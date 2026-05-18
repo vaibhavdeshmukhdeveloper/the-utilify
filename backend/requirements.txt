@@ -2,7 +2,7 @@ fastapi
 uvicorn
 python-multipart
 pymupdf
-rembg
+rembg[cpu]
 pillow
 supabase
 python-dotenv
