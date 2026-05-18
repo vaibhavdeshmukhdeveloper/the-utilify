@@ -1,0 +1,39 @@
+import type { Metadata } from "next";
+import { Inter, Outfit } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "sonner";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "Utilify - Free Online Utility & Productivity Tools Suite",
+  description: "A professional-grade, privacy-first suite of free online utilities. Split, merge, and convert PDFs, remove background with AI, compress images, and calculate financials in seconds.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="en"
+      className={`${inter.variable} ${outfit.variable} h-full antialiased font-sans`}
+    >
+      <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-300">
+        {children}
+        <Toaster position="top-center" richColors closeButton />
+      </body>
+    </html>
+  );
+}
