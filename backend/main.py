@@ -25,9 +25,9 @@ app.add_middleware(
 )
 
 # Global rembg session management as requested for low latency
-# Switches background removal engine to isnet-general-use for maximum accuracy
-print("Initializing global AI background removal model (isnet-general-use)...")
-rembg_session = new_session("isnet-general-use")
+# Switches background removal engine to silueta for memory efficiency on cloud servers
+print("Initializing global AI background removal model (silueta)...")
+rembg_session = new_session("silueta")
 print("AI Model loaded successfully!")
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
