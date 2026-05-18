@@ -1,4 +1,10 @@
-const rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+let rawApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+// Guarantee the URL starts with http:// or https:// (prevents relative path resolution)
+if (!rawApiUrl.startsWith("http://") && !rawApiUrl.startsWith("https://")) {
+  rawApiUrl = `https://${rawApiUrl}`;
+}
+
 const API_BASE_URL = rawApiUrl.endsWith("/") ? rawApiUrl.slice(0, -1) : rawApiUrl;
 
 export async function uploadToBackend(endpoint: string, files: File[], extraData?: Record<string, string>) {
