@@ -45,19 +45,6 @@ print("Initializing global AI background removal model (u2net)...")
 rembg_session = new_session("u2net")
 print("AI Model loaded successfully!")
 
-# Warm up the AI model with a tiny 1x1 dummy image during startup.
-# This compiles ONNX graph and loads the model into RAM before serving the first request,
-# entirely preventing first-request timeouts or latency spikes.
-print("Warming up AI background removal model...")
-try:
-    dummy_image = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
-    dummy_bytes = io.BytesIO()
-    dummy_image.save(dummy_bytes, format="PNG")
-    remove(dummy_bytes.getvalue(), session=rembg_session)
-    print("AI Model warmed up successfully and is ready for inference!")
-except Exception as e:
-    print(f"Warm-up failed: {e}")
-
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
     """
     Parses a user page range string (e.g. "1-3, 5, 8-10") into 0-indexed page numbers.
