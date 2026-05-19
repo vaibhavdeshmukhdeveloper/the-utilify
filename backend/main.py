@@ -27,9 +27,9 @@ app.add_middleware(
 )
 
 # Global rembg session management as requested for low latency
-# Switches background removal engine to silueta for memory efficiency on cloud servers
-print("Initializing global AI background removal model (silueta)...")
-rembg_session = new_session("silueta")
+# Switches background removal engine to u2net for maximum accuracy on icons and graphics
+print("Initializing global AI background removal model (u2net)...")
+rembg_session = new_session("u2net")
 print("AI Model loaded successfully!")
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
@@ -86,12 +86,15 @@ async def remove_background(file: UploadFile = File(...)):
         # Keep original format if possible, otherwise save as transparent PNG
         output_buffer = io.BytesIO()
         
-        # Run background removal using the global session
-        # Fine-tuned parameters: alpha_matting=False to avoid artifacts, post_process_mask=True for hole filling
+        # Run background removal using the global session with custom parameters
+        # Enables alpha_matting for smooth, anti-aliased edge blends without jagged artifacts
         output_bytes = remove(
             file_bytes,
             session=rembg_session,
-            alpha_matting=False,
+            alpha_matting=True,
+            alpha_matting_foreground_threshold=240,
+            alpha_matting_background_threshold=10,
+            alpha_matting_erode_size=10,
             post_process_mask=True
         )
         

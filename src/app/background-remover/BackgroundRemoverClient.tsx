@@ -13,6 +13,16 @@ export default function BackgroundRemoverClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
+  const [originalUrl, setOriginalUrl] = useState<string | null>(null);
+
+  const handleReset = () => {
+    if (originalUrl) {
+      URL.revokeObjectURL(originalUrl);
+    }
+    setResult(null);
+    setOriginalFile(null);
+    setOriginalUrl(null);
+  };
 
   const handleUpload = async (files: File[]) => {
     const file = files[0];
@@ -20,6 +30,12 @@ export default function BackgroundRemoverClient() {
       name: file.name,
       size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
     });
+    
+    if (originalUrl) {
+      URL.revokeObjectURL(originalUrl);
+    }
+    const url = URL.createObjectURL(file);
+    setOriginalUrl(url);
     
     setIsLoading(true);
     setResult(null);
@@ -122,27 +138,47 @@ export default function BackgroundRemoverClient() {
                 Our AI neural network is isolating the subject from your image. This usually takes 4-10 seconds depending on size (first request may take slightly longer as the model initializes).
               </p>
             </Card>
-          ) : result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-2 rounded-[2.5rem] overflow-hidden relative group">
-                {/* Transparency Grid Pattern */}
-                <div 
-                  className="absolute inset-4 rounded-[1.5rem] opacity-50"
-                  style={{
-                    backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
-                    backgroundSize: '20px 20px',
-                    backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
-                  }}
-                />
-                
-                <div className="relative z-10 p-4 min-h-[400px] flex items-center justify-center">
-                  <img 
-                    src={result.url} 
-                    alt="Removed Background" 
-                    className="max-w-full max-h-[450px] object-contain drop-shadow-2xl"
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Original Preview */}
+                <Card className="p-4 bg-zinc-100/50 dark:bg-zinc-900/30 border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
+                  <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-zinc-950/80 text-zinc-50 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                    Original
+                  </div>
+                  <div className="p-4 min-h-[350px] flex items-center justify-center">
+                    {originalUrl && (
+                      <img 
+                        src={originalUrl} 
+                        alt="Original Upload" 
+                        className="max-w-full max-h-[350px] object-contain rounded-2xl shadow-md"
+                      />
+                    )}
+                  </div>
+                </Card>
+
+                {/* Background Removed */}
+                <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
+                  <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider shadow-sm">
+                    Background Removed
+                  </div>
+                  {/* Transparency Grid Pattern */}
+                  <div 
+                    className="absolute inset-4 rounded-[1.5rem] opacity-40 dark:opacity-10"
+                    style={{
+                      backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
+                      backgroundSize: '20px 20px',
+                      backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+                    }}
                   />
-                </div>
-              </Card>
+                  <div className="relative z-10 p-4 min-h-[350px] flex items-center justify-center">
+                    <img 
+                      src={result.url} 
+                      alt="Removed Background" 
+                      className="max-w-full max-h-[350px] object-contain drop-shadow-2xl"
+                    />
+                  </div>
+                </Card>
+              </div>
 
               <Card className="p-10 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">
@@ -162,7 +198,7 @@ export default function BackgroundRemoverClient() {
                     </a>
                     <Button 
                       variant="outline" 
-                      onClick={() => {setResult(null); setOriginalFile(null);}} 
+                      onClick={handleReset} 
                       className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white"
                     >
                       Process Another
