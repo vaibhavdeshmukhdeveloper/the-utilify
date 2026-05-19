@@ -8,7 +8,7 @@ from PIL import Image
 from pydantic import BaseModel
 import fitz  # PyMuPDF
 from rembg import new_session, remove
-from xhtml2pdf import pisa
+from playwright.async_api import async_playwright
 
 app = FastAPI(
     title="Utilify Backend Services",
@@ -221,24 +221,34 @@ class HtmlRequest(BaseModel):
 async def html_to_pdf(request: HtmlRequest):
     """
     Converts compiled HTML with styles directly to a PDF in-memory.
-    Uses xhtml2pdf to completely run without Puppeteer/headless browser.
+    Uses headless Playwright Chromium for 100% pixel-perfect browser-level rendering.
     """
     try:
-        pdf_buffer = io.BytesIO()
-        # Create PDF from HTML string
-        pisa_status = pisa.CreatePDF(request.html, dest=pdf_buffer)
-        
-        if pisa_status.err:
-            raise HTTPException(status_code=500, detail="PDF generation failed during rendering")
+        async with async_playwright() as p:
+            # Launch headless chromium with no-sandbox sandbox parameters for Docker compatibility
+            browser = await p.chromium.launch(
+                headless=True,
+                args=["--no-sandbox", "--disable-setuid-sandbox"]
+            )
+            page = await browser.new_page()
             
-        pdf_buffer.seek(0)
+            # Load the styled HTML content and wait for it to be parsed completely
+            await page.set_content(request.html, wait_until="networkidle")
+            
+            # Print to A4 PDF with exact 1cm margins matching Puppeteer style
+            pdf_bytes = await page.pdf(
+                format="A4",
+                print_background=True,
+                margin={"top": "1cm", "right": "1cm", "bottom": "1cm", "left": "1cm"}
+            )
+            
+            await browser.close()
+            
         return Response(
-            content=pdf_buffer.getvalue(),
+            content=pdf_bytes,
             media_type="application/pdf",
             headers={"Content-Disposition": 'attachment; filename="document.pdf"'}
         )
-    except HTTPException:
-        raise
     except Exception as e:
         print(f"HTML to PDF crash: {e}")
         raise HTTPException(status_code=500, detail=f"HTML to PDF conversion failed: {str(e)}")

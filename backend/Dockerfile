@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install Playwright Chromium and all required OS system dependencies
+RUN playwright install --with-deps chromium
+
 COPY . .
 
 # Create temp directory
