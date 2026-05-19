@@ -14,6 +14,7 @@ export default function BackgroundRemoverClient() {
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
+  const [uploaderKey, setUploaderKey] = useState(0);
 
   const handleReset = () => {
     if (originalUrl) {
@@ -22,6 +23,7 @@ export default function BackgroundRemoverClient() {
     setResult(null);
     setOriginalFile(null);
     setOriginalUrl(null);
+    setUploaderKey(prev => prev + 1);
   };
 
   const handleUpload = async (files: File[]) => {
@@ -92,6 +94,7 @@ export default function BackgroundRemoverClient() {
         <div className="lg:col-span-5 space-y-6">
           <Card className="p-8 border-2 border-dashed bg-zinc-50/50 dark:bg-zinc-900/50 rounded-[2.5rem]">
             <FileUploader
+              key={uploaderKey}
               label="Upload Image"
               accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
               onUpload={handleUpload}
@@ -200,7 +203,7 @@ export default function BackgroundRemoverClient() {
                     <Button 
                       variant="outline" 
                       onClick={handleReset} 
-                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white"
+                      className="h-16 px-8 rounded-2xl border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-900 hover:text-white font-bold transition-all duration-300"
                     >
                       Process Another
                     </Button>
