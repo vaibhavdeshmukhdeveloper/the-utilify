@@ -2,9 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies for PyMuPDF and OpenCV
+# Install system dependencies for PyMuPDF, OpenCV, and pycairo compilation
 RUN apt-get update && apt-get install -y \
     build-essential \
+    libcairo2-dev \
+    pkg-config \
+    python3-dev \
     libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
