@@ -1,3 +1,4 @@
+import os
 import io
 import zipfile
 from typing import List
@@ -7,6 +8,12 @@ from fastapi.responses import Response, StreamingResponse
 from PIL import Image, ImageDraw, ImageChops
 from pydantic import BaseModel
 import fitz  # PyMuPDF
+
+# Set custom U2NET_HOME directory inside our project to prevent ephemeral runtime downloads
+# and make it easily cacheable/bakeable in Docker.
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+os.environ["U2NET_HOME"] = os.path.join(BACKEND_DIR, ".u2net")
+
 from rembg import new_session, remove
 from playwright.async_api import async_playwright
 
@@ -31,6 +38,19 @@ app.add_middleware(
 print("Initializing global AI background removal model (u2net)...")
 rembg_session = new_session("u2net")
 print("AI Model loaded successfully!")
+
+# Warm up the AI model with a tiny 1x1 dummy image during startup.
+# This compiles ONNX graph and loads the model into RAM before serving the first request,
+# entirely preventing first-request timeouts or latency spikes.
+print("Warming up AI background removal model...")
+try:
+    dummy_image = Image.new("RGBA", (1, 1), (0, 0, 0, 0))
+    dummy_bytes = io.BytesIO()
+    dummy_image.save(dummy_bytes, format="PNG")
+    remove(dummy_bytes.getvalue(), session=rembg_session)
+    print("AI Model warmed up successfully and is ready for inference!")
+except Exception as e:
+    print(f"Warm-up failed: {e}")
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
     """

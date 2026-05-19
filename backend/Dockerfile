@@ -15,6 +15,10 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Pre-download the rembg model so it's baked into the image, preventing runtime download timeouts
+ENV U2NET_HOME=/app/.u2net
+RUN python -c "from rembg import new_session; new_session('u2net')"
+
 # Install Playwright Chromium and all required OS system dependencies
 RUN playwright install --with-deps chromium
 
