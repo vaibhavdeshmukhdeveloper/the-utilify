@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { marked } from "marked";
-import puppeteer from "puppeteer";
 
 export async function POST(req: NextRequest) {
   try {
@@ -105,23 +104,32 @@ export async function POST(req: NextRequest) {
       </html>
     `;
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(styledHtml, { waitUntil: "networkidle0" });
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    let rawApiUrl = backendUrl;
     
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-      margin: { top: "1cm", right: "1cm", bottom: "1cm", left: "1cm" },
+    // Guarantee protocol is present
+    if (!rawApiUrl.startsWith("http://") && !rawApiUrl.startsWith("https://")) {
+      rawApiUrl = `https://${rawApiUrl}`;
+    }
+    
+    const API_BASE_URL = rawApiUrl.endsWith("/") ? rawApiUrl.slice(0, -1) : rawApiUrl;
+
+    const response = await fetch(`${API_BASE_URL}/pdf/html-to-pdf`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ html: styledHtml }),
     });
 
-    await browser.close();
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Backend PDF conversion failed: ${errText}`);
+    }
 
-    return new NextResponse(pdfBuffer as any, {
+    const pdfBuffer = await response.arrayBuffer();
+
+    return new NextResponse(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="document.pdf"`,

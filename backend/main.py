@@ -5,8 +5,10 @@ from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 from PIL import Image
+from pydantic import BaseModel
 import fitz  # PyMuPDF
 from rembg import new_session, remove
+from xhtml2pdf import pisa
 
 app = FastAPI(
     title="Utilify Backend Services",
@@ -211,6 +213,35 @@ async def merge_pdf(files: List[UploadFile] = File(...)):
     except Exception as e:
         print(f"Merge PDF crash: {e}")
         raise HTTPException(status_code=500, detail=f"PDF merging failed: {str(e)}")
+
+class HtmlRequest(BaseModel):
+    html: str
+
+@app.post("/pdf/html-to-pdf")
+async def html_to_pdf(request: HtmlRequest):
+    """
+    Converts compiled HTML with styles directly to a PDF in-memory.
+    Uses xhtml2pdf to completely run without Puppeteer/headless browser.
+    """
+    try:
+        pdf_buffer = io.BytesIO()
+        # Create PDF from HTML string
+        pisa_status = pisa.CreatePDF(request.html, dest=pdf_buffer)
+        
+        if pisa_status.err:
+            raise HTTPException(status_code=500, detail="PDF generation failed during rendering")
+            
+        pdf_buffer.seek(0)
+        return Response(
+            content=pdf_buffer.getvalue(),
+            media_type="application/pdf",
+            headers={"Content-Disposition": 'attachment; filename="document.pdf"'}
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"HTML to PDF crash: {e}")
+        raise HTTPException(status_code=500, detail=f"HTML to PDF conversion failed: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

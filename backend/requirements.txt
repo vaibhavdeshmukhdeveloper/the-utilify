@@ -6,3 +6,4 @@ rembg[cpu]
 pillow
 supabase
 python-dotenv
+xhtml2pdf
