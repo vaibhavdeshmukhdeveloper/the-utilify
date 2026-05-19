@@ -19,8 +19,6 @@ os.environ["U2NET_HOME"] = os.path.join(BACKEND_DIR, ".u2net")
 os.environ["OMP_NUM_THREADS"] = "1"
 os.environ["OMP_WAIT_POLICY"] = "PASSIVE"
 
-import onnxruntime as ort
-
 from rembg import new_session, remove
 from playwright.async_api import async_playwright
 
@@ -44,13 +42,7 @@ app.add_middleware(
 # Switches background removal engine to u2net for maximum accuracy on icons and graphics
 print("Initializing global AI background removal model (u2net)...")
 
-# Programmatically configure ONNX session options for CPU-constrained container execution
-sess_opts = ort.SessionOptions()
-sess_opts.intra_op_num_threads = 1
-sess_opts.inter_op_num_threads = 1
-sess_opts.add_session_config_entry("session.intra_op.allow_spinning", "0")
-
-rembg_session = new_session("u2net", sess_opts=sess_opts)
+rembg_session = new_session("u2net")
 print("AI Model loaded successfully!")
 
 # Warm up the AI model with a tiny 1x1 dummy image during startup.
