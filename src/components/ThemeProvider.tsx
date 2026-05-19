@@ -18,7 +18,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
 
   const setTheme = React.useCallback((newTheme: Theme) => {
-    console.log('setTheme called with:', newTheme);
     setThemeState(newTheme);
     localStorage.setItem("theme", newTheme);
   }, []);
@@ -33,23 +32,21 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (!mounted) return;
-    
+
     const root = window.document.documentElement;
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const updateTheme = () => {
       let activeTheme: "light" | "dark" = "light";
-      
+
       if (theme === "system") {
         activeTheme = mediaQuery.matches ? "dark" : "light";
       } else {
         activeTheme = theme as "light" | "dark";
       }
 
-      console.log('updateTheme: theme=', theme, 'activeTheme=', activeTheme);
       root.classList.remove("light", "dark");
       root.classList.add(activeTheme);
-      console.log('Root classes after update:', root.className);
       setResolvedTheme(activeTheme);
     };
 
