@@ -138,6 +138,7 @@ export default function BackgroundRemoverClient() {
                 Our AI neural network is isolating the subject from your image. This usually takes 4-10 seconds depending on size (first request may take slightly longer as the model initializes).
               </p>
             </Card>
+          ) : result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Original Preview */}
