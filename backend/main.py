@@ -86,15 +86,12 @@ async def remove_background(file: UploadFile = File(...)):
         # Keep original format if possible, otherwise save as transparent PNG
         output_buffer = io.BytesIO()
         
-        # Run background removal using the global session with custom parameters
-        # Enables alpha_matting for smooth, anti-aliased edge blends without jagged artifacts
+        # Run background removal using the global high-res session
+        # alpha_matting is set to False for graphics and icons to keep crisp, sharp, non-blurry borders
         output_bytes = remove(
             file_bytes,
             session=rembg_session,
-            alpha_matting=True,
-            alpha_matting_foreground_threshold=240,
-            alpha_matting_background_threshold=10,
-            alpha_matting_erode_size=10,
+            alpha_matting=False,
             post_process_mask=True
         )
         
