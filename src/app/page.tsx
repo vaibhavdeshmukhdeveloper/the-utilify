@@ -112,7 +112,7 @@ export default function Home() {
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative py-24 lg:py-36 overflow-hidden border-b bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-background">
+        <section className="relative py-24 lg:py-36 overflow-hidden border-b bg-background">
           {/* Visual grid overlay */}
           <div className="absolute inset-0 z-0 opacity-40 dark:opacity-60">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800c_1px,transparent_1px),linear-gradient(to_bottom,#8080800c_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_80%,transparent_100%)]" />
@@ -124,7 +124,7 @@ export default function Home() {
               <Sparkles className="h-3.5 w-3.5" /> 100% Free, Secure & Online
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-b from-zinc-900 via-zinc-900 to-zinc-500 dark:from-white dark:via-white dark:to-zinc-600 max-w-4xl mx-auto leading-[1.1]">
+            <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-8 text-foreground max-w-4xl mx-auto leading-[1.1]">
               Professional utilities. <br />
               <span className="text-primary italic font-serif">Simplified.</span>
             </h1>
@@ -148,34 +148,33 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Feature Highlights */}
-        <section className="py-16 bg-white dark:bg-background border-b border-zinc-100 dark:border-zinc-900">
+        <section className="py-16 bg-card border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="flex gap-4 p-6 rounded-3xl hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-violet-500/10 text-violet-500 flex items-center justify-center shrink-0">
+              <div className="flex gap-4 p-6 rounded-3xl hover:bg-muted/50 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   <Lock className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-1 text-zinc-900 dark:text-zinc-50">Privacy Protected</h3>
+                  <h3 className="font-bold text-lg mb-1 text-foreground">Privacy Protected</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">Everything runs client-side or on transient, secure servers. We never store or view your files.</p>
                 </div>
               </div>
-              <div className="flex gap-4 p-6 rounded-3xl hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+              <div className="flex gap-4 p-6 rounded-3xl hover:bg-muted/50 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   <Zap className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-1 text-zinc-900 dark:text-zinc-50">Lightning Fast</h3>
+                  <h3 className="font-bold text-lg mb-1 text-foreground">Lightning Fast</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">Supercharged with Next.js and optimized backend code to process image and PDF conversions in milliseconds.</p>
                 </div>
               </div>
-              <div className="flex gap-4 p-6 rounded-3xl hover:bg-zinc-50 dark:hover:bg-zinc-900/40 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+              <div className="flex gap-4 p-6 rounded-3xl hover:bg-muted/50 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   <Shield className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-1 text-zinc-900 dark:text-zinc-50">AdSense Approved</h3>
+                  <h3 className="font-bold text-lg mb-1 text-foreground">AdSense Approved</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">Built from the ground up for superior usability, clean layouts, and rich content - perfect for daily productive work.</p>
                 </div>
               </div>
@@ -186,7 +185,7 @@ export default function Home() {
         {/* Tools Section */}
         <section id="tools" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4 text-zinc-900 dark:text-zinc-50">
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4 text-foreground">
               Select Your Utility Tool
             </h2>
             <p className="text-muted-foreground leading-relaxed">

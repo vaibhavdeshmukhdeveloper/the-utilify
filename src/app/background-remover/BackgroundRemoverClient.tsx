@@ -32,16 +32,16 @@ export default function BackgroundRemoverClient() {
       name: file.name,
       size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
     });
-    
+
     if (originalUrl) {
       URL.revokeObjectURL(originalUrl);
     }
     const url = URL.createObjectURL(file);
     setOriginalUrl(url);
-    
+
     setIsLoading(true);
     setResult(null);
-    
+
     try {
       const data = await uploadToBackend("/image/remove-bg", files);
       setResult(data);
@@ -61,17 +61,17 @@ export default function BackgroundRemoverClient() {
   ];
 
   const faqs = [
-    { 
-      question: "How accurate is the AI?", 
-      answer: "Our AI is trained on millions of high-resolution images. It handles complex edges like hair and fur with professional precision." 
+    {
+      question: "How accurate is the AI?",
+      answer: "Our AI is trained on millions of high-resolution images. It handles complex edges like hair and fur with professional precision."
     },
-    { 
-      question: "What is the output format?", 
-      answer: "We always provide a transparent PNG to ensure you can layer your subject onto any background." 
+    {
+      question: "What is the output format?",
+      answer: "We always provide a transparent PNG to ensure you can layer your subject onto any background."
     },
-    { 
-      question: "Are there limits on resolution?", 
-      answer: "We support images up to 4K resolution. For larger files, the processing may take a few seconds longer." 
+    {
+      question: "Are there limits on resolution?",
+      answer: "We support images up to 4K resolution. For larger files, the processing may take a few seconds longer."
     },
   ];
 
@@ -102,7 +102,7 @@ export default function BackgroundRemoverClient() {
               hideDownload={true}
             />
           </Card>
-          
+
           {originalFile && (
             <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-white dark:bg-zinc-950 shadow-sm animate-in fade-in slide-in-from-left-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
@@ -117,13 +117,13 @@ export default function BackgroundRemoverClient() {
           )}
 
           <div className="grid grid-cols-2 gap-4">
-            <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-none rounded-2xl flex items-center gap-3">
+            <Card className="p-4 bg-muted border-none rounded-2xl flex items-center gap-3">
               <Sparkles className="h-4 w-4 text-amber-500" />
-              <span className="text-xs font-bold">AI Powered</span>
+              <span className="text-xs font-bold text-foreground">AI Powered</span>
             </Card>
-            <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-none rounded-2xl flex items-center gap-3">
+            <Card className="p-4 bg-muted border-none rounded-2xl flex items-center gap-3">
               <Maximize2 className="h-4 w-4 text-blue-500" />
-              <span className="text-xs font-bold">Full Resolution</span>
+              <span className="text-xs font-bold text-foreground">Full Resolution</span>
             </Card>
           </div>
         </div>
@@ -151,9 +151,9 @@ export default function BackgroundRemoverClient() {
                   </div>
                   <div className="p-4 min-h-[350px] flex items-center justify-center">
                     {originalUrl && (
-                      <img 
-                        src={originalUrl} 
-                        alt="Original Upload" 
+                      <img
+                        src={originalUrl}
+                        alt="Original Upload"
                         className="max-w-full max-h-[350px] object-contain rounded-2xl shadow-md"
                       />
                     )}
@@ -166,7 +166,7 @@ export default function BackgroundRemoverClient() {
                     Background Removed
                   </div>
                   {/* Transparency Grid Pattern */}
-                  <div 
+                  <div
                     className="absolute inset-4 rounded-[1.5rem] opacity-40 dark:opacity-10"
                     style={{
                       backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
@@ -175,9 +175,9 @@ export default function BackgroundRemoverClient() {
                     }}
                   />
                   <div className="relative z-10 p-4 min-h-[350px] flex items-center justify-center">
-                    <img 
-                      src={result.url} 
-                      alt="Removed Background" 
+                    <img
+                      src={result.url}
+                      alt="Removed Background"
                       className="max-w-full max-h-[350px] object-contain drop-shadow-2xl"
                     />
                   </div>
@@ -193,16 +193,16 @@ export default function BackgroundRemoverClient() {
                     <Zap className="h-4 w-4" /> AI Transformation Ready
                   </div>
                   <h2 className="text-4xl font-black tracking-tight mb-8">Pixel-perfect transparency.</h2>
-                  
+
                   <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
                     <a href={result.url} download={result.filename} className="flex-1">
                       <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
                         <Download className="mr-2 h-6 w-6" /> Download (PNG)
                       </Button>
                     </a>
-                    <Button 
-                      variant="outline" 
-                      onClick={handleReset} 
+                    <Button
+                      variant="outline"
+                      onClick={handleReset}
                       className="h-16 px-8 rounded-2xl border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-900 hover:text-white font-bold transition-all duration-300"
                     >
                       Process Another
@@ -212,9 +212,9 @@ export default function BackgroundRemoverClient() {
               </Card>
             </div>
           ) : (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-zinc-50/50 rounded-[2.5rem]">
-              <div className="w-24 h-24 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
-                <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
+            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
+              <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
+                <ImageIcon className="h-12 w-12 text-muted-foreground" />
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2">Ready for AI Magic?</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
@@ -227,10 +227,10 @@ export default function BackgroundRemoverClient() {
           )}
 
           {!isLoading && !result && originalFile && (
-             <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
-                <AlertCircle className="h-5 w-5 shrink-0" />
-                <span>Something went wrong. Please check your image size or ensure the backend server is online.</span>
-             </div>
+            <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
+              <AlertCircle className="h-5 w-5 shrink-0" />
+              <span>Something went wrong. Please check your image size or ensure the backend server is online.</span>
+            </div>
           )}
         </div>
       </div>

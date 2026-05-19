@@ -7,7 +7,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50 dark:bg-zinc-950 transition-colors">
+    <footer className="border-t bg-card transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
           {/* Logo & Pitch */}
@@ -16,7 +16,7 @@ export function Footer() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-violet-600 flex items-center justify-center text-white shadow-md shadow-primary/10">
                 <Sparkles className="h-4.5 w-4.5" />
               </div>
-              <span className="text-lg font-black tracking-tight text-zinc-900 dark:text-zinc-50">
+              <span className="text-lg font-black tracking-tight text-foreground">
                 Utilify
               </span>
             </Link>
@@ -27,7 +27,7 @@ export function Footer() {
 
           {/* Column 2: Tool categories */}
           <div>
-            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-wider uppercase mb-4">
+            <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
               Heavy Processing
             </h4>
             <ul className="space-y-2.5">
@@ -56,7 +56,7 @@ export function Footer() {
 
           {/* Column 3: Quick Utilities */}
           <div>
-            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-wider uppercase mb-4">
+            <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
               Calculators & Formatting
             </h4>
             <ul className="space-y-2.5">
@@ -85,7 +85,7 @@ export function Footer() {
 
           {/* Column 4: Links & Support */}
           <div>
-            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-50 tracking-wider uppercase mb-4">
+            <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
               Company
             </h4>
             <ul className="space-y-2.5">
@@ -114,7 +114,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Area */}
-        <div className="mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground text-center sm:text-left">
             &copy; {currentYear} Utilify. All rights reserved. Made with <Heart className="inline-block h-3.5 w-3.5 text-red-500 fill-red-500" /> for a simpler web.
           </p>

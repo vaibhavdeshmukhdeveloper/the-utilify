@@ -20,10 +20,10 @@ export default function PdfToImageClient() {
       name: file.name,
       size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
     });
-    
+
     setIsLoading(true);
     setResult(null);
-    
+
     try {
       const data = await uploadToBackend("/pdf/to-image", files);
       setResult(data);
@@ -43,17 +43,17 @@ export default function PdfToImageClient() {
   ];
 
   const faqs = [
-    { 
-      question: "What is the output image quality?", 
-      answer: "We use high-density rendering (2x scale) to ensure your images are crisp and readable, even for small text." 
+    {
+      question: "What is the output image quality?",
+      answer: "We use high-density rendering (2x scale) to ensure your images are crisp and readable, even for small text."
     },
-    { 
-      question: "How are multiple pages handled?", 
-      answer: "If your PDF has multiple pages, they are bundled into a single ZIP file for easy downloading." 
+    {
+      question: "How are multiple pages handled?",
+      answer: "If your PDF has multiple pages, they are bundled into a single ZIP file for easy downloading."
     },
-    { 
-      question: "Is there a page limit?", 
-      answer: "No hard limit, but very large PDFs (100+ pages) may take a few extra seconds to process." 
+    {
+      question: "Is there a page limit?",
+      answer: "No hard limit, but very large PDFs (100+ pages) may take a few extra seconds to process."
     },
   ];
 
@@ -74,7 +74,7 @@ export default function PdfToImageClient() {
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload */}
         <div className="lg:col-span-5 space-y-6">
-          <Card className="p-8 border-2 border-dashed bg-zinc-50/50 dark:bg-zinc-900/50 rounded-[2rem]">
+          <Card className="p-8 border-2 border-dashed bg-card rounded-[2rem]">
             <FileUploader
               label="Upload PDF"
               accept={{ "application/pdf": [".pdf"] }}
@@ -83,9 +83,9 @@ export default function PdfToImageClient() {
               hideDownload={true} // We'll show the result in the right column
             />
           </Card>
-          
+
           {fileInfo && (
-            <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-white dark:bg-zinc-950 shadow-sm animate-in fade-in slide-in-from-left-4">
+            <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-card shadow-sm animate-in fade-in slide-in-from-left-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <FileImage className="h-6 w-6" />
               </div>
@@ -106,33 +106,33 @@ export default function PdfToImageClient() {
                 <Loader2 className="h-16 w-16 text-primary animate-spin" />
                 <Layers className="h-8 w-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">Converting PDF...</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">Converting PDF...</h3>
               <p className="text-muted-foreground max-w-xs mx-auto">
                 We're extracting high-quality images from each page. This usually takes 3-10 seconds depending on size (first run may take slightly longer).
               </p>
             </Card>
           ) : result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="p-10 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
+              <Card className="p-10 bg-primary text-primary-foreground border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-20">
                   <Download className="h-32 w-32" />
                 </div>
                 <div className="relative z-10">
-                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
+                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] mb-4">
                     <CheckCircle2 className="h-4 w-4" /> Conversion Complete
                   </div>
                   <h2 className="text-4xl font-black tracking-tight mb-8">Your images are ready!</h2>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
+
+                  <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-primary-foreground/20">
                     <a href={result.url} download={result.filename} className="flex-1">
-                      <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
+                      <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all bg-background text-foreground hover:bg-background/90">
                         <Download className="mr-2 h-6 w-6" /> Download All (ZIP)
                       </Button>
                     </a>
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {setResult(null); setFileInfo(null);}} 
-                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white"
+                    <Button
+                      variant="outline"
+                      onClick={() => { setResult(null); setFileInfo(null); }}
+                      className="h-16 px-8 rounded-2xl border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
                     >
                       Convert Another
                     </Button>
@@ -141,32 +141,32 @@ export default function PdfToImageClient() {
               </Card>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="p-6 bg-blue-50/50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30 rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600">
+                <Card className="p-6 bg-card border rounded-2xl flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-primary">
                     <Layers className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-blue-600/70">Format</p>
-                    <p className="font-bold">PNG (High-Res)</p>
+                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Format</p>
+                    <p className="font-bold text-foreground">PNG (High-Res)</p>
                   </div>
                 </Card>
-                <Card className="p-6 bg-green-50/50 dark:bg-green-900/10 border-green-100 dark:border-green-900/30 rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center text-green-600">
+                <Card className="p-6 bg-card border rounded-2xl flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-primary">
                     <CheckCircle2 className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-green-600/70">Status</p>
-                    <p className="font-bold">Ready to Save</p>
+                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Status</p>
+                    <p className="font-bold text-foreground">Ready to Save</p>
                   </div>
                 </Card>
               </div>
             </div>
           ) : (
-            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-zinc-50/50 rounded-[2.5rem]">
-              <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
-                <FileImage className="h-10 w-10 text-muted-foreground/40" />
+            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-6">
+                <FileImage className="h-10 w-10 text-muted-foreground" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">No file uploaded yet</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">No file uploaded yet</h3>
               <p className="text-muted-foreground max-w-xs mx-auto">
                 Once you upload your PDF, you'll be able to download each page as an individual image.
               </p>
@@ -178,10 +178,10 @@ export default function PdfToImageClient() {
 
           {/* Error fallback */}
           {!isLoading && !result && fileInfo && (
-             <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
-                <AlertCircle className="h-5 w-5 shrink-0" />
-                 <span>Something went wrong. Please check your file size or ensure the backend server is online.</span>
-             </div>
+            <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
+              <AlertCircle className="h-5 w-5 shrink-0" />
+              <span>Something went wrong. Please check your file size or ensure the backend server is online.</span>
+            </div>
           )}
         </div>
       </div>
