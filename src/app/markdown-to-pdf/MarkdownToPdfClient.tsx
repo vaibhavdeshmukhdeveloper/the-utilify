@@ -349,8 +349,8 @@ export default function MarkdownToPdfClient() {
                 <Sparkles className="h-6 w-6 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
               <h3 className="text-xl font-black tracking-tight mb-1">Generating PDF...</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Utilizing Puppeteer headless compiler to render and export A4 margins. This takes 2-3 seconds.
+              <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+                Using Playwright headless Chromium for high-fidelity A4 rendering. This usually takes 3-10 seconds depending on size (first compile may take slightly longer).
               </p>
             </Card>
           ) : result ? (

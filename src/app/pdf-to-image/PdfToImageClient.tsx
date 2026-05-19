@@ -108,7 +108,7 @@ export default function PdfToImageClient() {
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2">Converting PDF...</h3>
               <p className="text-muted-foreground max-w-xs mx-auto">
-                We're extracting high-quality images from each page. This usually takes just a few seconds.
+                We're extracting high-quality images from each page. This usually takes 3-10 seconds depending on size (first run may take slightly longer).
               </p>
             </Card>
           ) : result ? (
@@ -180,7 +180,7 @@ export default function PdfToImageClient() {
           {!isLoading && !result && fileInfo && (
              <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
                 <AlertCircle className="h-5 w-5 shrink-0" />
-                <span>If the conversion fails, please ensure your local backend is running at http://localhost:8000</span>
+                 <span>Something went wrong. Please check your file size or ensure the backend server is online.</span>
              </div>
           )}
         </div>

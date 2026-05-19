@@ -119,7 +119,7 @@ export default function BackgroundRemoverClient() {
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2">Removing Background...</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
-                Our neural network is isolating the subject from your image. This usually takes 2-3 seconds.
+                Our AI neural network is isolating the subject from your image. This usually takes 4-10 seconds depending on size (first request may take slightly longer as the model initializes).
               </p>
             </Card>
           ) : result ? (
@@ -189,7 +189,7 @@ export default function BackgroundRemoverClient() {
           {!isLoading && !result && originalFile && (
              <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
                 <AlertCircle className="h-5 w-5 shrink-0" />
-                <span>Something went wrong. Please ensure your local backend server is running.</span>
+                <span>Something went wrong. Please check your image size or ensure the backend server is online.</span>
              </div>
           )}
         </div>
