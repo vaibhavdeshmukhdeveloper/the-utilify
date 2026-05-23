@@ -318,6 +318,12 @@ export default function JsonFormatterClient() {
   const zoomIn = () => setFontSize(prev => Math.min(20, prev + 1));
   const zoomOut = () => setFontSize(prev => Math.max(12, prev - 1));
 
+  // Dynamic gutter width calculator based on character length and zoom size
+  const getGutterWidth = (lines: number) => {
+    const charCount = String(lines).length;
+    return Math.max(40, charCount * fontSize * 0.6 + 16);
+  };
+
   // Sync scrollbar heights on changes
   useEffect(() => {
     handleInputScroll();
@@ -530,8 +536,12 @@ export default function JsonFormatterClient() {
               {/* Synched line number gutter */}
               <div 
                 ref={inputGutterRef}
-                className="w-10 bg-zinc-100/50 dark:bg-zinc-900/50 border-r border-zinc-200 dark:border-zinc-800 py-3 select-none overflow-hidden flex flex-col items-end text-zinc-400 font-mono text-xs pr-2"
-                style={{ fontSize: `${fontSize}px`, lineHeight: "24px" }}
+                className="bg-zinc-100/50 dark:bg-zinc-900/50 border-r border-zinc-200 dark:border-zinc-800 py-3 select-none overflow-hidden flex flex-col items-end text-zinc-400 font-mono text-xs pr-2 shrink-0"
+                style={{ 
+                  fontSize: `${fontSize}px`, 
+                  lineHeight: "24px",
+                  width: `${getGutterWidth(inputLineCount)}px`
+                }}
               >
                 {Array.from({ length: inputLineCount }).map((_, i) => {
                   const isErrorLine = validationError && validationError.line === i + 1;
@@ -679,8 +689,12 @@ export default function JsonFormatterClient() {
                   {/* Synched line gutter */}
                   <div 
                     ref={outputGutterRef}
-                    className="w-10 bg-zinc-100/50 dark:bg-zinc-900/50 border-r border-zinc-200 dark:border-zinc-800 py-3 select-none overflow-hidden flex flex-col items-end text-zinc-400 font-mono text-xs pr-2"
-                    style={{ fontSize: `${fontSize}px`, lineHeight: "24px" }}
+                    className="bg-zinc-100/50 dark:bg-zinc-900/50 border-r border-zinc-200 dark:border-zinc-800 py-3 select-none overflow-hidden flex flex-col items-end text-zinc-400 font-mono text-xs pr-2 shrink-0"
+                    style={{ 
+                      fontSize: `${fontSize}px`, 
+                      lineHeight: "24px",
+                      width: `${getGutterWidth(outputLineCount)}px`
+                    }}
                   >
                     {Array.from({ length: output ? outputLineCount : 1 }).map((_, i) => (
                       <div key={i}>{i + 1}</div>
