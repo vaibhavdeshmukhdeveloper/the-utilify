@@ -23,15 +23,6 @@
   --input: #e2e8f0;
   --ring: #6366f1;
   --radius: 1rem;
-
-  /* Premium standard Light Mode zinc values */
-  --zinc-50: #fafafa;
-  --zinc-100: #f4f4f5;
-  --zinc-200: #e4e4e7;
-  --zinc-300: #d4d4d8;
-  --zinc-800: #27272a;
-  --zinc-900: #18181b;
-  --zinc-950: #09090b;
 }
 
 .dark {
@@ -54,15 +45,6 @@
   --border: rgba(255, 255, 255, 0.08);
   --input: rgba(255, 255, 255, 0.08);
   --ring: rgba(99, 102, 241, 0.4);
-
-  /* Premium Dark Mode zinc overrides */
-  --zinc-50: #0b0b11;
-  --zinc-100: #10101a;
-  --zinc-200: #171726;
-  --zinc-300: #26263b;
-  --zinc-800: rgba(255, 255, 255, 0.08);
-  --zinc-900: rgba(255, 255, 255, 0.05);
-  --zinc-950: #050508;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -86,15 +68,6 @@
     --border: rgba(255, 255, 255, 0.08);
     --input: rgba(255, 255, 255, 0.08);
     --ring: rgba(99, 102, 241, 0.4);
-
-    /* Premium Dark Mode zinc overrides */
-    --zinc-50: #0b0b11;
-    --zinc-100: #10101a;
-    --zinc-200: #171726;
-    --zinc-300: #26263b;
-    --zinc-800: rgba(255, 255, 255, 0.08);
-    --zinc-900: rgba(255, 255, 255, 0.05);
-    --zinc-950: #050508;
   }
 }
 
@@ -118,15 +91,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-
-  /* Override Tailwind v4 default zinc with our premium dynamic colors */
-  --color-zinc-50: var(--zinc-50);
-  --color-zinc-100: var(--zinc-100);
-  --color-zinc-200: var(--zinc-200);
-  --color-zinc-300: var(--zinc-300);
-  --color-zinc-800: var(--zinc-800);
-  --color-zinc-900: var(--zinc-900);
-  --color-zinc-950: var(--zinc-950);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
