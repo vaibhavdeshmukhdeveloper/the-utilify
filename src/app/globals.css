@@ -21,51 +21,78 @@
   --input: #e2e8f0;
   --ring: #6366f1;
   --radius: 1rem;
+
+  /* Premium standard Light Mode zinc values */
+  --zinc-50: #fafafa;
+  --zinc-100: #f4f4f5;
+  --zinc-200: #e4e4e7;
+  --zinc-300: #d4d4d8;
+  --zinc-800: #27272a;
+  --zinc-900: #18181b;
+  --zinc-950: #09090b;
 }
 
 .dark {
-  --background: #0f172a;
-  --foreground: #f1f5f9;
-  --card: #1e293b;
-  --card-foreground: #f1f5f9;
-  --popover: #1e293b;
-  --popover-foreground: #f1f5f9;
+  --background: #030303;
+  --foreground: #f8fafc;
+  --card: #08080d;
+  --card-foreground: #f8fafc;
+  --popover: #08080d;
+  --popover-foreground: #f8fafc;
   --primary: #6366f1;
   --primary-foreground: #ffffff;
-  --secondary: #334155;
-  --secondary-foreground: #f1f5f9;
-  --muted: #334155;
+  --secondary: #0e0e15;
+  --secondary-foreground: #f8fafc;
+  --muted: #0b0b10;
   --muted-foreground: #94a3b8;
-  --accent: #334155;
-  --accent-foreground: #f1f5f9;
-  --destructive: #991b1b;
+  --accent: #151426;
+  --accent-foreground: #f8fafc;
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #475569;
-  --input: #475569;
-  --ring: #818cf8;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: rgba(99, 102, 241, 0.4);
+
+  /* Premium Dark Mode zinc overrides */
+  --zinc-50: #0b0b11;
+  --zinc-100: #10101a;
+  --zinc-200: #171726;
+  --zinc-300: #26263b;
+  --zinc-800: rgba(255, 255, 255, 0.08);
+  --zinc-900: rgba(255, 255, 255, 0.05);
+  --zinc-950: #050508;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f172a;
-    --foreground: #f1f5f9;
-    --card: #1e293b;
-    --card-foreground: #f1f5f9;
-    --popover: #1e293b;
-    --popover-foreground: #f1f5f9;
+    --background: #030303;
+    --foreground: #f8fafc;
+    --card: #08080d;
+    --card-foreground: #f8fafc;
+    --popover: #08080d;
+    --popover-foreground: #f8fafc;
     --primary: #6366f1;
     --primary-foreground: #ffffff;
-    --secondary: #334155;
-    --secondary-foreground: #f1f5f9;
-    --muted: #334155;
+    --secondary: #0e0e15;
+    --secondary-foreground: #f8fafc;
+    --muted: #0b0b10;
     --muted-foreground: #94a3b8;
-    --accent: #334155;
-    --accent-foreground: #f1f5f9;
-    --destructive: #991b1b;
+    --accent: #151426;
+    --accent-foreground: #f8fafc;
+    --destructive: #dc2626;
     --destructive-foreground: #ffffff;
-    --border: #475569;
-    --input: #475569;
-    --ring: #818cf8;
+    --border: rgba(255, 255, 255, 0.08);
+    --input: rgba(255, 255, 255, 0.08);
+    --ring: rgba(99, 102, 241, 0.4);
+
+    /* Premium Dark Mode zinc overrides */
+    --zinc-50: #0b0b11;
+    --zinc-100: #10101a;
+    --zinc-200: #171726;
+    --zinc-300: #26263b;
+    --zinc-800: rgba(255, 255, 255, 0.08);
+    --zinc-900: rgba(255, 255, 255, 0.05);
+    --zinc-950: #050508;
   }
 }
 
@@ -89,6 +116,15 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* Override Tailwind v4 default zinc with our premium dynamic colors */
+  --color-zinc-50: var(--zinc-50);
+  --color-zinc-100: var(--zinc-100);
+  --color-zinc-200: var(--zinc-200);
+  --color-zinc-300: var(--zinc-300);
+  --color-zinc-800: var(--zinc-800);
+  --color-zinc-900: var(--zinc-900);
+  --color-zinc-950: var(--zinc-950);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -485,4 +521,84 @@ body {
   color: #8c6239;
   font-variant: small-caps;
   font-weight: bold;
+}
+
+/* ==========================================================================
+   Premium Dark Mode Overlays and Glowing Touches
+   ========================================================================== */
+
+.dark body {
+  background-image: 
+    radial-gradient(circle at 50% -20%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 10% 40%, rgba(139, 92, 246, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.03) 0%, transparent 45%);
+  background-attachment: fixed;
+}
+
+/* Premium card and box hover glow overrides */
+.dark .group:hover .bg-card,
+.dark .group:hover .bg-white\/40,
+.dark .group:hover .bg-zinc-950\/40,
+.dark .group:hover .bg-white {
+  background: rgba(13, 12, 22, 0.6) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Custom premium integrated scrollbars for dark mode */
+.dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #030303;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1a1a2e;
+  border-radius: 9999px;
+  border: 2px solid #030303;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2a2a4a;
+}
+
+/* High-fidelity glowing state for active/hover upload boxes */
+.dark .border-primary\/50,
+.dark .border-dashed:hover {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  background-color: rgba(99, 102, 241, 0.02) !important;
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.05);
+}
+
+/* Glowing primary text accent */
+.dark .text-primary.italic.font-serif {
+  text-shadow: 0 0 25px rgba(99, 102, 241, 0.35);
+}
+
+/* Glassy header override in dark mode */
+.dark nav {
+  background: rgba(4, 4, 7, 0.7) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* High-contrast table headers for developer theme */
+.dark .theme-developer th {
+  background-color: #0b0b11 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .theme-developer td {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Premium input and textarea focus transitions */
+.dark button:focus-visible,
+.dark input:focus-visible,
+.dark textarea:focus-visible {
+  border-color: rgba(99, 102, 241, 0.6) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
 }
