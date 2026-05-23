@@ -190,7 +190,7 @@ async def remove_background(file: UploadFile = File(...)):
         print(f"Background removal crash: {e}")
         raise HTTPException(status_code=500, detail=f"Background removal failed: {str(e)}")
 
-@app.post("/pdf/pdf-to-image")
+@app.post("/pdf/to-image")
 async def pdf_to_image(file: UploadFile = File(...)):
     """
     Converts PDF pages into individual high-resolution PNG images packed inside a ZIP.
@@ -223,7 +223,7 @@ async def pdf_to_image(file: UploadFile = File(...)):
         print(f"PDF to Image crash: {e}")
         raise HTTPException(status_code=500, detail=f"PDF to image conversion failed: {str(e)}")
 
-@app.post("/pdf/split-pdf")
+@app.post("/pdf/split")
 async def split_pdf(file: UploadFile = File(...), page_ranges: str = Form(...)):
     """
     Splits a PDF by extracting specific page ranges or indexes.
@@ -260,7 +260,7 @@ async def split_pdf(file: UploadFile = File(...), page_ranges: str = Form(...)):
         print(f"Split PDF crash: {e}")
         raise HTTPException(status_code=500, detail=f"PDF splitting failed: {str(e)}")
 
-@app.post("/pdf/merge-pdf")
+@app.post("/pdf/merge")
 async def merge_pdf(files: List[UploadFile] = File(...)):
     """
     Merges multiple PDF documents in the order they are uploaded into a single PDF.
