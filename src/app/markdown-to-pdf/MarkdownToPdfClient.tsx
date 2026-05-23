@@ -397,7 +397,7 @@ export default function MarkdownToPdfClient() {
                 — OR —
               </div>
               
-              <Card className="p-8 border-2 border-dashed bg-zinc-50/50 dark:bg-zinc-900/50 rounded-[2.5rem]">
+              <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem]">
                 <FileUploader
                   label="Or Upload .md / .markdown file"
                   accept={{ "text/markdown": [".md", ".markdown"] }}

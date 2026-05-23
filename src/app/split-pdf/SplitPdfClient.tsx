@@ -196,7 +196,7 @@ export default function SplitPdfClient() {
                 </div>
               </Card>
 
-              <Card className="p-6 bg-zinc-50 dark:bg-zinc-900/50 border-none rounded-2xl flex items-center gap-4">
+              <Card className="p-6 bg-card border-none rounded-2xl flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600">
                   {splitMode === "all" ? <Layers className="h-5 w-5" /> : <Scissors className="h-5 w-5" />}
                 </div>
@@ -207,7 +207,7 @@ export default function SplitPdfClient() {
               </Card>
             </div>
           ) : (
-            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-zinc-50/50 rounded-[3rem]">
+            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[3rem]">
               <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
                 <Scissors className="h-10 w-10 text-muted-foreground/40" />
               </div>

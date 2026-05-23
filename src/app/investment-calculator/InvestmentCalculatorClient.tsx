@@ -308,7 +308,7 @@ export default function InvestmentCalculatorClient() {
               </Card>
             </div>
           ) : (
-            <Card className="h-full min-h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-zinc-50/50 rounded-[2.5rem]">
+            <Card className="h-full min-h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
               <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
                 <TrendingUp className="h-10 w-10 text-muted-foreground/40" />
               </div>

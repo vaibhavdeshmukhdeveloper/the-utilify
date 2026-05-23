@@ -108,7 +108,7 @@ export default function MergePdfClient() {
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Queue Management */}
         <div className="lg:col-span-6 space-y-6">
-          <Card className="p-6 border-2 border-dashed bg-zinc-50/50 dark:bg-zinc-900/50 rounded-[2rem]">
+          <Card className="p-6 border-2 border-dashed bg-card rounded-[2rem]">
             <FileUploader
               label={queuedFiles.length > 0 ? "Add More PDFs" : "Select PDFs to Merge"}
               accept={{ "application/pdf": [".pdf"] }}
@@ -250,7 +250,7 @@ export default function MergePdfClient() {
               </Card>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="p-6 bg-zinc-50 dark:bg-zinc-900/50 border-none rounded-2xl flex items-center gap-4">
+                <Card className="p-6 bg-card border-none rounded-2xl flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600">
                     <FilePlus className="h-5 w-5" />
                   </div>
@@ -259,7 +259,7 @@ export default function MergePdfClient() {
                     <p className="font-bold">Additive Uploads</p>
                   </div>
                 </Card>
-                <Card className="p-6 bg-zinc-50 dark:bg-zinc-900/50 border-none rounded-2xl flex items-center gap-4">
+                <Card className="p-6 bg-card border-none rounded-2xl flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600">
                     <ArrowDown className="h-5 w-5" />
                   </div>
@@ -271,7 +271,7 @@ export default function MergePdfClient() {
               </div>
             </div>
           ) : (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-zinc-50/50 rounded-[3rem]">
+            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[3rem]">
               <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
                 <Plus className="h-10 w-10 text-muted-foreground/40" />
               </div>

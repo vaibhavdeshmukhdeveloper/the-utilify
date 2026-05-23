@@ -290,7 +290,7 @@ export default function SipCalculatorClient() {
               </Card>
             </div>
           ) : (
-            <Card className="h-full min-h-[500px] flex flex-col items-center justify-center p-16 text-center border-dashed border-4 bg-zinc-50/50 dark:bg-zinc-900/10 rounded-[3rem] border-zinc-200 dark:border-zinc-800">
+            <Card className="h-full min-h-[500px] flex flex-col items-center justify-center p-16 text-center border-dashed border-4 bg-card rounded-[3rem] border-zinc-200 dark:border-zinc-800">
               <div className="w-24 h-24 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-8">
                 <PiggyBank className="h-12 w-12 text-muted-foreground/30" />
               </div>
