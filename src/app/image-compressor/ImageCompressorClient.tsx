@@ -94,7 +94,7 @@ export default function ImageCompressorClient() {
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload and Settings */}
         <div className="lg:col-span-5 space-y-6">
-          <Card className="p-8 border-2 border-dashed bg-zinc-50/50 dark:bg-zinc-900/50 rounded-[2.5rem] space-y-8">
+          <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem] space-y-8">
             <div className="space-y-4 px-2">
               <div className="flex justify-between items-center">
                 <label className="text-sm font-bold flex items-center gap-2">
@@ -164,7 +164,7 @@ export default function ImageCompressorClient() {
             </Card>
           ) : result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-2 rounded-[2.5rem] overflow-hidden relative group">
+              <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative group">
                 <div className="relative z-10 p-4 min-h-[400px] flex items-center justify-center">
                   <img 
                     src={result.url} 
@@ -213,7 +213,7 @@ export default function ImageCompressorClient() {
               </Card>
             </div>
           ) : (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-zinc-50/50 rounded-[2.5rem]">
+            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
               <div className="w-24 h-24 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
                 <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
               </div>
