@@ -186,7 +186,7 @@ export default function MarkdownToPdfClient() {
       <div className="w-full max-w-7xl mx-auto space-y-8">
         
         {/* Workspace Toolbar Controls */}
-        <Card className="border-2 border-zinc-100 dark:border-zinc-900 bg-white dark:bg-zinc-950/40 p-4 rounded-3xl flex flex-wrap gap-4 items-center justify-between shadow-sm">
+        <Card className="p-4 rounded-3xl flex flex-wrap gap-4 items-center justify-between shadow-sm bg-card border-2">
           {/* Left Side: View Modes */}
           <div className="flex items-center gap-2">
             <span className="text-xs font-black uppercase text-muted-foreground mr-2 tracking-wider">Workspace:</span>
@@ -279,7 +279,7 @@ export default function MarkdownToPdfClient() {
           
           {/* Left Column: Markdown Editor */}
           <Card className={cn(
-            "border-2 border-zinc-100 dark:border-zinc-900 rounded-[2.5rem] overflow-hidden bg-white dark:bg-zinc-950/40 shadow-xl transition-all duration-300",
+            "rounded-[2.5rem] overflow-hidden bg-card shadow-xl transition-all duration-300 border-2",
             viewMode === "editor" ? "lg:col-span-12" : viewMode === "preview" ? "hidden" : "lg:col-span-6"
           )}>
             <CardHeader className="border-b px-8 py-6 flex flex-row items-center justify-between">
@@ -306,7 +306,7 @@ export default function MarkdownToPdfClient() {
 
           {/* Right Column: Live A4 Simulation Preview */}
           <Card className={cn(
-            "border-2 border-zinc-100 dark:border-zinc-900 rounded-[2.5rem] overflow-hidden bg-zinc-50/50 dark:bg-zinc-900/10 shadow-inner min-h-[640px] flex flex-col transition-all duration-300",
+            "rounded-[2.5rem] overflow-hidden bg-card shadow-inner min-h-[640px] flex flex-col transition-all duration-300 border-2",
             viewMode === "preview" ? "lg:col-span-12" : viewMode === "editor" ? "hidden" : "lg:col-span-6"
           )}>
             <CardHeader className="border-b bg-white dark:bg-zinc-950/50 px-8 py-6 flex flex-row items-center justify-between">
