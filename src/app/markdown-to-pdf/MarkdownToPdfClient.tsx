@@ -376,7 +376,7 @@ export default function MarkdownToPdfClient() {
                   <Button 
                     variant="outline" 
                     onClick={() => setResult(null)} 
-                    className="h-14 px-6 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white"
+                    className="h-14 px-6 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                   >
                     Modify Document
                   </Button>

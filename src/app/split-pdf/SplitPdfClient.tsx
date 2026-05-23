@@ -188,7 +188,7 @@ export default function SplitPdfClient() {
                     <Button 
                       variant="outline" 
                       onClick={() => {setResult(null); setFileInfo(null);}} 
-                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white"
+                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                     >
                       Start Over
                     </Button>

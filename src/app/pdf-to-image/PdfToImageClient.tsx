@@ -132,7 +132,7 @@ export default function PdfToImageClient() {
                     <Button
                       variant="outline"
                       onClick={() => { setResult(null); setFileInfo(null); }}
-                      className="h-16 px-8 rounded-2xl border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                      className="h-16 px-8 rounded-2xl border-primary-foreground/20 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
                     >
                       Convert Another
                     </Button>

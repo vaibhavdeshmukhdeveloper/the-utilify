@@ -207,7 +207,7 @@ export default function MergePdfClient() {
                     <Button 
                       variant="outline" 
                       onClick={() => {setResult(null); setQueuedFiles([]);}} 
-                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white"
+                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                     >
                       Clear All
                     </Button>
