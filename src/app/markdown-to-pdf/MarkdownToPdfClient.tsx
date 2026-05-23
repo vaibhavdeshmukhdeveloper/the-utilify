@@ -293,7 +293,7 @@ export default function MarkdownToPdfClient() {
             </CardHeader>
             <CardContent className="p-0 relative">
               <textarea
-                className="w-full min-h-[500px] h-[550px] p-8 font-mono text-[13px] leading-relaxed resize-y bg-zinc-50/30 dark:bg-zinc-950/20 focus:outline-none placeholder:text-zinc-300 dark:placeholder:text-zinc-800"
+                className="w-full min-h-[500px] h-[550px] p-8 font-mono text-[13px] leading-relaxed resize-y bg-zinc-50/30 dark:bg-zinc-950/20 text-foreground focus:outline-none placeholder:text-zinc-400 dark:placeholder:text-zinc-700"
                 placeholder="# Compose your markdown document here..."
                 value={markdown}
                 onChange={(e) => {
