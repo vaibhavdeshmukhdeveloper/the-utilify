@@ -295,7 +295,7 @@ export default function InvestmentCalculatorClient() {
                     </thead>
                     <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                       {result.breakdown.map((row) => (
-                        <tr key={row.year} className="group hover:bg-zinc-50/50 transition-colors">
+                        <tr key={row.year} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
                           <td className="p-5 font-black text-primary">Year {row.year}</td>
                           <td className="p-5 text-sm font-medium text-zinc-600 dark:text-zinc-400">${row.principal.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
                           <td className="p-5 text-sm font-bold text-green-500">+${row.interest.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>

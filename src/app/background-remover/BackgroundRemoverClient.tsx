@@ -92,7 +92,7 @@ export default function BackgroundRemoverClient() {
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload */}
         <div className="lg:col-span-5 space-y-6">
-          <Card className="p-8 border-2 border-dashed bg-zinc-50/50 dark:bg-zinc-900/50 rounded-[2.5rem]">
+          <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem]">
             <FileUploader
               key={uploaderKey}
               label="Upload Image"
@@ -145,7 +145,7 @@ export default function BackgroundRemoverClient() {
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Original Preview */}
-                <Card className="p-4 bg-zinc-100/50 dark:bg-zinc-900/30 border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
+                <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
                   <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-zinc-950/80 text-zinc-50 text-[10px] font-black uppercase tracking-wider shadow-sm">
                     Original
                   </div>
@@ -161,7 +161,7 @@ export default function BackgroundRemoverClient() {
                 </Card>
 
                 {/* Background Removed */}
-                <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
+                <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
                   <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider shadow-sm">
                     Background Removed
                   </div>

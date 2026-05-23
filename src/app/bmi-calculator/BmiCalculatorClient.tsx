@@ -244,7 +244,7 @@ export default function BmiCalculatorClient() {
                   {bmiRanges.map((item, i) => (
                     <tr 
                       key={i} 
-                      className={`group transition-colors ${result?.category === item.label ? "bg-primary/5" : "hover:bg-zinc-50/50"}`}
+                      className={`group transition-colors ${result?.category === item.label ? "bg-primary/5" : "hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50"}`}
                     >
                       <td className="p-5 border-b flex items-center gap-3">
                         <div className={`w-3 h-3 rounded-full ${item.color}`} />

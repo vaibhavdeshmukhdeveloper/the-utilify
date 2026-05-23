@@ -1,6 +1,8 @@
-@import "tailwindcss";
-
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant data-horizontal (&:where([data-orientation="horizontal"]));
+@custom-variant data-vertical (&:where([data-orientation="vertical"]));
+@custom-variant data-active (&:where([data-active]));
+@custom-variant data-disabled (&:where([data-disabled]));
 
 :root {
   --background: #ffffff;
