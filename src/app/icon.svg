@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="utilifyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background reflecting the navbar logo -->
+  <rect x="2" y="2" width="28" height="28" rx="8" fill="url(#utilifyGrad)" />
+  <!-- Crisp white Sparkles vector paths styled after the Lucide icon -->
+  <g fill="#ffffff">
+    <!-- Main central sparkle -->
+    <path d="M16 8c0 3.5-1.5 5-5 5 3.5 0 5 1.5 5 5 0-3.5 1.5-5 5-5-3.5 0-5-1.5-5-5z" />
+    <!-- Secondary sparkle top-right -->
+    <path d="M23 5c0 1.5-0.7 2-2 2 1.3 0 2 0.5 2 2 0-1.5 0.7-2 2-2-1.3 0-2-0.5-2-2z" />
+    <!-- Third sparkle bottom-left -->
+    <path d="M9 19c0 1.5-0.7 2-2 2 1.3 0 2 0.5 2 2 0-1.5 0.7-2 2-2-1.3 0-2-0.5-2-2z" />
+  </g>
+</svg>
