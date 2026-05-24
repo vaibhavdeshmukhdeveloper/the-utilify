@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, AlertCircle, Shield, CheckCircle, Info } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { JsonLd } from "@/components/JsonLd";
 
 // Import all client tools dynamically or directly since this is a server wrapper
 import BackgroundRemoverClient from "@/app/background-remover/BackgroundRemoverClient";
@@ -80,9 +81,24 @@ export default async function UseCasePage({ params }: PageProps) {
     }
   };
 
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": data.title,
+    "description": data.seoDescription,
+    "operatingSystem": "All",
+    "applicationCategory": data.baseTool.includes("calculator") ? "BusinessApplication" : "MultimediaApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
+      <JsonLd data={schemaData} />
 
       <main className="flex-grow">
         {/* Niche Landing Page Header */}
