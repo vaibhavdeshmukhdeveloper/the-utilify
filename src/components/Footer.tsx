@@ -2,9 +2,18 @@
 
 import Link from "next/link";
 import { Sparkles, Heart } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+
+  const getLinkClass = (href: string) => {
+    const isActive = pathname === href;
+    return isActive
+      ? "text-sm text-primary font-bold hover:underline transition-colors"
+      : "text-sm text-muted-foreground hover:text-primary transition-colors";
+  };
 
   return (
     <footer className="border-t bg-card transition-colors">
@@ -32,22 +41,22 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/background-remover" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/background-remover" className={getLinkClass("/background-remover")}>
                   AI Background Remover
                 </Link>
               </li>
               <li>
-                <Link href="/pdf-to-image" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/pdf-to-image" className={getLinkClass("/pdf-to-image")}>
                   PDF to Image Converter
                 </Link>
               </li>
               <li>
-                <Link href="/image-compressor" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/image-compressor" className={getLinkClass("/image-compressor")}>
                   Image Compressor
                 </Link>
               </li>
               <li>
-                <Link href="/markdown-to-pdf" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/markdown-to-pdf" className={getLinkClass("/markdown-to-pdf")}>
                   Markdown to PDF
                 </Link>
               </li>
@@ -61,22 +70,22 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/sip-calculator" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/sip-calculator" className={getLinkClass("/sip-calculator")}>
                   SIP Calculator
                 </Link>
               </li>
               <li>
-                <Link href="/investment-calculator" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/investment-calculator" className={getLinkClass("/investment-calculator")}>
                   Investment Calculator
                 </Link>
               </li>
               <li>
-                <Link href="/bmi-calculator" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/bmi-calculator" className={getLinkClass("/bmi-calculator")}>
                   BMI Calculator
                 </Link>
               </li>
               <li>
-                <Link href="/json-formatter" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/json-formatter" className={getLinkClass("/json-formatter")}>
                   JSON Formatter & Validator
                 </Link>
               </li>
@@ -90,27 +99,27 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/use-cases" className="text-sm text-primary font-bold hover:underline transition-colors">
+                <Link href="/use-cases" className={getLinkClass("/use-cases")}>
                   Browse All Niches
                 </Link>
               </li>
               <li>
-                <Link href="/use-case/convert-bank-statement-pdf-to-jpg" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/use-case/convert-bank-statement-pdf-to-jpg" className={getLinkClass("/use-case/convert-bank-statement-pdf-to-jpg")}>
                   Secure Bank Statements
                 </Link>
               </li>
               <li>
-                <Link href="/use-case/remove-background-jewelry-photos-shopify" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/use-case/remove-background-jewelry-photos-shopify" className={getLinkClass("/use-case/remove-background-jewelry-photos-shopify")}>
                   Shopify Jewelry Cutouts
                 </Link>
               </li>
               <li>
-                <Link href="/use-case/compress-image-for-passport-application" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/use-case/compress-image-for-passport-application" className={getLinkClass("/use-case/compress-image-for-passport-application")}>
                   Passport Size Compressor
                 </Link>
               </li>
               <li>
-                <Link href="/use-case/convert-github-readme-to-beautiful-pdf" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/use-case/convert-github-readme-to-beautiful-pdf" className={getLinkClass("/use-case/convert-github-readme-to-beautiful-pdf")}>
                   GitHub README to PDF
                 </Link>
               </li>
@@ -124,22 +133,22 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/about" className={getLinkClass("/about")}>
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/blog" className={getLinkClass("/blog")}>
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/contact" className={getLinkClass("/contact")}>
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/faq" className={getLinkClass("/faq")}>
                   FAQ Help
                 </Link>
               </li>
