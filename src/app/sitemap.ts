@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next";
+import { useCases } from "@/lib/use-cases-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://utilify.io"; // Brand domain
+  const baseUrl = "https://www.theutilify.com"; // Correct active brand domain
 
   const tools = [
     "/json-formatter",
@@ -32,12 +33,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/blog/ai-background-removal-tips-for-ecommerce",
   ];
 
-  const allPaths = [...marketingPages, ...tools, ...blogSlugs];
+  // Dynamic programmatic SEO routes
+  const useCasePaths = useCases.map((uc) => `/use-case/${uc.slug}`);
+
+  const allPaths = [...marketingPages, ...tools, ...blogSlugs, ...useCasePaths];
 
   return allPaths.map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),
     changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1.0 : path.includes("/blog/") ? 0.6 : 0.8,
+    priority: path === "" ? 1.0 : path.includes("/use-case/") ? 0.7 : path.includes("/blog/") ? 0.6 : 0.8,
   }));
 }

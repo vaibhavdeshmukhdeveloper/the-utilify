@@ -9,7 +9,7 @@ export function Footer() {
   return (
     <footer className="border-t bg-card transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 md:gap-10">
           {/* Logo & Pitch */}
           <div className="space-y-4 col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 group">
@@ -83,7 +83,41 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Links & Support */}
+          {/* Column 4: Programmatic Use Cases (pSEO crawler helper) */}
+          <div>
+            <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
+              Popular Use Cases
+            </h4>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/use-cases" className="text-sm text-primary font-bold hover:underline transition-colors">
+                  Browse All Niches
+                </Link>
+              </li>
+              <li>
+                <Link href="/use-case/convert-bank-statement-pdf-to-jpg" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Secure Bank Statements
+                </Link>
+              </li>
+              <li>
+                <Link href="/use-case/remove-background-jewelry-photos-shopify" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Shopify Jewelry Cutouts
+                </Link>
+              </li>
+              <li>
+                <Link href="/use-case/compress-image-for-passport-application" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Passport Size Compressor
+                </Link>
+              </li>
+              <li>
+                <Link href="/use-case/convert-github-readme-to-beautiful-pdf" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  GitHub README to PDF
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 5: Links & Support */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
               Company
