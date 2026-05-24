@@ -5,6 +5,7 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { Card } from "@/components/ui/card";
 import { usePathname } from "next/navigation";
+import { AdBanner } from "./AdBanner";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ export function ToolLayout({
           <Card className="w-full p-6 md:p-12 lg:p-16 border-2 border-dashed bg-card backdrop-blur-sm min-h-[500px] flex flex-col items-center justify-center shadow-2xl shadow-primary/5 rounded-[2rem] text-center">
             {children}
           </Card>
+          <AdBanner />
         </div>
       </div>
     );
@@ -61,6 +63,7 @@ export function ToolLayout({
             <Card className="p-6 md:p-12 lg:p-16 border-2 border-dashed bg-card backdrop-blur-sm min-h-[500px] flex flex-col items-center justify-center shadow-2xl shadow-primary/5 rounded-[2rem] text-center">
               {children}
             </Card>
+            <AdBanner />
           </div>
         </section>
 
