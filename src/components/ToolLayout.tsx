@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { Card } from "@/components/ui/card";
+import { usePathname } from "next/navigation";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -20,6 +23,21 @@ export function ToolLayout({
   faqs,
   relatedTools,
 }: ToolLayoutProps) {
+  const pathname = usePathname();
+  const isUseCase = pathname?.startsWith("/use-case/");
+
+  if (isUseCase) {
+    return (
+      <div className="w-full flex items-center justify-center text-center">
+        <div className="w-full flex flex-col items-center justify-center text-center mx-auto">
+          <Card className="w-full p-6 md:p-12 lg:p-16 border-2 border-dashed bg-card backdrop-blur-sm min-h-[500px] flex flex-col items-center justify-center shadow-2xl shadow-primary/5 rounded-[2rem] text-center">
+            {children}
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
