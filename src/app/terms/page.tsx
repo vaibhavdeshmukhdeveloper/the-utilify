@@ -41,7 +41,7 @@ export default function TermsPage() {
             <section className="space-y-4">
               <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">3. Disclaimer of Warranties</h2>
               <p className="leading-relaxed">
-                Utilify is provided "as is" and without any warranty of any kind, either express or implied. We do not guarantee that our tools will always be online, error-free, or compatible with every file type. You use our tools at your own risk.
+                Utilify is provided &quot;as is&quot; and without any warranty of any kind, either express or implied. We do not guarantee that our tools will always be online, error-free, or compatible with every file type. You use our tools at your own risk.
               </p>
             </section>
 

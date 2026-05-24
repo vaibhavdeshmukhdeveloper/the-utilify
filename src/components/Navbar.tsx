@@ -2,42 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Sparkles, LayoutGrid, FileText, ImageIcon, Calculator, HelpCircle } from "lucide-react";
+import { Menu, X, Sparkles, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const categories = [
-    {
-      name: "PDF Tools",
-      icon: FileText,
-      items: [
-        { name: "PDF to Image", href: "/pdf-to-image" },
-        { name: "Split PDF", href: "/split-pdf" },
-        { name: "Merge PDF", href: "/merge-pdf" },
-        { name: "Markdown to PDF", href: "/markdown-to-pdf" },
-      ]
-    },
-    {
-      name: "Image Tools",
-      icon: ImageIcon,
-      items: [
-        { name: "AI Background Remover", href: "/background-remover" },
-        { name: "Image Compressor", href: "/image-compressor" },
-      ]
-    },
-    {
-      name: "Calculators",
-      icon: Calculator,
-      items: [
-        { name: "SIP Calculator", href: "/sip-calculator" },
-        { name: "Investment Calculator", href: "/investment-calculator" },
-        { name: "BMI Calculator", href: "/bmi-calculator" },
-      ]
-    }
-  ];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md transition-all">
@@ -74,11 +44,11 @@ export function Navbar() {
               </Link>
             </div>
 
-            <a href="/#tools">
+            <Link href="/#tools">
               <Button size="sm" className="rounded-xl shadow-md font-bold px-4 hover:shadow-lg transition-all">
                 Explore Tools <LayoutGrid className="ml-2 h-4 w-4" />
               </Button>
-            </a>
+            </Link>
 
             <ThemeToggle />
           </div>
@@ -130,11 +100,11 @@ export function Navbar() {
             </Link>
 
             <div className="pt-4 border-t">
-              <a href="/#tools" onClick={() => setIsOpen(false)}>
+              <Link href="/#tools" onClick={() => setIsOpen(false)}>
                 <Button className="w-full h-12 rounded-xl font-bold">
                   All Utilities <LayoutGrid className="ml-2 h-5 w-5" />
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

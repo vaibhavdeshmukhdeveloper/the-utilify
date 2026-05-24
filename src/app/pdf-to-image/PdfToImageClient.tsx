@@ -28,9 +28,10 @@ export default function PdfToImageClient() {
       const data = await uploadToBackend("/pdf/to-image", files);
       setResult(data);
       toast.success("PDF converted to images successfully!");
-    } catch (error: any) {
-      console.error("Conversion error:", error);
-      toast.error(error.message || "Failed to convert PDF. Please ensure the backend is running.");
+    } catch (error) {
+      const err = error as Error;
+      console.error("Conversion error:", err);
+      toast.error(err.message || "Failed to convert PDF. Please ensure the backend is running.");
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +109,7 @@ export default function PdfToImageClient() {
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">Converting PDF...</h3>
               <p className="text-muted-foreground max-w-xs mx-auto">
-                We're extracting high-quality images from each page. This usually takes 3-10 seconds depending on size (first run may take slightly longer).
+                We&apos;re extracting high-quality images from each page. This usually takes 3-10 seconds depending on size (first run may take slightly longer).
               </p>
             </Card>
           ) : result ? (
@@ -168,7 +169,7 @@ export default function PdfToImageClient() {
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">No file uploaded yet</h3>
               <p className="text-muted-foreground max-w-xs mx-auto">
-                Once you upload your PDF, you'll be able to download each page as an individual image.
+                Once you upload your PDF, you&apos;ll be able to download each page as an individual image.
               </p>
               <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
                 <ArrowRight className="h-4 w-4" /> Select a PDF to begin

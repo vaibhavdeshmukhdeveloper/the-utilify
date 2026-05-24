@@ -23,11 +23,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   React.useEffect(() => {
-    setMounted(true);
-    const savedTheme = localStorage.getItem("theme") as Theme | null;
-    if (savedTheme) {
-      setThemeState(savedTheme);
-    }
+    // De-synchronize state updates to prevent cascading synchronous renders
+    const timer = setTimeout(() => {
+      setMounted(true);
+      const savedTheme = localStorage.getItem("theme") as Theme | null;
+      if (savedTheme) {
+        setThemeState(savedTheme);
+      }
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   React.useEffect(() => {
