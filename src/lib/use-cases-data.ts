@@ -737,5 +737,456 @@ export const useCases: UseCaseData[] = [
       "No Latency: Runs completely client-side in your browser, keeping customer transaction amounts and email tokens completely secure.",
       "Structure Validation: Highlight exact lines where unclosed brackets or missing commas break payloads."
     ]
+  },
+  // 11. 30 New Programmatic SEO Use Cases
+  {
+    slug: "remove-background-food-photos-delivery-apps",
+    baseTool: "background-remover",
+    title: "Food Photo Background Remover",
+    seoTitle: "Remove Background from Food Photos (UberEats & DoorDash Ready)",
+    seoDescription: "Instantly remove backgrounds from food, burger, pizza, and dessert photos. Create clean transparent PNGs for online food delivery menus.",
+    heading: "Remove Background from Food Photos",
+    introduction: "Selling food online starts with delicious visuals. Isolate delicious burgers, pizzas, bowls, and desserts from busy kitchen or restaurant backdrops. Get perfect transparent PNG cutouts ready for UberEats, DoorDash, Zomato, or your own digital menu.",
+    category: "Image",
+    tips: [
+      "Detail Preservation: Our AI handles complex food textures, steam, garnish, and fine details with high precision.",
+      "Menu Standardization: Create a uniform aesthetic by replacing cluttered backgrounds with clean brand-color cards.",
+      "Optimal Size: Compress the final output to ensure your online menu loads fast on customer mobile screens."
+    ]
+  },
+  {
+    slug: "remove-background-book-cover-art",
+    baseTool: "background-remover",
+    title: "Book Cover Portrait Background Remover",
+    seoTitle: "Remove Background from Book Cover Photos Online (AI)",
+    seoDescription: "Easily remove backgrounds from portraits, figures, and illustrations to create stunning book covers for Kindle, print, and novels.",
+    heading: "Remove Background for Book Cover Art",
+    introduction: "Designing an eye-catching book cover requires layered graphics. Instantly isolate main characters, models, or illustrations from their background photos to drop them onto custom, high-impact background layers, text blocks, and typography layouts.",
+    category: "Image",
+    tips: [
+      "Character Isolation: Clean cuts around hair, clothing folds, and accessories ensure flawless cover integration.",
+      "High Resolution: Export in high density to preserve premium print and Kindle quality benchmarks.",
+      "Layering Flexibility: Transparent outputs allow you to place characters in front of rich gradients or dramatic backdrops."
+    ]
+  },
+  {
+    slug: "remove-background-plants-flowers",
+    baseTool: "background-remover",
+    title: "Plant & Flower Photo Background Remover",
+    seoTitle: "Remove Background from Plant and Flower Photos Online",
+    seoDescription: "Isolate plants, flowers, and succulents from complex botanical backgrounds with high-fidelity transparency. Ready for florists and nurseries.",
+    heading: "Remove Background from Plant & Flower Photos",
+    introduction: "Selling flora online or blogging about botany? Easily strip busy greenhouse, potting soil, or garden backgrounds from plant, succulent, and floral photos. Produce beautiful, isolated products for catalogs or nursery websites.",
+    category: "Image",
+    tips: [
+      "Delicate Foliage: Intelligently isolates intricate leaf points, thin stems, and individual flower petals.",
+      "E-commerce Ready: Place botanical products against solid white pages for standard florist marketplace requirements.",
+      "Color Accuracy: Keeps rich greens and vibrant petal colors looking completely natural."
+    ]
+  },
+  {
+    slug: "convert-pitch-deck-pdf-to-jpg",
+    baseTool: "pdf-to-image",
+    title: "Pitch Deck PDF to JPG Converter",
+    seoTitle: "Convert Pitch Deck PDF to High-Resolution JPG Slides",
+    seoDescription: "Convert business pitch decks, presentation slides, and PDF brochures into high-resolution JPG images. Perfect for social sharing.",
+    heading: "Convert Pitch Deck PDF to High-Res JPG Slides",
+    introduction: "Sharing your presentation or startup pitch deck on LinkedIn, Twitter, or blog posts? Easily convert raw document PDF pages into separate, crystal-clear JPG slides. Ready for sharing, embedding, or visual slide feeds.",
+    category: "PDF",
+    tips: [
+      "Vector Clarity: Converts slide vector elements, charts, and texts into crisp, readable images.",
+      "Social Sharing: JPG slides format prevents download requirements and displays directly in feeds.",
+      "Instant ZIP: Multi-slide presentations are rendered and bundled into a single ZIP archive automatically."
+    ]
+  },
+  {
+    slug: "convert-comic-book-pdf-to-jpg",
+    baseTool: "pdf-to-image",
+    title: "Comic Book PDF to JPG Converter",
+    seoTitle: "Convert Comic Book PDF to JPG Images Online",
+    seoDescription: "Convert comic books, manga pages, and graphic novels from PDF format to separate high-resolution JPG files. Read on any device.",
+    heading: "Convert Comic Book PDF to JPG Images",
+    introduction: "Want to read your favorite digital comic books, manga, or graphic novels on standard image viewers, tablets, or phones? Easily extract every PDF page and save it as an ordered, premium-resolution JPG file.",
+    category: "PDF",
+    tips: [
+      "Aesthetic Preservation: Keeps detailed comic illustrations, panel frames, and speech bubbles sharp.",
+      "Mobile Friendly: Standard JPG images load much faster on image-optimized e-readers and mobile galleries.",
+      "Secure Parsing: Extract graphic pages in-memory without exposing your files to storage risks."
+    ]
+  },
+  {
+    slug: "convert-floor-plan-pdf-to-png",
+    baseTool: "pdf-to-image",
+    title: "Floor Plan PDF to PNG Converter",
+    seoTitle: "Convert Floor Plan PDF to PNG Image Online (Blueprints)",
+    seoDescription: "Convert high-fidelity architectural floor plans, blueprints, and layout designs from PDF files to high-resolution PNG images safely.",
+    heading: "Convert Floor Plan PDF to PNG Image",
+    introduction: "Need to upload architectural layouts, site designs, or blueprints directly to real estate portals, MLS listings, or portfolio slideshows? Easily convert complex PDF vector designs into high-resolution PNG images.",
+    category: "PDF",
+    tips: [
+      "Blueprint Precision: Converts intricate lines, measurements, and legends into perfectly legible pixels.",
+      "Lossless PNG: Uses PNG format to keep thin architectural boundaries crisp and readable without compression artifacts.",
+      "Private Processing: Your private estate layouts and architectural files are rendered securely in-memory."
+    ]
+  },
+  {
+    slug: "extract-pages-from-paystubs-pdf",
+    baseTool: "split-pdf",
+    title: "Extract Pages from Paystubs PDF",
+    seoTitle: "Extract Specific Pages from Paystubs PDF Online (Private)",
+    seoDescription: "Safely isolate and extract specific paystubs, income statements, or earnings reports from a multi-page PDF in-memory. Zero server caching.",
+    heading: "Extract Specific Pages from Paystubs PDF",
+    introduction: "Applying for a home loan, car lease, or apartment rental? Don't share your entire consolidated income history or other sensitive pages. Extract exactly the recent paystubs requested and download them in a clean, isolated PDF file.",
+    category: "PDF",
+    tips: [
+      "Complete Security: Financial paystub records are processed exclusively in RAM to prevent private data leaks.",
+      "Maintain Signatures: Preserves all official company logos, seals, and digital signatures.",
+      "Exact Margins: The split output is perfectly configured to fit standard A4 or Letter boundaries."
+    ]
+  },
+  {
+    slug: "split-ebook-pdf-by-chapters",
+    baseTool: "split-pdf",
+    title: "E-Book & Textbook PDF Chapter Splitter",
+    seoTitle: "Split E-Book and Textbook PDF by Chapters Online",
+    seoDescription: "Divide heavy, multi-hundred-page textbooks, manuals, or novels from PDF format into individual chapter files for lightweight mobile reading.",
+    heading: "Split E-Book & Textbook PDF by Chapters",
+    introduction: "Tired of dealing with heavy 50MB e-book and academic textbook files? Break down massive documents into small, manageable chapter PDFs. Optimize study sessions and keep your mobile device storage light.",
+    category: "PDF",
+    tips: [
+      "Custom Ranges: Simply check your index and enter custom page bounds (e.g. '1-30, 31-75') to split multiple chapters at once.",
+      "Perfect Text Layer: Keeps all embedded search tables, index lists, and highlighted texts intact.",
+      "Fast Transfer: Smaller files are easier to email, print, or share with classmates."
+    ]
+  },
+  {
+    slug: "extract-receipts-from-invoice-pdf",
+    baseTool: "split-pdf",
+    title: "Invoice PDF Receipt Extractor",
+    seoTitle: "Extract Specific Pages from Invoice PDF Online (Free)",
+    seoDescription: "Extract specific receipt sheets, billing statements, or order confirmations from a bulk consolidated invoice PDF. Clean in-memory parsing.",
+    heading: "Extract Receipts from Consolidated Invoice PDF",
+    introduction: "Filing business expense claims or compiling accounts? Easily isolate and extract specific vendor receipt pages, tax sheets, or transaction forms from large bulk supplier PDF packages.",
+    category: "PDF",
+    tips: [
+      "Accounting Ready: Keep business documentation clean by extracting only relevant pages for auditing.",
+      "Lossless Resolution: Preserves the vector numbers, tax computations, and text layers exactly as generated.",
+      "No Traces: Runs client-side in your browser, keeping company accounting data safe."
+    ]
+  },
+  {
+    slug: "merge-creative-portfolio-pdf",
+    baseTool: "merge-pdf",
+    title: "Creative Portfolio PDF Merger",
+    seoTitle: "Merge Multiple PDF Portfolio Samples Online (Free)",
+    seoDescription: "Combine design samples, writing pieces, resumes, and project briefs into a single, cohesive PDF portfolio. Look professional to recruiters.",
+    heading: "Merge Creative Portfolio PDF Samples",
+    introduction: "Applying for graphic design, copywriting, or agency roles? Don't send recruiters dozen of separate attachments. Merge your visual samples, resume sheets, and case study PDFs into a single, professional portfolio dossier.",
+    category: "PDF",
+    tips: [
+      "Professional Impression: One unified portfolio makes your application look polished and highly organized.",
+      "Ordering Control: Arrange files in a logical sequence (Cover first, best work next, resume last).",
+      "Vector Sharpness: Preserves high-definition illustrations, branding elements, and texts."
+    ]
+  },
+  {
+    slug: "combine-bank-statement-and-paystubs-pdf",
+    baseTool: "merge-pdf",
+    title: "Income & Bank Statement PDF Merger",
+    seoTitle: "Combine Bank Statement and Paystubs into One PDF Online",
+    seoDescription: "Safely merge bank statements, recent paystubs, and utility bills into a single secure PDF file in-memory. Zero server caching.",
+    heading: "Combine Bank Statement & Paystubs into One PDF",
+    introduction: "Preparing financial documents for a lease verification, car loan, or mortgage check? Avoid confusion by merging your bank statements and paystub PDFs into a single, comprehensive proof-of-income file.",
+    category: "PDF",
+    tips: [
+      "Application Standard: Loan officers process cohesive files much faster, speeding up approvals.",
+      "Absolute Privacy: All financial worksheets and pay records are merged strictly in-memory without server storage.",
+      "Multi-Format Integration: Merge raw PDF files and JPEG or PNG document scans seamlessly."
+    ]
+  },
+  {
+    slug: "merge-study-guides-pdf-exam-prep",
+    baseTool: "merge-pdf",
+    title: "Exam Study Guides PDF Merger",
+    seoTitle: "Merge Study Guides and Notes into One PDF Online",
+    seoDescription: "Combine class notes, syllabus worksheets, cheat sheets, and study guides into a single comprehensive PDF master file for exam prep.",
+    heading: "Merge Study Guides & Notes for Exam Prep",
+    introduction: "Preparing for finals, AP tests, or professional certifications (like CPA, AWS, or CFA)? Don't waste time switching between dozens of folders. Merge your separate study guides, cheat sheets, and practice exams into a single organized master study guide.",
+    category: "PDF",
+    tips: [
+      "Consolidated Study: Keeps all your study material in a single, searchable PDF document.",
+      "Consistent Flow: Drag and drop files to align topics in chronological order.",
+      "Print Ready: Renders multiple worksheets into a cleanly paginated handbook."
+    ]
+  },
+  {
+    slug: "compress-us-visa-application-photo",
+    baseTool: "image-compressor",
+    title: "US Visa Photo Compressor",
+    seoTitle: "Compress US Visa Photo Online (Under 240KB - DS-160)",
+    seoDescription: "Compress visa photos and scans to fit US DS-160 online portal bounds (under 240KB, 600x600 px) with high clarity to avoid rejection.",
+    heading: "Compress US Visa Photo for DS-160 Portals",
+    introduction: "The US visa application (DS-160) portal enforces strict photo limits: the file must be under 240KB and exactly 600x600 pixels. Easily shrink your visa photo file size in seconds while keeping the facial resolution sharp and clear to avoid application rejection.",
+    category: "Image",
+    tips: [
+      "Exact Compliance: Shrinks files down to standard DS-160 thresholds while avoiding pixelation.",
+      "Facial Details: Protects biometric zones (eyes, skin tones, contours) at high priority.",
+      "100% In-Memory: Your private passport or visa photo is processed securely in your browser session."
+    ]
+  },
+  {
+    slug: "compress-images-for-email-attachments",
+    baseTool: "image-compressor",
+    title: "Email Image Compressor",
+    seoTitle: "Compress Images for Email Attachments Online (Free)",
+    seoDescription: "Shrink heavy camera photos and JPG/PNG files to easily fit under email attachment size limits (under 20MB) with high quality.",
+    heading: "Compress Images for Email Attachments",
+    introduction: "Trying to email high-resolution smartphone photos or project files but getting blocked by Outlook or Gmail size limits (usually 20-25MB)? Compress your image attachments in seconds. Shrink file sizes dramatically while keeping pictures look stunning and crisp.",
+    category: "Image",
+    tips: [
+      "Bandwidth Saver: Easily compresses photos by up to 80% to ensure your emails send and arrive instantly.",
+      "Text Preservation: Keeps scanned invoice details or textual contents in images fully legible.",
+      "Batch Mode: Optimize multiple attachments at once and download them with one click."
+    ]
+  },
+  {
+    slug: "compress-web-banners-website-speed",
+    baseTool: "image-compressor",
+    title: "Web Banner Image Compressor",
+    seoTitle: "Compress Web Banner Images Online (SEO & Core Web Vitals)",
+    seoDescription: "Compress homepage hero images, sliders, and promo banners. Boost website loading speed and improve Google PageSpeed ranking.",
+    heading: "Compress Web Banner Images for Website Speed",
+    introduction: "Heavy, unoptimized hero banner images are the main cause of slow loading times and low Core Web Vitals (LCP) scores. Compress all your web graphics. Shrink heavy JPEG and PNG banners, keeping your graphics completely sharp for premium displays.",
+    category: "Image",
+    tips: [
+      "SEO Optimization: Faster load speeds directly improve your Google search ranking and reduce bounce rates.",
+      "High Resolution: Retains color gradients and crisp overlays, ensuring banners look stunning on high-DPI screens.",
+      "Web Formats: Fully compatible with standard web JPEG and high-quality transparent PNG banners."
+    ]
+  },
+  {
+    slug: "convert-blog-post-markdown-to-pdf-ebook",
+    baseTool: "markdown-to-pdf",
+    title: "Blog Post Markdown to PDF Ebook Converter",
+    seoTitle: "Convert Blog Post Markdown to PDF Ebook Online (Lead Magnets)",
+    seoDescription: "Easily convert markdown blog articles and tutorials into beautifully formatted, downloadable PDF ebooks to capture leads.",
+    heading: "Convert Blog Post Markdown to PDF Ebook",
+    introduction: "Want to repurpose your successful markdown blog posts, documentation pages, or newsletters into digital lead-magnet ebooks? Paste your markdown text, choose margins, and compile it into a beautifully styled PDF ebook ready to grow your mailing list.",
+    category: "PDF",
+    tips: [
+      "Ebook Layout: Styled with a premium font system, logical spacing, and structured headers.",
+      "Interactive Links: Keeps all original hyperlinks, code blocks, and lists active in the final PDF.",
+      "Ready to Share: Output standard-sized files ready for upload on websites or newsletter attachments."
+    ]
+  },
+  {
+    slug: "convert-release-notes-markdown-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Software Release Notes Markdown to PDF Converter",
+    seoTitle: "Convert Release Notes Markdown to PDF Online (Professional Theme)",
+    seoDescription: "Convert markdown software changelogs and release specs into beautiful, executive-ready PDF reports. Elegant geometric layout.",
+    heading: "Convert Release Notes Markdown to PDF",
+    introduction: "Sharing software updates, release notes, or product changelogs with executive stakeholders or enterprise clients? Compile your raw markdown files into structured, corporate-designed PDFs. Include clear tags, code blocks, and timestamps.",
+    category: "PDF",
+    tips: [
+      "Action Items: Formats version checkboxes, lists, and highlight boxes cleanly.",
+      "Syntax Color Coding: Displays technical details or JSON examples in readable code blocks.",
+      "Corporate Clean: Preconfigured with standard company document styling and modern typography."
+    ]
+  },
+  {
+    slug: "convert-user-guide-markdown-to-pdf-manual",
+    baseTool: "markdown-to-pdf",
+    title: "User Guide Markdown to PDF Manual Converter",
+    seoTitle: "Convert Markdown User Guide to PDF Manual (Print Ready)",
+    seoDescription: "Convert markdown technical guides, software specs, and hardware manuals into publication-ready, beautifully formatted printable PDFs.",
+    heading: "Convert User Guide Markdown to PDF Manual",
+    introduction: "Need to print or publish a software documentation manual, a developer guide, or a hardware instruction booklet? Write your manual in standard markdown and compile it into an elegant, A4 or Letter-sized printable PDF handbook.",
+    category: "PDF",
+    tips: [
+      "Print Optimization: Automatically calculates safe gutters, page boundaries, and clear margins.",
+      "Highly Legible: Uses elegant Sans-Serif geometries ideal for instruction manuals.",
+      "Structure Preservation: Beautifully compiles nested bullet points, note alerts, and index lines."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-fire-movement",
+    baseTool: "sip-calculator",
+    title: "FIRE Movement SIP Calculator",
+    seoTitle: "SIP Calculator for FIRE Movement (Financial Independence Retire Early)",
+    seoDescription: "Calculate monthly savings and compound returns needed to achieve early retirement (FIRE by 35 or 40). Plan aggressive capital accumulation.",
+    heading: "SIP Calculator for the FIRE Movement",
+    introduction: "Aiming to break free from the 9-to-5 grind? The Financial Independence, Retire Early (FIRE) movement relies on high savings rates and compounding investment growth. Calculate how aggressive monthly mutual fund systematic investment plans (SIPs) can compound to hit your target retirement corpus.",
+    category: "Finance",
+    tips: [
+      "Early Compounding: Compounding interest performs exponentially better the longer it is left untouched. Start early.",
+      "Inflation Safe: Aim to beat standard inflation thresholds by allocating capital into high-growth global index funds.",
+      "Goal Projections: Visualizes standard retirement nest eggs and monthly cash-flow returns."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-emergency-fund",
+    baseTool: "sip-calculator",
+    title: "Emergency Fund SIP Calculator",
+    seoTitle: "SIP Calculator for Emergency Fund Accumulation Online",
+    seoDescription: "Calculate estimated monthly SIP returns to systematically build a robust 3 to 6-month living expenses emergency reserve fund safely.",
+    heading: "SIP Calculator for Emergency Fund Accumulation",
+    introduction: "Every sound financial plan starts with an emergency fund. Don't worry about trying to save thousands all at once. Project how a disciplined monthly systematic investment plan (SIP) into stable or liquid funds can accumulate a 6-month living expenses cushion.",
+    category: "Finance",
+    tips: [
+      "Low Risk Focus: When planning an emergency fund, model compounding returns of stable, low-volatility assets.",
+      "Disciplined Savings: Small monthly systematic contributions build an ironclad safety net over time.",
+      "Easy Access: Liquid funds allow instant withdrawals in times of unexpected expenses."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-crypto-dca",
+    baseTool: "sip-calculator",
+    title: "Cryptocurrency DCA SIP Calculator",
+    seoTitle: "Cryptocurrency Dollar-Cost Averaging (DCA) SIP Calculator",
+    seoDescription: "Calculate compound growth and dollar-cost averaging returns of systematic monthly crypto (Bitcoin & Ethereum) allocations over time.",
+    heading: "Cryptocurrency Dollar-Cost Averaging (DCA) Calculator",
+    introduction: "Interested in high-growth digital assets but want to manage risk? Dollar-Cost Averaging (DCA) involves investing a fixed amount (like $100) monthly. Estimate the power of compound returns and long-term DCA on major crypto portfolios like Bitcoin or Ethereum.",
+    category: "Finance",
+    tips: [
+      "Volatility Mitigation: DCA naturally helps smooth out price swings by buying more assets when prices are low and fewer when they are high.",
+      "Long Horizons: Cryptocurrencies are highly volatile; ensure your DCA goals span 3-5+ years to weather market cycles.",
+      "Risk Distribution: Balance high-risk assets with traditional index funds to protect your overall capital."
+    ]
+  },
+  {
+    slug: "calculate-sp500-index-returns",
+    baseTool: "investment-calculator",
+    title: "S&P 500 Long-Term Returns Calculator",
+    seoTitle: "S&P 500 Index Return Calculator (Lump Sum & Recurring)",
+    seoDescription: "Project long-term compound returns of S&P 500 ETF investments (SPY, VOO) online. Analyze historical 10% average growth curves.",
+    heading: "S&P 500 Long-Term Index Returns Calculator",
+    introduction: "Want to calculate how a lump-sum investment combined with monthly indexing contributions in S&P 500 ETFs will accumulate? Model growth using historical compound market averages (approx 10-11% per year) and track your future wealth curves.",
+    category: "Finance",
+    tips: [
+      "Consistent Indexing: Reinvest dividends automatically to maximize the power of compound growth.",
+      "Market History: While past performance is no guarantee of future results, the S&P 500 has consistently compounded wealth over multi-decade horizons.",
+      "Fee Optimization: Look for low-expense-ratio index funds (like VOO or SPY) to save thousands in management fees."
+    ]
+  },
+  {
+    slug: "calculate-hysa-high-yield-savings-growth",
+    baseTool: "investment-calculator",
+    title: "High-Yield Savings Account (HYSA) Calculator",
+    seoTitle: "High-Yield Savings Account (HYSA) Growth Calculator Online",
+    seoDescription: "Calculate compound growth of cash saved in high-yield savings accounts at 4-5% annual interest. Compare compounding rates.",
+    heading: "High-Yield Savings Account (HYSA) Growth Calculator",
+    introduction: "Keep your cash secure while beating standard bank rates. Calculate exactly how daily, monthly, or quarterly compound interest in modern High-Yield Savings Accounts (HYSA) grows your savings at current yields.",
+    category: "Finance",
+    tips: [
+      "Compounding Leverage: Daily or monthly interest compounding builds wealth slightly faster than annual compounding.",
+      "Liquid Cash: HYSA accounts keep your cash fully accessible, making them ideal for emergency reserves or near-term purchase goals.",
+      "Interest Swings: HYSA rates fluctuate with national interest standards; keep calculations updated accordingly."
+    ]
+  },
+  {
+    slug: "lump-sum-vs-sip-investment-calculator",
+    baseTool: "investment-calculator",
+    title: "Lump Sum vs SIP Investment Calculator",
+    seoTitle: "Lump Sum vs SIP Investment Return Calculator Online",
+    seoDescription: "Compare compound interest returns of a one-time (lump sum) investment against a systematic investment plan (SIP) over time.",
+    heading: "Lump Sum vs SIP Investment Calculator",
+    introduction: "Received a sudden windfall, tax refund, or bonus? Evaluate whether it's better to invest your entire capital at once (Lump Sum) or dollar-cost-average via fixed monthly contributions (SIP). Compare compounding differences and risk profiles.",
+    category: "Finance",
+    tips: [
+      "Lump Sum Power: Deploying a lump sum immediately gives your capital more time to compound, historically yielding higher returns.",
+      "SIP Comfort: Systematic investing reduces timing risk and offers emotional security during volatile market phases.",
+      "Balanced Hybrid: Consider deploying a portion as lump sum and setting the rest on a monthly SIP schedule."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-pregnancy-weight-tracker",
+    baseTool: "bmi-calculator",
+    title: "Pregnancy Pre-BMI & Weight Category Calculator",
+    seoTitle: "Pregnancy Pre-BMI & Healthy Weight Gain Tracker Online",
+    seoDescription: "Calculate pre-pregnancy BMI category to estimate healthy gestational weight gain guidelines according to medical standards.",
+    heading: "Pregnancy Pre-BMI & Weight Category Calculator",
+    introduction: "Healthy gestational weight gain supports your baby's development. Calculate your pre-pregnancy Body Mass Index (BMI) to understand the recommended weight gain ranges and medical parameters for standard pregnancies.",
+    category: "Health",
+    tips: [
+      "Pre-BMI Standard: Clinical guidelines suggest different weight target ranges depending on your starting BMI category.",
+      "Healthy Progress: Track your gradual weight changes under your doctor's supervision instead of focusing on weight restriction.",
+      "Nourishing Focus: Prioritize clean nutrition and light physical activity to support maternal well-being."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-seniors-over-65",
+    baseTool: "bmi-calculator",
+    title: "Senior Citizens (Over 65) BMI Calculator",
+    seoTitle: "BMI Calculator for Seniors and Older Adults (Over 65)",
+    seoDescription: "Calculate BMI parameters tailored for adults over age 65. Understand why a slightly higher weight index is beneficial for seniors.",
+    heading: "BMI Calculator for Seniors & Older Adults",
+    introduction: "Are you or your loved ones tracking health in golden years? Clinical studies show that standard BMI classifications differ for older adults. For seniors over 65, a slightly higher BMI (25 to 27) might offer protective nutritional reserves during illness.",
+    category: "Health",
+    tips: [
+      "Senior Ideal: Healthcare providers often target 22-27 as the ideal BMI range for seniors, compared to 18.5-25 for younger adults.",
+      "Lean Muscle Focus: Track muscle retention and functional balance alongside BMI to protect joint health.",
+      "Medical Consultation: Always discuss weight and dietary changes with a geriatric specialist."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-weight-loss-goals",
+    baseTool: "bmi-calculator",
+    title: "Weight Loss Goal BMI Calculator",
+    seoTitle: "BMI Calculator for Weight Loss Goals (Target Weight Finder)",
+    seoDescription: "Calculate your current BMI, target BMI, and the exact weight reduction needed to safely transition into the healthy weight category.",
+    heading: "BMI Calculator for Weight Loss Goals",
+    introduction: "Planning your health journey? Find out exactly how your current height and weight translate to standard BMI classes. Estimate your target weight thresholds and the precise pounds or kilograms needed to achieve a healthy weight.",
+    category: "Health",
+    tips: [
+      "Realistic Targets: Aim for a gradual, sustainable weight reduction of 1-2 pounds per week to protect lean muscle mass.",
+      "Progress Milestones: Celebrate shifting down from severe obesity, to moderate, to healthy zones.",
+      "Holistic Health: Couple active workouts with nutritional changes for maximum lifestyle success."
+    ]
+  },
+  {
+    slug: "format-kubernetes-manifest-json",
+    baseTool: "json-formatter",
+    title: "Kubernetes Manifest JSON Formatter",
+    seoTitle: "Format & Validate Kubernetes Manifest JSON Online (DevOps)",
+    seoDescription: "Paste, format, validate, and pretty-print Kubernetes deployment and pod JSON manifests in real-time. DevOps syntax validator.",
+    heading: "Format & Validate Kubernetes Manifest JSON",
+    introduction: "DevOps and Cloud engineering workflows. Prettify nested config blocks, map API parameters, validate schema constraints, and format Kubernetes pod, deployment, or service JSON logs before deployment.",
+    category: "Developer",
+    tips: [
+      "Syntax Validation: Pinpoints misplaced parameters or syntax brackets instantly.",
+      "Complete Privacy: manifest details run 100% locally in transient RAM, keeping secure endpoints protected.",
+      "Clear Hierarchies: Clean indentation aids in reviewing replica values, image bounds, and secret mappings."
+    ]
+  },
+  {
+    slug: "format-aws-iam-policy-json",
+    baseTool: "json-formatter",
+    title: "AWS IAM Policy JSON Validator & Prettifier",
+    seoTitle: "Format and Prettify AWS IAM Policy JSON Online (Secure)",
+    seoDescription: "Validate, debug, format, and prettify nested AWS IAM policy JSON scripts instantly. Locate Actions, Resources, and Conditions.",
+    heading: "AWS IAM Policy JSON Formatter & Validator",
+    introduction: "Debugging cloud authorization parameters? Paste complex, multi-statement AWS IAM policies. Check JSON syntax compliance, unescape nested string variables, and pretty-print nodes to review permissions easily.",
+    category: "Developer",
+    tips: [
+      "Access Tracing: Locate Statements, Resources, and Action arrays in seconds with color coding.",
+      "Local Checking: Policy components are parsed strictly client-side to prevent credential leaks.",
+      "Syntax Validation: Ensure bracket matchings to avoid policy application errors."
+    ]
+  },
+  {
+    slug: "prettify-json-logs-cloudwatch-kibana",
+    baseTool: "json-formatter",
+    title: "CloudWatch & Kibana JSON Log Prettifier",
+    seoTitle: "Format and Prettify CloudWatch & Kibana JSON Logs Online",
+    seoDescription: "Parse, unescape, and format single-line minified JSON logs from AWS CloudWatch or Kibana into beautiful structured trees.",
+    heading: "Prettify CloudWatch & Kibana JSON Logs",
+    introduction: "Production system troubleshooting. Convert unreadable, heavily minified single-line log dumps from cloud providers into clean, beautifully structured interactive JSON trees in milliseconds.",
+    category: "Developer",
+    tips: [
+      "Troubleshooting Speed: Indents deeply nested event details, exceptions, and database responses for fast review.",
+      "Log Cleaning: Easily strips off outer container metadata tags to focus on core payload logs.",
+      "High Volume Ready: Fully optimized client-side processing handles large files without lag."
+    ]
   }
 ];
