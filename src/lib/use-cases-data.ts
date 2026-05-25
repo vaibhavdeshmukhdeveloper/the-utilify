@@ -287,5 +287,455 @@ export const useCases: UseCaseData[] = [
       "Syntax Highlight: Full syntax highlighting to locate nested keys instantly.",
       "Validator: Pins down parsing errors with accurate line annotations."
     ]
+  },
+  {
+    slug: "remove-background-linkedin-headshot",
+    baseTool: "background-remover",
+    title: "Professional LinkedIn Headshot Background Remover",
+    seoTitle: "Remove Background from LinkedIn Headshot Online (AI Portrait)",
+    seoDescription: "Automatically remove backgrounds from professional headshots and portrait photos. Get transparent PNGs to create stunning LinkedIn, CV, and corporate profiles.",
+    heading: "Remove Background from LinkedIn Headshot",
+    introduction: "Stand out to recruiters and clients with a clean, professional profile photo. Our AI background remover isolates you perfectly from cluttered home, office, or outdoor backgrounds, delivering a razor-sharp transparent cutout. Add professional backdrops, solid corporate colors, or gradients to complete your premium headshot.",
+    category: "Image",
+    tips: [
+      "Hair Fidelity: The AI maintains fine details like individual hair strands for natural-looking cutouts.",
+      "LinkedIn Standard: Export in high-resolution PNG to prevent compression when uploaded to LinkedIn or resume builders.",
+      "Perfect Lighting: Shoot in front of natural light for the cleanest edge isolation."
+    ]
+  },
+  {
+    slug: "remove-background-real-estate-photos",
+    baseTool: "background-remover",
+    title: "Real Estate Listing Photo Background Remover",
+    seoTitle: "Remove Background from Real Estate Photos Online (MLS Ready)",
+    seoDescription: "Instantly remove backgrounds and clutter from real estate, property, and interior photos. Isolate furniture and home fixtures for professional MLS listings.",
+    heading: "Remove Background from Real Estate & MLS Photos",
+    introduction: "High-quality, clutter-free property photos sell homes faster. Clean up interior shots, remove distracting window views, or isolate specific furniture items and architectural features. Make your properties look spacious, bright, and highly professional.",
+    category: "Image",
+    tips: [
+      "MLS Guidelines: Keep your transparent outputs in PNG for custom backdrop layers like blue skies or clean windows.",
+      "High Resolution: Export at high-fidelity to ensure fine textures and metallic surfaces stay clear.",
+      "Lighting Balance: Adjust contrast before removal to help the AI detect walls and flooring boundaries perfectly."
+    ]
+  },
+  {
+    slug: "remove-background-clothes-fashion-ecommerce",
+    baseTool: "background-remover",
+    title: "Fashion & Apparel E-commerce Background Remover",
+    seoTitle: "Remove Background from Clothing & Fashion Photos (Etsy & Amazon)",
+    seoDescription: "Automatically remove white or busy backgrounds from clothes, apparel, and fashion product photos. Make high-quality transparent PNGs ready for e-commerce.",
+    heading: "Remove Background from Fashion & Apparel Product Photos",
+    introduction: "Create uniform, clean clothing catalogs for your Shopify, Etsy, or Amazon store. Our AI background remover precisely isolates fabrics, collars, hanger edges, and mannequins, giving you crisp, distraction-free product cutouts.",
+    category: "Image",
+    tips: [
+      "Edge Fidelity: Accurately traces complex fabric textures, loose threads, and fold shadows.",
+      "Clean Outlines: Perfect for isolating jackets, dresses, shoes, and jewelry from studio backdrops.",
+      "Compress for Speed: Compress the final output using our Image Compressor for lightning-fast site speed."
+    ]
+  },
+  {
+    slug: "convert-pdf-certificate-to-png-image",
+    baseTool: "pdf-to-image",
+    title: "Certificate PDF to PNG Image Converter",
+    seoTitle: "Convert PDF Certificates to PNG Online (LinkedIn Sharing)",
+    seoDescription: "Convert certificate and diploma PDFs into high-quality, shareable PNG or JPG images. Share your professional accomplishments on LinkedIn, Twitter, and CVs.",
+    heading: "Convert Certificate PDF to High-Quality PNG",
+    introduction: "Renders certificate, award, or diploma PDFs into premium PNG images. Share your credentials and professional milestones instantly on LinkedIn, social portfolios, and resumes without losing typography or vector emblem crispness.",
+    category: "PDF",
+    tips: [
+      "High Resolution: Renders vector seals and signatures at maximum density for perfect text legibility.",
+      "Ready for Socials: Sharing as a PNG or JPG prevents cropping and makes it instantly viewable in feeds.",
+      "100% In-Memory: Your academic and professional credentials are processed privately inside your browser."
+    ]
+  },
+  {
+    slug: "convert-pdf-resume-to-jpg-image",
+    baseTool: "pdf-to-image",
+    title: "PDF Resume to JPG Image Converter",
+    seoTitle: "Convert PDF Resume to JPG Image Online (Application Portals)",
+    seoDescription: "Convert your PDF resume or CV into a high-resolution JPG or PNG image. Perfect for online application systems and recruiter portfolios.",
+    heading: "Convert PDF Resume to High-Resolution JPG",
+    introduction: "Renders your resume PDF pages into standard, high-resolution JPG images. Perfect for company ATS portals that only allow image uploads, or for sharing your CV directly on visual portfolios, freelance platforms, and email attachments.",
+    category: "PDF",
+    tips: [
+      "Font Anti-Aliasing: Renders small body text and bullet points cleanly to keep your resume 100% readable.",
+      "Single Page Export: Extract single or multiple resume pages as separate, ordered JPG images.",
+      "Privacy Guaranteed: Your career history remains completely confidential — no data is saved to our servers."
+    ]
+  },
+  {
+    slug: "convert-pdf-menu-to-jpg-online",
+    baseTool: "pdf-to-image",
+    title: "Restaurant Menu PDF to JPG Converter",
+    seoTitle: "Convert Restaurant Menu PDF to JPG Online (Yelp & Google Maps)",
+    seoDescription: "Convert restaurant menus from PDF to high-resolution JPG images. Optimize your menu for quick uploads to Yelp, Google Maps, Facebook, and TripAdvisor.",
+    heading: "Convert Restaurant Menu PDF to High-Resolution JPG",
+    introduction: "Convert multi-page food and beverage menu PDFs into clear, lightweight JPG images. Perfect for restaurant owners uploading digital menus to Google Maps, Yelp, social pages, or mobile delivery apps.",
+    category: "PDF",
+    tips: [
+      "Vector Rendering: Keeps complex font styling, pricing tables, and decorative vector borders perfectly sharp.",
+      "Fast Uploads: Lightweight compressed JPG formats ensure hungry customers can load your menu instantly on weak mobile networks.",
+      "Batch Processing: Drag and drop all menu pages and download them in a single ZIP folder."
+    ]
+  },
+  {
+    slug: "extract-syllabus-pages-from-textbook-pdf",
+    baseTool: "split-pdf",
+    title: "Syllabus PDF Page Extractor",
+    seoTitle: "Extract Syllabus Pages from Textbook PDF Free & Online",
+    seoDescription: "Isolate and extract specific syllabus or assignment pages from heavy college textbook PDFs. Save storage and study efficiently with in-memory splitting.",
+    heading: "Extract Syllabus Pages from Large Textbook PDF",
+    introduction: "Don't carry around massive 500-page textbook PDFs on your mobile device or tablet. Isolate and extract exactly the syllabus pages, specific chapters, or weekly reading assignments you need for your courses in seconds.",
+    category: "PDF",
+    tips: [
+      "Custom Ranges: Enter page sequences (e.g. '12-18, 25') to extract exactly your assigned reading.",
+      "Optimized Size: Dramatically reduces file size so you can share course materials over email or school chat apps.",
+      "Text Layer Preservation: Maintains all original textbook bookmarks, interactive links, and searchable text layers."
+    ]
+  },
+  {
+    slug: "split-medical-records-pdf-pages",
+    baseTool: "split-pdf",
+    title: "Medical Records PDF Splitter & Page Extractor",
+    seoTitle: "Split Medical Records PDF Online (100% Secure & Private)",
+    seoDescription: "Safely separate specific lab reports, doctor prescriptions, or insurance invoices from a large multi-page medical records PDF in-memory.",
+    heading: "Split & Extract Pages from Medical Records PDF",
+    introduction: "Keep your medical history confidential. If a doctor or insurance provider only requires a specific blood test report or scan result, easily extract those specific pages from your consolidated medical records PDF.",
+    category: "PDF",
+    tips: [
+      "HIPAA Ready Privacy: Financial and medical files are processed strictly in your temporary browser memory. Zero files are uploaded or cached.",
+      "Perfect Isolation: Split large multi-year medical files into distinct, clean PDF documents for different specialists.",
+      "High Fidelity: Maintains full diagnostic detail, high-resolution scans, and doctor signatures."
+    ]
+  },
+  {
+    slug: "split-tax-returns-pdf-by-year",
+    baseTool: "split-pdf",
+    title: "Tax Returns PDF Splitter & Page Extractor",
+    seoTitle: "Split Tax Returns PDF by Year Online (W2s & Schedules)",
+    seoDescription: "Isolate specific years, schedules, or W2 forms from multi-page tax documents. Safe and private in-memory tax document splitting.",
+    heading: "Split Consolidated Tax Returns PDF",
+    introduction: "Preparing a mortgage application, rental check, or loan file? Easily split consolidated multi-page tax return documents. Extract specific schedule pages, W-2 forms, or isolated tax years to submit exactly what is requested.",
+    category: "PDF",
+    tips: [
+      "Bank Standard Security: Processed fully in-memory, ensuring your SSNs, income details, and addresses remain completely private.",
+      "Accurate Pages: Double-check your page range input before downloading to ensure no pages are cut off.",
+      "Original Layouts: Retains all IRS form elements, barcode sheets, and digital signature logs."
+    ]
+  },
+  {
+    slug: "merge-medical-reports-into-single-pdf",
+    baseTool: "merge-pdf",
+    title: "Medical Reports & Lab Results PDF Merger",
+    seoTitle: "Merge Medical Reports & Lab Results into One PDF Online",
+    seoDescription: "Safely combine multiple clinical lab reports, blood tests, doctor prescriptions, and health scans into a single, structured PDF file.",
+    heading: "Merge Medical Reports into a Single PDF",
+    introduction: "Organize your clinical records in one place. Combine separate blood work, MRI scans, prescriptions, and vaccine certificates into a single consolidated PDF file. Easily share your cohesive history with your healthcare provider or insurance claim system.",
+    category: "PDF",
+    tips: [
+      "Privacy Guaranteed: Your sensitive health reports are combined entirely in RAM. No file storage or caching occurs.",
+      "Perfect Order: Drag and drop files to arrange them chronologically for a clean history timeline.",
+      "High Resolution: Renders doctor signatures, scan graphics, and numeric lab tables with perfect clarity."
+    ]
+  },
+  {
+    slug: "combine-rent-agreement-and-id-pdf",
+    baseTool: "merge-pdf",
+    title: "Tenant Verification Document PDF Merger",
+    seoTitle: "Combine Rental Agreement and ID Scans into One PDF Online",
+    seoDescription: "Combine rental agreements, driver's licenses, passports, and utility bills into a single PDF. Perfect for tenant verification and lease applications.",
+    heading: "Combine Rent Agreement & ID Scans into One PDF",
+    introduction: "Applying for a new apartment or submitting verification paperwork? Avoid sending five different attachments to your landlord or property management company. Merge your lease agreement, passport, driver's license, and utility scans into one clean document.",
+    category: "PDF",
+    tips: [
+      "Application Standard: A single organized PDF looks professional and speeds up landlord approvals.",
+      "Safe & Private: All ID scans are merged in-memory to prevent leaks of personal information.",
+      "Cross-Format Support: Instantly combines JPG or PNG scans of ID cards and PDF contracts."
+    ]
+  },
+  {
+    slug: "merge-transcripts-and-degree-pdf",
+    baseTool: "merge-pdf",
+    title: "Academic Credentials PDF Merger",
+    seoTitle: "Merge Transcripts and Degree Certificate into One PDF Online",
+    seoDescription: "Combine your university grade sheets, academic transcripts, and degree certificates into a single, cohesive PDF for job or university applications.",
+    heading: "Merge Transcripts & Degree Certificates into One PDF",
+    introduction: "Applying for jobs, internships, or higher studies? Streamline your academic applications. Merge your multi-semester college transcripts, diplomas, and reference letters into a single, highly professional PDF dossier.",
+    category: "PDF",
+    tips: [
+      "Recruitment Compliant: Standard hiring systems process single PDF portfolios much faster.",
+      "Maintain High Quality: Vector transcripts and official university stamps remain perfectly sharp and legible.",
+      "Flexible Sorting: Order documents systematically (Degree first, Transcripts chronologically)."
+    ]
+  },
+  {
+    slug: "compress-image-for-aadhaar-pan-card",
+    baseTool: "image-compressor",
+    title: "Gov ID Photo & Scan Compressor",
+    seoTitle: "Compress Aadhaar & PAN Card Photo Online (Under 100KB)",
+    seoDescription: "Compress ID scans, Aadhaar, PAN cards, and driver's licenses to fit official size limits (under 50KB or 100KB) with zero legibility loss.",
+    heading: "Compress Aadhaar & PAN Card Photos for Government Portals",
+    introduction: "Government registration portals, tax filings, and ID verification systems have notoriously tight image file size limits (usually under 50KB or 100KB). Shrink the file size of your ID card photo or scanner document in seconds while keeping the text and photo sharp enough to avoid application rejection.",
+    category: "Image",
+    tips: [
+      "Text Legibility: Optimizes compression algorithms to protect small text characters, numbers, and barcodes.",
+      "Portal Ready: Easily squeeze your JPEGs and PNGs down to exact size limits.",
+      "Browser Privacy: Processed completely in-memory — your sensitive national ID card never leaves your device."
+    ]
+  },
+  {
+    slug: "compress-real-estate-listing-photos",
+    baseTool: "image-compressor",
+    title: "MLS & Real Estate Listing Photo Compressor",
+    seoTitle: "Compress Real Estate Photos Online (Zillow & MLS Ready)",
+    seoDescription: "Compress high-resolution property and interior photos. Keep images stunning while reducing file sizes for quick MLS, Zillow, and Redfin uploads.",
+    heading: "Compress Real Estate Listing Photos for MLS & Zillow",
+    introduction: "Uploading heavy 10MB camera photos to Zillow, Redfin, or MLS can cause failures, long load times, and low visitor engagement. Compress your property listing images to perfect, web-ready web sizes while retaining pristine interior colors, bright windows, and fine details.",
+    category: "Image",
+    tips: [
+      "Aesthetic Protection: Keeps colors vibrant and avoids pixelation on luxury home details.",
+      "Fast Storefronts: Compressed images load 3x faster, keeping prospective buyers on your listing page longer.",
+      "Batch Compression: Drag and drop entire property catalogs for quick optimization."
+    ]
+  },
+  {
+    slug: "compress-shopify-product-images-speed",
+    baseTool: "image-compressor",
+    title: "Shopify Product Image Compressor",
+    seoTitle: "Compress Shopify Product Images Online (Boost Page Speed)",
+    seoDescription: "Compress product catalog photos, transparent PNGs, and JPEG listings. Dramatically boost Shopify page speed and increase SEO ranking.",
+    heading: "Compress Shopify Product Images for Maximum Speed",
+    introduction: "Slow-loading product pages kill conversions. Compress all your Shopify, Etsy, or WooCommerce store photos. Shrink heavy JPEG and transparent PNG product images by up to 80% without losing visual detail, improving page speed scores.",
+    category: "Image",
+    tips: [
+      "Transparent PNG Support: Compresses alpha-channel product images while preserving transparent backgrounds.",
+      "Conversion Booster: Faster store loading increases Google search ranking and reduces cart abandonment.",
+      "Retain High Contrast: High-fidelity details are preserved so your customers can zoom in with absolute confidence."
+    ]
+  },
+  {
+    slug: "convert-markdown-academic-paper-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Academic Paper Markdown to PDF Converter",
+    seoTitle: "Convert Markdown Academic Paper to PDF (Beautiful Thesis Theme)",
+    seoDescription: "Render academic papers, thesis drafts, and research reports written in markdown into publication-quality PDFs. Styled with LaTeX fonts.",
+    heading: "Convert Academic Markdown Papers to Beautiful PDF",
+    introduction: "Compile your academic papers, research thesis drafts, or university assignments written in plain Markdown. Our compiler applies LaTeX-inspired typography, structured headers, and clean margins, transforming plain text into publication-ready PDF documents.",
+    category: "PDF",
+    tips: [
+      "LaTeX-Style Type: Renders with highly readable Serif or Sans-Serif academic font pairings.",
+      "Blockquote & Footnotes: Beautifully handles bibliography links, quotes, and research citations.",
+      "Print Ready: Margins and gutters are perfectly calculated for A4 or Letter printing."
+    ]
+  },
+  {
+    slug: "convert-markdown-meeting-notes-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Meeting Notes Markdown to PDF Converter",
+    seoTitle: "Convert Markdown Meeting Minutes to Professional PDF",
+    seoDescription: "Instantly compile team meeting minutes, sprint logs, and project agendas from Markdown into executive-ready PDFs. Custom business layout.",
+    heading: "Convert Meeting Notes Markdown to PDF",
+    introduction: "Share professional summaries with your team and stakeholders. Paste your meeting minutes, retro notes, or weekly agendas written in markdown, and render them into a beautifully structured, modern PDF report for email or Slack.",
+    category: "PDF",
+    tips: [
+      "Action Item Lists: Formats task checkboxes, bold owners, and time blocks into highly readable layouts.",
+      "Clean Metadata: Includes automatic formatting for date, titles, and team tags.",
+      "Modern Tech Aesthetic: Employs a crisp geometric layout that looks stellar in corporate environments."
+    ]
+  },
+  {
+    slug: "convert-markdown-software-spec-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Software Spec Markdown to PDF Converter",
+    seoTitle: "Convert Software Spec (PRD) Markdown to PDF Online",
+    seoDescription: "Convert markdown PRDs, software architecture designs, and API specifications into highly readable, executive-ready PDF documents.",
+    heading: "Convert Software Spec Markdown to PDF",
+    introduction: "Presenting a product requirement document (PRD), technical specification, or API design to client stakeholders? Paste your markdown spec, and convert it into a beautiful PDF containing highlighted code snippets and structured headings.",
+    category: "PDF",
+    tips: [
+      "Code Highlighting: Automatically colors JSON schemas, REST endpoints, and script blocks.",
+      "Logical Navigation: Renders structured table headers, nesting lists, and highlight boxes.",
+      "Client Ready: Professional margins and typographic systems ensure your spec feels premium."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-child-education-fund",
+    baseTool: "sip-calculator",
+    title: "Child Higher Education SIP Wealth Calculator",
+    seoTitle: "SIP Calculator for Child's College Education Fund (Inflation Adjusted)",
+    seoDescription: "Project estimated SIP returns to build a robust college education corpus for your child. Model compound growth over 10-18 years.",
+    heading: "SIP Wealth Calculator for Child's Education Fund",
+    introduction: "College and higher education costs are rising rapidly. Estimate how much a monthly systematic investment plan (SIP) in equity mutual funds can accumulate by the time your child is ready for university. Plan early to secure their educational future.",
+    category: "Finance",
+    tips: [
+      "Educational Inflation: College costs double every few years. Aim for higher compounding index funds to beat inflation.",
+      "Long Horizons: Starting when your child is a toddler exponentially increases the final nest-egg through compound growth.",
+      "Consistent Additions: Even small monthly SIP additions create an immense corpus over a 15-year period."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-buying-dream-house",
+    baseTool: "sip-calculator",
+    title: "House Down Payment SIP Calculator",
+    seoTitle: "SIP Calculator for Buying a House (Down Payment Goal)",
+    seoDescription: "Calculate monthly savings and compound returns needed to accumulate a house down payment. Plan your real estate purchase.",
+    heading: "SIP Calculator for a Dream House Down Payment",
+    introduction: "Planning to purchase a home in the next 5 to 10 years? Avoid heavy, high-interest loans. Estimate how a monthly systematic investment plan (SIP) can help you compile the down payment corpus faster through compounding returns.",
+    category: "Finance",
+    tips: [
+      "Aggressive Goals: Calculate how increasing your monthly SIP by 10% each year speeds up your home purchase timeline.",
+      "Balanced Risk: Consider hybrid or large-cap index funds for a 5-year timeline to protect your capital.",
+      "Corpus Projections: Compares total invested amount against compound interest gains clearly."
+    ]
+  },
+  {
+    slug: "sip-calculator-with-annual-step-up",
+    baseTool: "sip-calculator",
+    title: "Step-Up SIP Wealth Calculator",
+    seoTitle: "Step-Up SIP Calculator Online (Annual Contribution Top-Up)",
+    seoDescription: "Calculate compound returns with an annual step-up SIP percentage. Increase your monthly investment as your salary and income grow.",
+    heading: "SIP Wealth Calculator with Annual Step-Up",
+    introduction: "As your career progresses and your salary increases, your investments should too. Model the immense compounding impact of an annual Step-Up (or Top-Up) SIP where you increase your monthly savings by a fixed percentage (e.g. 10%) each year.",
+    category: "Finance",
+    tips: [
+      "Compounding Accelerator: An annual step-up of just 10% can double your final maturity corpus compared to a flat SIP.",
+      "Career Sync: Set your step-up percentage to align with your annual salary increments or bonus structures.",
+      "Wealth Projections: Perfect for aggressive investors targeting rapid financial independence."
+    ]
+  },
+  {
+    slug: "calculate-lump-sum-mutual-fund-returns",
+    baseTool: "investment-calculator",
+    title: "Lump Sum Mutual Fund Return Calculator",
+    seoTitle: "Lump Sum Mutual Fund Return Calculator Online (One-Time Investment)",
+    seoDescription: "Calculate future maturity values and compound interest for one-time (lump sum) mutual fund and ETF investments. Project wealth growth.",
+    heading: "Lump Sum Mutual Fund Return Calculator",
+    introduction: "Received a bonus, tax refund, or inheritance? Estimate how a one-time lump-sum investment in index funds or mutual funds will compound over 5, 10, or 25 years. Check how long-term holding maximizes your wealth.",
+    category: "Finance",
+    tips: [
+      "Holding Advantage: One-time investments benefit immensely from uninterrupted long-term compound compounding.",
+      "Realistic Yields: Base calculations on historical market index averages (e.g. 10-12% annually).",
+      "Inflation Scenarios: Evaluate how your one-time corpus stands up against purchasing power changes."
+    ]
+  },
+  {
+    slug: "calculate-fd-fixed-deposit-interest-returns",
+    baseTool: "investment-calculator",
+    title: "Fixed Deposit (FD) Maturity Calculator",
+    seoTitle: "Fixed Deposit (FD) Interest and Maturity Calculator Online",
+    seoDescription: "Calculate fixed deposit (FD) interest payouts and final maturity amounts. Metric parameters for quarterly, monthly, and yearly compound interest.",
+    heading: "Fixed Deposit (FD) Interest and Maturity Calculator",
+    introduction: "Protect your capital with guaranteed returns. Calculate the exact interest earned and final maturity value of your Fixed Deposits (FD) or Term Deposits. Toggle custom compounding frequencies (monthly, quarterly, or yearly) to see your exact yields.",
+    category: "Finance",
+    tips: [
+      "Compounding Frequency: Quarterly compounding yields slightly higher interest than semi-annual or annual compounding.",
+      "Tax Considerations: Keep in mind that FD interest is usually fully taxable depending on your income tax bracket.",
+      "Safe Allocation: Great for calculating the low-risk portion of your emergency fund or asset distribution."
+    ]
+  },
+  {
+    slug: "calculate-dividend-reinvestment-drip-returns",
+    baseTool: "investment-calculator",
+    title: "Dividend Reinvestment (DRIP) Return Calculator",
+    seoTitle: "Dividend Reinvestment (DRIP) Calculator (Compound Yields)",
+    seoDescription: "Estimate the compound growth of your stock portfolio when reinvesting dividends (DRIP). Calculate long-term wealth curves online.",
+    heading: "Dividend Reinvestment (DRIP) Growth Calculator",
+    introduction: "Harness the snowball effect of dividend compounding. Calculate how reinvesting stock or ETF dividend payouts back into buying more shares accelerates your portfolio size and passive income over the long term.",
+    category: "Finance",
+    tips: [
+      "The DRIP Snowball: Reinvesting dividends consistently triggers exponential growth because your subsequent dividend payouts are based on a larger share count.",
+      "Dividend Growth Rate: Input a custom dividend growth rate to model companies that raise their payouts annually.",
+      "Long Horizon: DRIP strategies work best when given 15+ years to weather market cycles."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-military-fitness-standards",
+    baseTool: "bmi-calculator",
+    title: "Military & Police Recruitment BMI Calculator",
+    seoTitle: "Military BMI Calculator - Police & Defense Recruitment Standards",
+    seoDescription: "Calculate your Body Mass Index (BMI) to verify eligibility for military, defense, and police physical recruitment height-weight bounds.",
+    heading: "Military & Police Recruitment BMI Calculator",
+    introduction: "Military branches, police departments, and defense academies enforce strict body composition and weight standards. Check if your height and weight fall within official physical eligibility standards using our precise medical BMI calculator.",
+    category: "Health",
+    tips: [
+      "Target Categories: Most defense academies reject applicants whose BMI falls in the underweight or obese brackets.",
+      "Active Prep: If you are close to the upper limit, couple cardiovascular training with dietary adjustments to land in the healthy BMI zone.",
+      "Metric & Imperial: Easily switch between feet/inches/pounds and centimeters/kilograms."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-kids-and-teens",
+    baseTool: "bmi-calculator",
+    title: "Child & Teenager BMI Growth Chart Calculator",
+    seoTitle: "BMI Calculator for Kids and Teens (Growth Percentiles)",
+    seoDescription: "Calculate child and teenage Body Mass Index (BMI). Monitor growth percentiles and healthy weight ranges for ages 2 to 19.",
+    heading: "Kids & Teenagers BMI Growth Calculator",
+    introduction: "Children and teenagers grow rapidly, so their body composition changes fast. Unlike adult calculations, child BMI analysis accounts for age and sex to provide precise growth percentiles and healthy developmental brackets.",
+    category: "Health",
+    tips: [
+      "Growth Percentiles: Focus on percentiles rather than the absolute BMI score, as healthy ranges change dynamically with age.",
+      "Active Lifestyles: Use growth charts as a general guidance tool. Always consult a pediatrician for diagnostic assessments.",
+      "Healthy Balance: Encourage balanced home nutrition and regular play rather than caloric restriction for children."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-bodybuilders-athletes",
+    baseTool: "bmi-calculator",
+    title: "Athlete & Bodybuilder BMI Calculator",
+    seoTitle: "BMI Calculator for Bodybuilders (FFMI & Muscle Adjusted)",
+    seoDescription: "Calculate BMI for bodybuilders, athletes, and muscular individuals. Understand why standard BMI can misclassify muscle mass as overweight.",
+    heading: "BMI Calculator for Bodybuilders & Muscular Athletes",
+    introduction: "Are you a muscular athlete or bodybuilder? Standard BMI equations frequently misclassify high muscle mass as 'overweight' or 'obese' because they cannot distinguish between lean muscle and fat tissue. Assess your healthy ranges with specialized muscle-adjusted parameters.",
+    category: "Health",
+    tips: [
+      "The Muscle Discrepancy: Muscular individuals should complement BMI with body fat percentage and Fat-Free Mass Index (FFMI) for complete assessments.",
+      "Waist-to-Height Ratio: Track your waist-to-height ratio alongside BMI to ensure visceral fat levels remain low.",
+      "Athletic Metrics: Professional athletes often carry heavy skeletal frames that skew standard healthcare formulas."
+    ]
+  },
+  {
+    slug: "minify-production-json-config-files",
+    baseTool: "json-formatter",
+    title: "Production JSON Config Minifier",
+    seoTitle: "Minify JSON Config Files Online (Remove Whitespace)",
+    seoDescription: "Compress and minify production JSON configuration, Edge config, and environment payloads. Remove whitespace to reduce data transfer times.",
+    heading: "Minify Production JSON Config Files",
+    introduction: "Optimize your app's performance. Strip out all formatting spaces, line breaks, indentations, and developer comments from your JSON configuration files to create lightweight, highly compressed payloads for high-speed edge environments.",
+    category: "Developer",
+    tips: [
+      "Bandwidth Savings: Minifying large JSON structures (like database exports or config maps) can reduce files sizes by up to 30%.",
+      "Error Prevention: Validates your JSON syntax structure automatically before minifying to ensure no syntax breakages.",
+      "One-Click Copy: Instantly copy the minified line straight to your clipboard or code editor."
+    ]
+  },
+  {
+    slug: "convert-escaped-json-string-to-object",
+    baseTool: "json-formatter",
+    title: "Escaped JSON String to Object Converter",
+    seoTitle: "Convert Escaped JSON String to Readable Object Online",
+    seoDescription: "Parse, unescape, and format backslash-escaped JSON strings from logs, database cells, or console outputs into beautiful readable JSON.",
+    heading: "Convert Escaped JSON Strings to Clean Objects",
+    introduction: "Debugging database records or server logs that are saved as escaped strings (with painful backslashes `\"` and newline characters `\n`)? Paste your raw escaped string, and our parser will instantly clean it, convert it into an interactive JSON object, and pretty-print it.",
+    category: "Developer",
+    tips: [
+      "Syntax Cleanup: Erases nested escape barriers and parses stringified JSON components into separate lines.",
+      "Log Parsing: Ideal for unpacking complex AWS CloudWatch, Google Cloud Logging, or Kubernetes event logs.",
+      "Instant Validation: Double-checks schema formatting and identifies trailing punctuation errors."
+    ]
+  },
+  {
+    slug: "validate-and-format-stripe-webhook-json",
+    baseTool: "json-formatter",
+    title: "Stripe Webhook JSON Validator & Formatter",
+    seoTitle: "Validate & Format Stripe Webhook JSON Online (Debug Payload)",
+    seoDescription: "Paste, parse, validate, and format Stripe payment webhook payloads in real-time. Locate charge objects and customer metadata instantly.",
+    heading: "Stripe Webhook JSON Payload Formatter & Validator",
+    introduction: "Debugging Stripe subscription triggers, checkout sessions, or checkout events? Paste raw webhook logs, pretty-print nested metadata dictionaries, validate JSON schema compliance, and trace exact charge statuses in milliseconds.",
+    category: "Developer",
+    tips: [
+      "Key Locator: Full syntax color coding helps you locate metadata, customer IDs, and payment status codes in seconds.",
+      "No Latency: Runs completely client-side in your browser, keeping customer transaction amounts and email tokens completely secure.",
+      "Structure Validation: Highlight exact lines where unclosed brackets or missing commas break payloads."
+    ]
   }
 ];
