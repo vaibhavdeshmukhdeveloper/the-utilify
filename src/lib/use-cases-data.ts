@@ -1188,5 +1188,455 @@ export const useCases: UseCaseData[] = [
       "Log Cleaning: Easily strips off outer container metadata tags to focus on core payload logs.",
       "High Volume Ready: Fully optimized client-side processing handles large files without lag."
     ]
+  },
+  {
+    slug: "remove-background-food-photos-delivery",
+    baseTool: "background-remover",
+    title: "AI Food & Dish Background Remover",
+    seoTitle: "Remove Background from Food Photos (UberEats & DoorDash Ready)",
+    seoDescription: "Automatically remove backgrounds from food, restaurant dish, and menu photos. Get transparent PNG food cutouts optimized for UberEats, DoorDash, and Yelp.",
+    heading: "Remove Background from Food & Dish Photos",
+    introduction: "Stunning food presentation drives online delivery sales. Isolate culinary dishes, drinks, and desserts from distracting restaurant table settings or kitchen clutter. Prepare high-quality, transparent PNG cutouts that look clean and delicious on delivery platforms.",
+    category: "Image",
+    tips: [
+      "Detail Preservation: Retains delicate steam effects, plate edges, and garnishes accurately.",
+      "Uniform Catalogs: Easily insert isolated dishes into brand menu templates with standard color backdrops.",
+      "Compression Tip: Compress final food PNGs to optimize mobile app load speeds for hungry customers."
+    ]
+  },
+  {
+    slug: "remove-background-plants-flowers-botany",
+    baseTool: "background-remover",
+    title: "Plant & Flower Photo Background Remover",
+    seoTitle: "Remove Background from Plant & Flower Photos Online",
+    seoDescription: "Instantly isolate plants, flowers, and botanical subjects. Remove background clutter for plant shop catalogs, gardening blogs, or educational guides.",
+    heading: "Remove Background from Plant & Flower Photos",
+    introduction: "Showcase botanical beauty without busy backgrounds. Isolate indoor plants, delicate flowers, and complex leaves. Create pixel-perfect cutouts with transparent backgrounds for nursery catalogs, digital design assets, or educational articles.",
+    category: "Image",
+    tips: [
+      "Leaf & stem accuracy: Traces intricate plant outlines and fine leaf edges without clipping.",
+      "Design flexibility: Easily drop transparent botanical cutouts into custom collage mockups.",
+      "Lighting clarity: Natural, high-contrast lighting produces the cleanest botanical edge separations."
+    ]
+  },
+  {
+    slug: "remove-background-book-cover-mockup",
+    baseTool: "background-remover",
+    title: "Book Cover Mockup Background Remover",
+    seoTitle: "Remove Background from Book Cover Designs Online",
+    seoDescription: "Isolate book covers and digital mockups from solid color or patterned backgrounds. Generate transparent PNG wrappers for authors and publishers.",
+    heading: "Remove Background from Book Cover Designs",
+    introduction: "Promote your book with clean, professional graphics. Extract book covers, 3D mockups, and paperback designs from raw photos or flat solid backdrops. Create clean assets ready for social promos, author websites, and online bookstores.",
+    category: "Image",
+    tips: [
+      "Perfect corners: Traces sharp corners and page edges without introducing distortion.",
+      "Spine & Shadows: Retains natural binding shadows to keep your 3D book mockup looking realistic.",
+      "Format choice: Export in transparent PNG format to overlap covers on any promo banner."
+    ]
+  },
+  {
+    slug: "remove-background-shoes-sneakers-resell",
+    baseTool: "background-remover",
+    title: "Sneaker & Footwear Photo Background Remover",
+    seoTitle: "Remove Background from Shoes & Sneakers Online (Reselling)",
+    seoDescription: "Automatically remove backgrounds from sneaker and shoe photos. Create clean transparent PNG footwear listings for eBay, GOAT, and StockX.",
+    heading: "Remove Background from Shoes & Sneakers",
+    introduction: "Clean, consistent listings help shoes sell faster on resale platforms. Instantly isolate sneakers, boots, and athletic footwear from floor shadows, carpets, or shoe boxes. Get high-quality, transparent product shots for professional catalogs.",
+    category: "Image",
+    tips: [
+      "Lace & Sole Detail: Retains intricate textures like shoe mesh, patterns, and hanging laces.",
+      "White Background standard: Drop your transparent shoes onto clean white backgrounds for premium listings.",
+      "Speed up load times: Compress your final product listings to keep shop pages fast and responsive."
+    ]
+  },
+  {
+    slug: "remove-background-furniture-interior-listings",
+    baseTool: "background-remover",
+    title: "Furniture & Home Decor Background Remover",
+    seoTitle: "Remove Background from Furniture Photos Online",
+    seoDescription: "Isolate tables, chairs, sofas, and decor items from indoor backgrounds. Create transparent PNG cutout assets for catalog layouts and interior designs.",
+    heading: "Remove Background from Furniture & Decor Photos",
+    introduction: "Design clean catalog sheets or mood boards by isolating furniture and decor pieces. Strip away room walls, floor boards, and distractions to showcase chairs, tables, and lighting fixtures in high definition.",
+    category: "Image",
+    tips: [
+      "Geometric precision: Traces straight table legs, smooth cushions, and circular lamps accurately.",
+      "Mood Board utility: Export as transparent PNG to overlay multiple furniture items in decor layouts.",
+      "Shadow retention: Keep subtle contact shadows for realistic spatial placement in design mockups."
+    ]
+  },
+  {
+    slug: "remove-background-toys-collectibles-ebay",
+    baseTool: "background-remover",
+    title: "Toy & Collectible Photo Background Remover",
+    seoTitle: "Remove Background from Toys & Collectibles (eBay & Amazon)",
+    seoDescription: "Instantly isolate action figures, rare toys, and collectibles from busy backgrounds. Get transparent PNG product shots for online auctions.",
+    heading: "Remove Background from Toys & Collectibles",
+    introduction: "Maximize buyer interest in collectibles by highlighting details. Isolate action figures, vintage models, and boxed toys from cluttered shelves or tables. Get clean, high-contrast transparent outputs ready for eBay or Amazon stores.",
+    category: "Image",
+    tips: [
+      "Box details: Isolates packaging borders cleanly while retaining clear window reflections.",
+      "High density: Export high-resolution images so collectors can examine product condition details.",
+      "Batch workflow: Upload and process collections sequentially to build a uniform storefront catalog."
+    ]
+  },
+  {
+    slug: "compress-jpg-images-email-attachments",
+    baseTool: "image-compressor",
+    title: "Email Attachment Image Compressor",
+    seoTitle: "Compress JPG Images for Email Attachments (Under 25MB)",
+    seoDescription: "Compress large JPG photos and image attachments to easily fit under email file size limits (like Outlook or Gmail's 25MB limit).",
+    heading: "Compress JPG Images for Email Attachments",
+    introduction: "Avoid email delivery bounces caused by bulky attachments. Compress high-resolution photos, event shots, and documents down to lightweight files. Ensure your emails send instantly and can be opened on any mobile connection.",
+    category: "Image",
+    tips: [
+      "Gmail Compliant: Easily squeeze your files under standard 25MB boundaries.",
+      "Readability Protection: Keeps embedded labels or document texts perfectly sharp.",
+      "Bulk Conversion: Drag and drop multiple photos to compress them in one quick batch."
+    ]
+  },
+  {
+    slug: "compress-png-mobile-app-assets",
+    baseTool: "image-compressor",
+    title: "Mobile App Asset PNG Compressor",
+    seoTitle: "Compress PNG Mobile App Assets (Reduce App Size)",
+    seoDescription: "Optimize PNG sprites, icons, and UI assets for mobile apps. Reduce application bundle size and improve app launch performance.",
+    heading: "Compress PNG Mobile App & Gaming Assets",
+    introduction: "Large image assets bloat iOS and Android application bundles. Compress game sprites, UI icons, and background screens to minimum sizes while preserving transparent background channels. Improve load times and user retention.",
+    category: "Image",
+    tips: [
+      "Alpha Channel preservation: Compresses PNGs without corrupting background transparencies.",
+      "Optimized Bundling: Helps developers pass App Store or Play Store download size warnings.",
+      "Color accuracy: Retains exact hex color shades for consistent user interfaces."
+    ]
+  },
+  {
+    slug: "compress-blog-header-images-seo",
+    baseTool: "image-compressor",
+    title: "Blog Hero & Header Image Compressor",
+    seoTitle: "Compress Blog Header Images for SEO (Core Web Vitals)",
+    seoDescription: "Compress blog hero graphics and post headers. Improve your website page speed scores, satisfy Core Web Vitals, and boost Google rankings.",
+    heading: "Compress Blog Hero & Header Images for SEO",
+    introduction: "Unoptimized blog header images delay page loading, hurting your SEO rankings. Compress large hero photos and thumbnail banners to lightweight formats. Achieve high PageSpeed scores and keep readers engaged.",
+    category: "Image",
+    tips: [
+      "Page Speed booster: Faster page loads lower bounce rates and improve index rankings.",
+      "Responsive design: Produce smaller files that render instantly on mobile networks.",
+      "Retain Visuals: Ensures header images look sharp and professional on high-resolution displays."
+    ]
+  },
+  {
+    slug: "compress-scans-documents-loan-application",
+    baseTool: "image-compressor",
+    title: "Document Scan & Loan Document Compressor",
+    seoTitle: "Compress ID Scans & Loan Documents Online (Secure)",
+    seoDescription: "Compress heavy document scans, passport files, and bank statements for secure loan application uploads. Keep text 100% readable.",
+    heading: "Compress Document Scans for Loan Applications",
+    introduction: "Mortgage, loan, and banking portals have strict file size thresholds for submitting verification scans. Safely compress JPG and PDF document scans in your browser. Keep signatures and printed terms perfectly legible to prevent portal errors.",
+    category: "Image",
+    tips: [
+      "Client-side processing: Sensitive document data is handled entirely in RAM to protect privacy.",
+      "Crisp text: Enhances text boundaries while drastically stripping out empty scan pixels.",
+      "Portal Ready: Meet strict uploads constraints (like under 2MB or 5MB requirements) in seconds."
+    ]
+  },
+  {
+    slug: "convert-presentation-slides-pdf-to-png",
+    baseTool: "pdf-to-image",
+    title: "PDF Slides to PNG Presentation Converter",
+    seoTitle: "Convert PDF Presentation Slides to PNG Images Online",
+    seoDescription: "Convert PDF presentation decks and keynote slides into high-resolution PNG or JPG images. Share slides on LinkedIn, Twitter, or blogs.",
+    heading: "Convert PDF Slides to Presentation PNGs",
+    introduction: "Need to upload slides to social media carousel platforms or embed them in a website blog? Convert multi-page PDF slide decks into separate, high-fidelity PNG images that render colors and typography beautifully.",
+    category: "PDF",
+    tips: [
+      "Aspect Ratio: Preserves widescreen 16:9 or standard 4:3 presentation slide sizes.",
+      "Typography sharpness: Anti-aliasing ensures small numbers and diagram labels stay readable.",
+      "Easy Sharing: Slides are compiled into individual files and delivered in a clean ZIP bundle."
+    ]
+  },
+  {
+    slug: "convert-legal-agreement-pdf-to-jpg",
+    baseTool: "pdf-to-image",
+    title: "Legal Agreement PDF to JPG Converter",
+    seoTitle: "Convert Legal Agreement PDF to JPG Online (Secure)",
+    seoDescription: "Safely convert legal agreements, NDA contracts, and signed PDFs into high-resolution JPG images. 100% secure in-memory extraction.",
+    heading: "Convert Legal Agreement PDF to JPG",
+    introduction: "Some verification platforms or court record filing systems require uploading contracts and legal forms as image files. Convert multi-page legal PDFs into sharp, high-density JPEGs without compromising small printed clauses.",
+    category: "PDF",
+    tips: [
+      "100% Local: Legal documents are processed entirely in browser memory to ensure privacy.",
+      "High density: Renders page vectors at high resolution so signatures and terms remain legible.",
+      "Ordered export: Pages are numbered sequentially for straightforward verification."
+    ]
+  },
+  {
+    slug: "convert-ebook-pdf-pages-to-png",
+    baseTool: "pdf-to-image",
+    title: "E-book PDF Pages to PNG Converter",
+    seoTitle: "Convert E-book PDF Pages to PNG Online (High Quality)",
+    seoDescription: "Convert textbook and e-book PDF pages into clear PNG images. Share book snippets, diagrams, or quotes online with ease.",
+    heading: "Convert E-book PDF Pages to PNG Images",
+    introduction: "Want to extract illustrations, charts, or reading quotes from a digital book to share in study groups or social feeds? Convert specific pages from your e-book PDF into separate, high-resolution PNG files in seconds.",
+    category: "PDF",
+    tips: [
+      "Pristine images: Retains layout, diagrams, and illustrations in high pixel density.",
+      "Selective extraction: Choose specific pages to render into images, saving bandwidth.",
+      "No registration: Convert files instantly in your browser with zero limits."
+    ]
+  },
+  {
+    slug: "split-pdf-ebook-by-chapters",
+    baseTool: "split-pdf",
+    title: "PDF E-book Chapter Splitter",
+    seoTitle: "Split PDF E-book by Chapters Online (Specific Pages)",
+    seoDescription: "Split large textbook and e-book PDFs into separate chapters. Save storage and organize your digital library with in-memory splitting.",
+    heading: "Split PDF E-books by Chapters",
+    introduction: "Avoid carrying around massive 80MB textbook files. Separate chapters or reading modules into smaller, lightweight PDFs. Create custom book volumes that load instantly on e-readers or tablets.",
+    category: "PDF",
+    tips: [
+      "Bookmark safe: Keeps internal chapter links and text layers fully functional.",
+      "File optimization: Drastically reduces file sizes for fast email sharing.",
+      "Exact splits: Type page numbers directly (e.g., '1-45, 46-90') to isolate chapters."
+    ]
+  },
+  {
+    slug: "extract-quiz-answer-sheets-pdf",
+    baseTool: "split-pdf",
+    title: "Test Quiz & Answer Key PDF Page Extractor",
+    seoTitle: "Extract Quiz & Answer Sheets from PDF Online",
+    seoDescription: "Isolate student questionnaires from teacher guides and answer keys in exam PDFs. Split educational sheets privately.",
+    heading: "Extract Quiz & Answer Sheets from PDF",
+    introduction: "Distributing exam papers to a class? Easily split teacher instruction books. Extract student test sheets while keeping answer keys and grade guides in a separate, secure file.",
+    category: "PDF",
+    tips: [
+      "Educational efficiency: Send clean, homework-only PDFs to your students.",
+      "Keep original layers: Preserves text boxes, math formulas, and charts.",
+      "Local security: Student papers are processed in-browser to protect test confidentiality."
+    ]
+  },
+  {
+    slug: "extract-bank-statement-months-visa-application",
+    baseTool: "split-pdf",
+    title: "Visa Application Bank Statement Extractor",
+    seoTitle: "Extract Bank Statement Pages for Visa Application",
+    seoDescription: "Isolate and extract specific months or pages from a multi-page bank statement PDF for immigration audits. 100% private in-memory splitting.",
+    heading: "Extract Bank Statement Pages for Visa Audits",
+    introduction: "Immigration agencies typically request bank statements spanning exactly the last 3 or 6 months. Extract only the required financial periods from a multi-year PDF. Protect your private financial history from unrelated audits.",
+    category: "PDF",
+    tips: [
+      "Immigration compliant: Keeps official headers, seals, and transactional layers intact.",
+      "Bank standard safety: Your sensitive banking transaction history is processed fully in RAM.",
+      "Precise ranges: Simply input the exact page sequence matching the required months."
+    ]
+  },
+  {
+    slug: "combine-portfolio-documents-job-application",
+    baseTool: "merge-pdf",
+    title: "Job Application PDF Portfolio Merger",
+    seoTitle: "Combine Cover Letter, Resume & Portfolio into One PDF",
+    seoDescription: "Merge cover letters, CVs, recommendation letters, and portfolio samples into a single, cohesive PDF for job applications.",
+    heading: "Combine Cover Letter, Resume & Portfolio",
+    introduction: "Recruiters spend seconds reviewing each application. Make a professional impression by combining your cover letter, resume, and design work samples into a single, high-quality PDF dossier. Simplify the recruitment pipeline.",
+    category: "PDF",
+    tips: [
+      "Job site ready: Meets recruitment portal guidelines for single-file submissions.",
+      "Flexible ordering: Order items strategically (Cover letter first, resume second, portfolio third).",
+      "No quality loss: Ensures typography and graphic links remain clickable and sharp."
+    ]
+  },
+  {
+    slug: "merge-monthly-invoices-bookkeeping-pdf",
+    baseTool: "merge-pdf",
+    title: "Monthly Invoice & Receipt PDF Merger",
+    seoTitle: "Merge Monthly Invoices and Receipts into One PDF (Bookkeeping)",
+    seoDescription: "Combine multiple business bills, invoice files, and receipt PDFs into a single organized document for monthly accounting reviews.",
+    heading: "Merge Invoices & Receipts for Bookkeeping",
+    introduction: "Organize company accounts for tax filings. Compile loose invoices and business receipts into a single PDF document. Simplify expense audits and share files cleanly with your accounting team.",
+    category: "PDF",
+    tips: [
+      "Tax audit ready: Keeps records chronological and easy for tax agents to read.",
+      "Format conversion: Combine JPEG/PNG scans of receipts with standard PDF billing files.",
+      "100% Private: Financial transaction records are processed safely in browser memory."
+    ]
+  },
+  {
+    slug: "combine-book-chapters-pdf",
+    baseTool: "merge-pdf",
+    title: "PDF Chapter Compiler",
+    seoTitle: "Combine Book Chapters and Pages into One PDF Online",
+    seoDescription: "Merge draft chapters, reference files, and index pages into a single consolidated e-book PDF document in-memory.",
+    heading: "Combine Draft Chapters into One PDF",
+    introduction: "Writing an e-book or thesis? Don't manage a dozen separate page files. Upload your draft chapters, appendices, and index logs, then combine them into a single, consolidated PDF ready for distribution or self-publishing.",
+    category: "PDF",
+    tips: [
+      "Simple sorting: Easily reorder sections before compiling the final manuscript.",
+      "Retain formatting: Keeps layout headings, page numbers, and custom fonts uniform.",
+      "Hyperlink safe: Dynamic internal bookmarks and web links remain fully interactive."
+    ]
+  },
+  {
+    slug: "convert-markdown-documentation-wiki-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Wiki & Dev Docs Markdown to PDF Converter",
+    seoTitle: "Convert Wiki and Developer Docs Markdown to PDF Online",
+    seoDescription: "Compile codebase wikis, API guides, and software documentation markdown files into structured, printable PDF manuals.",
+    heading: "Convert Wiki & Developer Docs Markdown to PDF",
+    introduction: "Create offline documentation for developers or clients. Paste your local wiki or GitHub docs written in Markdown. Compile them into a beautifully structured PDF manual complete with styled headers and code highlighting.",
+    category: "PDF",
+    tips: [
+      "Syntax styling: Code snippets are colored automatically to ensure coding legibility.",
+      "Modern structure: Uses clean spacing and clear heading levels for quick reference.",
+      "Print compatible: Sized perfectly to standard letter margins for office printouts."
+    ]
+  },
+  {
+    slug: "convert-markdown-release-notes-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Product Release Notes Markdown to PDF Compiler",
+    seoTitle: "Convert Markdown Release Notes to PDF Online (Clean Theme)",
+    seoDescription: "Compile product changelogs, release updates, and client release notes from markdown into elegant, shareable PDF documents.",
+    heading: "Convert Product Release Notes Markdown to PDF",
+    introduction: "Share product changes with clients. Paste release changelogs written in Markdown, and compile them into clean corporate PDFs. Deliver clear lists of new features, bug fixes, and upgrade procedures.",
+    category: "PDF",
+    tips: [
+      "Team branding: Renders clean tables, lists, and dates for professional layouts.",
+      "Checkboxes: Styled checkbox items illustrate completed tasks and milestones.",
+      "Client ready: Minimalist typography makes technical specifications readable for stakeholders."
+    ]
+  },
+  {
+    slug: "convert-markdown-recipe-cookbook-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Recipe & Cookbook Markdown to PDF Compiler",
+    seoTitle: "Convert Markdown Recipes to Beautiful PDF Cookbook (Print Ready)",
+    seoDescription: "Compile text recipes, kitchen measurements, and cookbook plans written in markdown into elegant, printable kitchen PDFs.",
+    heading: "Convert Markdown Recipes to PDF Cookbook",
+    introduction: "Build a custom recipe guide. Paste your recipes, ingredients, and directions written in simple Markdown. Render them into a beautifully formatted PDF cookbook ready to be printed or viewed in the kitchen.",
+    category: "PDF",
+    tips: [
+      "Structured lists: Formats ingredients and steps into easily scannable bullet logs.",
+      "Kitchen friendly: Serif font styling guarantees readability while looking clean on screens.",
+      "Standard size: Compiled to A4 pages so you can print and bind your cookbook easily."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-buying-car-goal",
+    baseTool: "sip-calculator",
+    title: "Car Purchase Goal SIP Wealth Calculator",
+    seoTitle: "SIP Calculator for Buying a Car (Vehicle Budget Goal)",
+    seoDescription: "Calculate estimated monthly SIP returns to buy your next car. Plan systematic investment structures to fund a vehicle purchase.",
+    heading: "SIP Calculator for Buying a Car",
+    introduction: "Ready to upgrade your vehicle? Avoid expensive car loans and high-interest financing. Estimate how a monthly systematic investment plan (SIP) can help you compile your dream vehicle's budget through market compounding returns.",
+    category: "Finance",
+    tips: [
+      "Loan free goal: Accumulating cash via SIP saves you from paying thousands in auto interest fees.",
+      "Shorter horizons: Choose lower-risk debt or hybrid funds for short 3-year savings plans.",
+      "SIP flexibility: Easily tweak monthly targets to fit different budget segments."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-wedding-expense-planning",
+    baseTool: "sip-calculator",
+    title: "Wedding Budget Savings SIP Calculator",
+    seoTitle: "SIP Calculator for Wedding Expense Planning Online",
+    seoDescription: "Plan systematic investments to finance your wedding ceremony. Estimate compound returns and target maturity values over time.",
+    heading: "SIP Calculator for Wedding Planning",
+    introduction: "Plan for the big day without financial stress. Estimate how monthly savings in index or hybrid funds can compound to create a robust wedding budget. Avoid debt and start your new life on a solid financial footing.",
+    category: "Finance",
+    tips: [
+      "Aggressive savings: Calculate how small monthly increments can build a larger budget.",
+      "Timeline focus: Set your duration precisely to coordinate with your target event date.",
+      "Balanced allocation: Protect your capital as the date nears by shifting assets to stable funds."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-travel-vacation-fund",
+    baseTool: "sip-calculator",
+    title: "Travel & Vacation Fund SIP Calculator",
+    seoTitle: "SIP Calculator for Travel & International Vacation Fund",
+    seoDescription: "Project monthly systematic savings returns to fund overseas travel. Build a travel nest-egg with compound interest.",
+    heading: "SIP Calculator for Travel & Vacations",
+    introduction: "Finance your travel goals. Calculate how recurring monthly systematic investments (SIP) compound to pay for flights, lodging, and tours. Make international vacations a regular, debt-free reality.",
+    category: "Finance",
+    tips: [
+      "Consistent allocations: Small monthly contributions quickly build a vacation budget.",
+      "Beat inflation: Investing cash in short-term options beats holding it in zero-interest accounts.",
+      "Goal setting: Track how different interest assumptions impact your final travel budget."
+    ]
+  },
+  {
+    slug: "calculate-nps-national-pension-scheme-returns",
+    baseTool: "investment-calculator",
+    title: "National Pension Scheme (NPS) Calculator",
+    seoTitle: "National Pension Scheme (NPS) Return Calculator Online",
+    seoDescription: "Project long-term compound growth of NPS retirement accounts. Model equity and debt allocations for pension planning.",
+    heading: "National Pension Scheme (NPS) Calculator",
+    introduction: "Planning your government or corporate pension contributions? Model how tax-sheltered National Pension Scheme (NPS) investments compound over your career. Tweak active or auto asset choice settings to view retirement corpus targets.",
+    category: "Finance",
+    tips: [
+      "Tax efficiency: Remember to factor in extra tax deductions allowed for NPS contributions.",
+      "Asset allocation: Model combinations of Equity (E), Corporate Bonds (C), and Gov Securities (G).",
+      "Annuity plan: Standard NPS guidelines require converting 40% of the maturity corpus into monthly annuities."
+    ]
+  },
+  {
+    slug: "calculate-treasury-bill-tbill-yields",
+    baseTool: "investment-calculator",
+    title: "Treasury Bill (T-Bill) Yield Calculator",
+    seoTitle: "Treasury Bill (T-Bill) Yield and Maturity Calculator",
+    seoDescription: "Calculate discount yields and final maturity values of short-term government Treasury Bills (T-Bills) online.",
+    heading: "Treasury Bill (T-Bill) Yield Calculator",
+    introduction: "Secure your capital with government-backed assets. Calculate the exact discounted price, yield-to-maturity, and interest returns on short-term Treasury Bills (T-Bills) spanning 91-day, 182-day, or 364-day durations.",
+    category: "Finance",
+    tips: [
+      "Discount pricing: T-Bills are issued at a discount and redeemed at full face value.",
+      "Low risk: Backed by sovereign government guarantee, making them ideal for cash parking.",
+      "Liquidity: Easily calculate yields if planning to buy direct from central bank auctions."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-athletes-bodybuilders",
+    baseTool: "bmi-calculator",
+    title: "Athletes & Bodybuilders BMI Health Calculator",
+    seoTitle: "BMI Calculator for Athletes & Bodybuilders (Muscle Correction)",
+    seoDescription: "Calculate Body Mass Index (BMI) for athletic individuals. Understand why standard BMI scales misclassify muscle mass.",
+    heading: "BMI Calculator for Athletes & Bodybuilders",
+    introduction: "Are you highly active or lifting weights? Standard BMI formulas can mistake heavy muscle tissue for body fat, incorrectly placing athletes in the overweight or obese ranges. Learn how to interpret your scores and track health indicators.",
+    category: "Health",
+    tips: [
+      "Muscle weight: Muscle is denser than fat; a high BMI might coexist with low body fat percentages.",
+      "Alternative metrics: Couple BMI with waist circumference or body fat calipers for accurate assessments.",
+      "Fitness focus: Prioritize physical performance, recovery rates, and functional endurance."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-weight-gain-goals",
+    baseTool: "bmi-calculator",
+    title: "Weight Gain Goal BMI Calculator",
+    seoTitle: "BMI Calculator for Weight Gain Goals (Build Healthy Mass)",
+    seoDescription: "Calculate target BMI thresholds and necessary weight increase to safely transition into healthy BMI weight categories.",
+    heading: "BMI Calculator for Weight Gain Goals",
+    introduction: "Looking to build mass or recover from being underweight? Tweak heights and weights to discover healthy BMI zones. Calculate the exact pounds or kilograms needed to achieve your fitness and nutritional targets.",
+    category: "Health",
+    tips: [
+      "Caloric surplus: Couple strength training with nutritional, calorie-dense foods for muscle gains.",
+      "Gradual progress: Target a steady weight gain of 0.5 to 1 pound per week to build mass safely.",
+      "Healthy ranges: Standard guidelines target a minimum BMI score of 18.5 to maintain energy levels."
+    ]
+  },
+  {
+    slug: "format-geojson-gis-map-coordinates",
+    baseTool: "json-formatter",
+    title: "GeoJSON GIS Map Coordinates Formatter",
+    seoTitle: "Format and Validate GeoJSON Files Online (GIS Mapping)",
+    seoDescription: "Paste, format, and validate GeoJSON coordinate records. Highlight coordinates, polygons, and feature collections in real-time.",
+    heading: "Format & Validate GeoJSON Map Files",
+    introduction: "GIS and mapping workflows. Prettify nested coordinates, validate GeoJSON standard syntax compliance, and format FeatureCollection and Geometry objects before loading them into map engines.",
+    category: "Developer",
+    tips: [
+      "Coordinate checks: Instantly check JSON syntax to locate invalid coordinate pairings.",
+      "Local validation: GeoJSON mapping scripts run 100% locally in your browser memory.",
+      "Clear hierarchies: View coordinate arrays, type mappings, and properties clearly."
+    ]
   }
 ];
