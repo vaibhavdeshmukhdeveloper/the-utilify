@@ -432,17 +432,29 @@ export default function JsonFormatterClient() {
 
   const faqs = [
     { 
-      question: "Is my JSON data safe?", 
-      answer: "Yes, 100%. All processing, validation, formatting, and file exports happen completely inside your web browser. Nothing is ever sent online or to third-party APIs." 
+      question: "Is my JSON data sent to a server for formatting?", 
+      answer: "No. Security is built into the architecture. All validation, syntax formatting, minification, and tree mapping are executed 100% locally inside your web browser using client-side JavaScript. No data ever leaves your device." 
     },
     { 
       question: "What does the Tree Viewer tab do?", 
-      answer: "It creates a beautiful interactive interface mapping out complex keys. You can collapse/expand objects and arrays to quickly scan deep hierarchies without reading raw lines." 
+      answer: "The Tree Viewer parses the JSON structure into an interactive collapsible UI. You can click arrows to expand or collapse nested objects and arrays, making it easy to navigate heavy API outputs." 
     },
     { 
       question: "How does the syntax validator show errors?", 
-      answer: "If parsing fails, it instantly displays a red diagnostics box showing the raw parsing error message, along with the precise line and column index of the issue." 
+      answer: "If the input string violates JSON specification rules, the live parser flags the error and displays a warning banner indicating the exact line number, column index, and character issue." 
     },
+    {
+      question: "Can I load files directly?",
+      answer: "Yes. Click the 'Upload' button in the toolbar to load files ending in '.json' or '.txt' directly from your local folders."
+    },
+    {
+      question: "What formats can I save my formatted results in?",
+      answer: "You can click the 'Copy' button to copy the output to your clipboard, or click 'Save' to download a clean, formatted '.json' file directly."
+    },
+    {
+      question: "What are the common syntax mistakes caught by the validator?",
+      answer: "Our validator detects typical JSON formatting errors such as trailing commas after the last item, single quotes instead of double quotes, missing quotes around keys, or unmatched braces and brackets."
+    }
   ];
 
   const relatedTools = [
@@ -451,6 +463,33 @@ export default function JsonFormatterClient() {
     { name: "PDF to Image", href: "/pdf-to-image" },
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: JSON Validation and Formatting</h3>
+      <p>
+        JSON (JavaScript Object Notation) is the standard exchange format for modern web APIs. However, raw JSON files are often minified to reduce network payloads, which removes all indentation and whitespace, making it impossible for humans to scan. Prettifying JSON restores indentation and spacing for quick debugging.
+      </p>
+      <h4>Standard JSON Rules Checked by Our Validator</h4>
+      <p>
+        JSON has strict formatting rules that differ from standard JavaScript objects. Our real-time validator helps you identify and fix these rules:
+      </p>
+      <ul>
+        <li><strong>Double Quotes Only:</strong> All keys and string values must be enclosed in double quotes (<code>"key"</code>). Single quotes (<code>'key'</code>) are invalid.</li>
+        <li><strong>No Trailing Commas:</strong> There must be no comma after the last key-value pair in an object or the last item in an array.</li>
+        <li><strong>Braces Match:</strong> All curly braces <code>{"{ }"}</code> and square brackets <code>[ ]</code> must balance and nest correctly.</li>
+      </ul>
+      <h4>Minifying vs. Prettifying JSON</h4>
+      <p>
+        Use the tabs in the output panel to toggle views based on your needs:
+      </p>
+      <ul>
+        <li><strong>Pretty:</strong> Formats the JSON with indentation and colors, making it highly readable for debugging and developer inspection.</li>
+        <li><strong>Tree View:</strong> Renders an interactive collapsible view, useful when dealing with very large datasets.</li>
+        <li><strong>Minified:</strong> Compresses the JSON onto a single line and removes all whitespace, reducing file size for optimized API payloads.</li>
+      </ul>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="JSON Formatter"
@@ -458,6 +497,7 @@ export default function JsonFormatterClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full space-y-6">
         

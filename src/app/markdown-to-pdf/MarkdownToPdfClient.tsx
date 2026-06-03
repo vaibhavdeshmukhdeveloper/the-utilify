@@ -148,17 +148,29 @@ export default function MarkdownToPdfClient() {
 
   const faqs = [
     { 
-      question: "Which markdown elements are supported?", 
-      answer: "We support the standard GitHub Flavored Markdown (GFM) specification, including dynamic tables, bold/italic highlights, blockquotes, lists, images, and monospace code blocks." 
+      question: "Which Markdown syntax extensions are supported?", 
+      answer: "We support the standard GitHub Flavored Markdown (GFM) specification. This includes tables, checklist boxes, strikethroughs, inline HTML blocks, blockquotes, numbered/unordered lists, and pre-formatted syntax code sections." 
     },
     { 
-      question: "How do templates work?", 
-      answer: "Our engine translates your Markdown directly into custom styled HTML before utilizing Puppeteer to compile the layout into an A4 page with print-perfect font spacing, headers, and borders." 
+      question: "How do the visual templates work?", 
+      answer: "Our rendering pipeline maps Markdown elements directly to custom CSS themes. The compiled pages utilize standard print layouts with calculated top and bottom margins to prevent headers or footers from clipping." 
     },
     { 
-      question: "Is my documentation secure?", 
-      answer: "Absolutely. All processing occurs in-memory. Files uploaded or compiled are immediately destroyed as soon as the PDF stream completes." 
+      question: "Is my personal document cached or saved?", 
+      answer: "No. Privacy is our top concern. All text compile streams and file uploads are processed fully in RAM on temporary sandbox instances. Files are deleted immediately after download." 
     },
+    {
+      question: "Can I print the generated PDF on physical A4 paper?",
+      answer: "Yes! The output PDF is compiled specifically with A4 document print parameters, matching standard paper sizes and incorporating standard margins perfect for resumes, specifications, and reports."
+    },
+    {
+      question: "Does the PDF support code syntax coloring?",
+      answer: "Yes. Selecting the 'Sleek Developer' theme or using code blocks in the default themes automatically colors code snippets (e.g. JavaScript, Python, JSON) for high readability."
+    },
+    {
+      question: "Can I convert local markdown files (.md) directly?",
+      answer: "Yes. You can compose in the editor or drag and drop local files ending in '.md' or '.markdown' into the file uploader below the editor to convert them."
+    }
   ];
 
   const relatedTools = [
@@ -166,6 +178,29 @@ export default function MarkdownToPdfClient() {
     { name: "PDF to Image", href: "/pdf-to-image" },
     { name: "Split PDF", href: "/split-pdf" },
   ];
+
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: Compiling Plain Text Markdown into PDFs</h3>
+      <p>
+        Markdown is a lightweight markup language that allows writers and developers to compose documents in plain text that translates cleanly to HTML or print formats. By separating document structure from styling rules, Markdown prevents layout shifting commonly caused by rich-text software.
+      </p>
+      <h4>Overview of the Compilation Themes</h4>
+      <p>
+        Utilify provides four distinct styling templates designed for different business objectives:
+      </p>
+      <ul>
+        <li><strong>Modern Clean:</strong> The default style. Minimal layout using sans-serif typography, ideal for reports, product specifications, and general documentation.</li>
+        <li><strong>Academic Report:</strong> Employs Times New Roman, justified alignments, and standard margins suitable for college research, thesis notes, and academic journals.</li>
+        <li><strong>Sleek Developer:</strong> A programming-oriented theme featuring a dark background and distinct code blocks, perfect for API schemas, script tutorials, and developer specs.</li>
+        <li><strong>Editorial Vintage:</strong> Uses Georgia serif typography and elegant dashed separators, giving it a classic newsletter or publication feel.</li>
+      </ul>
+      <h4>High-Fidelity PDF Generation</h4>
+      <p>
+        To ensure print quality, our server-side compiler uses headless Chromium to render the styled layout before compiling the page into a PDF. This ensures that fonts, tables, margins, and page breaks are rendered exactly as they appear in the editor.
+      </p>
+    </article>
+  );
 
   // Theme descriptions
   const themes = [
@@ -182,6 +217,7 @@ export default function MarkdownToPdfClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-7xl mx-auto space-y-8">
         

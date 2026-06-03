@@ -99,17 +99,29 @@ export default function BmiCalculatorClient() {
 
   const faqs = [
     { 
-      question: "Is BMI the only measure of health?", 
-      answer: "No, while useful, BMI doesn't measure body fat directly or consider muscle mass, bone density, or overall body composition." 
+      question: "What is Body Mass Index (BMI)?", 
+      answer: "Body Mass Index (BMI) is a mathematical estimation of body fatness based on an individual's height and weight. It is used as a screening tool to categorize adult health categories." 
     },
     { 
-      question: "What if I have high muscle mass?", 
-      answer: "Athletes with high muscle mass may have a high BMI score while being perfectly healthy, as muscle is denser than fat." 
+      question: "Why is muscle mass a limitation for BMI?", 
+      answer: "BMI does not distinguish between muscle tissue, bone density, and body fat. Since muscle is denser than fat, muscular individuals (like bodybuilders or athletes) may register an overweight or obese BMI despite having very low body fat." 
     },
     { 
-      question: "How often should I check my BMI?", 
-      answer: "Checking every few months can help track trends in your weight and general health status." 
+      question: "Are child and adult BMI calculations interpreted the same way?", 
+      answer: "No. While the basic calculation formula is identical, a child's BMI score is plotted on age-and-sex-specific growth percentiles (e.g. CDC charts) because body composition changes rapidly during growth." 
     },
+    {
+      question: "Does this calculator support both imperial and metric units?",
+      answer: "Yes! You can toggle between Metric Units (kilograms and centimeters) and US Units (pounds, feet, and inches) in the tabs at the top of the interface."
+    },
+    {
+      question: "How do I calculate healthy weight targets?",
+      answer: "A standard healthy BMI range falls between 18.5 and 24.9. You can calculate your ideal weight range by multiplying the square of your height in meters by 18.5 (lower bound) and 24.9 (upper bound)."
+    },
+    {
+      question: "Is my personal health data saved anywhere?",
+      answer: "Never. All height, weight, and BMI calculations run entirely inside your browser using client-side JavaScript. None of your metrics are transmitted to our servers or stored in any database."
+    }
   ];
 
   const relatedTools = [
@@ -118,6 +130,32 @@ export default function BmiCalculatorClient() {
     { name: "Image Compressor", href: "/image-compressor" },
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: Understanding Body Mass Index (BMI)</h3>
+      <p>
+        Body Mass Index (BMI) is a standard screening measurement adopted by the World Health Organization (WHO) and global health agencies to identify weight categories that may lead to health concerns. However, BMI is not a diagnostic tool; it is a general statistical indicator.
+      </p>
+      <h4>The BMI Calculation Formulas</h4>
+      <p>
+        The calculation varies depending on your preferred measurement units:
+      </p>
+      <ul>
+        <li><strong>Metric Formula:</strong> <code>BMI = weight (kg) / [height (m)]²</code></li>
+        <li><strong>US Imperial Formula:</strong> <code>BMI = 703 &times; weight (lbs) / [height (inches)]²</code></li>
+      </ul>
+      <h4>Biological Factors to Consider</h4>
+      <p>
+        Because BMI is a simple weight-to-height ratio, it is important to factor in other metrics when evaluating overall health:
+      </p>
+      <ul>
+        <li><strong>Muscle Density:</strong> Muscle tissue weighs more than fat tissue of the same volume, causing active individuals to register high BMIs.</li>
+        <li><strong>Ethnic Variances:</strong> Research shows that healthy weight and fat distribution bounds differ slightly across different genetic groups.</li>
+        <li><strong>Aging:</strong> Older adults naturally lose muscle mass and carry more body fat than younger individuals at identical BMI scores.</li>
+      </ul>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="BMI Calculator"
@@ -125,6 +163,7 @@ export default function BmiCalculatorClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         <div className="space-y-8">

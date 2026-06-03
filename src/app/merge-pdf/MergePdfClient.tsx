@@ -78,17 +78,29 @@ export default function MergePdfClient() {
 
   const faqs = [
     { 
-      question: "Can I add files from different folders?", 
-      answer: "Yes! You can add files as many times as you want. They will be added to the end of the list." 
+      question: "Can I add files from different directories?", 
+      answer: "Yes. You can select files from multiple locations on your computer. Simply click 'Add More PDFs' repeatedly to queue additional documents." 
     },
     { 
-      question: "How do I change the order?", 
-      answer: "Use the Up and Down arrows on each file card to move it within the sequence." 
+      question: "How do I rearrange the order of the queued PDFs?", 
+      answer: "Each file card in the queue lists Up and Down arrow buttons. Click these buttons to swap positions and adjust the final consolidation sequence." 
     },
     { 
-      question: "Is there a limit?", 
-      answer: "You can merge up to 20 files at once. The total size limit is approximately 100MB." 
+      question: "Is there a limit on file count or total file size?", 
+      answer: "You can merge up to 20 PDF documents in a single operation. The cumulative size limit is approximately 100MB to ensure high performance." 
     },
+    {
+      question: "Do you keep copies of my financial or legal PDFs?",
+      answer: "No. All merging operations are performed dynamically inside RAM on secure, ephemeral cloud nodes. Your source files and the merged result are permanently purged as soon as you close or reset the window."
+    },
+    {
+      question: "Will the page sizes, orientations, or margins change after merging?",
+      answer: "No. Our merge compiler preserves the exact dimension, rotation orientation, text layout, vector objects, hyperlinks, and image details of every page in the source files."
+    },
+    {
+      question: "Can I merge PDF forms that have fillable fields?",
+      answer: "Yes, but please note that some fillable form fields might be flattened during compile to prevent naming conflicts between different forms."
+    }
   ];
 
   const relatedTools = [
@@ -97,6 +109,25 @@ export default function MergePdfClient() {
     { name: "Image Compressor", href: "/image-compressor" },
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: Consolidating Business and Personal Documents</h3>
+      <p>
+        Combining several individual PDF files into a single master document is one of the most common administrative tasks in the workplace. Whether you are assembling a lease application dossier, compiling corporate invoices for accounting, or organizing receipts for tax declarations, a single unified PDF is easier to store, navigate, and email.
+      </p>
+      <h4>Why Use Utilify to Merge PDFs?</h4>
+      <ul>
+        <li><strong>Interactive Queue Management:</strong> Easily add more files, remove incorrect files from the list, and order the sequence of documents before running the compiler.</li>
+        <li><strong>Confidentiality First:</strong> Traditional web converters store uploaded PDFs on persistent physical server disks for days. Utilify handles your files strictly in transient memory.</li>
+        <li><strong>High-Speed PDF Assembly:</strong> Our backend engine combines files in milliseconds, outputting a perfectly compiled single PDF.</li>
+      </ul>
+      <h4>How to Order Your Merge Queue</h4>
+      <p>
+        Documents will be combined in the exact numerical order shown in the queue (from 1 to N). Use the Up and Down arrow icons on the side of each file card to fine-tune the final pagination order. Once the queue represents your desired output, click 'Merge All Files' to complete the assembly.
+      </p>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="Merge PDF"
@@ -104,6 +135,7 @@ export default function MergePdfClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Queue Management */}

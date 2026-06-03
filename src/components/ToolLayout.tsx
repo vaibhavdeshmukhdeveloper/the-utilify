@@ -14,6 +14,7 @@ interface ToolLayoutProps {
   howToUse: { step: string; description: string }[];
   faqs: { question: string; answer: string }[];
   relatedTools: { name: string; href: string }[];
+  detailedContent?: React.ReactNode;
 }
 
 export function ToolLayout({
@@ -23,6 +24,7 @@ export function ToolLayout({
   howToUse,
   faqs,
   relatedTools,
+  detailedContent,
 }: ToolLayoutProps) {
   const pathname = usePathname();
   const isUseCase = pathname?.startsWith("/use-case/");
@@ -59,13 +61,22 @@ export function ToolLayout({
 
         {/* Tool Area */}
         <section className="py-12 md:py-20 flex-grow flex items-center justify-center text-center">
-          <div className="container flex flex-col items-center justify-center text-center mx-auto">
-            <Card className="p-6 md:p-12 lg:p-16 border-2 border-dashed bg-card backdrop-blur-sm min-h-[500px] flex flex-col items-center justify-center shadow-2xl shadow-primary/5 rounded-[2rem] text-center">
+          <div className="container flex flex-col items-center justify-center text-center mx-auto px-4">
+            <Card className="w-full p-6 md:p-12 lg:p-16 border-2 border-dashed bg-card backdrop-blur-sm min-h-[500px] flex flex-col items-center justify-center shadow-2xl shadow-primary/5 rounded-[2rem] text-center">
               {children}
             </Card>
             <AdBanner />
           </div>
         </section>
+
+        {/* Detailed Guide Content */}
+        {detailedContent && (
+          <section className="py-16 bg-muted/10 border-t flex flex-col items-center justify-center text-left">
+            <div className="container max-w-4xl px-6 mx-auto prose prose-zinc dark:prose-invert">
+              {detailedContent}
+            </div>
+          </section>
+        )}
 
         {/* SEO Content: How to Use */}
         <section className="py-12 border-t flex flex-col items-center justify-center text-center">

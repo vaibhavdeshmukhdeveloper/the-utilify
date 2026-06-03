@@ -63,16 +63,28 @@ export default function BackgroundRemoverClient() {
   const faqs = [
     {
       question: "How accurate is the AI?",
-      answer: "Our AI is trained on millions of high-resolution images. It handles complex edges like hair and fur with professional precision."
+      answer: "Our AI is trained on millions of high-resolution images. It handles complex edges like hair, clothing outlines, and fine textures with professional precision."
     },
     {
       question: "What is the output format?",
-      answer: "We always provide a transparent PNG to ensure you can layer your subject onto any background."
+      answer: "We always output transparent PNG files with a full alpha channel. This ensures you can seamlessly layer your subject onto any custom background."
     },
     {
       question: "Are there limits on resolution?",
-      answer: "We support images up to 4K resolution. For larger files, the processing may take a few seconds longer."
+      answer: "We support images up to 4K resolution. High-resolution images are processed at their original fidelity without downscaling."
     },
+    {
+      question: "Is my private data uploaded to a third party?",
+      answer: "No. Your image is processed transiently in RAM on our secure cloud server. It is wiped immediately after processing is complete. We do not store or inspect your files."
+    },
+    {
+      question: "Can I remove backgrounds from graphics or logos?",
+      answer: "Yes! Our AI is highly optimized for portraits and products, but it also works very well for solid logo boundaries, vector objects, and artwork icons."
+    },
+    {
+      question: "Is there a limit on how many images I can process?",
+      answer: "No. Utilify provides completely free, unlimited background removal. You can process as many images as you need without signup or subscription limits."
+    }
   ];
 
   const relatedTools = [
@@ -81,6 +93,33 @@ export default function BackgroundRemoverClient() {
     { name: "Split PDF", href: "/split-pdf" },
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: AI-Powered Image Segmentation</h3>
+      <p>
+        The Utilify Background Remover leverages state-of-the-art computer vision models trained specifically to isolate foreground subjects from complex backgrounds. The neural network calculates a high-resolution alpha matte to identify transparency values on every pixel.
+      </p>
+      <h4>How to Get the Best Results</h4>
+      <p>
+        To ensure pixel-perfect removal, we recommend:
+      </p>
+      <ul>
+        <li><strong>High Contrast:</strong> Choose photos where the subject has a distinct color from the backdrop.</li>
+        <li><strong>Clear Focus:</strong> Avoid strong motion blur around the edges of the subject.</li>
+        <li><strong>Proper Lighting:</strong> Natural lighting helps the AI identify edge details, especially around hair.</li>
+      </ul>
+      <h4>Common Use Cases</h4>
+      <p>
+        This tool is highly optimized for:
+      </p>
+      <ul>
+        <li><strong>E-Commerce Sellers:</strong> Create clean white or transparent product listings for Amazon, Shopify, or Etsy.</li>
+        <li><strong>LinkedIn Profiles:</strong> Isolate portrait photos to create professional headshots with custom backdrops.</li>
+        <li><strong>Graphic Designers:</strong> Speed up your editing workflow by generating transparent cutouts in seconds instead of drawing manual paths.</li>
+      </ul>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="Background Remover"
@@ -88,6 +127,7 @@ export default function BackgroundRemoverClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload */}

@@ -134,14 +134,64 @@ export default function SipCalculatorClient() {
         { step: "Return Rate", description: "Expected annual percentage yield from your investment." }
       ]}
       faqs={[
-        { question: "What is Rupee/Dollar Cost Averaging?", answer: "It's a strategy where you invest a fixed amount regularly, buying more units when prices are low and fewer when prices are high." },
-        { question: "Does SIP guarantee returns?", answer: "No, SIP returns depend on the underlying asset's performance." }
+        { 
+          question: "What is a Systematic Investment Plan (SIP)?", 
+          answer: "A Systematic Investment Plan (SIP) is a disciplined investment methodology where you allocate a fixed sum of money into mutual funds or index portfolios at regular intervals (usually monthly) rather than in a lump sum." 
+        },
+        { 
+          question: "How does Rupee/Dollar Cost Averaging benefit me?", 
+          answer: "By investing a flat sum consistently, you buy more portfolio units when market prices are low and fewer units when prices are high. This smooths out purchase costs and reduces timing risks." 
+        },
+        { 
+          question: "Does this calculator support different compounding intervals?", 
+          answer: "Yes. In the Advanced Settings, you can toggle between Monthly and Yearly compounding frequencies to align with different mutual fund, bank deposit, or stock return schemes." 
+        },
+        {
+          question: "What does the 'Beginning' vs 'End' timing setting do?",
+          answer: "'Beginning' assumes you make monthly deposits at the start of each month, earning interest on that deposit immediately. 'End' assumes deposits are made at the close of the month, starting compound interest calculation in the subsequent period."
+        },
+        {
+          question: "Are SIP returns guaranteed?",
+          answer: "No. SIP returns depend entirely on market fluctuations and the performance of the underlying mutual fund, ETF, or index portfolio. Projections are estimates based on historical averages."
+        },
+        {
+          question: "Is my financial input data kept confidential?",
+          answer: "Absolutely. All math formulas run completely inside your browser using JavaScript. No financial inputs or calculations are sent to servers or recorded on databases."
+        }
       ]}
       relatedTools={[
         { name: "Investment Calculator", href: "/investment-calculator" },
         { name: "BMI Calculator", href: "/bmi-calculator" },
         { name: "JSON Formatter", href: "/json-formatter" },
       ]}
+      detailedContent={(
+        <article className="space-y-6">
+          <h3>Detailed Guide: Understanding SIP Compounding Projections</h3>
+          <p>
+            A Systematic Investment Plan (SIP) is widely considered the safest and most efficient path for long-term wealth accumulation. Unlike lump-sum investments, which expose all your capital to immediate market fluctuations, SIPs utilize consistency and time to generate exponential compound growth.
+          </p>
+          <h4>The Math Behind SIP Growth</h4>
+          <p>
+            When you invest a flat monthly amount, the portfolio compounds continuously. The future value is calculated using the following formula:
+          </p>
+          <p className="bg-muted p-4 rounded-xl font-mono text-center">
+            FV = P &times; [ ( (1 + r)^n - 1 ) / r ] &times; (1 + r)
+          </p>
+          <p>
+            Where:
+          </p>
+          <ul>
+            <li><strong>FV:</strong> Future Value (Maturity Amount).</li>
+            <li><strong>P:</strong> Monthly investment contribution.</li>
+            <li><strong>r:</strong> Monthly rate of return (Annual Rate / 12 / 100).</li>
+            <li><strong>n:</strong> Total number of monthly contributions (Years &times; 12).</li>
+          </ul>
+          <h4>Why Start a SIP Early?</h4>
+          <p>
+            The single most important variable in compound growth is time, not capital. Because interest compounds on top of previous interest, your balance curve grows exponentially in the later years. Delaying your investment plan by even five years can cut your final retirement corpus in half.
+          </p>
+        </article>
+      )}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Inputs */}

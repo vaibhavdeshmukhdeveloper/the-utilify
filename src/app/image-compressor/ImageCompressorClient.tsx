@@ -64,17 +64,29 @@ export default function ImageCompressorClient() {
 
   const faqs = [
     { 
-      question: "Will I lose image quality?", 
-      answer: "Compression always involves some loss, but at 80% quality, the difference is usually invisible to the human eye." 
+      question: "Will I lose image quality during compression?", 
+      answer: "We employ advanced lossy and lossless algorithms. When compressing at the default 80% quality level, file size is reduced by up to 80% while the visual difference remains completely indistinguishable to the human eye." 
     },
     { 
-      question: "What formats are supported?", 
-      answer: "We currently support JPG, PNG, and WebP images." 
+      question: "Which file formats are supported?", 
+      answer: "We support the three major web image formats: JPEG/JPG, PNG, and WebP. Transparent layers inside PNG and WebP files are fully preserved." 
     },
     { 
-      question: "Is there a file size limit?", 
-      answer: "You can upload images up to 20MB for compression." 
+      question: "Is there a limit on upload file size?", 
+      answer: "Our compressor supports images up to 20MB in size. Very large high-resolution camera photos are optimized in seconds." 
     },
+    {
+      question: "Are my uploaded photos stored on your servers?",
+      answer: "No. Security is part of our design system. All files are uploaded and optimized in-memory (RAM) and immediately purged upon download. We never save your private photos."
+    },
+    {
+      question: "How does the quality slider affect file size?",
+      answer: "Lowering the slider increases compression strength, yielding smaller file sizes but potentially introducing compression artifacts. Keeping the slider between 70% and 85% is ideal for the web."
+    },
+    {
+      question: "Do you support batch image compression?",
+      answer: "Currently, our tool processes images one by one to ensure maximum optimization accuracy for each file. You can refresh and compress as many files as you like."
+    }
   ];
 
   const relatedTools = [
@@ -83,6 +95,25 @@ export default function ImageCompressorClient() {
     { name: "Split PDF", href: "/split-pdf" },
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: Squeezing Web Graphics for Performance</h3>
+      <p>
+        Uncompressed images are the leading cause of slow page speeds. When loading heavy 5MB photos onto web platforms like Shopify, WordPress, or custom portals, your users experience long load times, which can lead to higher bounce rates and poor SEO rankings. Image compression shrinks files while keeping visual structures clean.
+      </p>
+      <h4>Understanding Image Compression Formats</h4>
+      <ul>
+        <li><strong>JPEG Compression:</strong> Eliminates high-frequency noise that is hard for the human eye to detect. Perfect for photos.</li>
+        <li><strong>PNG Compression:</strong> Squeezes color palettes and removes redundant pixel patterns without discarding details, maintaining crisp text outlines and transparent backdrops.</li>
+        <li><strong>WebP Compression:</strong> A modern Google standard combining the best features of both, yielding files up to 30% smaller than JPEGs.</li>
+      </ul>
+      <h4>How to Balance Quality vs. File Size</h4>
+      <p>
+        For standard web storefronts and email attachments, setting the compression quality slider to <strong>80%</strong> offers the perfect sweet spot. This provides significant weight savings (often reducing a 3MB file to less than 400KB) while ensuring graphics look completely crisp and clear on high-resolution screens.
+      </p>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="Image Compressor"
@@ -90,6 +121,7 @@ export default function ImageCompressorClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload and Settings */}

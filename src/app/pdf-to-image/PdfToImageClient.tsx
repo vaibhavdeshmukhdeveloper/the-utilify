@@ -46,16 +46,28 @@ export default function PdfToImageClient() {
   const faqs = [
     {
       question: "What is the output image quality?",
-      answer: "We use high-density rendering (2x scale) to ensure your images are crisp and readable, even for small text."
+      answer: "We render PDF pages at 2x pixel density (300 DPI equivalent) to ensure that small typography, numerical tables, and vector lines remain perfectly sharp and readable."
     },
     {
-      question: "How are multiple pages handled?",
-      answer: "If your PDF has multiple pages, they are bundled into a single ZIP file for easy downloading."
+      question: "How are multi-page PDFs handled?",
+      answer: "If your PDF has multiple pages, our converter processes them all at once and bundles the output images into a single zip archive for convenient single-click download."
     },
     {
-      question: "Is there a page limit?",
-      answer: "No hard limit, but very large PDFs (100+ pages) may take a few extra seconds to process."
+      question: "Are there any file size or page limitations?",
+      answer: "No hard limits are enforced. However, files with 100+ pages or extremely large scanning sizes may require a few additional seconds of server processing time."
     },
+    {
+      question: "Is my personal data safe with this converter?",
+      answer: "Absolutely. We respect your confidentiality. All PDF rendering is executed in-memory on modern sandbox instances, and files are permanently cleared the moment your download completes."
+    },
+    {
+      question: "Which image format is generated?",
+      answer: "Our converter defaults to PNG (Portable Network Graphics) to support transparent layers and avoid lossy compression artifacts, ensuring exact replicas of your PDF pages."
+    },
+    {
+      question: "Does this require software installation?",
+      answer: "No. The tool runs completely inside your browser interface, utilizing cloud infrastructure. There are no downloads, extensions, or signups required."
+    }
   ];
 
   const relatedTools = [
@@ -64,6 +76,25 @@ export default function PdfToImageClient() {
     { name: "Image Compressor", href: "/image-compressor" },
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: Converting PDF Documents to High-Res Images</h3>
+      <p>
+        PDF files are excellent for maintaining document layout across different systems. However, they are difficult to embed in web pages, display on social feeds, or use inside presentation software. Renders of PDF pages into separate graphics (such as PNG) resolve these compatibility hurdles.
+      </p>
+      <h4>Why Convert PDF to PNG?</h4>
+      <ul>
+        <li><strong>Lossless Fidelity:</strong> PNG does not suffer from blocky pixelation, preserving small text lines and detailed tables.</li>
+        <li><strong>Slide & Social Compatibility:</strong> Easily drop PNG pages directly into PowerPoint, Google Slides, or share academic achievements on LinkedIn.</li>
+        <li><strong>Zero Software Dependency:</strong> Requisite PDF readers are not needed to view the page once it has been exported as a standard image asset.</li>
+      </ul>
+      <h4>Security & Private Handling</h4>
+      <p>
+        Utilify takes security seriously. Financial sheets, bank statements, or official CV files contain sensitive personal data. Our processing pipeline operates completely in temporary server memory (RAM) and immediately purges data upon delivery. No files are written to hard disks.
+      </p>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="PDF to Image"
@@ -71,6 +102,7 @@ export default function PdfToImageClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload */}

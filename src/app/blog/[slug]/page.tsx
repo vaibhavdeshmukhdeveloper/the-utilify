@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { marked } from "marked";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -29,48 +30,8 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  // Parse custom Markdown paragraphs for simple rendering
-  const paragraphs = post.content.trim().split("\n\n");
-
-  // Helper to parse bold text (**text**)
-  const parseBoldText = (text: string): React.ReactNode[] => {
-    const parts = text.split("**");
-    return parts.map((part, index) => {
-      if (index % 2 === 1) {
-        return <strong key={index} className="font-extrabold text-zinc-950 dark:text-zinc-50">{part}</strong>;
-      }
-      return part;
-    });
-  };
-
-  // Helper to parse links and bold text within a string
-  const parseMarkdownInline = (text: string): React.ReactNode[] => {
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-    const matches = Array.from(text.matchAll(linkRegex));
-
-    if (matches.length === 0) {
-      return parseBoldText(text);
-    }
-
-    let parts: React.ReactNode[] = [];
-    let lastIndex = 0;
-    matches.forEach((match, matchIdx) => {
-      const linkText = match[1];
-      const url = match[2];
-      const index = match.index!;
-
-      parts.push(...parseBoldText(text.substring(lastIndex, index)));
-      parts.push(
-        <Link key={matchIdx} href={url} className="text-primary font-bold hover:underline">
-          {parseBoldText(linkText)}
-        </Link>
-      );
-      lastIndex = index + match[0].length;
-    });
-
-    parts.push(...parseBoldText(text.substring(lastIndex)));
-    return parts;
-  };
+  // Parse markdown asynchronously on the server
+  const htmlContent = await marked(post.content.trim());
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -105,31 +66,10 @@ export default async function BlogPostPage({ params }: PageProps) {
           </header>
 
           {/* Content */}
-          <div className="prose prose-zinc dark:prose-invert max-w-none text-zinc-700 dark:text-zinc-300 leading-[1.8] space-y-6">
-            {paragraphs.map((p, idx) => {
-              if (p.startsWith("### ")) {
-                return (
-                  <h3 key={idx} className="text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 mt-10 mb-4">
-                    {parseMarkdownInline(p.replace("### ", ""))}
-                  </h3>
-                );
-              }
-              if (p.startsWith("- ")) {
-                return (
-                  <ul key={idx} className="list-disc pl-6 space-y-2 my-6">
-                    {p.split("\n")
-                      .map(li => li.trim())
-                      .filter(Boolean)
-                      .map((li, liIdx) => (
-                        <li key={liIdx}>{parseMarkdownInline(li.replace("- ", ""))}</li>
-                      ))}
-                  </ul>
-                );
-              }
-
-              return <p key={idx}>{parseMarkdownInline(p)}</p>;
-            })}
-          </div>
+          <div 
+            className="prose prose-zinc dark:prose-invert max-w-none text-zinc-700 dark:text-zinc-300 leading-[1.8] space-y-6"
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
+          />
         </article>
       </main>
 

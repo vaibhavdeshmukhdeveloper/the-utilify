@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { useCases } from "@/lib/use-cases-data";
+import { blogPosts } from "@/lib/blog-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.theutilify.com"; // Correct active brand domain
@@ -27,11 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms",
   ];
 
-  const blogSlugs = [
-    "/blog/stop-using-cluttered-online-converters",
-    "/blog/demystifying-compound-interest-wealth-creation",
-    "/blog/ai-background-removal-tips-for-ecommerce",
-  ];
+  const blogSlugs = blogPosts.map((post) => `/blog/${post.slug}`);
 
   // Dynamic programmatic SEO routes
   const useCasePaths = useCases.map((uc) => `/use-case/${uc.slug}`);

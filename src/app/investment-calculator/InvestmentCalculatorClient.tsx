@@ -130,24 +130,89 @@ export default function InvestmentCalculatorClient() {
     setResult(null);
   };
 
+  const howToUse = [
+    { step: "Initial Sum", description: "The amount you're starting with." },
+    { step: "Contributions", description: "Regular monthly deposits." },
+    { step: "Settings", description: "Adjust compounding frequency and timing for accuracy." }
+  ];
+
+  const faqs = [
+    { 
+      question: "What is the difference between this and the SIP Calculator?", 
+      answer: "The SIP Calculator is designed specifically for mutual fund plans with recurring monthly contributions and no initial lump sum. The Investment Calculator lets you combine a large initial capital amount (lump sum) with recurring monthly contributions." 
+    },
+    { 
+      question: "How does compounding frequency affect my returns?", 
+      answer: "Compounding frequency determines how often interest is calculated and added back to your balance. More frequent compounding (e.g. daily vs. annually) means you earn interest on interest sooner, resulting in slightly higher final values." 
+    },
+    { 
+      question: "What is the difference between Beginning and End contribution timing?", 
+      answer: "Selecting 'Beginning' timing assumes monthly contributions are added at the start of each period, earning interest immediately. 'End' timing adds contributions at the end of the month, delay-compounding them to the next cycle." 
+    },
+    {
+      question: "Is this calculator suitable for stock portfolio planning?",
+      answer: "Yes. You can model stock market historical yields (such as the S&P 500 average of 8-10%) by inputting your current stock value as the Initial Investment and adding recurring monthly stock buys."
+    },
+    {
+      question: "Does this calculator account for taxes or inflation?",
+      answer: "No. The calculator yields raw nominal projections. Capital gains taxes, income taxes, and inflation-adjusted purchasing power are not factored in and should be planned separately."
+    },
+    {
+      question: "Is my personal financial data safe?",
+      answer: "Completely. Utilify does not transmit your calculations to any server. All compounding projection algorithms execute 100% locally inside your browser interface."
+    }
+  ];
+
+  const relatedTools = [
+    { name: "SIP Calculator", href: "/sip-calculator" },
+    { name: "BMI Calculator", href: "/bmi-calculator" },
+    { name: "JSON Formatter", href: "/json-formatter" },
+  ];
+
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: Understanding Long-Term Compound Growth</h3>
+      <p>
+        Compounding is the process where an investment earns interest, and then that accumulated interest earns additional interest in subsequent periods. Over a decade or more, this generates a non-linear growth curve where interest gains far exceed your total out-of-pocket contributions.
+      </p>
+      <h4>The Compound Interest Equation</h4>
+      <p>
+        The calculator models compound interest with regular contributions using the formula:
+      </p>
+      <p className="bg-muted p-4 rounded-xl font-mono text-center">
+        {"A = P(1 + r/n)^(n*t) + PMT * [ ((1 + r/n)^(n*t) - 1) / (r/n) ]"}
+      </p>
+      <p>
+        Where:
+      </p>
+      <ul>
+        <li><strong>A:</strong> The final future balance of your investment.</li>
+        <li><strong>P:</strong> The initial investment amount (principal).</li>
+        <li><strong>r:</strong> Expected annual interest rate (decimal).</li>
+        <li><strong>n:</strong> Compounding frequency per year (1 for annual, 12 for monthly, 365 for daily).</li>
+        <li><strong>t:</strong> Total term of investment in years.</li>
+        <li><strong>PMT:</strong> Recurring monthly contribution amount.</li>
+      </ul>
+      <h4>Maximizing Your Compounding Snowball</h4>
+      <p>
+        To get the most out of your wealth projections:
+      </p>
+      <ul>
+        <li><strong>Maximize Time:</strong> The longer your money compounds, the steeper the growth curve. Compound interest works best when given 15+ years.</li>
+        <li><strong>Increase Frequency:</strong> Opting for daily or monthly compounding interest schemes yields slightly higher returns over time than annual compounding.</li>
+        <li><strong>Automate Deposits:</strong> Adding even a small monthly contribution dramatically boosts the final corpus compared to lump-sum growth alone.</li>
+      </ul>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="Investment Calculator"
       description="Calculate your future wealth by projecting investment growth with custom compounding and contribution timing."
-      howToUse={[
-        { step: "Initial Sum", description: "The amount you're starting with." },
-        { step: "Contributions", description: "Regular monthly deposits." },
-        { step: "Settings", description: "Adjust compounding frequency and timing for accuracy." }
-      ]}
-      faqs={[
-        { question: "Beginning vs End?", answer: "Contributions at the beginning earn interest for that period, whereas end-of-period contributions start earning in the next period." },
-        { question: "Compounding frequency?", answer: "The more often interest is added, the faster your money grows due to the power of compounding." }
-      ]}
-      relatedTools={[
-        { name: "SIP Calculator", href: "/sip-calculator" },
-        { name: "BMI Calculator", href: "/bmi-calculator" },
-        { name: "JSON Formatter", href: "/json-formatter" },
-      ]}
+      howToUse={howToUse}
+      faqs={faqs}
+      relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Inputs */}

@@ -56,17 +56,29 @@ export default function SplitPdfClient() {
 
   const faqs = [
     { 
-      question: "What is 'Split All'?", 
-      answer: "This mode takes every single page of your PDF and turns it into a separate PDF file, then bundles them into a ZIP." 
+      question: "What is the difference between 'Extract Ranges' and 'Split All Pages'?", 
+      answer: "'Extract Ranges' allows you to select specific pages (e.g. 1-3, 5) and merges them into a single new PDF. 'Split All Pages' splits every single page of your PDF into an individual separate file and bundles them in a ZIP." 
     },
     { 
-      question: "Can I extract multiple ranges?", 
-      answer: "Yes, in Range mode, combine them like '1-3, 7, 10-15' and they will be merged into one output PDF." 
+      question: "Can I enter non-consecutive page numbers?", 
+      answer: "Yes, you can combine single pages and ranges using commas, for example: '1, 3, 5-8, 12'. The output document will contain exactly these pages in the order specified." 
     },
     { 
-      question: "Is there a file size limit?", 
-      answer: "Our system handles large PDFs efficiently. ZIP generation for 100+ pages might take a few seconds." 
+      question: "Is there a limit to the size of the PDF file I can split?", 
+      answer: "No. Our backend processes file actions in highly optimized server threads. However, extremely large files (e.g. 200MB+) might take slightly longer to upload and process." 
     },
+    {
+      question: "Are my confidential files stored on your servers?",
+      answer: "No. Security is our priority. Your documents are uploaded, processed in transient RAM, and immediately deleted. We never store files on physical hard drives or databases."
+    },
+    {
+      question: "Will the formatting or links inside the PDF change?",
+      answer: "No. The splitting process is completely lossless. It retains all vector graphics, fonts, text layers, hyperlinks, form fields, and metadata completely intact."
+    },
+    {
+      question: "Is this tool completely free to use?",
+      answer: "Yes. Utilify provides free, unlimited document splitting with no hidden costs, caps on page counts, or watermarks."
+    }
   ];
 
   const relatedTools = [
@@ -75,6 +87,30 @@ export default function SplitPdfClient() {
     { name: "Image Compressor", href: "/image-compressor" },
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <h3>Detailed Guide: Splitting PDFs and Extracting Specific Pages</h3>
+      <p>
+        PDF files are commonly used for heavy consolidated reports, books, contracts, and legal papers. Sharing a massive document when you only need to submit a few specific pages is a bad practice. It is safer, faster, and more professional to extract exactly the page ranges you need.
+      </p>
+      <h4>When to Use the Split PDF Tool</h4>
+      <ul>
+        <li><strong>Redacting Unwanted Pages:</strong> Remove personal details, price charts, or audit sheets from business contracts.</li>
+        <li><strong>Reducing File Sizes:</strong> Extract a single chapter from a massive academic textbook to read on your tablet or share via email.</li>
+        <li><strong>Isolating Invoices:</strong> Separate monthly billing statements from a yearly consolidated file for accounting submissions.</li>
+      </ul>
+      <h4>How to Write Page Ranges Correctly</h4>
+      <p>
+        Our parser supports standard indexing symbols. Separate page ranges with hyphens and individual pages with commas:
+      </p>
+      <ul>
+        <li><code>1-5</code>: Extracts pages 1, 2, 3, 4, and 5.</li>
+        <li><code>3, 7, 9</code>: Extracts only pages 3, 7, and 9.</li>
+        <li><code>1-4, 8, 12-15</code>: Extracts pages 1 to 4, page 8, and pages 12 to 15, merging them into one output file.</li>
+      </ul>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="Split PDF"
@@ -82,6 +118,7 @@ export default function SplitPdfClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Config & Upload */}
