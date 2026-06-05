@@ -41,12 +41,21 @@ app.add_middleware(
     expose_headers=["Content-Disposition"]
 )
 
-# Global rembg session management as requested for low latency
-# Switches background removal engine to u2net for memory efficiency and high performance
-print("Initializing global AI background removal model (u2net)...")
+# Global dictionary to cache loaded model sessions for low latency
+rembg_sessions = {}
 
-rembg_session = new_session("u2net")
-print("AI Model loaded successfully!")
+def get_rembg_session(model_name: str):
+    if model_name not in rembg_sessions:
+        print(f"Loading AI background removal model ({model_name})...")
+        rembg_sessions[model_name] = new_session(model_name)
+        print(f"Model {model_name} loaded successfully!")
+    return rembg_sessions[model_name]
+
+# Pre-load default u2net model on startup so first request has low latency
+try:
+    get_rembg_session("u2net")
+except Exception as e:
+    print(f"Failed to pre-load default u2net model: {e}")
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
     """
@@ -146,7 +155,8 @@ def clean_solid_background(img: Image.Image, tolerance: int = 20) -> Image.Image
 @app.post("/image/remove-bg")
 async def remove_background(
     file: UploadFile = File(...),
-    post_process: bool = Form(False)
+    post_process: bool = Form(False),
+    model: str = Form("u2net")
 ):
     """
     Removes the background from an uploaded image.
@@ -171,10 +181,14 @@ async def remove_background(
             solid_cutout.save(output_buffer, format="PNG")
         else:
             # Fallback to AI-based neural network model for photographs/complex backgrounds
-            print(f"Complex scene detected. Utilizing global AI background removal model (u2netp, post_process={post_process}).")
+            valid_models = ["u2net", "u2net_human_seg", "u2net_cloth_seg"]
+            target_model = model if model in valid_models else "u2net"
+            
+            print(f"Complex scene detected. Utilizing global AI background removal model ({target_model}, post_process={post_process}).")
+            session = get_rembg_session(target_model)
             output_bytes = remove(
                 file_bytes,
-                session=rembg_session,
+                session=session,
                 alpha_matting=False,
                 post_process_mask=post_process
             )

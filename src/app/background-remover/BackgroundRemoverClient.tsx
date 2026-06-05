@@ -17,6 +17,7 @@ export default function BackgroundRemoverClient() {
   const [uploaderKey, setUploaderKey] = useState(0);
   const [refineEdges, setRefineEdges] = useState(true);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
+  const [modelMode, setModelMode] = useState<"u2net" | "u2net_human_seg" | "u2net_cloth_seg">("u2net");
 
   const resizeImageIfNeeded = (file: File, maxDim = 2048): Promise<File> => {
     return new Promise((resolve) => {
@@ -110,7 +111,8 @@ export default function BackgroundRemoverClient() {
 
     try {
       const data = await uploadToBackend("/image/remove-bg", [fileToUpload], {
-        post_process: refineEdges ? "true" : "false"
+        post_process: refineEdges ? "true" : "false",
+        model: modelMode
       });
       setResult(data);
       toast.success("Background removed successfully!");
@@ -246,6 +248,51 @@ export default function BackgroundRemoverClient() {
                 >
                   <span className="font-extrabold text-sm">Original Size</span>
                   <span className="text-[10px] opacity-80">Full resolution</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Subject Mode Selection */}
+            <div className="space-y-3 pt-2 border-t">
+              <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block">
+                Subject Type
+              </label>
+              <div className="grid grid-cols-3 gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setModelMode("u2net")}
+                  className={`py-2 px-1 rounded-lg text-center flex flex-col justify-center items-center gap-0.5 border transition-all ${
+                    modelMode === "u2net"
+                      ? "border-primary bg-primary/5 text-primary"
+                      : "border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-muted-foreground"
+                  }`}
+                >
+                  <span className="font-extrabold text-[11px] leading-tight">General</span>
+                  <span className="text-[9px] opacity-75 leading-tight">Products/Auto</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModelMode("u2net_human_seg")}
+                  className={`py-2 px-1 rounded-lg text-center flex flex-col justify-center items-center gap-0.5 border transition-all ${
+                    modelMode === "u2net_human_seg"
+                      ? "border-primary bg-primary/5 text-primary"
+                      : "border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-muted-foreground"
+                  }`}
+                >
+                  <span className="font-extrabold text-[11px] leading-tight">Portraits</span>
+                  <span className="text-[9px] opacity-75 leading-tight">People only</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModelMode("u2net_cloth_seg")}
+                  className={`py-2 px-1 rounded-lg text-center flex flex-col justify-center items-center gap-0.5 border transition-all ${
+                    modelMode === "u2net_cloth_seg"
+                      ? "border-primary bg-primary/5 text-primary"
+                      : "border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-muted-foreground"
+                  }`}
+                >
+                  <span className="font-extrabold text-[11px] leading-tight">Clothing</span>
+                  <span className="text-[9px] opacity-75 leading-tight">Fashion items</span>
                 </button>
               </div>
             </div>
