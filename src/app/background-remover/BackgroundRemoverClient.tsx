@@ -646,7 +646,7 @@ export default function BackgroundRemoverClient() {
                 onTouchStart={startDrawing}
                 onTouchMove={handleDrawing}
                 onTouchEnd={stopDrawing}
-                className="max-w-full max-h-[65vh] object-contain cursor-none rounded-lg"
+                className="max-w-full max-h-[65vh] w-auto h-auto cursor-none rounded-lg block mx-auto"
                 style={{ touchAction: "none" }}
               />
               
