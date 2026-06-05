@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { FileUploader } from "@/components/FileUploader";
 import { uploadToBackend } from "@/lib/api";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
-import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Maximize2, Zap, Settings } from "lucide-react";
+import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Maximize2, Zap, Settings, Eraser } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function BackgroundRemoverClient() {
@@ -18,6 +18,129 @@ export default function BackgroundRemoverClient() {
   const [refineEdges, setRefineEdges] = useState(true);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
   const [modelMode, setModelMode] = useState<"u2net" | "u2net_human_seg" | "u2net_cloth_seg">("u2net");
+
+  // Manual Eraser Editor States
+  const [isEditing, setIsEditing] = useState(false);
+  const [brushSize, setBrushSize] = useState(30);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [brushPos, setBrushPos] = useState<{ x: number; y: number } | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    if (isEditing && result && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = result.url;
+      img.onload = () => {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      };
+    }
+  }, [isEditing, result]);
+
+  const getCoordinates = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+    
+    let clientX = 0;
+    let clientY = 0;
+    
+    if ("touches" in e) {
+      if (e.touches.length === 0) return null;
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const coords = getCoordinates(e);
+    if (!coords) return;
+    setIsDrawing(true);
+    if ("touches" in e) {
+      setBrushPos(null);
+    }
+    draw(coords.x, coords.y);
+  };
+
+  const draw = (x: number, y: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath();
+    ctx.arc(x, y, brushSize, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  };
+
+  const handleDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    if (!isDrawing) return;
+    const coords = getCoordinates(e);
+    if (!coords) return;
+    if ("touches" in e) {
+      setBrushPos(null);
+    }
+    draw(coords.x, coords.y);
+  };
+
+  const stopDrawing = () => {
+    setIsDrawing(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    setBrushPos({
+      x: e.clientX,
+      y: e.clientY
+    });
+    
+    if (isDrawing) {
+      const coords = getCoordinates(e);
+      if (coords) draw(coords.x, coords.y);
+    }
+  };
+
+  const getVisualBrushRadius = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return brushSize;
+    const rect = canvas.getBoundingClientRect();
+    return brushSize * (rect.width / canvas.width);
+  };
+
+  const handleSave = () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !result) return;
+    
+    const dataUrl = canvas.toDataURL("image/png");
+    setResult({
+      ...result,
+      url: dataUrl
+    });
+    setIsEditing(false);
+    toast.success("Cutout edited successfully!");
+  };
 
   const resizeImageIfNeeded = (file: File, maxDim = 2048): Promise<File> => {
     return new Promise((resolve) => {
@@ -423,6 +546,13 @@ export default function BackgroundRemoverClient() {
                       </Button>
                     </a>
                     <Button
+                      type="button"
+                      onClick={() => setIsEditing(true)}
+                      className="h-16 px-6 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-bold transition-all border border-zinc-700 flex items-center justify-center gap-2"
+                    >
+                      <Eraser className="h-5 w-5 text-primary animate-pulse" /> Edit Cutout
+                    </Button>
+                    <Button
                       variant="outline"
                       onClick={handleReset}
                       className="h-16 px-8 rounded-2xl border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-900 hover:text-white font-bold transition-all duration-300"
@@ -456,6 +586,86 @@ export default function BackgroundRemoverClient() {
           )}
         </div>
       </div>
+
+      {isEditing && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-zinc-950/95 backdrop-blur-md animate-in fade-in duration-200">
+          {/* Header */}
+          <div className="flex items-center justify-between px-8 py-4 border-b border-zinc-800 bg-zinc-900/50">
+            <div>
+              <h3 className="text-xl font-black text-zinc-100 m-0">Manual Eraser Editor</h3>
+              <p className="text-xs text-zinc-400">Drag to erase remaining background elements</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 bg-zinc-900 px-4 py-2 rounded-xl border border-zinc-800">
+                <label className="text-xs font-black uppercase text-zinc-400">Brush Size</label>
+                <input
+                  type="range"
+                  min="5"
+                  max="100"
+                  value={brushSize}
+                  onChange={(e) => setBrushSize(parseInt(e.target.value))}
+                  className="w-32 accent-primary"
+                />
+                <span className="text-xs text-zinc-300 font-bold w-6">{brushSize}px</span>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => setIsEditing(false)}
+                className="h-10 px-6 border-zinc-800 bg-transparent text-zinc-300 hover:bg-zinc-900 hover:text-white rounded-xl font-bold"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSave}
+                className="h-10 px-6 rounded-xl font-black bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
+              >
+                Save Changes
+              </Button>
+            </div>
+          </div>
+
+          {/* Editor Workspace */}
+          <div className="flex-1 flex items-center justify-center p-8 overflow-hidden relative select-none">
+            {/* Transparency Grid Backdrop */}
+            <div
+              className="absolute inset-8 rounded-2xl opacity-40 dark:opacity-10 pointer-events-none"
+              style={{
+                backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
+                backgroundSize: '20px 20px',
+                backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+              }}
+            />
+            
+            <div className="relative max-w-full max-h-[70vh] flex items-center justify-center bg-zinc-900/30 rounded-2xl p-4 border border-zinc-800/50 shadow-2xl">
+              <canvas
+                ref={canvasRef}
+                onMouseDown={startDrawing}
+                onMouseMove={handleMouseMove}
+                onMouseUp={stopDrawing}
+                onMouseLeave={() => { stopDrawing(); setBrushPos(null); }}
+                onTouchStart={startDrawing}
+                onTouchMove={handleDrawing}
+                onTouchEnd={stopDrawing}
+                className="max-w-full max-h-[65vh] object-contain cursor-none rounded-lg"
+                style={{ touchAction: "none" }}
+              />
+              
+              {/* Brush Preview Circle */}
+              {brushPos && (
+                <div
+                  className="fixed border-2 border-white rounded-full pointer-events-none bg-primary/10 shadow-[0_0_10px_rgba(255,255,255,0.5)] transform -translate-x-1/2 -translate-y-1/2 z-[100]"
+                  style={{
+                    left: brushPos.x,
+                    top: brushPos.y,
+                    width: getVisualBrushRadius() * 2,
+                    height: getVisualBrushRadius() * 2,
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </ToolLayout>
   );
 }
