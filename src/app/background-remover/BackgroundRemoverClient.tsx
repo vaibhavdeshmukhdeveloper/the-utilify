@@ -15,7 +15,7 @@ export default function BackgroundRemoverClient() {
   const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [uploaderKey, setUploaderKey] = useState(0);
-  const [refineEdges, setRefineEdges] = useState(false);
+  const [refineEdges, setRefineEdges] = useState(true);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
 
   const resizeImageIfNeeded = (file: File, maxDim = 2048): Promise<File> => {

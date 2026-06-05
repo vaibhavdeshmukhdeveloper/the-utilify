@@ -42,10 +42,10 @@ app.add_middleware(
 )
 
 # Global rembg session management as requested for low latency
-# Switches background removal engine to u2netp for memory efficiency and high performance
-print("Initializing global AI background removal model (u2netp)...")
+# Switches background removal engine to u2net for memory efficiency and high performance
+print("Initializing global AI background removal model (u2net)...")
 
-rembg_session = new_session("u2netp")
+rembg_session = new_session("u2net")
 print("AI Model loaded successfully!")
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
