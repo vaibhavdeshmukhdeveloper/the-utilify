@@ -24,10 +24,13 @@ export default function BackgroundRemoverClient() {
   const [brushSize, setBrushSize] = useState(30);
   const [isDrawing, setIsDrawing] = useState(false);
   const [brushPos, setBrushPos] = useState<{ x: number; y: number } | null>(null);
+  const [isEditorImageLoading, setIsEditorImageLoading] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const lastCoordsRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     if (isEditing && result && canvasRef.current) {
+      setIsEditorImageLoading(true);
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -40,6 +43,11 @@ export default function BackgroundRemoverClient() {
         canvas.height = img.naturalHeight;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
+        setIsEditorImageLoading(false);
+      };
+      img.onerror = () => {
+        setIsEditorImageLoading(false);
+        toast.error("Failed to load image for editing");
       };
     }
   }, [isEditing, result]);
@@ -70,17 +78,7 @@ export default function BackgroundRemoverClient() {
     };
   };
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-    const coords = getCoordinates(e);
-    if (!coords) return;
-    setIsDrawing(true);
-    if ("touches" in e) {
-      setBrushPos(null);
-    }
-    draw(coords.x, coords.y);
-  };
-
-  const draw = (x: number, y: number) => {
+  const draw = (x: number, y: number, lastX?: number, lastY?: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -88,10 +86,45 @@ export default function BackgroundRemoverClient() {
 
     ctx.save();
     ctx.globalCompositeOperation = "destination-out";
-    ctx.beginPath();
-    ctx.arc(x, y, brushSize, 0, Math.PI * 2);
-    ctx.fill();
+    
+    if (typeof lastX === "number" && typeof lastY === "number") {
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(x, y);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = brushSize * 2;
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.arc(x, y, brushSize, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
     ctx.restore();
+  };
+
+  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    const coords = getCoordinates(e);
+    if (!coords) return;
+    setIsDrawing(true);
+    lastCoordsRef.current = coords;
+    
+    const canvas = canvasRef.current;
+    if (!("touches" in e) && canvas) {
+      const container = canvas.parentElement;
+      if (container) {
+        const containerRect = container.getBoundingClientRect();
+        setBrushPos({
+          x: e.clientX - containerRect.left,
+          y: e.clientY - containerRect.top
+        });
+      }
+    } else {
+      setBrushPos(null);
+    }
+    
+    draw(coords.x, coords.y);
   };
 
   const handleDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -101,30 +134,56 @@ export default function BackgroundRemoverClient() {
     if ("touches" in e) {
       setBrushPos(null);
     }
-    draw(coords.x, coords.y);
+    
+    const lastCoords = lastCoordsRef.current;
+    if (lastCoords) {
+      draw(coords.x, coords.y, lastCoords.x, lastCoords.y);
+    } else {
+      draw(coords.x, coords.y);
+    }
+    lastCoordsRef.current = coords;
   };
 
   const stopDrawing = () => {
     setIsDrawing(false);
+    lastCoordsRef.current = null;
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    setBrushPos({
-      x: e.clientX,
-      y: e.clientY
-    });
+    
+    const container = canvas.parentElement;
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      setBrushPos({
+        x: e.clientX - containerRect.left,
+        y: e.clientY - containerRect.top
+      });
+    } else {
+      setBrushPos({
+        x: e.clientX,
+        y: e.clientY
+      });
+    }
     
     if (isDrawing) {
       const coords = getCoordinates(e);
-      if (coords) draw(coords.x, coords.y);
+      if (coords) {
+        const lastCoords = lastCoordsRef.current;
+        if (lastCoords) {
+          draw(coords.x, coords.y, lastCoords.x, lastCoords.y);
+        } else {
+          draw(coords.x, coords.y);
+        }
+        lastCoordsRef.current = coords;
+      }
     }
   };
 
   const getVisualBrushRadius = () => {
     const canvas = canvasRef.current;
-    if (!canvas) return brushSize;
+    if (!canvas || !canvas.width) return brushSize;
     const rect = canvas.getBoundingClientRect();
     return brushSize * (rect.width / canvas.width);
   };
@@ -133,13 +192,24 @@ export default function BackgroundRemoverClient() {
     const canvas = canvasRef.current;
     if (!canvas || !result) return;
     
-    const dataUrl = canvas.toDataURL("image/png");
-    setResult({
-      ...result,
-      url: dataUrl
-    });
-    setIsEditing(false);
-    toast.success("Cutout edited successfully!");
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        toast.error("Failed to save edited image.");
+        return;
+      }
+      
+      if (result.url.startsWith("blob:")) {
+        URL.revokeObjectURL(result.url);
+      }
+      
+      const newUrl = URL.createObjectURL(blob);
+      setResult({
+        ...result,
+        url: newUrl
+      });
+      setIsEditing(false);
+      toast.success("Cutout edited successfully!");
+    }, "image/png");
   };
 
   const resizeImageIfNeeded = (file: File, maxDim = 2048): Promise<File> => {
@@ -201,6 +271,9 @@ export default function BackgroundRemoverClient() {
     if (originalUrl) {
       URL.revokeObjectURL(originalUrl);
     }
+    if (result?.url && result.url.startsWith("blob:")) {
+      URL.revokeObjectURL(result.url);
+    }
     setResult(null);
     setOriginalFile(null);
     setOriginalUrl(null);
@@ -211,6 +284,10 @@ export default function BackgroundRemoverClient() {
     let fileToUpload = files[0];
     
     setIsLoading(true);
+    
+    if (result?.url && result.url.startsWith("blob:")) {
+      URL.revokeObjectURL(result.url);
+    }
     setResult(null);
 
     if (resolutionMode === "standard") {
@@ -601,7 +678,7 @@ export default function BackgroundRemoverClient() {
                 <input
                   type="range"
                   min="5"
-                  max="100"
+                  max="250"
                   value={brushSize}
                   onChange={(e) => setBrushSize(parseInt(e.target.value))}
                   className="w-32 accent-primary"
@@ -636,7 +713,13 @@ export default function BackgroundRemoverClient() {
               }}
             />
             
-            <div className="relative max-w-full max-h-[70vh] flex items-center justify-center bg-zinc-900/30 rounded-2xl p-4 border border-zinc-800/50 shadow-2xl">
+            <div className="relative max-w-full max-h-[70vh] flex items-center justify-center bg-zinc-900/30 rounded-2xl p-4 border border-zinc-800/50 shadow-2xl cursor-none">
+              {isEditorImageLoading && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-950/80 rounded-2xl z-10">
+                  <Loader2 className="h-10 w-10 text-primary animate-spin mb-2" />
+                  <p className="text-sm text-zinc-400">Loading image...</p>
+                </div>
+              )}
               <canvas
                 ref={canvasRef}
                 onMouseDown={startDrawing}
@@ -651,9 +734,9 @@ export default function BackgroundRemoverClient() {
               />
               
               {/* Brush Preview Circle */}
-              {brushPos && (
+              {brushPos && !isEditorImageLoading && (
                 <div
-                  className="fixed border-2 border-white rounded-full pointer-events-none bg-primary/10 shadow-[0_0_10px_rgba(255,255,255,0.5)] transform -translate-x-1/2 -translate-y-1/2 z-[100]"
+                  className="absolute border-2 border-white rounded-full pointer-events-none bg-primary/10 shadow-[0_0_10px_rgba(255,255,255,0.5)] transform -translate-x-1/2 -translate-y-1/2 z-[100]"
                   style={{
                     left: brushPos.x,
                     top: brushPos.y,
