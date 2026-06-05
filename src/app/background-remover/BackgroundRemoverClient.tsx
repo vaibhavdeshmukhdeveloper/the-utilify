@@ -6,7 +6,7 @@ import { FileUploader } from "@/components/FileUploader";
 import { uploadToBackend } from "@/lib/api";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
-import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Maximize2, Zap } from "lucide-react";
+import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Maximize2, Zap, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function BackgroundRemoverClient() {
@@ -15,6 +15,63 @@ export default function BackgroundRemoverClient() {
   const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [uploaderKey, setUploaderKey] = useState(0);
+  const [refineEdges, setRefineEdges] = useState(false);
+  const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
+
+  const resizeImageIfNeeded = (file: File, maxDim = 2048): Promise<File> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.src = url;
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const { width, height } = img;
+        if (width <= maxDim && height <= maxDim) {
+          resolve(file);
+          return;
+        }
+
+        let newWidth = width;
+        let newHeight = height;
+        if (width > height) {
+          if (width > maxDim) {
+            newHeight = Math.round((height * maxDim) / width);
+            newWidth = maxDim;
+          }
+        } else {
+          if (height > maxDim) {
+            newWidth = Math.round((width * maxDim) / height);
+            newHeight = maxDim;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          resolve(file);
+          return;
+        }
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            resolve(file);
+            return;
+          }
+          const resizedFile = new File([blob], file.name, {
+            type: file.type || "image/png",
+            lastModified: Date.now(),
+          });
+          resolve(resizedFile);
+        }, file.type || "image/png", 0.95);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve(file);
+      };
+    });
+  };
 
   const handleReset = () => {
     if (originalUrl) {
@@ -27,23 +84,34 @@ export default function BackgroundRemoverClient() {
   };
 
   const handleUpload = async (files: File[]) => {
-    const file = files[0];
+    let fileToUpload = files[0];
+    
+    setIsLoading(true);
+    setResult(null);
+
+    if (resolutionMode === "standard") {
+      try {
+        fileToUpload = await resizeImageIfNeeded(fileToUpload, 2048);
+      } catch (err) {
+        console.error("Client side resize error:", err);
+      }
+    }
+
     setOriginalFile({
-      name: file.name,
-      size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
+      name: fileToUpload.name,
+      size: (fileToUpload.size / (1024 * 1024)).toFixed(2) + " MB"
     });
 
     if (originalUrl) {
       URL.revokeObjectURL(originalUrl);
     }
-    const url = URL.createObjectURL(file);
+    const url = URL.createObjectURL(fileToUpload);
     setOriginalUrl(url);
 
-    setIsLoading(true);
-    setResult(null);
-
     try {
-      const data = await uploadToBackend("/image/remove-bg", files);
+      const data = await uploadToBackend("/image/remove-bg", [fileToUpload], {
+        post_process: refineEdges ? "true" : "false"
+      });
       setResult(data);
       toast.success("Background removed successfully!");
     } catch (error: any) {
@@ -141,6 +209,73 @@ export default function BackgroundRemoverClient() {
               isLoading={isLoading}
               hideDownload={true}
             />
+          </Card>
+
+          <Card className="p-6 border-2 bg-card rounded-[2rem] space-y-6">
+            <div className="flex items-center gap-3 border-b pb-4">
+              <Settings className="w-5 h-5 text-primary" />
+              <h3 className="text-lg font-black tracking-tight m-0">AI Processing Settings</h3>
+            </div>
+            
+            {/* Resolution selection */}
+            <div className="space-y-3">
+              <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block">
+                Target Resolution
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setResolutionMode("standard")}
+                  className={`py-3 px-4 rounded-xl text-xs font-bold transition-all border-2 text-center flex flex-col justify-center items-center gap-1 ${
+                    resolutionMode === "standard"
+                      ? "border-primary bg-primary/5 text-primary"
+                      : "border-transparent bg-muted/50 hover:bg-muted text-muted-foreground"
+                  }`}
+                >
+                  <span className="font-extrabold text-sm">Standard (2K)</span>
+                  <span className="text-[10px] opacity-80">Faster upload & run</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setResolutionMode("original")}
+                  className={`py-3 px-4 rounded-xl text-xs font-bold transition-all border-2 text-center flex flex-col justify-center items-center gap-1 ${
+                    resolutionMode === "original"
+                      ? "border-primary bg-primary/5 text-primary"
+                      : "border-transparent bg-muted/50 hover:bg-muted text-muted-foreground"
+                  }`}
+                >
+                  <span className="font-extrabold text-sm">Original Size</span>
+                  <span className="text-[10px] opacity-80">Full resolution</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Edge Refinement Toggle */}
+            <div className="space-y-3 pt-2 border-t">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block mb-0.5">
+                    Edge Optimization
+                  </label>
+                  <span className="text-[10px] text-muted-foreground">
+                    Refine mask borders (e.g. hair details)
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setRefineEdges(prev => !prev)}
+                  className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 focus:outline-none ${
+                    refineEdges ? "bg-primary" : "bg-zinc-300 dark:bg-zinc-700"
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-300 ${
+                      refineEdges ? "translate-x-6" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
           </Card>
 
           {originalFile && (

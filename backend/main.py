@@ -16,8 +16,11 @@ os.environ["U2NET_HOME"] = os.path.join(BACKEND_DIR, ".u2net")
 
 # Limit ONNX Runtime threading and disable active thread spinning to prevent
 # container hangs, deadlocks, and cgroup CPU throttling in resource-constrained hosting (e.g. Railway)
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["OMP_WAIT_POLICY"] = "PASSIVE"
+# Allow overriding via environment variables (e.g. on Google Cloud Run)
+if "OMP_NUM_THREADS" not in os.environ:
+    os.environ["OMP_NUM_THREADS"] = "1"
+if "OMP_WAIT_POLICY" not in os.environ:
+    os.environ["OMP_WAIT_POLICY"] = "PASSIVE"
 
 from rembg import new_session, remove
 from playwright.async_api import async_playwright
@@ -141,7 +144,10 @@ def clean_solid_background(img: Image.Image, tolerance: int = 20) -> Image.Image
         return None
 
 @app.post("/image/remove-bg")
-async def remove_background(file: UploadFile = File(...)):
+async def remove_background(
+    file: UploadFile = File(...),
+    post_process: bool = Form(False)
+):
     """
     Removes the background from an uploaded image.
     Uses an instant high-fidelity floodfill cutout if a flat background is detected,
@@ -165,12 +171,12 @@ async def remove_background(file: UploadFile = File(...)):
             solid_cutout.save(output_buffer, format="PNG")
         else:
             # Fallback to AI-based neural network model for photographs/complex backgrounds
-            print("Complex scene detected. Utilizing global AI background removal model (u2net).")
+            print(f"Complex scene detected. Utilizing global AI background removal model (u2netp, post_process={post_process}).")
             output_bytes = remove(
                 file_bytes,
                 session=rembg_session,
                 alpha_matting=False,
-                post_process_mask=True
+                post_process_mask=post_process
             )
             output_image = Image.open(io.BytesIO(output_bytes))
             output_image.save(output_buffer, format="PNG")
