@@ -273,7 +273,7 @@ export default function Home() {
               Select Your Utility Tool
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Explore our suite of 10 professional utilities. Instantly available online with a clean layout and mobile-first design.
+              Explore our suite of 20 professional utilities. Instantly available online with a clean layout and mobile-first design.
             </p>
           </div>
 
