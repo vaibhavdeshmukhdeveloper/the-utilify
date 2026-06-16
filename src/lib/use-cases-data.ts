@@ -1,6 +1,26 @@
 export interface UseCaseData {
   slug: string;
-  baseTool: "background-remover" | "pdf-to-image" | "split-pdf" | "merge-pdf" | "image-compressor" | "markdown-to-pdf" | "sip-calculator" | "investment-calculator" | "bmi-calculator" | "json-formatter";
+  baseTool: 
+    | "background-remover" 
+    | "pdf-to-image" 
+    | "split-pdf" 
+    | "merge-pdf" 
+    | "image-compressor" 
+    | "markdown-to-pdf" 
+    | "sip-calculator" 
+    | "investment-calculator" 
+    | "bmi-calculator" 
+    | "json-formatter"
+    | "password-generator"
+    | "qr-generator"
+    | "text-converter"
+    | "base64"
+    | "color-palette"
+    | "date-calculator"
+    | "age-calculator"
+    | "unit-converter"
+    | "diff-checker"
+    | "lorem-ipsum";
   title: string;
   seoTitle: string;
   seoDescription: string;
@@ -1637,6 +1657,156 @@ export const useCases: UseCaseData[] = [
       "Coordinate checks: Instantly check JSON syntax to locate invalid coordinate pairings.",
       "Local validation: GeoJSON mapping scripts run 100% locally in your browser memory.",
       "Clear hierarchies: View coordinate arrays, type mappings, and properties clearly."
+    ]
+  },
+  {
+    slug: "generate-strong-passwords-for-wifi",
+    baseTool: "password-generator",
+    title: "Secure Wi-Fi Router Password Generator",
+    seoTitle: "Generate Secure Passwords for Wi-Fi Routers (WPA2/WPA3 Ready)",
+    seoDescription: "Generate highly secure, strong random passwords for your home or office Wi-Fi routers. Protect against local dictionary network sweep tools.",
+    heading: "Secure Wi-Fi Router Password Generator",
+    introduction: "Weak wireless passwords allow neighboring devices or drive-by scanners to breach your home network. Generate random sequences containing uppercase, lowercase, numbers, and symbols client-side.",
+    category: "Developer",
+    tips: [
+      "High Randomization: Prevents dictionary sweeps and credential cracking on local network nodes.",
+      "Router Compatibility: Make sure your router hardware supports the symbol characters you select.",
+      "Offline Safety: Passwords are generated directly in-browser using standard crypto protocols."
+    ]
+  },
+  {
+    slug: "generate-wifi-qr-code-for-guests",
+    baseTool: "qr-generator",
+    title: "Guest Wi-Fi Connection QR Code Generator",
+    seoTitle: "Generate Wi-Fi QR Codes for Guest Access Online",
+    seoDescription: "Create custom guest Wi-Fi connection QR codes. Let visitors scan and connect automatically without typing your network password.",
+    heading: "Generate Guest Wi-Fi QR Codes",
+    introduction: "Simplify internet sharing for visitors in your office, café, or guest home. Generate custom QR codes that automatically prompt smartphones to join your wireless network upon scan.",
+    category: "Developer",
+    tips: [
+      "SSID Accuracy: Network names must match router SSID capitalization and spelling exactly.",
+      "Security Types: Select WPA/WPA2 for standard routers, or choose unsecured for open networks.",
+      "Branded Downloads: Style colors to match your space design and download high-quality PNGs."
+    ]
+  },
+  {
+    slug: "convert-text-to-sql-snake-case",
+    baseTool: "text-converter",
+    title: "SQL Database Column snake_case Converter",
+    seoTitle: "Convert Text to SQL snake_case Online (Dev Tools)",
+    seoDescription: "Instantly convert raw strings and column headers to snake_case format. Remove illegal special characters for SQL databases.",
+    heading: "Convert Text to SQL snake_case",
+    introduction: "Database design workflows. Speed up schema drafting. Paste raw field lists and convert text to standard database columns connected by underscores in seconds.",
+    category: "Developer",
+    tips: [
+      "Removes Symbols: Automatically strips special characters that break SQL syntax queries.",
+      "Uniform Casing: Lowercases entire fields to ensure consistent naming conventions.",
+      "Developer Speed: Process dozens of strings in one click instead of editing character by character."
+    ]
+  },
+  {
+    slug: "encode-image-to-css-base64-uri",
+    baseTool: "base64",
+    title: "CSS Inline Image Base64 Data URI Encoder",
+    seoTitle: "Encode Images to CSS Inline Base64 Data URIs",
+    seoDescription: "Encode small layout icons, SVG elements, and logo files to Base64 strings. Embed images directly in CSS stylesheets to speed up loading.",
+    heading: "CSS Inline Image Base64 Encoder",
+    introduction: "Optimize stylesheet deliveries. Convert visual icon files directly into ASCII text. Embed them inside background image styles to bypass extra server requests.",
+    category: "Developer",
+    tips: [
+      "Speed Performance: Inlining graphical assets removes extra DNS lookup requests during page renders.",
+      "File Sizing: Restrict inline conversions to small icons (under 10KB) to prevent styling page bloat.",
+      "Format compliance: Returns structured Data URIs (e.g. data:image/svg+xml;base64) ready for CSS templates."
+    ]
+  },
+  {
+    slug: "generate-accessible-wcag-color-palette",
+    baseTool: "color-palette",
+    title: "WCAG Compliant Accessible Color Palette Generator",
+    seoTitle: "Generate WCAG Compliant Accessible UI Palettes Online",
+    seoDescription: "Generate cohesive color palettes and check relative luminance contrast. Maintain strict WCAG AA & AAA readability compliance.",
+    heading: "Accessible WCAG Color Palette Generator",
+    introduction: "Ensure your digital product is usable by everyone, including individuals with low vision. Generate beautiful harmonized layouts and analyze contrast scores in real-time.",
+    category: "Design",
+    tips: [
+      "Luminance check: Test background and copy colors to pass AA (4.5:1 ratio) standard constraints.",
+      "Cohesive schemes: Generate monochromatic or analogous palettes to maintain brand alignment.",
+      "Locking bases: Lock your corporate brand color before rotating other slots."
+    ]
+  },
+  {
+    slug: "calculate-billing-invoice-due-date",
+    baseTool: "date-calculator",
+    title: "Invoice Billing Due Date Calculator",
+    seoTitle: "Calculate Net 30/60/90 Invoice Billing Due Dates",
+    seoDescription: "Calculate exact maturity and due dates for commercial invoices. Add Net 30, 60, or 90 days from starting contract dates.",
+    heading: "Calculate Invoice Billing Due Dates",
+    introduction: "Manage accounts receivable efficiently. Calculate exact final calendar dates for business invoice payments under Net 30, Net 60, or Net 90 timelines, adjusting for leap years.",
+    category: "Productivity",
+    tips: [
+      "Payment projection: Identify weekdays to prevent invoices maturing on banking holidays or weekends.",
+      "Quick calculations: Input starting issuance date and select operations to calculate the target date.",
+      "Calendar precision: Handles varying month lengths (28, 30, 31 days) automatically."
+    ]
+  },
+  {
+    slug: "calculate-chronological-age-for-insurance",
+    baseTool: "age-calculator",
+    title: "Insurance Application Chronological Age Calculator",
+    seoTitle: "Calculate Exact Chronological Age for Insurance Portals",
+    seoDescription: "Calculate exact chronological age in years, months, and days. Provide underwriters with precise age metrics to estimate policy premiums.",
+    heading: "Chronological Age Calculator for Insurance",
+    introduction: "Applying for health or life insurance coverage? Underwriters require exact age parameters in months and days to place you in pricing categories. Calculate your exact metrics in seconds.",
+    category: "Health",
+    tips: [
+      "Exact intervals: Computes exact month transitions, borrowing days from previous months precisely.",
+      "Age check: Watch how your age category shifts to lock in pricing premiums before upcoming birthdays.",
+      "Private metrics: Run age calculations offline. Your birth details are never cached."
+    ]
+  },
+  {
+    slug: "convert-inches-to-cm-for-packaging",
+    baseTool: "unit-converter",
+    title: "Packaging Dimensions Inches to CM Converter",
+    seoTitle: "Convert Packaging Dimensions: Inches to Centimeters (in to cm)",
+    seoDescription: "Convert box and shipping coordinates between Imperial inches and Metric centimeters. Meet international shipping standards.",
+    heading: "Convert Packaging Dimensions: Inches to CM",
+    introduction: "E-commerce logistics. International courier services (like DHL or FedEx) require entering package shapes in metric parameters. Translate measurements accurately to avoid clearance delays.",
+    category: "Productivity",
+    tips: [
+      "High accuracy: Conversions are processed to 6 decimal places to prevent cargo dimensional weight gaps.",
+      "Double checks: Verify values in the generated all-units mapping grid (converts to meters or millimeters too).",
+      "Fast swaps: Use the swap button to convert centimeters back to inches instantly."
+    ]
+  },
+  {
+    slug: "compare-legal-contract-clauses-side-by-side",
+    baseTool: "diff-checker",
+    title: "Legal Contract Clause Comparison Diff Checker",
+    seoTitle: "Compare Legal Contract Clauses Side-by-Side Online",
+    seoDescription: "Compare legal contract clauses and lease documents side-by-side. Highlight insertions and deletions to audit drafts securely.",
+    heading: "Compare Contract Clauses Side-by-Side",
+    introduction: "Auditing document drafts or contract negotiations? Avoid missing hidden updates or deleted sections. Compare text versions side-by-side to highlight modifications in seconds.",
+    category: "Developer",
+    tips: [
+      "Visual markings: Deletions are highlighted in red (left) and additions in green (right) for quick scanning.",
+      "RAM processing: Text blocks are checked strictly in browser memory. Confidential legal drafts are never sent to external servers.",
+      "Flexible views: Switch between Split (side-by-side) or Unified (vertical line) layouts."
+    ]
+  },
+  {
+    slug: "generate-lorem-ipsum-html-paragraphs-for-wireframes",
+    baseTool: "lorem-ipsum",
+    title: "HTML-Formatted Lorem Ipsum Paragraph Wireframe Generator",
+    seoTitle: "Generate HTML-Formatted Lorem Ipsum Paragraphs for UI Wireframes",
+    seoDescription: "Generate custom placeholder paragraph blocks wrapped in HTML tags. Create quick text filler copy for web designs and layouts.",
+    heading: "Generate HTML-Formatted Lorem Ipsum for Wireframes",
+    introduction: "Web design mockups. Create realistic placeholder text distributions. Generate paragraph grids, lists, or custom words wrapped in HTML tags to drop directly into source code.",
+    category: "Developer",
+    tips: [
+      "Code integration: Toggle the HTML markup checkbox to get clean paragraph wrapper codes instantly.",
+      "Custom weights: Set sliders to control paragraph counts and word sequences.",
+      "Layout focus: Realistic character distribution keeps focus on typography and layout design."
     ]
   }
 ];

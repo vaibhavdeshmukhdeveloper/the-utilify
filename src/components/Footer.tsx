@@ -34,10 +34,10 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Column 2: Tool categories */}
+          {/* Column 2: PDF & Image Tools */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Heavy Processing
+              PDF & Image Tools
             </h4>
             <ul className="space-y-2.5">
               <li>
@@ -46,13 +46,23 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/pdf-to-image" className={getLinkClass("/pdf-to-image")}>
-                  PDF to Image Converter
+                <Link href="/image-compressor" className={getLinkClass("/image-compressor")}>
+                  Image Compressor
                 </Link>
               </li>
               <li>
-                <Link href="/image-compressor" className={getLinkClass("/image-compressor")}>
-                  Image Compressor
+                <Link href="/pdf-to-image" className={getLinkClass("/pdf-to-image")}>
+                  PDF to Image
+                </Link>
+              </li>
+              <li>
+                <Link href="/split-pdf" className={getLinkClass("/split-pdf")}>
+                  Split PDF
+                </Link>
+              </li>
+              <li>
+                <Link href="/merge-pdf" className={getLinkClass("/merge-pdf")}>
+                  Merge PDF
                 </Link>
               </li>
               <li>
@@ -63,10 +73,54 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Quick Utilities */}
+          {/* Column 3: Developer & Text Tools */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Calculators & Formatting
+              Developer & Text
+            </h4>
+            <ul className="space-y-2.5">
+              <li>
+                <Link href="/json-formatter" className={getLinkClass("/json-formatter")}>
+                  JSON Formatter
+                </Link>
+              </li>
+              <li>
+                <Link href="/password-generator" className={getLinkClass("/password-generator")}>
+                  Password Generator
+                </Link>
+              </li>
+              <li>
+                <Link href="/qr-generator" className={getLinkClass("/qr-generator")}>
+                  QR Code Generator
+                </Link>
+              </li>
+              <li>
+                <Link href="/base64" className={getLinkClass("/base64")}>
+                  Base64 Encoder/Decoder
+                </Link>
+              </li>
+              <li>
+                <Link href="/text-converter" className={getLinkClass("/text-converter")}>
+                  Text Case Converter
+                </Link>
+              </li>
+              <li>
+                <Link href="/diff-checker" className={getLinkClass("/diff-checker")}>
+                  Diff Checker
+                </Link>
+              </li>
+              <li>
+                <Link href="/lorem-ipsum" className={getLinkClass("/lorem-ipsum")}>
+                  Lorem Ipsum Generator
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Calculators & Design */}
+          <div>
+            <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
+              Calculators & Design
             </h4>
             <ul className="space-y-2.5">
               <li>
@@ -85,48 +139,29 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/json-formatter" className={getLinkClass("/json-formatter")}>
-                  JSON Formatter & Validator
+                <Link href="/age-calculator" className={getLinkClass("/age-calculator")}>
+                  Age Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/date-calculator" className={getLinkClass("/date-calculator")}>
+                  Date Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/unit-converter" className={getLinkClass("/unit-converter")}>
+                  Unit Converter
+                </Link>
+              </li>
+              <li>
+                <Link href="/color-palette" className={getLinkClass("/color-palette")}>
+                  Color Palette Generator
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Programmatic Use Cases (pSEO crawler helper) */}
-          <div>
-            <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Popular Use Cases
-            </h4>
-            <ul className="space-y-2.5">
-              <li>
-                <Link href="/use-cases" className={getLinkClass("/use-cases")}>
-                  Browse All Niches
-                </Link>
-              </li>
-              <li>
-                <Link href="/use-case/convert-bank-statement-pdf-to-jpg" className={getLinkClass("/use-case/convert-bank-statement-pdf-to-jpg")}>
-                  Secure Bank Statements
-                </Link>
-              </li>
-              <li>
-                <Link href="/use-case/remove-background-jewelry-photos-shopify" className={getLinkClass("/use-case/remove-background-jewelry-photos-shopify")}>
-                  Shopify Jewelry Cutouts
-                </Link>
-              </li>
-              <li>
-                <Link href="/use-case/compress-image-for-passport-application" className={getLinkClass("/use-case/compress-image-for-passport-application")}>
-                  Passport Size Compressor
-                </Link>
-              </li>
-              <li>
-                <Link href="/use-case/convert-github-readme-to-beautiful-pdf" className={getLinkClass("/use-case/convert-github-readme-to-beautiful-pdf")}>
-                  GitHub README to PDF
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 5: Links & Support */}
+          {/* Column 5: Company */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
               Company
@@ -135,6 +170,11 @@ export function Footer() {
               <li>
                 <Link href="/about" className={getLinkClass("/about")}>
                   About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/use-cases" className={getLinkClass("/use-cases")}>
+                  Use Cases
                 </Link>
               </li>
               <li>

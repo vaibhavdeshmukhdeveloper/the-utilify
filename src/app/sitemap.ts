@@ -16,6 +16,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/background-remover",
     "/image-compressor",
     "/markdown-to-pdf",
+    "/password-generator",
+    "/qr-generator",
+    "/text-converter",
+    "/base64",
+    "/color-palette",
+    "/date-calculator",
+    "/age-calculator",
+    "/unit-converter",
+    "/diff-checker",
+    "/lorem-ipsum",
   ];
 
   const marketingPages = [

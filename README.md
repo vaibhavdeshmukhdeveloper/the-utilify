@@ -19,20 +19,30 @@ The Utilify is organized into clear, focused categories. Each tool is designed t
 *   **AI Background Remover (`/background-remover`):** Automatically isolates subjects and removes complex backgrounds in milliseconds.
     *   *Hybrid Engine:* Employs a fast mathematical flood-fill algorithm for flat graphic and vector backgrounds, and instantly falls back to a **u2netp** neural network model for photographs.
 *   **Image Compressor (`/image-compressor`):** Compresses and optimizes image formats (PNG, JPG, WebP) directly in the browser with zero quality loss.
+*   **Color Palette Generator (`/color-palette`):** Create harmonic color schemes (analogous, triadic, monochromatic), check color contrast against WCAG standards, and export configuration variables.
 
 ### 📄 PDF Utilities
 *   **PDF to Image (`/pdf-to-image`):** Converts PDF document pages into individual high-resolution PNG images packed inside a structured `.zip` file using **PyMuPDF (fitz)** rendered at `2x` resolution (~150 DPI).
 *   **Split PDF (`/split-pdf`):** Extracts specific pages, ranges, or custom indices (e.g. `1-3, 5, 8-10`) into separate, lightweight PDF files.
-*   **Merge PDF (`/merge-pdf`):** Sequentially combines multiple PDF documents of any size into a single, perfectly formatted file.
+*   **Merge PDF (`/merge-pdf`):** Sequentially combines multiple PDF documents of any size into a single, perfectly structured file.
 *   **Markdown to PDF (`/markdown-to-pdf`):** Converts styled markdown files or raw strings directly into beautiful, custom-styled A4 PDF files. Uses a headless Playwright Chromium instance for pixel-perfect browser-level rendering.
 
-### 📈 Financial Calculators
-*   **SIP Calculator (`/sip-calculator`):** Projects compound returns and maturity wealth for monthly Systematic Investment Plans (SIPs) in mutual funds. Includes visual projections.
-*   **Investment Calculator (`/investment-calculator`):** Models long-term wealth growth under custom initial capital, recurring contributions, compound intervals, and rate of return assumptions.
-
-### 🩺 Health & Developer Tools
-*   **BMI Calculator (`/bmi-calculator`):** Instantly calculates Body Mass Index and provides interactive categorizations and healthy weight suggestions.
+### 💻 Developer & Text Tools
 *   **JSON Formatter (`/json-formatter`):** Prettifies, validates, minifies, and syntax-highlights raw JSON data in real-time.
+*   **Password Generator (`/password-generator`):** Generate highly secure, random passwords client-side using cryptographic browser APIs, with strength metrics.
+*   **QR Code Generator (`/qr-generator`):** Create custom QR codes for Wi-Fi configurations, URLs, SMS, or plain texts with color layouts and download features.
+*   **Text Case Converter (`/text-converter`):** Transform text between UPPER, lower, Title, sentence, camelCase, or snake_case instantly, with detailed layout statistics.
+*   **Base64 Encoder/Decoder (`/base64`):** Encode plain text or upload binary files (up to 5MB) to Base64 format, and decode Base64 strings back safely.
+*   **Diff Checker (`/diff-checker`):** Compare two texts side-by-side or inline to highlight additions and deletions using a custom Longest Common Subsequence algorithm.
+*   **Lorem Ipsum Generator (`/lorem-ipsum`):** Generate customizable placeholder text paragraphs, sentences, words, or lists with optional HTML wrapper tags.
+
+### 📉 Financial & Utility Calculators
+*   **SIP Calculator (`/sip-calculator`):** Projects compound returns and wealth gain for monthly Systematic Investment Plans in mutual funds.
+*   **Investment Calculator (`/investment-calculator`):** Models long-term wealth growth under initial capital, recurring contributions, compound intervals, and rate of return assumptions.
+*   **BMI Calculator (`/bmi-calculator`):** Calculates Body Mass Index and provides interactive categorizations and healthy weight suggestions.
+*   **Date Calculator (`/date-calculator`):** Calculate exact calendar duration between dates or add/subtract time intervals.
+*   **Age Calculator (`/age-calculator`):** Track precise age with a live seconds ticking counter and countdown to your next birthday.
+*   **Unit Converter (`/unit-converter`):** Convert dimensions for length, weight, temperature, area, and volume with dynamic lookup tables.
 
 ---
 
@@ -53,7 +63,7 @@ sequenceDiagram
     
     User->>FE: Upload File / Input Data
     rect rgb(240, 248, 255)
-        note right of User: Standard calculators & JSON formatters<br/>resolve instantly in the browser client-side.
+        note right of User: Standard calculators, converters & JSON formatters<br/>resolve instantly in the browser client-side.
     end
     FE->>BE: POST /api/endpoint (Multipart Form Data / JSON)
     activate BE
@@ -88,7 +98,6 @@ sequenceDiagram
 *   **PDF Engine:** PyMuPDF (`fitz`) for ultra-fast, robust document manipulation
 *   **HTML/MD Rendering Engine:** Playwright Chromium (Headless browser rendering)
 *   **Image Processing:** Pillow (`PIL`)
-*   **Integration Layer:** Supabase Client
 
 ---
 
@@ -108,11 +117,21 @@ theutilify/
 │   │   ├── investment-calculator/# Page & Client logic for Investment Calculator
 │   │   ├── bmi-calculator/      # Page & Client logic for BMI Calculator
 │   │   ├── json-formatter/      # Page & Client logic for JSON Formatter
+│   │   ├── password-generator/  # Page & Client logic for Password Generator
+│   │   ├── qr-generator/        # Page & Client logic for QR Code Generator
+│   │   ├── text-converter/      # Page & Client logic for Text Case Converter
+│   │   ├── base64/              # Page & Client logic for Base64 Converter
+│   │   ├── color-palette/       # Page & Client logic for Color Palette Generator
+│   │   ├── date-calculator/     # Page & Client logic for Date Calculator
+│   │   ├── age-calculator/      # Page & Client logic for Age Calculator
+│   │   ├── unit-converter/      # Page & Client logic for Unit Converter
+│   │   ├── diff-checker/        # Page & Client logic for Diff Checker
+│   │   ├── lorem-ipsum/         # Page & Client logic for Lorem Ipsum Generator
 │   │   ├── about/               # About & Mission Page
 │   │   ├── contact/             # Contact Page
 │   │   ├── globals.css          # Tailwind CSS v4 globals, variables & custom utility classes
 │   │   ├── layout.tsx           # Global HTML viewport structure & Providers
-│   │   └── page.tsx             # Homepage UI showcasing 10 core tools
+│   │   └── page.tsx             # Homepage UI showcasing 20 core tools
 │   ├── components/              # Reusable React UI Components
 │   │   ├── ui/                  # Shared shadcn styling primitives (buttons, cards, dialogs, etc.)
 │   │   ├── FileUploader.tsx     # Custom Drag-and-Drop file uploader
@@ -120,8 +139,7 @@ theutilify/
 │   │   ├── Footer.tsx           # Multi-column footer layout
 │   │   └── ToolLayout.tsx       # Standard SEO wrapper layout for all individual tool pages
 │   └── lib/                     # Custom helper functions & clients
-│       ├── api.ts               # Universal backend upload & file download handler
-│       └── supabase.ts          # Supabase client instantiation
+│       └── api.ts               # Universal backend upload & file download handler
 │
 ├── backend/                     # FastAPI Backend Application
 │   ├── .u2net/                  # Local cache folder for baked-in AI model weights
@@ -189,8 +207,6 @@ npm install
 Create a `.env.local` file in the root directory:
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 Run the local Next.js development server:

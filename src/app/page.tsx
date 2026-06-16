@@ -17,7 +17,17 @@ import {
   FileJson,
   Activity,
   FileCode,
-  Lock
+  Lock,
+  Key,
+  QrCode,
+  Type,
+  Binary,
+  Palette,
+  Calendar,
+  Hourglass,
+  Ruler,
+  GitCompare,
+  AlignLeft
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -102,6 +112,80 @@ const tools = [
     icon: FileJson,
     category: "Developer",
     badge: "Formatter"
+  },
+  {
+    title: "Password Generator",
+    description: "Create strong, customizable, highly secure passwords to protect your accounts.",
+    href: "/password-generator",
+    icon: Key,
+    category: "Developer",
+    badge: "Secure"
+  },
+  {
+    title: "QR Code Generator",
+    description: "Generate fully customizable QR codes for links, text, emails, or Wi-Fi networks.",
+    href: "/qr-generator",
+    icon: QrCode,
+    category: "Developer",
+    badge: "Free"
+  },
+  {
+    title: "Text Case Converter",
+    description: "Convert text cases (UPPER, lower, Title, sentence) and get real-time statistics.",
+    href: "/text-converter",
+    icon: Type,
+    category: "Developer"
+  },
+  {
+    title: "Base64 Encoder/Decoder",
+    description: "Encode and decode text or binary files to and from Base64 format instantly.",
+    href: "/base64",
+    icon: Binary,
+    category: "Developer"
+  },
+  {
+    title: "Color Palette Generator",
+    description: "Create harmonic color schemes, check color contrast, and export code snippets.",
+    href: "/color-palette",
+    icon: Palette,
+    category: "Image",
+    badge: "Design"
+  },
+  {
+    title: "Date Calculator",
+    description: "Calculate exact duration between dates or add/subtract time from a date.",
+    href: "/date-calculator",
+    icon: Calendar,
+    category: "Utility"
+  },
+  {
+    title: "Age Calculator",
+    description: "Determine your exact age down to the day and track your next birthday countdown.",
+    href: "/age-calculator",
+    icon: Hourglass,
+    category: "Utility"
+  },
+  {
+    title: "Unit Converter",
+    description: "Convert between various measurement units for length, weight, temperature, and more.",
+    href: "/unit-converter",
+    icon: Ruler,
+    category: "Utility",
+    badge: "Popular"
+  },
+  {
+    title: "Diff Checker",
+    description: "Compare two pieces of text side-by-side to highlight and analyze differences.",
+    href: "/diff-checker",
+    icon: GitCompare,
+    category: "Developer"
+  },
+  {
+    title: "Lorem Ipsum Generator",
+    description: "Generate customizable placeholder text paragraphs, sentences, or words.",
+    href: "/lorem-ipsum",
+    icon: AlignLeft,
+    category: "Developer"
   }
 ];
 

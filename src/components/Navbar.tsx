@@ -36,6 +36,9 @@ export function Navbar() {
               <Link href="/about" className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors">
                 About
               </Link>
+              <Link href="/use-cases" className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors">
+                Use Cases
+              </Link>
               <Link href="/blog" className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors">
                 Blog
               </Link>
@@ -83,6 +86,13 @@ export function Navbar() {
               className="block px-3 py-2.5 rounded-xl text-base font-bold text-foreground hover:bg-accent transition-colors"
             >
               About Us
+            </Link>
+            <Link
+              href="/use-cases"
+              onClick={() => setIsOpen(false)}
+              className="block px-3 py-2.5 rounded-xl text-base font-bold text-foreground hover:bg-accent transition-colors"
+            >
+              Use Cases
             </Link>
             <Link
               href="/blog"

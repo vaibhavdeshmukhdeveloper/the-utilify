@@ -10,7 +10,17 @@ import {
   Layers, 
   Calculator,
   TrendingUp,
-  PiggyBank
+  PiggyBank,
+  Key,
+  QrCode,
+  Type,
+  Binary,
+  Palette,
+  Calendar,
+  Hourglass,
+  Ruler,
+  GitCompare,
+  AlignLeft
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -87,13 +97,85 @@ const allTools = [
     href: "/markdown-to-pdf",
     icon: FileText,
     category: "Developer"
+  },
+  {
+    title: "Password Generator",
+    description: "Generate highly secure, strong random passwords client-side.",
+    href: "/password-generator",
+    icon: Key,
+    category: "Developer",
+    popular: true
+  },
+  {
+    title: "QR Code Generator",
+    description: "Create custom high-quality QR codes for links and text.",
+    href: "/qr-generator",
+    icon: QrCode,
+    category: "Developer"
+  },
+  {
+    title: "Text Case Converter",
+    description: "Convert texts to UPPER, lower, Title, or sentence case.",
+    href: "/text-converter",
+    icon: Type,
+    category: "Developer"
+  },
+  {
+    title: "Base64 Encoder/Decoder",
+    description: "Convert plain text or files to Base64 format and vice versa.",
+    href: "/base64",
+    icon: Binary,
+    category: "Developer"
+  },
+  {
+    title: "Color Palette Generator",
+    description: "Generate random or custom palettes and check colors.",
+    href: "/color-palette",
+    icon: Palette,
+    category: "Image"
+  },
+  {
+    title: "Date Calculator",
+    description: "Calculate duration between dates or add/subtract time.",
+    href: "/date-calculator",
+    icon: Calendar,
+    category: "Utility"
+  },
+  {
+    title: "Age Calculator",
+    description: "Check your exact age and countdown your next birthday.",
+    href: "/age-calculator",
+    icon: Hourglass,
+    category: "Utility"
+  },
+  {
+    title: "Unit Converter",
+    description: "Convert length, weight, area, volume, and temperature.",
+    href: "/unit-converter",
+    icon: Ruler,
+    category: "Utility",
+    popular: true
+  },
+  {
+    title: "Diff Checker",
+    description: "Compare two chunks of text side-by-side to highlight differences.",
+    href: "/diff-checker",
+    icon: GitCompare,
+    category: "Developer"
+  },
+  {
+    title: "Lorem Ipsum Generator",
+    description: "Generate custom placeholder text in paragraphs or words.",
+    href: "/lorem-ipsum",
+    icon: AlignLeft,
+    category: "Developer"
   }
 ];
 
 export function ToolsGrid() {
   const [filter, setFilter] = useState("All");
   
-  const categories = ["All", "PDF", "Image", "Developer", "Finance", "Health"];
+  const categories = ["All", "PDF", "Image", "Developer", "Finance", "Health", "Utility"];
   
   const filteredTools = filter === "All" 
     ? allTools 

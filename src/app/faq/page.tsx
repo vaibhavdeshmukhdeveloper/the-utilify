@@ -19,11 +19,11 @@ const faqs = [
   },
   {
     q: "Which operations run in the browser vs. the server?",
-    a: "Calculations (SIP, Investment, BMI) and formatting (JSON Formatter) run entirely inside your web browser. Heavy conversions (PDF conversion, AI background removal, etc.) run in highly secure cloud sandbox servers."
+    a: "To guarantee your absolute privacy, most of our tools—including calculators (BMI, Investment, SIP, Age, Date), generators (Password, QR, Lorem Ipsum), text converters (Case Converter, Base64, Diff Checker), and design utilities (Color Palette)—run 100% locally in your web browser client-side. Only heavy operations requiring specialized server environments (such as AI background removal, image compression, and PDF splitting/merging/conversion/compilation) run securely on our transient backend servers, where files are held strictly in RAM and deleted instantly after processing."
   },
   {
     q: "Do I need to sign up for an account?",
-    a: "No! There is no account registration or login required. You get immediate, unhindered access to all of our 10 utilities with a single click."
+    a: "No! There is no account registration or login required. You get immediate, unhindered access to all of our 20 utilities with a single click."
   },
   {
     q: "Can I use these tools on my mobile phone?",

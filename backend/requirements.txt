@@ -4,6 +4,5 @@ python-multipart
 pymupdf
 rembg[cpu]
 pillow
-supabase
 python-dotenv
 playwright

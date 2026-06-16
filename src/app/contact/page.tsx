@@ -31,8 +31,8 @@ export default function ContactPage() {
               <Mail className="h-10 w-10 text-primary mb-4" />
               <h3 className="font-bold text-lg mb-2">Email Us</h3>
               <p className="text-sm text-muted-foreground mb-4">For help or feedback, drop us a line at:</p>
-              <a href="mailto:support@utilify.io" className="text-sm font-black text-primary hover:underline">
-                support@utilify.io
+              <a href="mailto:vaibhavdeshmukhdeveloper@gmail.com" className="text-sm font-black text-primary hover:underline">
+                vaibhavdeshmukhdeveloper@gmail.com
               </a>
             </Card>
 
