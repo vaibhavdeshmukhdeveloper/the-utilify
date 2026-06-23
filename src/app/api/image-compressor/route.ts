@@ -15,21 +15,30 @@ export async function POST(req: NextRequest) {
 
     let compressedBuffer: Buffer;
     const extension = file.name.split('.').pop()?.toLowerCase();
+    const contentType = file.type || "";
+    let outputType = contentType;
 
-    if (extension === 'png') {
+    if (extension === 'png' || contentType === 'image/png') {
       compressedBuffer = await sharp(buffer)
         .png({ quality, compressionLevel: 9 })
         .toBuffer();
-    } else {
-      // Default to jpeg/webp/etc.
+      outputType = "image/png";
+    } else if (extension === 'webp' || contentType === 'image/webp') {
       compressedBuffer = await sharp(buffer)
-        .jpeg({ quality, mozjpeg: true })
+        .webp({ quality })
         .toBuffer();
+      outputType = "image/webp";
+    } else {
+      // Default to jpeg/jpg/etc.
+      compressedBuffer = await sharp(buffer)
+        .jpeg({ quality })
+        .toBuffer();
+      outputType = "image/jpeg";
     }
 
     return new NextResponse(compressedBuffer as any, {
       headers: {
-        "Content-Type": file.type,
+        "Content-Type": outputType,
         "Content-Disposition": `attachment; filename="compressed_${file.name}"`,
       },
     });
@@ -38,3 +47,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to compress image" }, { status: 500 });
   }
 }
+
