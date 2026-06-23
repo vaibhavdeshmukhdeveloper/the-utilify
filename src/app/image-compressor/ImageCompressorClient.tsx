@@ -8,12 +8,18 @@ import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
 import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Minimize2, Zap, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 export default function ImageCompressorClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string; originalSize: string; compressedSize: string } | null>(null);
   const [quality, setQuality] = useState([80]);
-  const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
+  const [originalFile, setOriginalFile] = useState<{ name: string; size: string; type: string } | null>(null);
+  const [format, setFormat] = useState<"original" | "png" | "jpeg" | "webp">("original");
+
+  const activeFormat = format === "original" ? (originalFile?.type || "") : `image/${format}`;
+  const isPngOutput = activeFormat === "image/png";
 
   const handleUpload = async (files: File[]) => {
     const file = files[0];
@@ -27,7 +33,8 @@ export default function ImageCompressorClient() {
 
     setOriginalFile({
       name: file.name,
-      size: fileSizeInMB.toFixed(2) + " MB"
+      size: fileSizeInMB.toFixed(2) + " MB",
+      type: file.type
     });
 
     setIsLoading(true);
@@ -56,10 +63,15 @@ export default function ImageCompressorClient() {
             const q = quality[0] / 100;
             let mimeType = file.type || "image/jpeg";
             
-            // For PNG, canvas.toBlob does not support quality options.
-            // Convert PNG to WebP to achieve lossy size compression while keeping transparency.
-            if (mimeType === "image/png") {
+            if (format === "png") {
+              mimeType = "image/png";
+            } else if (format === "jpeg") {
+              mimeType = "image/jpeg";
+            } else if (format === "webp") {
               mimeType = "image/webp";
+            } else {
+              // format === "original"
+              mimeType = file.type || "image/jpeg";
             }
 
             canvas.toBlob(
@@ -88,10 +100,17 @@ export default function ImageCompressorClient() {
       const url = window.URL.createObjectURL(compressedBlob);
       
       // Determine output extension/name
-      let outputFilename = `compressed_${file.name}`;
-      if (file.type === "image/png" && compressedBlob.type === "image/webp") {
-        outputFilename = `compressed_${file.name.replace(/\.[^/.]+$/, "")}.webp`;
+      let extension = "jpg";
+      if (compressedBlob.type === "image/png") {
+        extension = "png";
+      } else if (compressedBlob.type === "image/webp") {
+        extension = "webp";
+      } else if (compressedBlob.type === "image/jpeg") {
+        extension = "jpg";
       }
+      
+      const baseName = file.name.replace(/\.[^/.]+$/, "");
+      const outputFilename = `compressed_${baseName}.${extension}`;
 
       setResult({ 
         url, 
@@ -181,12 +200,12 @@ export default function ImageCompressorClient() {
           <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem] space-y-8">
             <div className="space-y-4 px-2">
               <div className="flex justify-between items-center">
-                <label className="text-sm font-bold flex items-center gap-2">
+                <label className={cn("text-sm font-bold flex items-center gap-2", isPngOutput && "text-muted-foreground")}>
                   <Settings className="w-4 h-4 text-primary" />
-                  Compression Quality: {quality[0]}%
+                  Compression Quality: {isPngOutput ? "N/A" : `${quality[0]}%`}
                 </label>
                 <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                  {quality[0] < 50 ? "High Compression" : quality[0] < 80 ? "Balanced" : "High Quality"}
+                  {isPngOutput ? "Lossless" : quality[0] < 50 ? "High Compression" : quality[0] < 80 ? "Balanced" : "High Quality"}
                 </span>
               </div>
               <Slider 
@@ -196,7 +215,32 @@ export default function ImageCompressorClient() {
                 min={10} 
                 step={1} 
                 className="py-4"
+                disabled={isPngOutput}
               />
+            </div>
+
+            <div className="space-y-4 px-2">
+              <label className="text-sm font-bold flex items-center gap-2">
+                <ImageIcon className="w-4 h-4 text-primary" />
+                Output Format
+              </label>
+              <Tabs value={format} onValueChange={(val) => setFormat(val as any)} className="w-full">
+                <TabsList className="grid grid-cols-4 w-full h-10">
+                  <TabsTrigger value="original">Original</TabsTrigger>
+                  <TabsTrigger value="png">PNG</TabsTrigger>
+                  <TabsTrigger value="jpeg">JPEG</TabsTrigger>
+                  <TabsTrigger value="webp">WebP</TabsTrigger>
+                </TabsList>
+              </Tabs>
+              
+              {isPngOutput && (
+                <div className="mt-2 p-3 bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-start gap-2.5 text-xs leading-relaxed border border-blue-100 dark:border-blue-950/50 animate-in fade-in slide-in-from-top-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>PNG compression is lossless</strong> in browser environments. For significant file size reduction of transparent images, consider converting to <strong>WebP</strong>.
+                  </span>
+                </div>
+              )}
             </div>
             
             <FileUploader
