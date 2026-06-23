@@ -1,13 +1,14 @@
 import os
 import io
 import zipfile
+import asyncio
+from contextlib import asynccontextmanager
 from typing import List
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 from PIL import Image, ImageDraw, ImageChops
 from pydantic import BaseModel
-import fitz  # PyMuPDF
 
 # Set custom U2NET_HOME directory inside our project to prevent ephemeral runtime downloads
 # and make it easily cacheable/bakeable in Docker.
@@ -22,13 +23,37 @@ if "OMP_NUM_THREADS" not in os.environ:
 if "OMP_WAIT_POLICY" not in os.environ:
     os.environ["OMP_WAIT_POLICY"] = "PASSIVE"
 
-from rembg import new_session, remove
-from playwright.async_api import async_playwright
+# Global dictionary to cache loaded model sessions for low latency
+rembg_sessions = {}
+
+def get_rembg_session(model_name: str):
+    if model_name not in rembg_sessions:
+        from rembg import new_session
+        print(f"Loading AI background removal model ({model_name})...")
+        rembg_sessions[model_name] = new_session(model_name)
+        print(f"Model {model_name} loaded successfully!")
+    return rembg_sessions[model_name]
+
+# Asynchronously pre-load default u2net model in the background so it doesn't block startup
+async def preload_models():
+    def load():
+        try:
+            get_rembg_session("u2net")
+        except Exception as e:
+            print(f"Failed to pre-load default u2net model: {e}")
+    await asyncio.to_thread(load)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: trigger model pre-loading asynchronously
+    asyncio.create_task(preload_models())
+    yield
 
 app = FastAPI(
     title="Utilify Backend Services",
     description="High-performance document and image processing APIs.",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # CORS configuration matching frontend requests
@@ -40,22 +65,6 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"]
 )
-
-# Global dictionary to cache loaded model sessions for low latency
-rembg_sessions = {}
-
-def get_rembg_session(model_name: str):
-    if model_name not in rembg_sessions:
-        print(f"Loading AI background removal model ({model_name})...")
-        rembg_sessions[model_name] = new_session(model_name)
-        print(f"Model {model_name} loaded successfully!")
-    return rembg_sessions[model_name]
-
-# Pre-load default u2net model on startup so first request has low latency
-try:
-    get_rembg_session("u2net")
-except Exception as e:
-    print(f"Failed to pre-load default u2net model: {e}")
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
     """
@@ -186,6 +195,7 @@ async def remove_background(
             
             print(f"Complex scene detected. Utilizing global AI background removal model ({target_model}, post_process={post_process}).")
             session = get_rembg_session(target_model)
+            from rembg import remove
             output_bytes = remove(
                 file_bytes,
                 session=session,
@@ -220,6 +230,7 @@ async def pdf_to_image(file: UploadFile = File(...)):
 
     try:
         pdf_bytes = await file.read()
+        import fitz
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         
         zip_buffer = io.BytesIO()
@@ -253,6 +264,7 @@ async def split_pdf(file: UploadFile = File(...), page_ranges: str = Form(...)):
 
     try:
         pdf_bytes = await file.read()
+        import fitz
         src_doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         max_pages = len(src_doc)
         
@@ -293,6 +305,7 @@ async def merge_pdf(files: List[UploadFile] = File(...)):
             raise HTTPException(status_code=400, detail=f"File {file.filename} is not a PDF.")
 
     try:
+        import fitz
         dest_doc = fitz.open()
         for file in files:
             file_bytes = await file.read()
@@ -322,6 +335,7 @@ async def html_to_pdf(request: HtmlRequest):
     Uses headless Playwright Chromium for 100% pixel-perfect browser-level rendering.
     """
     try:
+        from playwright.async_api import async_playwright
         async with async_playwright() as p:
             # Launch headless chromium with no-sandbox sandbox parameters for Docker compatibility
             browser = await p.chromium.launch(
