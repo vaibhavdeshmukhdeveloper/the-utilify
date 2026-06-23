@@ -17,34 +17,86 @@ export default function ImageCompressorClient() {
 
   const handleUpload = async (files: File[]) => {
     const file = files[0];
+
+    // Proactively validate the 20MB file size limit
+    const fileSizeInMB = file.size / (1024 * 1024);
+    if (fileSizeInMB > 20) {
+      toast.error("File is too large! Maximum supported size is 20MB.");
+      return;
+    }
+
     setOriginalFile({
       name: file.name,
-      size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
+      size: fileSizeInMB.toFixed(2) + " MB"
     });
 
     setIsLoading(true);
     setResult(null);
     
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("quality", quality[0].toString());
+      // Compress entirely on the client-side to bypass Vercel's 4.5MB payload limit
+      const compressedBlob = await new Promise<Blob>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target?.result as string;
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            if (!ctx) {
+              reject(new Error("Could not create canvas context"));
+              return;
+            }
 
-      const response = await fetch("/api/image-compressor", {
-        method: "POST",
-        body: formData,
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            ctx.drawImage(img, 0, 0);
+
+            const q = quality[0] / 100;
+            let mimeType = file.type || "image/jpeg";
+            
+            // For PNG, canvas.toBlob does not support quality options.
+            // Convert PNG to WebP to achieve lossy size compression while keeping transparency.
+            if (mimeType === "image/png") {
+              mimeType = "image/webp";
+            }
+
+            canvas.toBlob(
+              (blob) => {
+                if (blob) {
+                  // Fallback: If compressed blob is larger than original file, return original file
+                  if (blob.size > file.size && mimeType === file.type) {
+                    resolve(file);
+                  } else {
+                    resolve(blob);
+                  }
+                } else {
+                  reject(new Error("Image compression failed"));
+                }
+              },
+              mimeType,
+              q
+            );
+          };
+          img.onerror = () => reject(new Error("Failed to load image"));
+        };
+        reader.onerror = () => reject(new Error("Failed to read file"));
       });
 
-      if (!response.ok) throw new Error("Compression failed");
-
-      const blob = await response.blob();
-      const compressedSize = (blob.size / (1024 * 1024)).toFixed(2) + " MB";
-      const url = window.URL.createObjectURL(blob);
+      const compressedSize = (compressedBlob.size / (1024 * 1024)).toFixed(2) + " MB";
+      const url = window.URL.createObjectURL(compressedBlob);
       
+      // Determine output extension/name
+      let outputFilename = `compressed_${file.name}`;
+      if (file.type === "image/png" && compressedBlob.type === "image/webp") {
+        outputFilename = `compressed_${file.name.replace(/\.[^/.]+$/, "")}.webp`;
+      }
+
       setResult({ 
         url, 
-        filename: `compressed_${file.name}`,
-        originalSize: (file.size / (1024 * 1024)).toFixed(2) + " MB",
+        filename: outputFilename,
+        originalSize: fileSizeInMB.toFixed(2) + " MB",
         compressedSize 
       });
       toast.success("Image compressed successfully!");
@@ -117,7 +169,7 @@ export default function ImageCompressorClient() {
   return (
     <ToolLayout
       title="Image Compressor"
-      description="Reduce image file size instantly without losing visible quality. Perfect for web optimization."
+      description="Compress PNG, JPEG, and WebP images up to 20MB entirely in your browser. Files are never uploaded, ensuring 100% privacy."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
@@ -154,6 +206,16 @@ export default function ImageCompressorClient() {
               isLoading={isLoading}
               hideDownload={true}
             />
+
+            <div className="p-4 bg-muted/50 rounded-2xl border border-border flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="text-xs font-bold leading-none">In-Browser Compression</p>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Your image is processed entirely inside your browser. No files are uploaded to our servers, enabling fast operations and 100% privacy. Supports files up to <strong>20MB</strong>.
+                </p>
+              </div>
+            </div>
           </Card>
           
           {originalFile && (
