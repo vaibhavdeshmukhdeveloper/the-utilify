@@ -18,6 +18,16 @@ import SipCalculatorClient from "@/app/sip-calculator/SipCalculatorClient";
 import InvestmentCalculatorClient from "@/app/investment-calculator/InvestmentCalculatorClient";
 import BmiCalculatorClient from "@/app/bmi-calculator/BmiCalculatorClient";
 import JsonFormatterClient from "@/app/json-formatter/JsonFormatterClient";
+import PasswordGeneratorClient from "@/app/password-generator/PasswordGeneratorClient";
+import QrGeneratorClient from "@/app/qr-generator/QrGeneratorClient";
+import TextConverterClient from "@/app/text-converter/TextConverterClient";
+import Base64Client from "@/app/base64/Base64Client";
+import ColorPaletteClient from "@/app/color-palette/ColorPaletteClient";
+import DateCalculatorClient from "@/app/date-calculator/DateCalculatorClient";
+import AgeCalculatorClient from "@/app/age-calculator/AgeCalculatorClient";
+import UnitConverterClient from "@/app/unit-converter/UnitConverterClient";
+import DiffCheckerClient from "@/app/diff-checker/DiffCheckerClient";
+import LoremIpsumClient from "@/app/lorem-ipsum/LoremIpsumClient";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -76,6 +86,26 @@ export default async function UseCasePage({ params }: PageProps) {
         return <BmiCalculatorClient />;
       case "json-formatter":
         return <JsonFormatterClient />;
+      case "password-generator":
+        return <PasswordGeneratorClient />;
+      case "qr-generator":
+        return <QrGeneratorClient />;
+      case "text-converter":
+        return <TextConverterClient />;
+      case "base64":
+        return <Base64Client />;
+      case "color-palette":
+        return <ColorPaletteClient />;
+      case "date-calculator":
+        return <DateCalculatorClient />;
+      case "age-calculator":
+        return <AgeCalculatorClient />;
+      case "unit-converter":
+        return <UnitConverterClient />;
+      case "diff-checker":
+        return <DiffCheckerClient />;
+      case "lorem-ipsum":
+        return <LoremIpsumClient />;
       default:
         return notFound();
     }

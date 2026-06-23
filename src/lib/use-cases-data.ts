@@ -1808,5 +1808,456 @@ export const useCases: UseCaseData[] = [
       "Custom weights: Set sliders to control paragraph counts and word sequences.",
       "Layout focus: Realistic character distribution keeps focus on typography and layout design."
     ]
+  },
+  {
+    slug: "split-legal-deposition-pdf-transcripts",
+    baseTool: "split-pdf",
+    title: "Legal Deposition PDF Transcript Splitter",
+    seoTitle: "Split Legal Deposition PDF Transcripts Online (Secure)",
+    seoDescription: "Extract specific testimony pages, witness statements, or exhibit logs from long legal deposition PDF files in-memory. Zero file retention.",
+    heading: "Split & Extract Legal Deposition PDF Transcripts",
+    introduction: "Legal files are heavy and often contain highly sensitive personal testimonies or medical histories. Easily split complex, multi-page legal deposition transcripts to extract only the relevant pages needed for court filings, keeping the rest of the document confidential.",
+    category: "PDF",
+    tips: [
+      "Client-side Privacy: All document processing occurs strictly within your browser RAM. Your confidential legal files are never saved or cached.",
+      "Retain Vector Quality: Text layers, attorney highlights, and official digital notary stamps remain perfectly intact.",
+      "Custom Index Arrays: Extract distinct ranges (e.g., pages 5-12 and 45-50) simultaneously into a single document."
+    ]
+  },
+  {
+    slug: "extract-w2-forms-from-payroll-pdf",
+    baseTool: "split-pdf",
+    title: "Extract W-2 Forms from Consolidated Payroll PDF",
+    seoTitle: "Extract W-2 Forms from Consolidated Payroll PDF Online",
+    seoDescription: "Isolate individual employee W-2 forms or paycheck stubs from a single consolidated payroll PDF. High security in-memory extraction.",
+    heading: "Extract W-2 Forms from payroll PDF files",
+    introduction: "Processing year-end tax returns for a team? Avoid sending large, consolidated payroll directories containing multiple employees' details. Upload your company's master tax document and extract individual W-2 forms or paystubs securely.",
+    category: "PDF",
+    tips: [
+      "SSN Security: Processing happens locally in-memory, ensuring sensitive financial details and SSNs are protected.",
+      "Clean Outlines: Extracts precise pages cleanly without content displacement.",
+      "Fast processing: Spits out individual PDFs in seconds, ready to be distributed to staff."
+    ]
+  },
+  {
+    slug: "merge-commercial-lease-addendums-pdf",
+    baseTool: "merge-pdf",
+    title: "Commercial Lease Addendums PDF Merger",
+    seoTitle: "Merge Commercial Lease Addendums into Single PDF",
+    seoDescription: "Combine retail or office commercial leases, rider clauses, and signed addendums into one organized PDF file online.",
+    heading: "Merge Commercial Lease & Addendums",
+    introduction: "Simplify commercial property management paperwork. Instead of archiving separate documents for a single tenant, merge the core commercial lease contract, property rules, and any subsequent amendments or riders into one consolidated PDF dossier.",
+    category: "PDF",
+    tips: [
+      "Chronological Ordering: Upload your files in sequence to keep the primary agreement ahead of amendments.",
+      "Lossless Merging: Retains print-ready resolution for architectural layouts, floor plans, and signature fields.",
+      "Quick Share: Creating a single PDF makes it easier to share with legal and financial audits."
+    ]
+  },
+  {
+    slug: "combine-freelance-portfolio-pdf",
+    baseTool: "merge-pdf",
+    title: "Freelance Design Portfolio PDF Merger",
+    seoTitle: "Merge Freelance Design Portfolio PDFs Online",
+    seoDescription: "Combine design samples, resume sheets, cover letters, and client recommendations into one professional PDF showcase.",
+    heading: "Combine Freelance Portfolio PDFs",
+    introduction: "Stand out to prospective clients. Combine your cover letter, case study PDFs, resumes, and reference letters into a single, cohesive design portfolio that loads quickly and looks highly professional.",
+    category: "PDF",
+    tips: [
+      "Format Flexibility: Merge different document formats (including images and text documents) into a unified PDF layout.",
+      "Size Check: Ensure the final output size is under email attachment limits using our Image Compressor if necessary.",
+      "Professional flow: Arrange documents logically (Cover page first, followed by CV and case studies)."
+    ]
+  },
+  {
+    slug: "convert-architectural-blueprint-pdf-to-jpg",
+    baseTool: "pdf-to-image",
+    title: "Architectural Blueprint PDF to JPG Converter",
+    seoTitle: "Convert CAD Blueprint PDF to High-Res JPG Online",
+    seoDescription: "Render large scale CAD drawing and architectural blueprint PDFs into clear, high-resolution JPG images. Preserves vector fine line details.",
+    heading: "Convert Architectural Blueprint PDF to JPG",
+    introduction: "Need to view CAD schematic prints or architectural drawings on a device that doesn't render vector PDFs well? Convert blueprint pages into high-density JPG or PNG files, maintaining crisp, readable measurement lines and labels.",
+    category: "PDF",
+    tips: [
+      "Precision Zoom: Output files render with high anti-aliasing to preserve thin blueprint lines and micro-annotations.",
+      "Format choice: Use PNG if you need transparent backgrounds, or JPG for lightweight storage and quick messaging.",
+      "Completely Local: Blueprints and proprietary IP are processed inside browser memory without server uploads."
+    ]
+  },
+  {
+    slug: "convert-presentation-slides-pdf-to-png",
+    baseTool: "pdf-to-image",
+    title: "Presentation Slides PDF to PNG Converter",
+    seoTitle: "Convert Presentation Slides PDF to PNG Images",
+    seoDescription: "Extract slide decks and pitch presentations from PDF to high-quality PNG images for portfolio display or social media posts.",
+    heading: "Convert Presentation Slides PDF to PNG",
+    introduction: "Sharing slide decks on LinkedIn, Twitter, or web portfolios? Convert your presentation PDFs into separate, sequential PNG images. Let recruiters and followers swipe through your slides directly on visual social media feeds.",
+    category: "PDF",
+    tips: [
+      "Aspect Ratio Stability: Renders layouts exactly as designed in widescreen 16:9 or standard 4:3 shapes.",
+      "Color Accuracy: Retains design templates, gradients, and font colors perfectly.",
+      "Bulk Extraction: Slides are zipped together to keep files ordered and organized."
+    ]
+  },
+  {
+    slug: "convert-markdown-release-notes-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Software Release Notes Markdown to PDF Converter",
+    seoTitle: "Convert Release Notes Markdown to PDF (Clean Tech Theme)",
+    seoDescription: "Compile software release logs and changelogs written in markdown into professional, client-ready PDF bulletins.",
+    heading: "Convert Software Release Notes Markdown to PDF",
+    introduction: "Distributing product updates or release notes to users, enterprise clients, or stakeholders? Convert raw markdown lists and descriptions into highly polished PDF files, styled with code highlights and clean headers.",
+    category: "PDF",
+    tips: [
+      "Code Syntax: Automatically structures CLI commands and API endpoints cleanly.",
+      "Version headers: Styled with prominent, readable headings to separate versions.",
+      "Lightweight Layouts: Styled simply for print or offline reference without styling clutter."
+    ]
+  },
+  {
+    slug: "convert-markdown-user-guide-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "User Manual Markdown to PDF Converter",
+    seoTitle: "Convert User Guide Markdown to PDF (Structured Format)",
+    seoDescription: "Generate beautifully styled PDF user manuals, instruction booklets, and technical help guides directly from standard markdown text.",
+    heading: "Convert User Guide Markdown to PDF",
+    introduction: "Writing standard user manuals or how-to documents? Author them in lightweight Markdown, then paste and compile them into clean, paginated PDF booklets. Great for hardware developers, software projects, and operations manuals.",
+    category: "PDF",
+    tips: [
+      "Table Structures: Clean grid alignment for key shortcuts, commands, and specifications.",
+      "Navigation Indexes: Standard header tags map logically to clear PDF sections.",
+      "Custom Margin Options: Tweak printable bounds to look great in A4 booklets."
+    ]
+  },
+  {
+    slug: "remove-background-plant-flower-photos",
+    baseTool: "background-remover",
+    title: "Florist Plant & Flower Background Remover",
+    seoTitle: "Remove Background from Plant & Flower Photos Online",
+    seoDescription: "Extract flowers, houseplants, and botanical items from messy garden or shop backgrounds. High precision AI edge tracing.",
+    heading: "Remove Background from Plant & Flower Photos",
+    introduction: "Florists, nursery shops, and botanical bloggers can now create clean product listings easily. Our AI background remover traces complicated edges of plant leaves, stems, and delicate petals, delivering transparent PNGs ready for catalogs.",
+    category: "Image",
+    tips: [
+      "Stem Isolation: Handles tiny gaps and green edges of leaves perfectly.",
+      "Clean Backdrops: Isolate plants to paste onto clean backgrounds or web headers.",
+      "Color Preservation: Keeps green textures and flower hues vibrant without color bleeding."
+    ]
+  },
+  {
+    slug: "remove-background-restaurant-food-photos",
+    baseTool: "background-remover",
+    title: "Restaurant Dish & Food Photo Background Remover",
+    seoTitle: "Remove Background from Food Photos (Menu Ready PNG)",
+    seoDescription: "Isolate dishes, burgers, drinks, and gourmet food items from table backgrounds. Get transparent PNG food cutouts for menus.",
+    heading: "Remove Background from Restaurant Food Photos",
+    introduction: "Designing a digital menu or food delivery listing? Strip off distracting tables, steam trails, or busy restaurant dining backgrounds. Isolate the main culinary plate, beverage, or dessert with pixel-perfect transparency.",
+    category: "Image",
+    tips: [
+      "Organic Edges: Handles reflections on glassware and textures of foods accurately.",
+      "Menu Ready: Export to transparent PNG format to overlay food directly onto menu templates.",
+      "App Speed: Run the output through our Image Compressor before uploading to mobile apps."
+    ]
+  },
+  {
+    slug: "compress-heavy-portfolio-jpg-images",
+    baseTool: "image-compressor",
+    title: "Creative Portfolio JPG Image Compressor",
+    seoTitle: "Compress Creative Portfolio JPG Images (Retain Quality)",
+    seoDescription: "Compress high-res photography, design artwork, and digital painting JPGs. Optimize portfolio load speeds without pixelation.",
+    heading: "Compress Heavy Portfolio JPG Images",
+    introduction: "Artists and photographers need fast websites to hold viewer interest, but loading 15MB images stalls page speeds. Compress high-resolution portfolio images while retaining color gradients, clean lines, and texture fidelity.",
+    category: "Image",
+    tips: [
+      "Retain Visuals: Smart compression algorithms keep photographs clean when zoomed in.",
+      "Fast Pages: Speed up your personal web hosting and boost Google SEO visibility.",
+      "Bulk optimization: Drag-and-drop entire galleries to compress them in one go."
+    ]
+  },
+  {
+    slug: "compress-scanned-receipt-png-files",
+    baseTool: "image-compressor",
+    title: "Scanned Expense Receipt PNG Compressor",
+    seoTitle: "Compress Scanned Receipt PNG Images Online",
+    seoDescription: "Reduce the file size of PNG scans of receipts, tax invoices, and expense claims to fit corporate reimbursement portals.",
+    heading: "Compress Scanned Receipt PNG Images",
+    introduction: "Reimbursement systems often restrict receipt uploads to very small file sizes. If your scanner outputs heavy PNG images, compress them down by up to 80% while keeping small invoice numbers, dates, and vendor details perfectly readable.",
+    category: "Image",
+    tips: [
+      "Keep Text Legible: Optimizes details in text characters so tax tables remain readable.",
+      "Portal Ready: Squeeze large receipts to under 500KB limits in seconds.",
+      "Local Safety: Receipts containing transaction numbers are processed entirely in browser cache."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-emergency-cash-reserve",
+    baseTool: "sip-calculator",
+    title: "Emergency Cash Reserve SIP Wealth Calculator",
+    seoTitle: "SIP Calculator for Building an Emergency Fund Online",
+    seoDescription: "Calculate estimated systematic investment returns to build a liquid emergency cash reserve. Plan safe monthly compound saving rates.",
+    heading: "SIP Calculator for Emergency Cash Reserves",
+    introduction: "Building an emergency reserve of 3-6 months' expenses? Estimate how investing regular monthly amounts into liquid mutual funds or low-volatility savings accounts compiles compound returns over a 1-3 year period.",
+    category: "Finance",
+    tips: [
+      "Liquid Yields: Model conservative asset returns (e.g. 5-7% annually) suitable for emergency cash reserves.",
+      "Steady Build: Discover how minor increases in monthly allocations accelerate your safety net timeline.",
+      "Short Horizon: Avoid risky equities for emergency reserves; keep calculations focused on short-term stability."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-early-financial-freedom",
+    baseTool: "sip-calculator",
+    title: "Early Financial Independence (FIRE) SIP Calculator",
+    seoTitle: "FIRE SIP Wealth Calculator - Project Early Retirement",
+    seoDescription: "Project aggressive monthly savings compound returns to reach your early financial freedom target (FIRE) nest-egg corpus.",
+    heading: "Early Financial Independence (FIRE) SIP Calculator",
+    introduction: "Targeting the FIRE movement (Financial Independence, Retire Early)? Calculate the monthly systematic investment plan required over 10-20 years to build a retirement corpus that allows living comfortably off dividends and withdrawals.",
+    category: "Finance",
+    tips: [
+      "Compounding Leverage: Long holding times maximize the compound snowball effect on aggressive allocations.",
+      "Inflation adjustments: Check real future purchasing power relative to expected annual return yields.",
+      "Step-Up Strategy: Model salary growth increments to increase monthly savings targets annually."
+    ]
+  },
+  {
+    slug: "calculate-corporate-bond-yield-maturity",
+    baseTool: "investment-calculator",
+    title: "Corporate Bond Yield & Maturity Calculator",
+    seoTitle: "Calculate Corporate Bond Yield and Maturity Interest",
+    seoDescription: "Calculate interest payouts, discount rates, and final maturity values of high-grade corporate bonds or debt instruments.",
+    heading: "Corporate Bond Yield & Maturity Calculator",
+    introduction: "Assess interest payouts from AAA-rated corporate debt assets. Input initial purchase discounts, coupons, and maturities to determine future yield-to-maturity (YTM) returns for your investment portfolio.",
+    category: "Finance",
+    tips: [
+      "Coupon calculations: Factor in semi-annual or annual interest payouts precisely.",
+      "Credit Check: Balance yield rate calculations with credit ratings of issuing corporations.",
+      "Taxation considerations: Keep in mind corporate bond interest may be fully taxable at local rates."
+    ]
+  },
+  {
+    slug: "calculate-inflation-adjusted-investment-growth",
+    baseTool: "investment-calculator",
+    title: "Inflation-Adjusted Investment Growth Calculator",
+    seoTitle: "Calculate Inflation-Adjusted Investment Growth & Purchasing Power",
+    seoDescription: "Calculate the real future value and purchasing power of your investment portfolio by factoring in estimated annual inflation rates.",
+    heading: "Inflation-Adjusted Investment Growth Calculator",
+    introduction: "A portfolio worth $1 Million in 30 years won't buy what it does today. Calculate the inflation-adjusted growth of lump sum or recurring investments to discover the real purchasing power of your future savings.",
+    category: "Finance",
+    tips: [
+      "Historical Inflation: Standard projections calculate using 2% to 4% average inflation rates.",
+      "Real Yield Projections: Subtracts inflation percentage from nominal market returns for real growth curves.",
+      "Asset adjustments: Plan investments in assets that historical beat inflation parameters."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-seniors-elderly-health",
+    baseTool: "bmi-calculator",
+    title: "Seniors & Elderly BMI Health Range Calculator",
+    seoTitle: "BMI Calculator for Seniors & Elderly (Healthy Aging Ranges)",
+    seoDescription: "Calculate body mass index for older adults. Review specialized healthy BMI guidelines tailored for senior health and longevity.",
+    heading: "Seniors & Elderly BMI Range Calculator",
+    introduction: "Seniors require specialized health indices. Medical research suggests that older adults benefit from slightly higher BMI ranges (e.g. 23-28) to protect against bone loss and nutritional issues. Verify healthy levels tailored for ages 65 and above.",
+    category: "Health",
+    tips: [
+      "Specialized Ranges: Standard healthy adult ranges may misclassify seniors. A BMI of 23-27 is often considered ideal.",
+      "Muscle Mass Retention: Prioritize protein intake and low-impact resistance training to combat aging sarcopenia.",
+      "Doctor Consultation: Use calculation metrics as general guides; prioritize personal physician assessments."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-pregnancy-weight-tracking",
+    baseTool: "bmi-calculator",
+    title: "Pregnancy Weight Status BMI Calculator",
+    seoTitle: "Pregnancy BMI Calculator - Pre-Pregnancy Health Status",
+    seoDescription: "Calculate pre-pregnancy BMI category to estimate recommended weight gain guides during gestation. Check metric and imperial boundaries.",
+    heading: "Pregnancy Pre-Pregnancy Status BMI Calculator",
+    introduction: "Pregnancy health begins with pre-pregnancy metrics. Health providers use initial BMI indexes to outline healthy weight gain categories during the trimesters. Calculate your starting status to plan nutrition guidelines.",
+    category: "Health",
+    tips: [
+      "Target Ranges: Provides pre-pregnancy categories (Underweight, Normal, Overweight, Obese) to identify recommended weight gain margins.",
+      "Do Not Calculate Mid-Pregnancy: Standard BMI equations do not account for gestational weight and should not be used mid-pregnancy.",
+      "Prenatal Care: Coordinate calculations with your obstetrician's customized nutritional checklists."
+    ]
+  },
+  {
+    slug: "format-graphql-schema-json-response",
+    baseTool: "json-formatter",
+    title: "GraphQL Schema JSON Response Formatter",
+    seoTitle: "Format and Prettify GraphQL API JSON Responses Online",
+    seoDescription: "Prettify nested GraphQL queries, mutations, and payload responses. Format and validate deep JSON trees locally in-memory.",
+    heading: "Format GraphQL Schema JSON Responses",
+    introduction: "GraphQL API responses are deeply nested due to queried objects and connections. Format minified GraphQL payloads to debug query fields, locate missing variables, and validate schema integrity instantly.",
+    category: "Developer",
+    tips: [
+      "Deep Tree Navigation: Collapsible node nodes let you explore complex data graphs quickly.",
+      "Validate Syntax: Identifies invalid characters or commas that break parsing engines.",
+      "Local Processing: Run API payload checks offline. Your telemetry data stays in the browser."
+    ]
+  },
+  {
+    slug: "prettify-docker-compose-json-configs",
+    baseTool: "json-formatter",
+    title: "Docker Compose JSON Config Prettifier",
+    seoTitle: "Prettify Docker Compose JSON Configuration Online",
+    seoDescription: "Paste, format, and validate container configuration JSON documents. Debug nested environment vars and port mappings instantly.",
+    heading: "Prettify Docker Compose JSON Configurations",
+    introduction: "Docker configs and docker-compose settings can be exported or represented as JSON structures. Prettify, align, and debug formatting in minified configs to quickly check volume mount strings, network settings, and microservice definitions.",
+    category: "Developer",
+    tips: [
+      "Service Isolation: Format configurations to review distinct microservice setups.",
+      "Syntax Auditing: Ensures your environment variable arrays are properly formatted lists.",
+      "Developer Speed: Clean up dense, multi-service docker configurations in a single click."
+    ]
+  },
+  {
+    slug: "generate-cryptographic-api-keys",
+    baseTool: "password-generator",
+    title: "Cryptographic API Key & Token Generator",
+    seoTitle: "Generate Cryptographic API Keys and Tokens Online",
+    seoDescription: "Generate high-entropy random cryptographic keys, secret tokens, and password salts client-side. Standard local browser security.",
+    heading: "Cryptographic API Key & Token Generator",
+    introduction: "Building an API server or setting up database salts? Generate high-entropy, cryptographically secure keys and tokens of custom lengths. Generated client-side using native browser window.crypto protocols.",
+    category: "Developer",
+    tips: [
+      "Maximum Entropy: Includes upper/lowercase letters, numerals, and special syntax strings.",
+      "Native Security: Your generated API keys are never transmitted over the internet or logged on servers.",
+      "Length variety: Customize key sizes up to 64 characters to secure cloud auth headers."
+    ]
+  },
+  {
+    slug: "generate-ssh-passphrase-random-string",
+    baseTool: "password-generator",
+    title: "Secure SSH Key Passphrase Generator",
+    seoTitle: "Generate Secure SSH Key Passphrases Online",
+    seoDescription: "Generate strong, memorable random strings for SSH private key passphrases. Protect your terminal servers from SSH credential attacks.",
+    heading: "Secure SSH Key Passphrase Generator",
+    introduction: "Protect your terminal private keys. Standard SSH keys should be encrypted with strong passphrases. Generate random, high-entropy character arrays to shield SSH keys from automated dictionary sweep tools.",
+    category: "Developer",
+    tips: [
+      "Cryptographic Randomness: Standard random numbers protect key files from decryption attempts.",
+      "Zero Logging: Processed fully client-side inside standard browser runtime environment.",
+      "Offline Access: Work safely by generating keys and passphrases in airplane mode."
+    ]
+  },
+  {
+    slug: "generate-bitcoin-wallet-payment-qr",
+    baseTool: "qr-generator",
+    title: "Bitcoin Wallet Address Payment QR Code Generator",
+    seoTitle: "Generate Bitcoin Wallet Address QR Codes Online",
+    seoDescription: "Create custom QR codes for Bitcoin and cryptocurrency wallet address strings. Speed up mobile crypto transfers safely.",
+    heading: "Generate Bitcoin Wallet Address QR Codes",
+    introduction: "Simplify cryptocurrency payments. Instead of copying long, complex public keys which can lead to typing errors and lost funds, generate a clean QR code of your Bitcoin wallet address. Clients and friends can scan and pay instantly.",
+    category: "Developer",
+    tips: [
+      "Precision Address: Always check address casing and character strings before generating.",
+      "Crypto URI Support: Format address strings with 'bitcoin:' prefixes to prompt mobile wallets.",
+      "Safe and Clean: Addresses are processed locally, ensuring transaction privacy."
+    ]
+  },
+  {
+    slug: "generate-vcard-contact-business-qr",
+    baseTool: "qr-generator",
+    title: "vCard Digital Business Card QR Code Generator",
+    seoTitle: "Generate vCard Contact QR Codes (Digital Business Card)",
+    seoDescription: "Generate custom vCard contact QR codes. Let clients scan your badge to add phone, email, and social links instantly to contacts.",
+    heading: "Generate vCard Contact QR Codes",
+    introduction: "Upgrade your networking experience. Generate custom vCard QR codes for print business cards, resume headers, or presentation screens. When scanned by a smartphone camera, it prompts the scanner to save your name, company, email, and phone instantly.",
+    category: "Developer",
+    tips: [
+      "Standard fields: Fill in standard formats for email, phone, company, and social URLs.",
+      "Easy Scan: Download high-resolution PNG outputs to print on cards or display on screens.",
+      "No dynamic trackers: Completely static contact records. No third-party redirect or login required."
+    ]
+  },
+  {
+    slug: "convert-programming-variables-to-camelcase",
+    baseTool: "text-converter",
+    title: "Variable Name camelCase Code Converter",
+    seoTitle: "Convert Variable Names to camelCase Online (JSON & JS)",
+    seoDescription: "Translate spaced strings, kebabs, or underscores into camelCase format. Perfect for Javascript, Typescript, and JSON keys.",
+    heading: "Convert Variable Names to camelCase",
+    introduction: "Javascript and TypeScript variables use standard camelCase naming. Paste raw variable lists, database names, or API response keys and instantly convert them into camelCase arrays.",
+    category: "Developer",
+    tips: [
+      "Symbol Stripping: Automatically removes space separators, dashes, and underscores.",
+      "Consistent API Keys: Ensure external data feeds align with native code variable styles.",
+      "Developer Velocity: Convert lists of keys in one operation instead of renaming manually."
+    ]
+  },
+  {
+    slug: "convert-blog-title-to-url-slug",
+    baseTool: "text-converter",
+    title: "Blog Title URL Slug Casing Converter",
+    seoTitle: "Convert Text to URL-Friendly Slugs (Kebab-Case Converter)",
+    seoDescription: "Convert blog post titles and page headings into clean, lowercase, URL-friendly kebab-case strings. Strips special symbols.",
+    heading: "Convert Text to URL-Friendly Slugs",
+    introduction: "Improve SEO indexing with clean, semantic web URLs. Paste raw article titles, document headers, or product names, and convert them into lowercase, hyphen-connected kebab-case strings ready for routing.",
+    category: "Developer",
+    tips: [
+      "Clean URL compliance: Automatically strips question marks, commas, periods, and special chars.",
+      "SEO formatting: Joins words with hyphens instead of spaces or underscores to match crawler standards.",
+      "Lowercased string: Standardizes all text segments to lowercase."
+    ]
+  },
+  {
+    slug: "encode-string-to-base64-url-safe",
+    baseTool: "base64",
+    title: "URL-Safe Base64 String Encoder & Decoder",
+    seoTitle: "Encode String to URL-Safe Base64 Online",
+    seoDescription: "Convert standard text strings into URL-safe Base64 format (using - and _ symbols). Perfect for web APIs and secure token routing.",
+    heading: "URL-Safe Base64 String Encoder",
+    introduction: "Standard Base64 strings contain '+' and '/' symbols, which can break web URLs when used as token parameters. Encode text into URL-safe Base64 (using hyphens and underscores) to ensure safe routing and payload storage.",
+    category: "Developer",
+    tips: [
+      "Safe transmission: Removes the need for percentage-encoding in URL parameter strings.",
+      "Reversible conversion: Swap modes to decode URL-safe strings back to plain text instantly.",
+      "Local execution: Encoding operations occur in the browser console. Keys and values are secure."
+    ]
+  },
+  {
+    slug: "encode-svg-xml-to-base64-data-uri",
+    baseTool: "base64",
+    title: "SVG XML to Base64 Data URI Encoder",
+    seoTitle: "Encode SVG XML code to Base64 Data URI Online",
+    seoDescription: "Convert raw XML vector SVG tags into Base64 data URIs. Embed vector icons directly into HTML or CSS templates.",
+    heading: "Convert SVG XML to Base64 Data URI",
+    introduction: "Inlining vector icons keeps webpages loading extremely fast. Paste raw SVG tags and convert them into encoded Base64 Data URIs. Embed them directly as source links in HTML tags or background-image styles in stylesheets.",
+    category: "Developer",
+    tips: [
+      "Page Speed boost: Embedding code removes external asset fetch calls.",
+      "Compact styling: Perfect for small menu indicators and toggle buttons.",
+      "HTML compatibility: Outputs structured `data:image/svg+xml;base64,...` strings ready to copy."
+    ]
+  },
+  {
+    slug: "compare-yaml-config-files-diff-checker",
+    baseTool: "diff-checker",
+    title: "YAML Configuration File Diff Checker",
+    seoTitle: "Compare YAML Configuration Files Online (Side-by-Side)",
+    seoDescription: "Compare Kubernetes, Docker, or server YAML configurations side-by-side. Spot indentation changes and property drift easily.",
+    heading: "Compare YAML Configuration Files Side-by-Side",
+    introduction: "YAML files are space-sensitive. A single misplaced indent can break application deployments. Compare Kubernetes charts, compose setups, or server settings side-by-side to pinpoint changes in lines, keys, and values.",
+    category: "Developer",
+    tips: [
+      "Indentation checks: Visual margins highlight spacing changes clearly.",
+      "Split layouts: Side-by-side column arrays make manual code inspection easy.",
+      "Data protection: Configurations are compared locally, protecting infrastructure parameters."
+    ]
+  },
+  {
+    slug: "generate-lorem-ipsum-markdown-bullets-for-documentation",
+    baseTool: "lorem-ipsum",
+    title: "Markdown-Formatted Lorem Ipsum Bullet List Generator",
+    seoTitle: "Generate Markdown Lorem Ipsum Lists & Headers",
+    seoDescription: "Generate placeholder text lists, nested bullets, and section headers in standard markdown syntax for technical specifications.",
+    heading: "Generate Markdown Lorem Ipsum Lists & Headers",
+    introduction: "Writing developer manuals or setting up documentation layouts? Generate sample placeholder files containing bullet points, numeric lists, blockquotes, and nested headings in standard Markdown syntax to test rendering styles.",
+    category: "Developer",
+    tips: [
+      "Layout Validation: Verify readability and list spacing in your tech docs.",
+      "Ready to copy: Output text is formatted in clean markdown notation ready to paste into files.",
+      "Custom count controls: Control paragraph sizes and heading hierarchies easily."
+    ]
   }
 ];
+

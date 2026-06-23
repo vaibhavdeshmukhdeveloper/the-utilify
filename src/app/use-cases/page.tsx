@@ -3,7 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Sparkles, ArrowRight, Layers, FileText, PiggyBank, Activity, FileJson } from "lucide-react";
+import { Sparkles, ArrowRight, Layers, FileText, PiggyBank, Activity, FileJson, Palette, Clock } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function UseCasesDirectoryPage() {
   // Group use cases by category
-  const categories = ["PDF", "Image", "Finance", "Health", "Developer"];
+  const categories = ["PDF", "Image", "Finance", "Health", "Developer", "Design", "Productivity"];
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -27,6 +27,10 @@ export default function UseCasesDirectoryPage() {
         return Activity;
       case "Developer":
         return FileJson;
+      case "Design":
+        return Palette;
+      case "Productivity":
+        return Clock;
       default:
         return Sparkles;
     }
