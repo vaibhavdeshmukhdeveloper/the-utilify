@@ -129,7 +129,7 @@ export default function ImageCompressorClient() {
     },
     {
       question: "Are my uploaded photos stored on your servers?",
-      answer: "No. Security is part of our design system. All files are uploaded and optimized in-memory (RAM) and immediately purged upon download. We never save your private photos."
+      answer: "No. Security is part of our design system. Images are processed entirely in-memory (RAM) inside your local web browser and are never uploaded to any server. Your photos never leave your device."
     },
     {
       question: "How does the quality slider affect file size?",

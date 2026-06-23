@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     q: "Which operations run in the browser vs. the server?",
-    a: "To guarantee your absolute privacy, most of our tools—including calculators (BMI, Investment, SIP, Age, Date), generators (Password, QR, Lorem Ipsum), text converters (Case Converter, Base64, Diff Checker), and design utilities (Color Palette)—run 100% locally in your web browser client-side. Only heavy operations requiring specialized server environments (such as AI background removal, image compression, and PDF splitting/merging/conversion/compilation) run securely on our transient backend servers, where files are held strictly in RAM and deleted instantly after processing."
+    a: "To guarantee your absolute privacy, most of our tools - including calculators (BMI, Investment, SIP, Age, Date), generators (Password, QR, Lorem Ipsum), text converters (Case Converter, Base64, Diff Checker), design utilities (Color Palette), and our Image Compressor - run 100% locally in your web browser client-side. Only heavy operations requiring specialized server environments (such as AI background removal and PDF splitting/merging/conversion/compilation) run securely on our transient backend servers, where files are held strictly in RAM and deleted instantly after processing."
   },
   {
     q: "Do I need to sign up for an account?",
