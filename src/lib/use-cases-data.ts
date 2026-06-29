@@ -2258,6 +2258,456 @@ export const useCases: UseCaseData[] = [
       "Ready to copy: Output text is formatted in clean markdown notation ready to paste into files.",
       "Custom count controls: Control paragraph sizes and heading hierarchies easily."
     ]
+  },
+  {
+    slug: "split-pdf-chapters-for-kindle-e-reader",
+    baseTool: "split-pdf",
+    title: "Split PDF Chapters for Kindle E-Reader",
+    seoTitle: "Split and Extract Chapters from PDF for Kindle Online",
+    seoDescription: "Extract specific chapters, sections, or page ranges from thick PDFs. Optimized size and compatibility for seamless Kindle e-reader uploads.",
+    heading: "Split PDF Chapters for Kindle E-Reader",
+    introduction: "Reading academic textbooks or dense literature on a Kindle or mobile e-reader is often difficult if the PDF is too large. Easily extract individual chapters or specific page ranges to reduce file sizes, speed up loading times, and maintain perfect text formatting.",
+    category: "PDF",
+    tips: [
+      "Optimal File Sizes: Keep individual split PDF chunks under 50MB to comply with Send to Kindle limits.",
+      "Dynamic Range Selection: Input specific page markers like '15-40, 60-80' to strip out useless index pages.",
+      "Native Formatting: Retains the original PDF fonts, formatting, and high-definition image assets."
+    ]
+  },
+  {
+    slug: "merge-pdf-invoices-monthly-expense-claims",
+    baseTool: "merge-pdf",
+    title: "Merge PDF Invoices for Monthly Expense Claims",
+    seoTitle: "Merge PDF Invoices for Expenses Online & Free",
+    seoDescription: "Combine multiple receipt and invoice PDF pages into one unified document. Simplify monthly company expense submissions and tax filings.",
+    heading: "Merge PDF Invoices for Monthly Expense Claims",
+    introduction: "Filing monthly expense claims or tax documents with dozens of individual receipt files is a chore. Merge your business invoices, utility bills, and payment records into a single, clean PDF document ready for submission to accounting departments.",
+    category: "PDF",
+    tips: [
+      "Sort Order: Arrange files chronologically before merging to present a neat, easy-to-verify expense trail.",
+      "No Data Storage: Your sensitive financial documents are merged locally in RAM, keeping your accounts fully secure.",
+      "File Compression: Compress the final output file if it exceeds company email file size limits."
+    ]
+  },
+  {
+    slug: "convert-pdf-portfolios-to-png-behance",
+    baseTool: "pdf-to-image",
+    title: "Convert PDF Portfolio Pages to PNG for Behance",
+    seoTitle: "Convert PDF Portfolio to PNG Images Online (High Res)",
+    seoDescription: "Convert multi-page PDF design and architecture portfolios into high-resolution PNG images. Perfect for uploads to Behance and Dribbble.",
+    heading: "Convert PDF Portfolio Pages to PNG for Behance",
+    introduction: "Portfolios are crucial for showcasing creative design work, but platforms like Behance and Dribbble require image formats. Seamlessly render every page of your PDF portfolio as a high-density, lossless PNG file ready to be uploaded to your online showcase.",
+    category: "PDF",
+    tips: [
+      "Lossless Format: PNG is ideal for design layouts, retaining sharp text boundaries and vivid colors.",
+      "High-Density Grid: Check font legibility on mobile screens by zooming into individual page exports.",
+      "ZIP Download: Multi-page portfolios are automatically packaged into a single ZIP archive for swift downloads."
+    ]
+  },
+  {
+    slug: "convert-markdown-readme-to-pdf-for-client-handover",
+    baseTool: "markdown-to-pdf",
+    title: "Convert Markdown README to PDF for Client Handover",
+    seoTitle: "Convert Markdown README to Professional PDF Online",
+    seoDescription: "Convert markdown codebase README files and setup instructions into clean, modern PDF documents for clients and handovers.",
+    heading: "Convert Markdown README to PDF for Client Handover",
+    introduction: "Handing over a software project or system setup guidelines to a client? Convert your technical markdown README file into a clean, professionally formatted PDF manual, complete with styled headers, code blocks, and lists.",
+    category: "PDF",
+    tips: [
+      "Styling Blocks: Keep code segments clean by enclosing them in standard markdown backticks.",
+      "Structural Layouts: Use clear H2 and H3 hierarchies to generate readable section breaks in the PDF output.",
+      "Self-Contained Content: Ensure external links or image URLs are fully qualified before exporting."
+    ]
+  },
+  {
+    slug: "extract-annex-pages-from-legal-pdf",
+    baseTool: "split-pdf",
+    title: "Extract Annex Pages from Legal PDF Documents",
+    seoTitle: "Extract Annex Pages from PDF Safely (Legal Documents)",
+    seoDescription: "Quickly isolate and extract annexures, addendums, and terms sheets from large legal PDFs. Completely secure, private in-memory parsing.",
+    heading: "Extract Annex Pages from Legal PDF Documents",
+    introduction: "Legal dossiers and master contracts often span hundreds of pages, with the most critical tables or annexures placed at the very end. Save time by splitting out only the relevant annex and addendum pages into a lightweight, standalone PDF.",
+    category: "PDF",
+    tips: [
+      "Page Audit: Check target page indexes carefully to ensure you do not miss any multi-page annex extensions.",
+      "Privacy Standards: Legal files are processed client-side in RAM. No document contents are sent to external databases.",
+      "Lossless Splitting: Keeps original legal digital signatures and vector fonts fully intact."
+    ]
+  },
+  {
+    slug: "merge-signed-contract-and-annexure-pdf",
+    baseTool: "merge-pdf",
+    title: "Merge Signed Contract and Annexure PDFs",
+    seoTitle: "Merge Signed Contract and Annexure PDFs Online & Free",
+    seoDescription: "Combine separate signed contract agreements, index lists, and annexures into a single official PDF. 100% free and client-side.",
+    heading: "Merge Signed Contract and Annexure PDFs",
+    introduction: "Keep your legal records organized. When signing contracts, you often end up with a signed signature page, a main agreement body, and multiple annexure lists. Merge them into a single consolidated PDF file for storage or official record keeping.",
+    category: "PDF",
+    tips: [
+      "Correct Hierarchy: Upload the primary agreement first, followed by supporting annexes and IDs.",
+      "Compact Archiving: Merge files client-side instantly without compromising the visual fidelity of signatures.",
+      "Naming Standards: Name files descriptive of the transaction before compiling them."
+    ]
+  },
+  {
+    slug: "convert-academic-paper-pdf-to-images-for-slides",
+    baseTool: "pdf-to-image",
+    title: "Convert Academic Paper PDF to Images for Slides",
+    seoTitle: "Convert PDF Paper Pages to High-Res JPG Images for Slides",
+    seoDescription: "Convert academic paper PDFs, graphs, and reference tables to clear JPG images. Easy to copy-paste directly into PowerPoint or Google Slides.",
+    heading: "Convert Academic Paper PDF to Images for Slides",
+    introduction: "Preparing for a thesis defense or research presentation? Easily convert complex academic PDF paper layouts, statistical tables, and methodology charts into individual JPG files that you can drop directly into presentation slides.",
+    category: "PDF",
+    tips: [
+      "High Clarity: Renders mathematical equations and micro-diagrams clearly in high resolution.",
+      "Image Cropping: After converting, crop the exact charts or figures using standard presentation tools.",
+      "No Server Footprint: Ideal for pre-publication papers. Renders locally to preserve copyright."
+    ]
+  },
+  {
+    slug: "convert-markdown-api-docs-to-pdf-manual",
+    baseTool: "markdown-to-pdf",
+    title: "Convert Markdown API Docs to PDF Manual",
+    seoTitle: "Convert Markdown API Documentation to PDF Guide Online",
+    seoDescription: "Convert markdown developer API endpoints, schemas, and usage examples into an elegant, readable PDF guide. Fast and locally processed.",
+    heading: "Convert Markdown API Docs to PDF Manual",
+    introduction: "Provide your engineering teams or API clients with a clean, offline-readable reference manual. Convert nested markdown API summaries, endpoint paths, and parameters lists into a beautifully typeset PDF manual.",
+    category: "PDF",
+    tips: [
+      "Formatting Tables: Use standard Markdown tables for parameter types to ensure clean alignment in PDF format.",
+      "JSON Examples: Pre-format code examples inside backticks to guarantee readable code indentation.",
+      "Offline Reading: Download the generated PDF to provide developer teams with offline documentation options."
+    ]
+  },
+  {
+    slug: "remove-background-restaurant-menu-photos",
+    baseTool: "background-remover",
+    title: "Remove Background from Restaurant Menu Item Photos",
+    seoTitle: "Remove Background from Food & Restaurant Menu Photos",
+    seoDescription: "Automatically remove backgrounds from restaurant dishes, desserts, and drink photos. Perfect for UberEats, DoorDash, and print menus.",
+    heading: "Remove Background from Restaurant Menu Item Photos",
+    introduction: "Stunning food photography sells. Isolate plates of gourmet food, signature cocktails, and pastries from busy restaurant kitchen backdrops to create high-impact, clean images for digital food ordering apps and print menus.",
+    category: "Image",
+    tips: [
+      "Preserve Steam & Shine: The AI is optimized to retain soft highlights on glazes and steam contours.",
+      "Branded Layouts: Transparent backgrounds make it simple to place dishes onto colorful social templates.",
+      "Delivery Apps: Fits transparency guidelines for platforms like UberEats, DoorDash, and GrubHub."
+    ]
+  },
+  {
+    slug: "compress-high-res-artwork-for-email-attachment",
+    baseTool: "image-compressor",
+    title: "Compress High-Res Digital Artwork for Email",
+    seoTitle: "Compress Large Digital Art & Design Files for Email Attachments",
+    seoDescription: "Reduce the file size of digital art, illustrations, and posters without losing color range or crisp details. Ready for client email reviews.",
+    heading: "Compress High-Res Digital Artwork for Email",
+    introduction: "Sharing large digital illustration portfolios and high-resolution posters with clients over email often triggers file limit errors. Compress massive PNG and JPG artworks down to email-friendly sizes while preserving color gradients.",
+    category: "Image",
+    tips: [
+      "Quality Preservation: Maintains fine details and high color-depth while stripping redundant metadata.",
+      "Target Sizing: Aim for a total email bundle size under 20MB to guarantee mailbox delivery.",
+      "Client Approvals: Perfect for sending quick visual updates without bogging down communication channels."
+    ]
+  },
+  {
+    slug: "generate-retro-cyberpunk-color-palette",
+    baseTool: "color-palette",
+    title: "Generate Retro Cyberpunk Color Palette",
+    seoTitle: "Generate Neon Retro Cyberpunk Color Palettes Online",
+    seoDescription: "Generate vibrant neon cyberpunk color palettes. Get HEX, RGB, and HSL codes for high-contrast retro web layouts.",
+    heading: "Generate Retro Cyberpunk Color Palette",
+    introduction: "Bring energy to your designs. Generate dark, electrifying retro cyberpunk palettes consisting of hot pinks, toxic greens, and deep neon blues. Perfect for sci-fi games, synthwave music covers, and futuristic UI designs.",
+    category: "Design",
+    tips: [
+      "High Contrast: Combine dark backgrounds with neon accent tones to achieve maximum visual pop.",
+      "HEX Outputs: Copy color values directly into CSS or design programs like Figma and Photoshop.",
+      "A11y Checks: Ensure readable text contrast levels when layering neon colors over dark backdrops."
+    ]
+  },
+  {
+    slug: "remove-background-3d-render-transparent-png",
+    baseTool: "background-remover",
+    title: "Remove Background from 3D Render to PNG",
+    seoTitle: "Extract 3D Model Renders to Transparent PNG Online",
+    seoDescription: "Instantly remove flat, gray, or solid environment backdrops from Blender or CAD 3D renders. High-fidelity transparent PNG output.",
+    heading: "Remove Background from 3D Render to PNG",
+    introduction: "Exporting a 3D model with environment textures but need a clean cutout for catalog pages? Automatically isolate your 3D product render from solid background environments with pixel-perfect transparency, saving hours of manual clipping.",
+    category: "Image",
+    tips: [
+      "Fine Edge Isolation: Extracts crisp contours around complex mechanical structures, glass, and shadows.",
+      "Lossless Export: Renders are saved in alpha-enabled PNG format for easy layering in photoshop projects.",
+      "Speed Optimization: Processed client-side instantly, avoiding long export queues in heavy 3D softwares."
+    ]
+  },
+  {
+    slug: "compress-raw-interior-design-photos-for-web",
+    baseTool: "image-compressor",
+    title: "Compress Interior Design Photos for Web Portfolios",
+    seoTitle: "Compress Real Estate & Interior Design Images (Web Optimized)",
+    seoDescription: "Reduce the size of professional real estate and interior design photos. Keep portfolios loading instantly on desktop and mobile browsers.",
+    heading: "Compress Interior Design Photos for Web Portfolios",
+    introduction: "Professional real estate listings require bright, high-resolution photos, but massive files will slow down your portfolio site. Compress your interior design and real estate photos to achieve high page speeds without compromising room details.",
+    category: "Image",
+    tips: [
+      "Retain Highlights: Keeps window exposures and detailed wall textures looking crisp and balanced.",
+      "SEO Boost: Faster page load speeds directly improve search visibility for real estate portfolios.",
+      "Batch Compression: Upload and compress multiple listing photos simultaneously to save time."
+    ]
+  },
+  {
+    slug: "generate-minimalist-warm-monochrome-color-palette",
+    baseTool: "color-palette",
+    title: "Generate Minimalist Warm Monochrome Palette",
+    seoTitle: "Generate Warm Monochrome Color Palettes for Design",
+    seoDescription: "Create clean, minimalist warm monochrome palettes featuring soft creams, warm beiges, and earth tones. Ideal for interior and fashion design.",
+    heading: "Generate Minimalist Warm Monochrome Palette",
+    introduction: "Achieve elegant, modern design themes. Generate minimalist warm monochrome palettes that create a calming, premium atmosphere. Perfect for organic cosmetics branding, luxury fashion websites, and interior styling moodboards.",
+    category: "Design",
+    tips: [
+      "Subtle Graduations: Use closely aligned warm tones to establish depth without creating harsh contrasts.",
+      "Organic Branding: Excellent for sustainable products and modern lifestyle editorial designs.",
+      "Figma Integration: Copy colors to your system clipboards to populate brand UI token libraries instantly."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-early-retirement-fire",
+    baseTool: "sip-calculator",
+    title: "SIP Calculator for Early Retirement (FIRE Movement)",
+    seoTitle: "FIRE Calculator - SIP Savings for Early Retirement Online",
+    seoDescription: "Calculate how much you need to invest monthly in SIPs to retire early. Plan your Financial Independence, Retire Early (FIRE) goals.",
+    heading: "SIP Calculator for Early Retirement (FIRE)",
+    introduction: "Dreaming of achieving financial independence and retiring early? Use our specialized FIRE SIP calculator to map out how much monthly capital you need to invest at estimated returns to reach your targeted retirement corpus.",
+    category: "Finance",
+    tips: [
+      "Inflation adjustments: Factor in standard inflation of 6-7% to ensure your future retirement corpus maintains purchasing power.",
+      "Step-Up SIPs: Consider increasing monthly investments annually to reach your target retirement corpus years earlier.",
+      "Safe Withdrawal Rate: Plan a safe withdrawal rate of 3-4% of your final corpus for sustained income."
+    ]
+  },
+  {
+    slug: "investment-calculator-for-crypto-dollar-cost-averaging",
+    baseTool: "investment-calculator",
+    title: "Investment Calculator for Crypto Dollar-Cost Averaging",
+    seoTitle: "DCA Calculator - Crypto Dollar-Cost Averaging Projections",
+    seoDescription: "Project the returns of dollar-cost averaging (DCA) into cryptocurrencies over long horizons. Model compound returns of fixed recurring investments.",
+    heading: "Investment Calculator for Crypto Dollar-Cost Averaging",
+    introduction: "Dollar-cost averaging (DCA) is a popular strategy to mitigate cryptocurrency market volatility. Proactively model how fixed daily, weekly, or monthly crypto investments accrue over long timelines with estimated compound growth rates.",
+    category: "Finance",
+    tips: [
+      "Volatility Management: Standard DCA helps smooth out sharp price adjustments in crypto cycles.",
+      "Consistent Intervals: Decide on a fixed investment schedule (e.g. every Sunday) rather than trying to time market bottoms.",
+      "Risk Mitigation: Never invest more than you are willing to lose in speculative asset classes."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-wedding-expenses-fund",
+    baseTool: "sip-calculator",
+    title: "SIP Calculator for Wedding Expense Planning",
+    seoTitle: "SIP Calculator - Plan Savings & Returns for Wedding Expenses",
+    seoDescription: "Calculate monthly mutual fund SIP contributions required to build a wedding savings fund. Plan smart for your big day.",
+    heading: "SIP Calculator for Wedding Expense Planning",
+    introduction: "Planning a wedding involves major financial decisions. Instead of taking high-interest personal loans, use our SIP calculator to find out how much you should invest monthly to build a wedding budget over a 2 to 5-year timeline.",
+    category: "Finance",
+    tips: [
+      "Accurate Budgeting: List all major vendor, venue, and outfit costs early to set a realistic target fund goal.",
+      "Horizon Alignment: For goals under 3 years, prefer conservative debt or hybrid SIP funds to avoid equity market drops.",
+      "Start Early: The earlier you start, the less monthly pressure you will face as the wedding date approaches."
+    ]
+  },
+  {
+    slug: "investment-calculator-for-long-term-etf-growth",
+    baseTool: "investment-calculator",
+    title: "Investment Calculator for Long-Term ETF Growth",
+    seoTitle: "ETF Investment Calculator - Compound Growth Projections",
+    seoDescription: "Calculate long-term compound growth of broad-market index ETF investments. Model lump-sum deposits and recurring monthly top-ups.",
+    heading: "Investment Calculator for Long-Term ETF Growth",
+    introduction: "Index funds and exchange-traded funds (ETFs) offer low-cost, diversified exposure to broad stock markets. Calculate how a lump-sum initial deposit paired with monthly top-ups grows over decades under historic stock market return rates.",
+    category: "Finance",
+    tips: [
+      "Compounding Power: Reinvesting dividends (DRIP) significantly increases your final portfolio balance over time.",
+      "Historical Baseline: Broad index ETFs (like S&P 500) have historically returned 8-10% annually over long periods.",
+      "Tax Efficiency: Look for low-cost, passively managed index options to minimize fee drag."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-insurance-premium-assessment",
+    baseTool: "bmi-calculator",
+    title: "BMI Calculator for Insurance Premium Assessment",
+    seoTitle: "BMI Calculator for Life & Health Insurance Premium Evaluation",
+    seoDescription: "Calculate your Body Mass Index (BMI) to understand how it impacts health and life insurance premiums. Check height-weight brackets easily.",
+    heading: "BMI Calculator for Insurance Premium Assessment",
+    introduction: "Life and health insurance underwriters use BMI as a primary factor in determining policy eligibility and premium tiers. Calculate your BMI status to check where your height and weight lie on standard actuarial premium brackets.",
+    category: "Health",
+    tips: [
+      "Healthy Brackets: Standard preferred premium rates are usually offered for BMIs between 18.5 and 24.9.",
+      "Actuarial Brackets: A high BMI can occasionally classify applicants into higher premium surcharge categories.",
+      "Holistic Health: Underwriters also review factors like waist circumference and overall cardiovascular fitness."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-pregnancy-weight-tracking",
+    baseTool: "bmi-calculator",
+    title: "BMI Calculator for Pregnancy Weight Tracking",
+    seoTitle: "Pregnancy BMI Tracker - Calculate Safe Weight Ranges Online",
+    seoDescription: "Calculate your pre-pregnancy BMI to determine recommended weight gain guidelines during pregnancy. Keep check of healthy clinical thresholds.",
+    heading: "BMI Calculator for Pregnancy Weight Tracking",
+    introduction: "Obstetric guidelines suggest that safe, healthy weight gain during pregnancy is highly dependent on your pre-pregnancy Body Mass Index (BMI). Easily calculate your starting BMI to check corresponding target weight gain ranges.",
+    category: "Health",
+    tips: [
+      "Pre-pregnancy Baseline: Always calculate using your weight before pregnancy for clinical accuracy.",
+      "Gain Guidelines: Women in the normal pre-pregnancy BMI range are generally advised to gain 25-35 pounds.",
+      "Medical Guidance: Always consult your physician or OB-GYN to customize dietary and lifestyle plans."
+    ]
+  },
+  {
+    slug: "prettify-graphql-response-json-payload",
+    baseTool: "json-formatter",
+    title: "Prettify GraphQL Response JSON Payload",
+    seoTitle: "Format GraphQL Response JSON Payloads Online & Free",
+    seoDescription: "Paste and format raw, minified GraphQL API response JSON objects. Highlight structure, nest blocks, and validate syntax instantly.",
+    heading: "Prettify GraphQL Response JSON Payloads",
+    introduction: "GraphQL queries return structured, nested JSON payloads which can quickly become difficult to read when returned in a single minified line. Beautify and format raw API logs to inspect data, errors, and metadata nodes clearly.",
+    category: "Developer",
+    tips: [
+      "Structural Highlighting: Quickly isolate 'data' and 'errors' arrays to pinpoint failing resolver paths.",
+      "Local Inspection: Validation is executed entirely client-side, ensuring proprietary API tokens remain secure.",
+      "Clean Copy: Copy formatted schemas back to your local markdown notes or slack messages."
+    ]
+  },
+  {
+    slug: "generate-xkcd-style-memorable-passphrase",
+    baseTool: "password-generator",
+    title: "Generate XKCD-Style Memorable Passphrase",
+    seoTitle: "Generate Secure XKCD-Style Memorable Passphrases",
+    seoDescription: "Generate cryptographically secure, easy-to-remember passphrases using the classic four random words method (XKCD style).",
+    heading: "Generate XKCD-Style Memorable Passphrases",
+    introduction: "Traditional passwords with random characters are difficult to memorize but easy for computer clusters to brute-force. Generate high-entropy XKCD-style passphrases using four or more random, memorable words separated by hyphens.",
+    category: "Developer",
+    tips: [
+      "XKCD Security: Combining four unrelated common words creates high entropy while remaining easy to remember.",
+      "Zero Storage: Words are selected randomly in your browser using cryptographically secure native entropy.",
+      "Separators: Customize separator symbols (like hyphens or underscores) to fit database formats."
+    ]
+  },
+  {
+    slug: "generate-wifi-network-access-qr-code",
+    baseTool: "qr-generator",
+    title: "Generate WiFi Network Access QR Code",
+    seoTitle: "Generate WiFi QR Codes for Easy Router Password Sharing",
+    seoDescription: "Generate a secure WiFi access QR code. Let guests scan to connect to your home or office router network instantly without typing passwords.",
+    heading: "Generate WiFi Network Access QR Codes",
+    introduction: "Tired of spelling out long, complex WiFi router passwords to visitors? Generate a secure WiFi credential QR code. When guests scan it with their smartphones, they are connected to your wireless network instantly.",
+    category: "Developer",
+    tips: [
+      "SSID Accuracy: Make sure to enter the exact wireless network name, respecting capital letters.",
+      "Encryption Standards: Select WPA/WPA2 for standard modern routers to ensure compatibility.",
+      "Privacy Shield: Password configuration strings are processed fully offline, protecting your home networks."
+    ]
+  },
+  {
+    slug: "convert-text-to-screaming-snake-case-constants",
+    baseTool: "text-converter",
+    title: "Convert Text to SCREAMING_SNAKE_CASE Constants",
+    seoTitle: "Convert Strings to SCREAMING_SNAKE_CASE Code Constants",
+    seoDescription: "Convert plain text, camelCase, or spaces into SCREAMING_SNAKE_CASE. Perfect for global configuration keys and environment variables.",
+    heading: "Convert Text to SCREAMING_SNAKE_CASE",
+    introduction: "Programming languages use SCREAMING_SNAKE_CASE (all caps with underscores) to declare global variables, environment constants, and config keys. Paste lists of variables and convert them instantly to constant styles.",
+    category: "Developer",
+    tips: [
+      "Symbol Replacement: Replaces spaces, slashes, and dashes with clean underscore connectors.",
+      "Consistent Codebases: Swiftly align environment configuration files with project style guidelines.",
+      "Capitalization: Converts all characters to uppercase automatically."
+    ]
+  },
+  {
+    slug: "encode-binary-file-to-base64-data-uri",
+    baseTool: "base64",
+    title: "Encode Binary File to Base64 Data URI",
+    seoTitle: "Convert Binary & Image Files to Base64 Data URI Online",
+    seoDescription: "Encode images, PDFs, fonts, and binary assets into Base64 Data URIs. Embed binary files directly into HTML or CSS code blocks.",
+    heading: "Encode Binary File to Base64 Data URI",
+    introduction: "Need to embed tiny images, vector icons, or custom fonts directly into HTML files or stylesheets? Convert local binary files into base64 strings containing standard data types ready to be copied and pasted.",
+    category: "Developer",
+    tips: [
+      "Data URI syntax: Automatically adds type prefixes like `data:image/png;base64,...` for instant compatibility.",
+      "Asset Limits: Best used for tiny icons and web fonts under 10KB to avoid excessive page source sizes.",
+      "RAM Processing: Files are loaded into browser memory via FileReader API. No contents leave your computer."
+    ]
+  },
+  {
+    slug: "compare-git-env-files-diff-checker",
+    baseTool: "diff-checker",
+    title: "Compare environment .env files side-by-side",
+    seoTitle: "Compare .env Environment Files (Side-by-Side Diff Checker)",
+    seoDescription: "Compare production and development environment .env configurations. Spot missing keys and value drift without exposing secrets.",
+    heading: "Compare Environment .env Files Side-by-Side",
+    introduction: "Configuring cloud deployments requires syncing various .env files. Compare local configuration sheets side-by-side to detect missing keys, spelling drifts, or mismatched variable properties before deployment.",
+    category: "Developer",
+    tips: [
+      "Property Verification: Identify missing variables that would cause production application crashes.",
+      "Secure Sandbox: Operations run fully inside local browser runtime. Sensitive API keys are never leaked to external logs.",
+      "Clear Highlighting: Spot missing or modified settings instantly with line-by-line differences."
+    ]
+  },
+  {
+    slug: "generate-lorem-ipsum-json-mock-data",
+    baseTool: "lorem-ipsum",
+    title: "Generate Lorem Ipsum JSON Mock Data",
+    seoTitle: "Generate Mock JSON Data Arrays with Lorem Ipsum Text",
+    seoDescription: "Generate mock JSON database arrays populated with realistic Lorem Ipsum placeholder name, title, and paragraph values.",
+    heading: "Generate Lorem Ipsum JSON Mock Data",
+    introduction: "Prototypes and frontend UI components need realistic mock data structures to validate grids and layouts. Generate structured JSON arrays containing custom records containing titles, tags, and paragraphs of placeholder text.",
+    category: "Developer",
+    tips: [
+      "API Validation: Perfect for simulating REST or GraphQL queries in early development stages.",
+      "Custom Arrays: Control how many objects to generate in the dataset list to test scrolling limits.",
+      "Well Formatted: Outputs validated, formatted JSON ready to drop into local mock servers."
+    ]
+  },
+  {
+    slug: "calculate-business-days-between-dates",
+    baseTool: "date-calculator",
+    title: "Calculate Business Days Between Dates",
+    seoTitle: "Business Days Calculator - Count Working Days Online",
+    seoDescription: "Calculate total business days (working days) between two calendar dates. Automatically excludes weekends for project tracking.",
+    heading: "Calculate Business Days Between Dates",
+    introduction: "Need to estimate project milestones or calculate billing cycles? Easily count the total number of business days (Monday through Friday) between any two dates on the calendar, filtering out standard weekends.",
+    category: "Productivity",
+    tips: [
+      "Excluding Weekends: Ignores Saturdays and Sundays automatically to return pure working days.",
+      "Holiday Adjustments: Remember to manually subtract local federal or regional bank holidays from the output.",
+      "Project Milestones: Ideal for calculating sprint lengths and delivery target dates."
+    ]
+  },
+  {
+    slug: "calculate-dog-age-in-human-years",
+    baseTool: "age-calculator",
+    title: "Calculate Dog Age in Human Years",
+    seoTitle: "Dog Age Calculator - Convert Dog Years to Human Years",
+    seoDescription: "Calculate your dog's age in human years. Accounts for breed sizing and biological aging curves for accurate calculations.",
+    heading: "Calculate Dog Age in Human Years",
+    introduction: "The '1 dog year equals 7 human years' rule is a gross oversimplification. Calculate a scientifically accurate estimation of your dog's equivalent age in human years based on size and breed category.",
+    category: "Productivity",
+    tips: [
+      "Sizing Brackets: Sizable breeds (like Great Danes) age faster than smaller ones (like Chihuahuas) after puppyhood.",
+      "Puppy Milestones: Dogs mature rapidly during their first year, equivalent to roughly 15 human years.",
+      "Vet Care Planning: Use calculated age brackets to anticipate health and nutritional needs."
+    ]
+  },
+  {
+    slug: "convert-metric-units-to-imperial-standards",
+    baseTool: "unit-converter",
+    title: "Convert Metric Units to Imperial Standards",
+    seoTitle: "Metric to Imperial Units Converter Online & Free",
+    seoDescription: "Convert metric values (meters, kilograms, Celsius) into imperial equivalents (feet, pounds, Fahrenheit). Fast and accurate conversions.",
+    heading: "Convert Metric Units to Imperial Standards",
+    introduction: "Working with international colleagues or reading global manuals? Instantly translate standard metric units (meters, grams, liters) to their corresponding imperial equivalents (inches, ounces, gallons) with precise mathematical scaling.",
+    category: "Productivity",
+    tips: [
+      "Accurate Factors: Uses internationally accepted mathematical conversion constants.",
+      "Temperature Checks: Converts Celsius to Fahrenheit and vice versa using exact scales.",
+      "Cooking & Travel: Excellent for translating recipes and flight dimension limits."
+    ]
   }
 ];
 
