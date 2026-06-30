@@ -255,7 +255,14 @@ export default function DiffCheckerClient() {
         {!hasCompared && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-300">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><FileText className="h-3.5 w-3.5" /> Original Text (Before)</label>
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center justify-between w-full">
+                <span className="flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5" /> Original Text (Before)
+                </span>
+                <span className="text-[9px] font-bold lowercase text-muted-foreground/60 select-none">
+                  (or drag & drop file)
+                </span>
+              </label>
               <div 
                 onDragOver={handleDragOverLeft}
                 onDragLeave={handleDragLeaveLeft}
@@ -272,7 +279,7 @@ export default function DiffCheckerClient() {
                   </div>
                 )}
                 <Textarea
-                  placeholder="Paste original text here..."
+                  placeholder="Paste original text here (or drag & drop text file)..."
                   className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
                   value={originalText}
                   onChange={(e) => setOriginalText(e.target.value)}
@@ -280,7 +287,14 @@ export default function DiffCheckerClient() {
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><GitCompare className="h-3.5 w-3.5" /> Modified Text (After)</label>
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center justify-between w-full">
+                <span className="flex items-center gap-1.5">
+                  <GitCompare className="h-3.5 w-3.5" /> Modified Text (After)
+                </span>
+                <span className="text-[9px] font-bold lowercase text-muted-foreground/60 select-none">
+                  (or drag & drop file)
+                </span>
+              </label>
               <div 
                 onDragOver={handleDragOverRight}
                 onDragLeave={handleDragLeaveRight}
@@ -297,7 +311,7 @@ export default function DiffCheckerClient() {
                   </div>
                 )}
                 <Textarea
-                  placeholder="Paste modified text here..."
+                  placeholder="Paste modified text here (or drag & drop text file)..."
                   className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
                   value={modifiedText}
                   onChange={(e) => setModifiedText(e.target.value)}
