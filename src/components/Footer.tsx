@@ -32,6 +32,22 @@ export function Footer() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               Fast, elegant, and 100% secure online utilities designed to simplify your digital life. No signups, no fees - just instant results.
             </p>
+            <div className="pt-2">
+              <a
+                href="https://play.google.com/store/apps/developer?id=Vaibhav+Deshmukh"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 bg-zinc-950 hover:bg-zinc-900 dark:bg-zinc-50 dark:hover:bg-zinc-100 text-white dark:text-zinc-950 px-4 py-2 rounded-xl transition-all shadow-md hover:shadow-lg border border-zinc-800 dark:border-zinc-200"
+              >
+                <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M5 3.25c-.28 0-.53.15-.66.39L12.56 12l-8.22 8.36c.13.24.38.39.66.39.12 0 .23-.03.34-.09l13.11-7.53c.69-.4 1.05-1.07 1.05-1.63 0-.56-.36-1.23-1.05-1.63L5.34 3.34c-.11-.06-.22-.09-.34-.09z"/>
+                </svg>
+                <div className="flex flex-col text-left">
+                  <span className="text-[8px] uppercase font-bold tracking-widest text-zinc-400 dark:text-zinc-500 leading-none mb-0.5">Get it on</span>
+                  <span className="text-xs font-black leading-none">Google Play</span>
+                </div>
+              </a>
+            </div>
           </div>
 
           {/* Column 2: PDF & Image Tools */}
