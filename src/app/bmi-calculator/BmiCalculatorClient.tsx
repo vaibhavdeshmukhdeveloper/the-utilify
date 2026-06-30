@@ -295,7 +295,7 @@ export default function BmiCalculatorClient() {
           </Tabs>
 
           {result && (
-            <div ref={resultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+            <div ref={resultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
               <Card className="p-8 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
               <div className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-black mb-4">Your Body Mass Index (BMI)</div>
               <div className={`text-7xl font-black mb-6 ${result.color} tracking-tighter`}>

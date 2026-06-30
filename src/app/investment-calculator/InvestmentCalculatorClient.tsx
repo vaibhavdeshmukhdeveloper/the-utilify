@@ -326,7 +326,7 @@ export default function InvestmentCalculatorClient() {
         </div>
 
         {/* Right Column: Results & Table */}
-        <div ref={resultsRef} className="lg:col-span-7 space-y-8">
+        <div ref={resultsRef} className="lg:col-span-7 space-y-8 scroll-mt-24">
           {result ? (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
               {/* Main Result Card */}

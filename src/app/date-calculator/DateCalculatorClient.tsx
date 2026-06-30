@@ -235,7 +235,7 @@ export default function DateCalculatorClient() {
             </form>
 
             {diffResult && (
-              <div ref={diffResultsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <div ref={diffResultsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
                 {/* Years-Months-Days layout */}
                 <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
                   <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Time Breakdown</div>
@@ -352,7 +352,7 @@ export default function DateCalculatorClient() {
             </form>
 
             {mathResult && (
-              <div ref={mathResultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-xl mx-auto">
+              <div ref={mathResultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-xl mx-auto scroll-mt-24">
                 <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
                   <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Calculated Date</div>
                   <div className="text-3xl font-black text-primary tracking-tight">{mathResult.formattedDate}</div>
