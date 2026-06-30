@@ -19,6 +19,20 @@ export default function BackgroundRemoverClient() {
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
   const [modelMode, setModelMode] = useState<"u2net" | "u2net_human_seg" | "u2net_cloth_seg">("u2net");
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
+
+  useEffect(() => {
+    if (isLoading && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isLoading]);
+
   // Manual Eraser Editor States
   const [isEditing, setIsEditing] = useState(false);
   const [brushSize, setBrushSize] = useState(30);
@@ -401,7 +415,7 @@ export default function BackgroundRemoverClient() {
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
           <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem]">
             <FileUploader
               key={uploaderKey}
@@ -551,7 +565,7 @@ export default function BackgroundRemoverClient() {
         </div>
 
         {/* Right Column: Results */}
-        <div className="lg:col-span-7">
+        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24">
           {isLoading ? (
             <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
               <div className="relative mb-6">

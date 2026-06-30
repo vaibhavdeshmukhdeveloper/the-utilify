@@ -374,7 +374,7 @@ export default function QrGeneratorClient() {
         </div>
 
         {/* Preview Column */}
-        <div className="lg:col-span-5 flex flex-col items-center">
+        <div className="lg:col-span-5 lg:sticky lg:top-8 flex flex-col items-center scroll-mt-24">
           <Card className="w-full p-8 flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-100 dark:border-zinc-800 rounded-3xl shadow-md">
             <h3 className="text-lg font-bold flex items-center gap-2 mb-6 self-start border-b pb-3 w-full">
               <QrCode className="h-5 w-5 text-primary" /> QR Code Preview

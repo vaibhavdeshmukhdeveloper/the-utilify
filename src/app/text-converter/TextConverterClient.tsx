@@ -216,7 +216,7 @@ export default function TextConverterClient() {
               </Button>
             </div>
           </div>
-          <div className="relative">
+          <div className="relative scroll-mt-24">
             <Textarea
               className="min-h-[250px] text-lg font-medium p-6 rounded-3xl border-2 focus:border-primary bg-background shadow-inner leading-relaxed"
               value={text}

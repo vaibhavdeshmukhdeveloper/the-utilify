@@ -341,7 +341,7 @@ export default function ColorPaletteClient() {
         {/* Accessibility & Export row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Contrast Ratio Check */}
-          <Card className="p-6 border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/20 rounded-3xl space-y-6">
+          <Card className="p-6 border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/20 rounded-3xl space-y-6 scroll-mt-24">
             <h3 className="text-md font-bold flex items-center gap-2 border-b pb-3">
               <Sparkles className="h-5 w-5 text-primary" /> WCAG Contrast Checker
             </h3>

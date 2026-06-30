@@ -225,7 +225,7 @@ export default function LoremIpsumClient() {
     >
       <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
         {/* Controls Column */}
-        <div className="lg:col-span-5 space-y-8">
+        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-8">
           <div className="space-y-3">
             <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><LayoutGrid className="h-4 w-4" /> Generation Type</label>
             <div className="grid grid-cols-2 gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-2xl">
@@ -296,7 +296,7 @@ export default function LoremIpsumClient() {
         </div>
 
         {/* Output Column */}
-        <div className="lg:col-span-7 space-y-4">
+        <div className="lg:col-span-7 space-y-4 scroll-mt-24">
           <div className="flex justify-between items-center">
             <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><AlignLeft className="h-4 w-4" /> Generated Output</span>
             <Button onClick={copyToClipboard} size="sm" className="rounded-xl shadow-md font-bold px-4">

@@ -616,7 +616,7 @@ export default function JsonFormatterClient() {
           </div>
 
           {/* RIGHT PANEL - Output Viewer */}
-          <div className="flex flex-col bg-zinc-50 dark:bg-zinc-950 border rounded-xl overflow-hidden shadow-sm transition-all">
+          <div className="flex flex-col bg-zinc-50 dark:bg-zinc-950 border rounded-xl overflow-hidden shadow-sm transition-all scroll-mt-24">
             
             {/* Output Header Tabs & Actions */}
             <div className="flex flex-wrap items-center justify-between px-3 py-1.5 bg-zinc-100 dark:bg-zinc-900 border-b gap-2">

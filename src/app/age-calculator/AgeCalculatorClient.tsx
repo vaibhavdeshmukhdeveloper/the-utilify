@@ -225,7 +225,7 @@ export default function AgeCalculatorClient() {
         </form>
 
         {result && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
             {/* Main outputs */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
               {/* Exact Age Card */}

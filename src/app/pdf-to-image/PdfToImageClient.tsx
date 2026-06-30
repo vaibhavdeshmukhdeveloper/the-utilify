@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { FileUploader } from "@/components/FileUploader";
 import { uploadToBackend } from "@/lib/api";
@@ -13,6 +13,20 @@ export default function PdfToImageClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string; pages?: number } | null>(null);
   const [fileInfo, setFileInfo] = useState<{ name: string; size: string } | null>(null);
+
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
+
+  useEffect(() => {
+    if (isLoading && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isLoading]);
 
   const handleUpload = async (files: File[]) => {
     const file = files[0];
@@ -106,7 +120,7 @@ export default function PdfToImageClient() {
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Upload */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
           <Card className="p-8 border-2 border-dashed bg-card rounded-[2rem]">
             <FileUploader
               label="Upload PDF"
@@ -132,7 +146,7 @@ export default function PdfToImageClient() {
         </div>
 
         {/* Right Column: Results */}
-        <div className="lg:col-span-7">
+        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24">
           {isLoading ? (
             <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
               <div className="relative mb-6">

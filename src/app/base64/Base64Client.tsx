@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +25,14 @@ export default function Base64Client() {
   const [fileName, setFileName] = useState("");
   const [fileSize, setFileSize] = useState(0);
   const [fileType, setFileType] = useState("");
+
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (fileBase64 && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [fileBase64]);
 
   const handleEncode = (text: string) => {
     setPlainInput(text);
@@ -264,7 +272,7 @@ export default function Base64Client() {
                 )}
               </div>
 
-              <div className="md:col-span-7 space-y-3">
+              <div ref={resultsRef} className="md:col-span-7 space-y-3 scroll-mt-24">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><ArrowLeftRight className="h-4 w-4 text-primary" /> Generated Base64 Data URI</label>
                   {fileBase64 && (

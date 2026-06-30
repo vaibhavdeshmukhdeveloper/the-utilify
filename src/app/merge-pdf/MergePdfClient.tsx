@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { FileUploader } from "@/components/FileUploader";
 import { uploadToBackend } from "@/lib/api";
@@ -18,6 +18,20 @@ export default function MergePdfClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [queuedFiles, setQueuedFiles] = useState<QueuedFile[]>([]);
+
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
+
+  useEffect(() => {
+    if (isLoading && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isLoading]);
 
   const handleFileSelect = (newFiles: File[]) => {
     const formatted = newFiles.map(f => ({
@@ -206,7 +220,7 @@ export default function MergePdfClient() {
         </div>
 
         {/* Right Column: Actions & Results */}
-        <div className="lg:col-span-6">
+        <div ref={resultsRef} className="lg:col-span-6 lg:sticky lg:top-8 scroll-mt-24">
           {isLoading ? (
             <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
               <div className="relative mb-6">

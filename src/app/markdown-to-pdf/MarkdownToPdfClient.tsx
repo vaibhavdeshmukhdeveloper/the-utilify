@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { FileUploader } from "@/components/FileUploader";
 import { toast } from "sonner";
@@ -69,6 +69,20 @@ export default function MarkdownToPdfClient() {
   const [htmlContent, setHtmlContent] = useState("");
   const [activeTheme, setActiveTheme] = useState<ThemeType>("default");
   const [viewMode, setViewMode] = useState<ViewMode>("split");
+
+  const actionAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (result && actionAreaRef.current) {
+      actionAreaRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
+
+  useEffect(() => {
+    if (isLoading && actionAreaRef.current) {
+      actionAreaRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isLoading]);
 
   // Client-side marked rendering to prevent Next.js SSR hydration mismatches
   useEffect(() => {
@@ -377,7 +391,7 @@ export default function MarkdownToPdfClient() {
         </div>
 
         {/* Generate / Action Area */}
-        <div className="max-w-3xl mx-auto pt-6">
+        <div ref={actionAreaRef} className="max-w-3xl mx-auto pt-6 scroll-mt-24">
           {isLoading ? (
             <Card className="p-8 border-2 border-primary/20 bg-primary/5 rounded-[2.5rem] text-center shadow-lg animate-pulse">
               <div className="relative mb-4 flex justify-center">

@@ -312,7 +312,7 @@ export default function UnitConverterClient() {
 
         {/* Breakdown table */}
         {allConversions.length > 0 && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
             <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">All Conversion Mappings</h3>
             <Card className="overflow-hidden border border-zinc-100 dark:border-zinc-800 rounded-3xl shadow-sm">
               <table className="w-full text-left border-collapse">

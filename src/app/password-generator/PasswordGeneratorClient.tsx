@@ -175,7 +175,7 @@ export default function PasswordGeneratorClient() {
         {/* Main controls */}
         <div className="lg:col-span-8 space-y-8">
           {/* Display box */}
-          <div className="relative flex items-center bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-3xl p-3 pl-6 pr-4 focus-within:border-primary transition-all shadow-sm">
+          <div className="relative flex items-center bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-3xl p-3 pl-6 pr-4 focus-within:border-primary transition-all shadow-sm scroll-mt-24">
             <input
               type="text"
               readOnly

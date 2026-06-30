@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +25,14 @@ export default function DiffCheckerClient() {
 
   const [viewMode, setViewMode] = useState<"split" | "unified">("split");
   const [hasCompared, setHasCompared] = useState(false);
+
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (hasCompared && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [hasCompared]);
   const [diffResult, setDiffResult] = useState<{
     left: DiffLine[];
     right: DiffLine[];
@@ -202,7 +210,7 @@ export default function DiffCheckerClient() {
 
         {/* Diff Output */}
         {hasCompared && diffResult && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div ref={resultsRef} className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
             <div className="flex justify-between items-center border-b pb-2">
               <span className="text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1"><Eye className="h-4 w-4 text-primary" /> Comparison Results</span>
               <Button variant="ghost" size="sm" onClick={() => setHasCompared(false)} className="text-xs font-bold text-primary">
