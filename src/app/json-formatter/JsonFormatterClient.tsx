@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { 
   Copy, 
   Trash2, 
@@ -254,6 +255,32 @@ export default function JsonFormatterClient() {
   const [fontSize, setFontSize] = useState(14);
   const [parsedJson, setParsedJson] = useState<any>(null);
   const [globalCollapse, setGlobalCollapse] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      setInput(text);
+      toast.success(`Loaded dropped file: ${file.name}`);
+    };
+    reader.readAsText(file);
+  };
   
   // Save to recently used history in local storage
   useEffect(() => {
@@ -596,7 +623,21 @@ export default function JsonFormatterClient() {
             </div>
 
             {/* Input Textarea with synched gutter */}
-            <div className="flex flex-1 relative overflow-hidden h-[450px]">
+            <div 
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={cn(
+                "flex flex-1 relative overflow-hidden h-[450px] transition-all duration-200",
+                isDragOver ? "ring-2 ring-primary/50" : ""
+              )}
+            >
+              {isDragOver && (
+                <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-xl animate-in fade-in duration-200">
+                  <Upload className="w-10 h-10 text-primary animate-bounce mb-2" />
+                  <p className="text-sm font-black uppercase tracking-wider text-primary">Drop JSON / Text File</p>
+                </div>
+              )}
               {/* Synched line number gutter */}
               <div 
                 ref={inputGutterRef}

@@ -8,9 +8,12 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Copy, Trash2, Clipboard, FileText, ArrowLeftRight, Upload, Info } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Base64Client() {
   const [activeTab, setActiveTab] = useState("encode");
+  const [isDragOverPlain, setIsDragOverPlain] = useState(false);
+  const [isDragOverBase64, setIsDragOverBase64] = useState(false);
   
   // Text encoding states
   const [plainInput, setPlainInput] = useState("Hello from Utilify!");
@@ -27,6 +30,70 @@ export default function Base64Client() {
   const [fileType, setFileType] = useState("");
 
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Save to recently used history in local storage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const href = "/base64";
+      
+      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch (e) {
+      console.error("Error setting recently used tools", e);
+    }
+  }, []);
+
+  const handleDragOverPlain = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverPlain(true);
+  };
+
+  const handleDragLeavePlain = () => {
+    setIsDragOverPlain(false);
+  };
+
+  const handleDropPlain = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverPlain(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      handleEncode(text);
+      toast.success(`Loaded dropped file: ${file.name}`);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleDragOverBase64 = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverBase64(true);
+  };
+
+  const handleDragLeaveBase64 = () => {
+    setIsDragOverBase64(false);
+  };
+
+  const handleDropBase64 = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverBase64(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      handleDecode(text);
+      toast.success(`Loaded dropped file: ${file.name}`);
+    };
+    reader.readAsText(file);
+  };
 
   useEffect(() => {
     if (fileBase64 && resultsRef.current) {
@@ -185,12 +252,28 @@ export default function Base64Client() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Plain Text (Input)</label>
-                <Textarea
-                  value={plainInput}
-                  onChange={(e) => handleEncode(e.target.value)}
-                  placeholder="Type plain text..."
-                  className="min-h-[220px] rounded-2xl border-2 focus:border-primary p-4 leading-relaxed font-semibold"
-                />
+                <div 
+                  onDragOver={handleDragOverPlain}
+                  onDragLeave={handleDragLeavePlain}
+                  onDrop={handleDropPlain}
+                  className={cn(
+                    "relative rounded-2xl transition-all duration-200",
+                    isDragOverPlain ? "ring-2 ring-primary/50" : ""
+                  )}
+                >
+                  {isDragOverPlain && (
+                    <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-2xl animate-in fade-in duration-200">
+                      <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
+                      <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Text File</p>
+                    </div>
+                  )}
+                  <Textarea
+                    value={plainInput}
+                    onChange={(e) => handleEncode(e.target.value)}
+                    placeholder="Type plain text..."
+                    className="min-h-[220px] rounded-2xl border-2 focus:border-primary p-4 leading-relaxed font-semibold"
+                  />
+                </div>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
@@ -214,12 +297,28 @@ export default function Base64Client() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Base64 String (Input)</label>
-                <Textarea
-                  value={base64Input}
-                  onChange={(e) => handleDecode(e.target.value)}
-                  placeholder="Paste Base64 string here..."
-                  className="min-h-[220px] rounded-2xl border-2 focus:border-primary p-4 leading-relaxed font-mono font-bold"
-                />
+                <div 
+                  onDragOver={handleDragOverBase64}
+                  onDragLeave={handleDragLeaveBase64}
+                  onDrop={handleDropBase64}
+                  className={cn(
+                    "relative rounded-2xl transition-all duration-200",
+                    isDragOverBase64 ? "ring-2 ring-primary/50" : ""
+                  )}
+                >
+                  {isDragOverBase64 && (
+                    <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-2xl animate-in fade-in duration-200">
+                      <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
+                      <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Base64 Text File</p>
+                    </div>
+                  )}
+                  <Textarea
+                    value={base64Input}
+                    onChange={(e) => handleDecode(e.target.value)}
+                    placeholder="Paste Base64 string here..."
+                    className="min-h-[220px] rounded-2xl border-2 focus:border-primary p-4 leading-relaxed font-mono font-bold"
+                  />
+                </div>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
