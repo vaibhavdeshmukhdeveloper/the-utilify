@@ -57,6 +57,36 @@ function getContrastRatio(hex1: string, hex2: string): number {
   return (brightest + 0.05) / (darkest + 0.05);
 }
 
+// Convert Hex to RGB String
+function hexToRgbStr(hex: string): string {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+}
+
+// Convert Hex to HSL String
+function hexToHslStr(hex: string): string {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  const r = rgb.r / 255;
+  const g = rgb.g / 255;
+  const b = rgb.b / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0, l = (max + min) / 2;
+
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+}
+
 export default function ColorPaletteClient() {
   const [colors, setColors] = useState<{ hex: string; locked: boolean }[]>([
     { hex: "#6366F1", locked: false },
@@ -67,8 +97,23 @@ export default function ColorPaletteClient() {
   ]);
 
   const [schemeType, setSchemeType] = useState("random");
+  const [copyFormat, setCopyFormat] = useState<"hex" | "rgb" | "hsl">("hex");
   const [textContrastColor, setTextContrastColor] = useState("#FFFFFF");
   const [bgContrastColor, setBgContrastColor] = useState("#6366F1");
+
+  // Save to recently used history in local storage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const href = "/color-palette";
+      
+      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch (e) {
+      console.error("Error setting recently used tools", e);
+    }
+  }, []);
 
   // Generate random hex color
   const generateRandomHex = () => {
@@ -268,8 +313,8 @@ export default function ColorPaletteClient() {
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-10 text-left">
         {/* Core Generator Card */}
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl">
+          <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+            <div className="flex flex-wrap gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl">
               {["random", "monochromatic", "analogous", "triadic", "complementary"].map((type) => (
                 <Button
                   key={type}
@@ -282,8 +327,29 @@ export default function ColorPaletteClient() {
                 </Button>
               ))}
             </div>
-            <div className="flex gap-3">
-              <Button onClick={generatePalette} className="rounded-xl shadow-md font-bold px-5">
+
+            {/* Copy Format Tabs Selector */}
+            <div className="flex items-center gap-2 self-end">
+              <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest hidden sm:inline-block">Format:</span>
+              <div className="flex bg-zinc-100 dark:bg-zinc-900 rounded-xl p-1 gap-1">
+                {["hex", "rgb", "hsl"].map((fmt) => (
+                  <button
+                    key={fmt}
+                    onClick={() => setCopyFormat(fmt as "hex" | "rgb" | "hsl")}
+                    className={`px-3 py-1.5 text-xs font-black rounded-lg uppercase transition-all cursor-pointer ${
+                      copyFormat === fmt
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-zinc-500 hover:text-foreground hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    {fmt}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 self-end">
+              <Button onClick={generatePalette} className="rounded-xl shadow-md font-bold px-5 h-11">
                 <RefreshCw className="mr-2 h-4 w-4" /> Generate <span className="hidden sm:inline ml-1 text-xs opacity-75 font-normal">(or press Space)</span>
               </Button>
             </div>
@@ -296,6 +362,15 @@ export default function ColorPaletteClient() {
               const rgb = hexToRgb(color.hex) || { r: 0, g: 0, b: 0 };
               const lum = getLuminance(rgb.r, rgb.g, rgb.b);
               const textClass = lum > 0.45 ? "text-zinc-900" : "text-white";
+
+              // Get current color string format
+              const getColorString = (hex: string) => {
+                if (copyFormat === "rgb") return hexToRgbStr(hex);
+                if (copyFormat === "hsl") return hexToHslStr(hex);
+                return hex;
+              };
+
+              const formattedVal = getColorString(color.hex);
 
               return (
                 <div
@@ -313,13 +388,13 @@ export default function ColorPaletteClient() {
                     {color.locked ? <Lock className="h-5 w-5" /> : <Unlock className="h-5 w-5 opacity-40 hover:opacity-100" />}
                   </Button>
 
-                  {/* Hex display */}
-                  <div className="flex flex-col items-center sm:items-center">
+                  {/* Format color display */}
+                  <div className="flex flex-col items-center sm:items-center max-w-full px-2 overflow-hidden text-center">
                     <span
-                      onClick={() => copyToClipboard(color.hex)}
-                      className={`font-mono font-black text-lg sm:text-xl tracking-wider cursor-pointer hover:scale-105 duration-200 transition-transform ${textClass}`}
+                      onClick={() => copyToClipboard(formattedVal)}
+                      className={`font-mono font-black text-sm tracking-tight cursor-pointer hover:scale-105 duration-200 transition-transform ${textClass} break-all select-all`}
                     >
-                      {color.hex}
+                      {formattedVal}
                     </span>
                   </div>
 
@@ -327,7 +402,7 @@ export default function ColorPaletteClient() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => copyToClipboard(color.hex)}
+                    onClick={() => copyToClipboard(formattedVal)}
                     className={`rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${textClass}`}
                   >
                     <Copy className="h-4 w-4" />

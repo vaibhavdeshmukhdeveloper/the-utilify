@@ -24,18 +24,25 @@ function JsonTreeNode({
   label, 
   value, 
   isLast = true, 
-  depth = 0 
+  depth = 0,
+  initialCollapse = false
 }: { 
   label?: string; 
   value: any; 
   isLast?: boolean; 
   depth?: number; 
+  initialCollapse?: boolean;
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(initialCollapse);
   const type = typeof value;
   const isNull = value === null;
   const isArray = Array.isArray(value);
   const isObject = !isNull && type === "object" && !isArray;
+
+  // Keep state synchronized with global collapse/expand triggers
+  useEffect(() => {
+    setIsCollapsed(initialCollapse);
+  }, [initialCollapse]);
 
   const indentStyle = { paddingLeft: `${depth * 16}px` };
 
@@ -102,6 +109,7 @@ function JsonTreeNode({
                 value={item}
                 isLast={idx === value.length - 1}
                 depth={depth + 1}
+                initialCollapse={initialCollapse}
               />
             ))}
             <div style={{ paddingLeft: `${depth * 16}px` }} className="text-zinc-500 font-mono select-none">
@@ -155,6 +163,7 @@ function JsonTreeNode({
                 value={value[key]}
                 isLast={idx === keys.length - 1}
                 depth={depth + 1}
+                initialCollapse={initialCollapse}
               />
             ))}
             <div style={{ paddingLeft: `${depth * 16}px` }} className="text-zinc-500 font-mono select-none">
@@ -244,6 +253,21 @@ export default function JsonFormatterClient() {
   const [copied, setCopied] = useState(false);
   const [fontSize, setFontSize] = useState(14);
   const [parsedJson, setParsedJson] = useState<any>(null);
+  const [globalCollapse, setGlobalCollapse] = useState(false);
+  
+  // Save to recently used history in local storage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const href = "/json-formatter";
+      
+      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch (e) {
+      console.error("Error setting recently used tools", e);
+    }
+  }, []);
   
   // Validation Error state
   const [validationError, setValidationError] = useState<{
@@ -662,6 +686,26 @@ export default function JsonFormatterClient() {
 
               {/* Toolbar Right Side */}
               <div className="flex items-center gap-1">
+                {/* Global Tree Viewer controls */}
+                {activeTab === "tree" && parsedJson && (
+                  <div className="flex border border-zinc-200 dark:border-zinc-800 rounded-md bg-background overflow-hidden mr-1 select-none">
+                    <button 
+                      onClick={() => setGlobalCollapse(true)} 
+                      className="px-2 py-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-[10px] font-black uppercase text-zinc-550 dark:text-zinc-400 border-r border-zinc-200 dark:border-zinc-800 transition-colors"
+                      title="Collapse All Nodes"
+                    >
+                      Collapse All
+                    </button>
+                    <button 
+                      onClick={() => setGlobalCollapse(false)} 
+                      className="px-2 py-1.5 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-[10px] font-black uppercase text-zinc-550 dark:text-zinc-400 transition-colors"
+                      title="Expand All Nodes"
+                    >
+                      Expand All
+                    </button>
+                  </div>
+                )}
+
                 {/* Font Scaling */}
                 <div className="flex border border-zinc-200 dark:border-zinc-800 rounded-md bg-background overflow-hidden mr-1 select-none">
                   <button 
@@ -715,7 +759,7 @@ export default function JsonFormatterClient() {
                 // Tree viewer
                 <div className="flex-grow p-4 overflow-auto text-left bg-zinc-50/50 dark:bg-zinc-950/50">
                   {parsedJson ? (
-                    <JsonTreeNode value={parsedJson} />
+                    <JsonTreeNode value={parsedJson} initialCollapse={globalCollapse} />
                   ) : (
                     <div className="h-full flex items-center justify-center text-sm text-zinc-400 select-none">
                       Valid formatted JSON Tree will appear here...
