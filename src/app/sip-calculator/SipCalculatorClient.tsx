@@ -333,17 +333,13 @@ export default function SipCalculatorClient() {
                 </div>
               </Card>
 
-              {/* Interactive Visual Charts Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                <div className="md:col-span-5 flex">
-                  <DonutChart 
-                    invested={parseFloat(result.invested.replace(/,/g, '')) || 0} 
-                    returns={parseFloat(result.returns.replace(/,/g, '')) || 0} 
-                  />
-                </div>
-                <div className="md:col-span-7 flex">
-                  <GrowthChart breakdown={result.breakdown} />
-                </div>
+              {/* Interactive Visual Charts Stack */}
+              <div className="flex flex-col gap-6 w-full">
+                <DonutChart 
+                  invested={parseFloat(result.invested.replace(/,/g, '')) || 0} 
+                  returns={parseFloat(result.returns.replace(/,/g, '')) || 0} 
+                />
+                <GrowthChart breakdown={result.breakdown} />
               </div>
 
               {/* Yearly Breakdown Table */}
