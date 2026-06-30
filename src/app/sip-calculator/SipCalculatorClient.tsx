@@ -10,6 +10,7 @@ import { PiggyBank, RefreshCw, DollarSign, Calendar, Percent, TrendingUp, ArrowR
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { DonutChart, GrowthChart } from "@/components/CalculatorCharts";
 
 interface YearlyBreakdown {
   year: number;
@@ -56,6 +57,20 @@ export default function SipCalculatorClient() {
       }
     }
   };
+
+  // Save to recently used history in local storage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const href = "/sip-calculator";
+      
+      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch (e) {
+      console.error("Error setting recently used tools", e);
+    }
+  }, []);
 
   // Run calculation reactively when inputs change
   useEffect(() => {
@@ -295,7 +310,7 @@ export default function SipCalculatorClient() {
         {/* Right Column: Results */}
         <div ref={resultsRef} className="lg:col-span-7 space-y-8 scroll-mt-24">
           {result ? (
-            <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {/* Main Result Card */}
               <Card className="p-12 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[3rem] relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-10 opacity-10">
@@ -317,6 +332,19 @@ export default function SipCalculatorClient() {
                   </div>
                 </div>
               </Card>
+
+              {/* Interactive Visual Charts Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div className="md:col-span-5 flex">
+                  <DonutChart 
+                    invested={parseFloat(result.invested.replace(/,/g, '')) || 0} 
+                    returns={parseFloat(result.returns.replace(/,/g, '')) || 0} 
+                  />
+                </div>
+                <div className="md:col-span-7 flex">
+                  <GrowthChart breakdown={result.breakdown} />
+                </div>
+              </div>
 
               {/* Yearly Breakdown Table */}
               <Card className="overflow-hidden border-none shadow-2xl rounded-[2.5rem]">

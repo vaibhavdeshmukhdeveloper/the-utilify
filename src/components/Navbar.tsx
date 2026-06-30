@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Sparkles, LayoutGrid } from "lucide-react";
+import { Menu, X, Sparkles, LayoutGrid, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { CommandPalette } from "@/components/CommandPalette";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,6 +48,18 @@ export function Navbar() {
               </Link>
             </div>
 
+            {/* Command Palette Trigger */}
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-sm font-semibold text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-sm select-none"
+            >
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <span>Search...</span>
+              <kbd className="hidden lg:inline-flex h-5 select-none items-center gap-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                <span>⌘</span>K
+              </kbd>
+            </button>
+
             <Link href="/#tools">
               <Button size="sm" className="rounded-xl shadow-md font-bold px-4 hover:shadow-lg transition-all">
                 Explore Tools <LayoutGrid className="ml-2 h-4 w-4" />
@@ -58,6 +71,12 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
+              className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            >
+              <Search className="h-5 w-5" />
+            </button>
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -119,6 +138,9 @@ export function Navbar() {
           </div>
         </div>
       )}
+
+      {/* Global Command Palette Dialog */}
+      <CommandPalette />
     </nav>
   );
 }

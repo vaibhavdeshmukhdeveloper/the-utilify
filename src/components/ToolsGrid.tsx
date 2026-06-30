@@ -4,9 +4,6 @@ import { ToolCard } from "@/components/ToolCard";
 import { 
   FileJson, 
   FileText, 
-  SplitSquareVertical, 
-  Merge, 
-  Image as ImageIcon, 
   Layers, 
   Calculator,
   TrendingUp,
@@ -20,39 +17,38 @@ import {
   Hourglass,
   Ruler,
   GitCompare,
-  AlignLeft
+  AlignLeft,
+  Search,
+  X,
+  History,
+  Activity,
+  Image as ImageIcon
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
 const allTools = [
   {
-    title: "JSON Formatter",
-    description: "Pretty-print, validate and minify JSON data instantly.",
-    href: "/json-formatter",
-    icon: FileJson,
-    category: "Developer"
+    title: "AI Background Remover",
+    description: "Remove image backgrounds automatically using professional-grade AI.",
+    href: "/background-remover",
+    icon: Layers,
+    category: "Image",
+    popular: true
   },
   {
-    title: "BMI Calculator",
-    description: "Calculate your Body Mass Index (BMI) instantly.",
-    href: "/bmi-calculator",
-    icon: Calculator,
-    category: "Health"
+    title: "Image Compressor",
+    description: "Reduce image file size with zero quality loss.",
+    href: "/image-compressor",
+    icon: ImageIcon,
+    category: "Image"
   },
   {
-    title: "Investment Calculator",
-    description: "Project your future wealth with compound interest.",
-    href: "/investment-calculator",
-    icon: TrendingUp,
-    category: "Finance"
-  },
-  {
-    title: "SIP Calculator",
-    description: "Estimate the future value of your monthly investments.",
-    href: "/sip-calculator",
-    icon: PiggyBank,
-    category: "Finance"
+    title: "Color Palette Generator",
+    description: "Generate random or custom palettes and test contrast against WCAG standards.",
+    href: "/color-palette",
+    icon: Palette,
+    category: "Image"
   },
   {
     title: "PDF to Image",
@@ -66,36 +62,49 @@ const allTools = [
     title: "Split PDF",
     description: "Separate one page or a whole range for easy conversion.",
     href: "/split-pdf",
-    icon: SplitSquareVertical,
+    icon: Layers,
     category: "PDF"
   },
   {
     title: "Merge PDF",
     description: "Combine multiple PDF files into a single document.",
     href: "/merge-pdf",
-    icon: Merge,
+    icon: FileText,
     category: "PDF"
-  },
-  {
-    title: "Background Remover",
-    description: "Remove image backgrounds automatically using AI.",
-    href: "/background-remover",
-    icon: Layers,
-    category: "Image",
-    popular: true
-  },
-  {
-    title: "Image Compressor",
-    description: "Reduce image file size without losing quality.",
-    href: "/image-compressor",
-    icon: ImageIcon,
-    category: "Image"
   },
   {
     title: "Markdown to PDF",
     description: "Convert Markdown text or files into clean PDF documents.",
     href: "/markdown-to-pdf",
     icon: FileText,
+    category: "PDF"
+  },
+  {
+    title: "SIP Calculator",
+    description: "Estimate the future value of your monthly investments.",
+    href: "/sip-calculator",
+    icon: PiggyBank,
+    category: "Finance"
+  },
+  {
+    title: "Investment Calculator",
+    description: "Project your future wealth with compound interest.",
+    href: "/investment-calculator",
+    icon: TrendingUp,
+    category: "Finance"
+  },
+  {
+    title: "BMI Calculator",
+    description: "Calculate your Body Mass Index (BMI) instantly.",
+    href: "/bmi-calculator",
+    icon: Activity,
+    category: "Health"
+  },
+  {
+    title: "JSON Formatter",
+    description: "Pretty-print, validate and minify JSON data instantly.",
+    href: "/json-formatter",
+    icon: FileJson,
     category: "Developer"
   },
   {
@@ -128,11 +137,18 @@ const allTools = [
     category: "Developer"
   },
   {
-    title: "Color Palette Generator",
-    description: "Generate random or custom palettes and check colors.",
-    href: "/color-palette",
-    icon: Palette,
-    category: "Image"
+    title: "Diff Checker",
+    description: "Compare two chunks of text side-by-side to highlight differences.",
+    href: "/diff-checker",
+    icon: GitCompare,
+    category: "Developer"
+  },
+  {
+    title: "Lorem Ipsum Generator",
+    description: "Generate custom placeholder text in paragraphs or words.",
+    href: "/lorem-ipsum",
+    icon: AlignLeft,
+    category: "Developer"
   },
   {
     title: "Date Calculator",
@@ -155,60 +171,181 @@ const allTools = [
     icon: Ruler,
     category: "Utility",
     popular: true
-  },
-  {
-    title: "Diff Checker",
-    description: "Compare two chunks of text side-by-side to highlight differences.",
-    href: "/diff-checker",
-    icon: GitCompare,
-    category: "Developer"
-  },
-  {
-    title: "Lorem Ipsum Generator",
-    description: "Generate custom placeholder text in paragraphs or words.",
-    href: "/lorem-ipsum",
-    icon: AlignLeft,
-    category: "Developer"
   }
 ];
 
+
 export function ToolsGrid() {
   const [filter, setFilter] = useState("All");
-  
+  const [query, setQuery] = useState("");
+  const [recentTools, setRecentTools] = useState<typeof allTools>([]);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   const categories = ["All", "PDF", "Image", "Developer", "Finance", "Health", "Utility"];
-  
-  const filteredTools = filter === "All" 
-    ? allTools 
-    : allTools.filter(t => t.category === filter);
+
+  // Focus search input when pressing "/"
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key === "/" && 
+        document.activeElement !== searchInputRef.current && 
+        document.activeElement?.tagName !== "INPUT" && 
+        document.activeElement?.tagName !== "TEXTAREA"
+      ) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Fetch recently used tools from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      if (stored) {
+        const parsed = JSON.parse(stored) as string[];
+        const matched = parsed
+          .map((href) => allTools.find((t) => t.href === href))
+          .filter((t): t is typeof allTools[0] => !!t);
+        setRecentTools(matched);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  const handleRecentClick = (href: string) => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const clearRecent = () => {
+    try {
+      localStorage.removeItem("utilify-recent-tools");
+      setRecentTools([]);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Filter tools based on search query and category active tab
+  const filteredTools = allTools.filter((tool) => {
+    const matchesCategory = filter === "All" || tool.category === filter;
+    const text = (tool.title + " " + tool.description + " " + tool.category).toLowerCase();
+    const matchesSearch = text.includes(query.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
-    <section id="tools" className="py-24">
-      <div className="container px-4 md:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-8">
-          <div className="text-center md:text-left">
-            <h2 className="text-4xl font-black tracking-tight mb-4">Our Powerful Tools</h2>
-            <p className="text-xl text-muted-foreground">Select a tool to get started with your task.</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-2xl">
-            {categories.map((cat) => (
-              <Button 
-                key={cat}
-                variant={filter === cat ? "default" : "ghost"} 
-                size="sm"
-                onClick={() => setFilter(cat)}
-                className="rounded-xl px-6 font-bold"
+    <section id="tools" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Search & Categories Panel */}
+      <div className="flex flex-col gap-8 mb-16">
+        {/* Search Bar Input */}
+        <div className="w-full max-w-2xl mx-auto relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-violet-500/10 rounded-2xl blur-lg opacity-40 group-hover:opacity-75 transition-opacity" />
+          <div className="relative flex items-center bg-card border border-border/80 rounded-2xl shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all h-14 px-5">
+            <Search className="h-5 w-5 text-muted-foreground shrink-0 mr-3" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="flex-grow bg-transparent border-none outline-none text-foreground font-bold placeholder:text-muted-foreground placeholder:font-semibold text-base"
+              placeholder="Search utility tools... (Press '/' to focus)"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            {query && (
+              <button 
+                onClick={() => setQuery("")}
+                className="p-1 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors mr-2 cursor-pointer"
               >
-                {cat}
-              </Button>
-            ))}
+                <X className="h-4 w-4" />
+              </button>
+            )}
+            <kbd className="hidden sm:inline-flex h-6 select-none items-center gap-0.5 rounded border border-border bg-muted/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+              /
+            </kbd>
           </div>
         </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredTools.map((tool, index) => (
-            <ToolCard key={index} {...tool} />
+
+        {/* Categories Select Tab Row */}
+        <div className="flex flex-wrap justify-center gap-2 p-1.5 bg-muted/40 dark:bg-zinc-900/30 border border-border/40 rounded-2xl max-w-3xl mx-auto">
+          {categories.map((cat) => (
+            <Button 
+              key={cat}
+              variant={filter === cat ? "default" : "ghost"} 
+              size="sm"
+              onClick={() => setFilter(cat)}
+              className="rounded-xl px-5 py-2 font-bold text-sm transition-all"
+            >
+              {cat}
+            </Button>
           ))}
         </div>
+      </div>
+
+      {/* Recently Visited Tools Section */}
+      {recentTools.length > 0 && !query && filter === "All" && (
+        <div className="mb-16 animate-in fade-in slide-in-from-bottom-3 duration-500">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-black uppercase tracking-widest text-primary flex items-center gap-2">
+              <History className="h-5 w-5" /> Jump Back In
+            </h3>
+            <button 
+              onClick={clearRecent}
+              className="text-xs font-semibold text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+            >
+              Clear History
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {recentTools.map((tool) => {
+              return (
+                <div key={tool.href} onClick={() => handleRecentClick(tool.href)}>
+                  <ToolCard {...tool} />
+                </div>
+              );
+            })}
+          </div>
+          <div className="border-b border-border/60 pt-12" />
+        </div>
+      )}
+
+      {/* Main Tools Grid */}
+      <div>
+        <div className="flex justify-between items-center mb-8">
+          <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">
+            {filter} Utilities
+          </h3>
+          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-muted/60 text-muted-foreground border">
+            {filteredTools.length} {filteredTools.length === 1 ? "tool" : "tools"} found
+          </span>
+        </div>
+
+        {filteredTools.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredTools.map((tool) => (
+              <div key={tool.href} onClick={() => handleRecentClick(tool.href)}>
+                <ToolCard {...tool} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-24 border border-dashed rounded-[2rem] bg-card/25 border-border">
+            <Search className="h-10 w-10 text-muted-foreground/30 mx-auto mb-4 animate-pulse" />
+            <h4 className="text-lg font-bold text-foreground mb-1">No tools matched</h4>
+            <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+              We couldn't find any utilities matching your keyword or category selection. Try revising your query.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

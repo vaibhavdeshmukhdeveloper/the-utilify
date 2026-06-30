@@ -10,6 +10,7 @@ import { TrendingUp, RefreshCw, DollarSign, Calendar, Percent, Info, Settings2, 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { DonutChart, GrowthChart } from "@/components/CalculatorCharts";
 
 interface YearlyBreakdown {
   year: number;
@@ -57,6 +58,20 @@ export default function InvestmentCalculatorClient() {
       }
     }
   };
+
+  // Save to recently used history in local storage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const href = "/investment-calculator";
+      
+      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch (e) {
+      console.error("Error setting recently used tools", e);
+    }
+  }, []);
 
   // Run calculation reactively when inputs change
   useEffect(() => {
@@ -148,131 +163,84 @@ export default function InvestmentCalculatorClient() {
   const faqs = [
     { 
       question: "What is the difference between this and the SIP Calculator?", 
-      answer: "The SIP Calculator is designed specifically for mutual fund plans with recurring monthly contributions and no initial lump sum. The Investment Calculator lets you combine a large initial capital amount (lump sum) with recurring monthly contributions." 
-    },
-    { 
-      question: "How does compounding frequency affect my returns?", 
-      answer: "Compounding frequency determines how often interest is calculated and added back to your balance. More frequent compounding (e.g. daily vs. annually) means you earn interest on interest sooner, resulting in slightly higher final values." 
-    },
-    { 
-      question: "What is the difference between Beginning and End contribution timing?", 
-      answer: "Selecting 'Beginning' timing assumes monthly contributions are added at the start of each period, earning interest immediately. 'End' timing adds contributions at the end of the month, delay-compounding them to the next cycle." 
+      answer: "The Investment Calculator is a broader utility. It models scenarios starting with a significant initial capital amount (lump sum) compounded alongside recurring monthly savings, whereas a SIP calculator primarily focuses on pure recurring monthly deposits starting from zero."
     },
     {
-      question: "Is this calculator suitable for stock portfolio planning?",
-      answer: "Yes. You can model stock market historical yields (such as the S&P 500 average of 8-10%) by inputting your current stock value as the Initial Investment and adding recurring monthly stock buys."
+      question: "How does compounding frequency affect my growth?",
+      answer: "The more frequently interest compounding occurs, the higher the total return. For instance, compounding daily yields slightly higher growth than compounding monthly, which in turn grows faster than annual compounding."
     },
     {
-      question: "Does this calculator account for taxes or inflation?",
-      answer: "No. The calculator yields raw nominal projections. Capital gains taxes, income taxes, and inflation-adjusted purchasing power are not factored in and should be planned separately."
-    },
-    {
-      question: "Is my personal financial data safe?",
-      answer: "Completely. Utilify does not transmit your calculations to any server. All compounding projection algorithms execute 100% locally inside your browser interface."
+      question: "What values does the breakdown show?",
+      answer: "It displays cumulative principal deposited, compound interest earned, and the resulting ending balance for each year of the investment schedule."
     }
   ];
 
   const relatedTools = [
     { name: "SIP Calculator", href: "/sip-calculator" },
     { name: "BMI Calculator", href: "/bmi-calculator" },
-    { name: "JSON Formatter", href: "/json-formatter" },
+    { name: "Date Calculator", href: "/date-calculator" }
   ];
-
-  const detailedContent = (
-    <article className="space-y-6">
-      <h3>Detailed Guide: Understanding Long-Term Compound Growth</h3>
-      <p>
-        Compounding is the process where an investment earns interest, and then that accumulated interest earns additional interest in subsequent periods. Over a decade or more, this generates a non-linear growth curve where interest gains far exceed your total out-of-pocket contributions.
-      </p>
-      <h4>The Compound Interest Equation</h4>
-      <p>
-        The calculator models compound interest with regular contributions using the formula:
-      </p>
-      <p className="bg-muted p-4 rounded-xl font-mono text-center">
-        {"A = P(1 + r/n)^(n*t) + PMT * [ ((1 + r/n)^(n*t) - 1) / (r/n) ]"}
-      </p>
-      <p>
-        Where:
-      </p>
-      <ul>
-        <li><strong>A:</strong> The final future balance of your investment.</li>
-        <li><strong>P:</strong> The initial investment amount (principal).</li>
-        <li><strong>r:</strong> Expected annual interest rate (decimal).</li>
-        <li><strong>n:</strong> Compounding frequency per year (1 for annual, 12 for monthly, 365 for daily).</li>
-        <li><strong>t:</strong> Total term of investment in years.</li>
-        <li><strong>PMT:</strong> Recurring monthly contribution amount.</li>
-      </ul>
-      <h4>Maximizing Your Compounding Snowball</h4>
-      <p>
-        To get the most out of your wealth projections:
-      </p>
-      <ul>
-        <li><strong>Maximize Time:</strong> The longer your money compounds, the steeper the growth curve. Compound interest works best when given 15+ years.</li>
-        <li><strong>Increase Frequency:</strong> Opting for daily or monthly compounding interest schemes yields slightly higher returns over time than annual compounding.</li>
-        <li><strong>Automate Deposits:</strong> Adding even a small monthly contribution dramatically boosts the final corpus compared to lump-sum growth alone.</li>
-      </ul>
-    </article>
-  );
 
   return (
     <ToolLayout
       title="Investment Calculator"
-      description="Calculate your future wealth by projecting investment growth with custom compounding and contribution timing."
+      description="Analyze compound returns on initial capital combined with monthly savings."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
-      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Inputs */}
         <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-8">
           <form onSubmit={calculateInvestment} className="space-y-6">
             <Card className="p-8 space-y-6 border-2 shadow-sm rounded-3xl">
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <Label className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                  <DollarSign className="h-4 w-4" /> Initial Investment
+                  <DollarSign className="h-4 w-4" /> Initial Capital
                 </Label>
                 <Input 
                   type="text" 
                   inputMode="numeric"
-                  className="h-14 text-xl font-black rounded-2xl border-2 focus:border-primary transition-all"
+                  className="h-14 text-xl font-bold rounded-xl border-2 focus:border-primary transition-all bg-zinc-50/50 dark:bg-zinc-900/50"
                   value={initialAmount} 
                   onChange={handleInputChange(setInitialAmount)} 
                 />
               </div>
-              <div className="space-y-3">
+
+              <div className="space-y-4">
                 <Label className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                   <DollarSign className="h-4 w-4" /> Monthly Contribution
                 </Label>
                 <Input 
                   type="text" 
                   inputMode="numeric"
-                  className="h-14 text-xl font-black rounded-2xl border-2 focus:border-primary transition-all"
+                  className="h-14 text-xl font-bold rounded-xl border-2 focus:border-primary transition-all bg-zinc-50/50 dark:bg-zinc-900/50"
                   value={monthlyContribution} 
                   onChange={handleInputChange(setMonthlyContribution)} 
                 />
               </div>
+
               <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Label className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                    <Calendar className="h-4 w-4" /> Years
+                    <Calendar className="h-4 w-4" /> Duration (Years)
                   </Label>
                   <Input 
                     type="text" 
                     inputMode="numeric"
-                    className="h-14 text-xl font-black rounded-2xl border-2 focus:border-primary transition-all"
+                    className="h-14 text-xl font-bold rounded-xl border-2 focus:border-primary transition-all bg-zinc-50/50 dark:bg-zinc-900/50"
                     value={years} 
                     onChange={handleInputChange(setYears)} 
                   />
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Label className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                    <Percent className="h-4 w-4" /> Interest Rate
+                    <Percent className="h-4 w-4" /> Return Rate (%)
                   </Label>
                   <Input 
                     type="text" 
                     inputMode="decimal"
-                    className="h-14 text-xl font-black rounded-2xl border-2 focus:border-primary transition-all"
+                    className="h-14 text-xl font-bold rounded-xl border-2 focus:border-primary transition-all bg-zinc-50/50 dark:bg-zinc-900/50"
                     value={interestRate} 
                     onChange={handleInputChange(setInterestRate)} 
                   />
@@ -285,7 +253,7 @@ export default function InvestmentCalculatorClient() {
                 </div>
                 
                 <div className="space-y-3">
-                  <Label className="text-xs font-bold uppercase text-muted-foreground">Compounding Frequency</Label>
+                  <Label className="text-xs font-bold uppercase text-muted-foreground">Compounding Interval</Label>
                   <Select value={compoundFrequency} onValueChange={(val) => val && setCompoundFrequency(val)}>
                     <SelectTrigger className="h-12 rounded-xl border-2">
                       <SelectValue placeholder="Select frequency" />
@@ -351,6 +319,19 @@ export default function InvestmentCalculatorClient() {
                 </div>
               </Card>
 
+              {/* Interactive Visual Charts Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div className="md:col-span-5 flex">
+                  <DonutChart 
+                    invested={parseFloat(result.invested.replace(/,/g, '')) || 0} 
+                    returns={parseFloat(result.returns.replace(/,/g, '')) || 0} 
+                  />
+                </div>
+                <div className="md:col-span-7 flex">
+                  <GrowthChart breakdown={result.breakdown} />
+                </div>
+              </div>
+
               {/* Yearly Breakdown Table */}
               <Card className="overflow-hidden border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
                 <div className="p-8 bg-zinc-50 dark:bg-zinc-900 border-b">
@@ -383,7 +364,7 @@ export default function InvestmentCalculatorClient() {
             </div>
           ) : (
             <Card className="h-full min-h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
-              <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
+              <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-6">
                 <TrendingUp className="h-10 w-10 text-muted-foreground/40" />
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2">Ready to plan?</h3>
