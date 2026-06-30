@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { TrendingUp, RefreshCw, DollarSign, Calendar, Percent, Info, Settings2, ArrowRight } from "lucide-react";
+import { TrendingUp, RefreshCw, DollarSign, Calendar, Percent, Info, Settings2, ArrowRight, Download } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -152,6 +152,28 @@ export default function InvestmentCalculatorClient() {
     setYears("");
     setInterestRate("");
     setResult(null);
+  };
+
+  const exportToCsv = () => {
+    if (!result) return;
+    const headers = ["Year", "Invested Principal ($)", "Interest Earned ($)", "Total Balance ($)"];
+    const rows = result.breakdown.map((row) => [
+      `Year ${row.year}`,
+      Math.round(row.principal),
+      Math.round(row.interest),
+      Math.round(row.balance)
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "investment_yearly_projection.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Exported yearly projection to CSV!");
   };
 
   const howToUse = [
@@ -330,9 +352,19 @@ export default function InvestmentCalculatorClient() {
 
               {/* Yearly Breakdown Table */}
               <Card className="overflow-hidden border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
-                <div className="p-8 bg-zinc-50 dark:bg-zinc-900 border-b">
-                  <h3 className="text-2xl font-black tracking-tight">Yearly Breakdown</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Growth projection for {years} years</p>
+                <div className="p-8 bg-zinc-50 dark:bg-zinc-900 border-b flex items-center justify-between">
+                  <div>
+                    <h3 className="text-2xl font-black tracking-tight">Yearly Breakdown</h3>
+                    <p className="text-sm text-muted-foreground mt-1">Growth projection for {years} years</p>
+                  </div>
+                  <Button 
+                    onClick={exportToCsv} 
+                    variant="outline" 
+                    size="sm"
+                    className="rounded-xl border-2 font-bold h-11 shrink-0"
+                  >
+                    <Download className="h-4 w-4 mr-2" /> Export CSV
+                  </Button>
                 </div>
                 <div className="overflow-auto max-h-[500px]">
                   <table className="w-full text-left border-collapse">

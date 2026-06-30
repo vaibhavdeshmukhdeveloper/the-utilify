@@ -7,7 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { GitCompare, Eye, FileText, ArrowRight, Trash2 } from "lucide-react";
+import { GitCompare, Eye, FileText, ArrowRight, Trash2, Upload } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DiffLine {
   text: string;
@@ -25,8 +26,74 @@ export default function DiffCheckerClient() {
 
   const [viewMode, setViewMode] = useState<"split" | "unified">("split");
   const [hasCompared, setHasCompared] = useState(false);
+  const [isDragOverLeft, setIsDragOverLeft] = useState(false);
+  const [isDragOverRight, setIsDragOverRight] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Save to recently used history in local storage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const href = "/diff-checker";
+      
+      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch (e) {
+      console.error("Error setting recently used tools", e);
+    }
+  }, []);
+
+  const handleDragOverLeft = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverLeft(true);
+  };
+
+  const handleDragLeaveLeft = () => {
+    setIsDragOverLeft(false);
+  };
+
+  const handleDropLeft = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverLeft(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      setOriginalText(text);
+      toast.success(`Loaded dropped file: ${file.name}`);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleDragOverRight = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverRight(true);
+  };
+
+  const handleDragLeaveRight = () => {
+    setIsDragOverRight(false);
+  };
+
+  const handleDropRight = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOverRight(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      setModifiedText(text);
+      toast.success(`Loaded dropped file: ${file.name}`);
+    };
+    reader.readAsText(file);
+  };
 
   useEffect(() => {
     if (hasCompared && resultsRef.current) {
@@ -189,21 +256,53 @@ export default function DiffCheckerClient() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-300">
             <div className="space-y-2">
               <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><FileText className="h-3.5 w-3.5" /> Original Text (Before)</label>
-              <Textarea
-                placeholder="Paste original text here..."
-                className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
-                value={originalText}
-                onChange={(e) => setOriginalText(e.target.value)}
-              />
+              <div 
+                onDragOver={handleDragOverLeft}
+                onDragLeave={handleDragLeaveLeft}
+                onDrop={handleDropLeft}
+                className={cn(
+                  "relative rounded-3xl transition-all duration-200",
+                  isDragOverLeft ? "ring-2 ring-primary/50" : ""
+                )}
+              >
+                {isDragOverLeft && (
+                  <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-3xl animate-in fade-in duration-200">
+                    <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
+                    <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Original File</p>
+                  </div>
+                )}
+                <Textarea
+                  placeholder="Paste original text here..."
+                  className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
+                  value={originalText}
+                  onChange={(e) => setOriginalText(e.target.value)}
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><GitCompare className="h-3.5 w-3.5" /> Modified Text (After)</label>
-              <Textarea
-                placeholder="Paste modified text here..."
-                className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
-                value={modifiedText}
-                onChange={(e) => setModifiedText(e.target.value)}
-              />
+              <div 
+                onDragOver={handleDragOverRight}
+                onDragLeave={handleDragLeaveRight}
+                onDrop={handleDropRight}
+                className={cn(
+                  "relative rounded-3xl transition-all duration-200",
+                  isDragOverRight ? "ring-2 ring-primary/50" : ""
+                )}
+              >
+                {isDragOverRight && (
+                  <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-3xl animate-in fade-in duration-200">
+                    <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
+                    <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Modified File</p>
+                  </div>
+                )}
+                <Textarea
+                  placeholder="Paste modified text here..."
+                  className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
+                  value={modifiedText}
+                  onChange={(e) => setModifiedText(e.target.value)}
+                />
+              </div>
             </div>
           </div>
         )}

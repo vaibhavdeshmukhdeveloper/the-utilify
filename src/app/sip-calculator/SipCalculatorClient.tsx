@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { PiggyBank, RefreshCw, DollarSign, Calendar, Percent, TrendingUp, ArrowRight, Settings2 } from "lucide-react";
+import { PiggyBank, RefreshCw, DollarSign, Calendar, Percent, TrendingUp, ArrowRight, Settings2, Download } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -146,6 +146,28 @@ export default function SipCalculatorClient() {
     setYears("");
     setReturnRate("");
     setResult(null);
+  };
+
+  const exportToCsv = () => {
+    if (!result) return;
+    const headers = ["Year", "Invested Principal ($)", "Interest Earned ($)", "Total Balance ($)"];
+    const rows = result.breakdown.map((row) => [
+      `Year ${row.year}`,
+      Math.round(row.principal),
+      Math.round(row.interest),
+      Math.round(row.balance)
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "sip_yearly_projection.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Exported yearly projection to CSV!");
   };
 
   return (
@@ -344,9 +366,19 @@ export default function SipCalculatorClient() {
 
               {/* Yearly Breakdown Table */}
               <Card className="overflow-hidden border-none shadow-2xl rounded-[2.5rem]">
-                <div className="p-10 bg-zinc-50 dark:bg-zinc-900 border-b">
-                  <h3 className="text-3xl font-black tracking-tight">Yearly Projection</h3>
-                  <p className="text-muted-foreground mt-2">See how your portfolio grows year after year</p>
+                <div className="p-10 bg-zinc-50 dark:bg-zinc-900 border-b flex items-center justify-between">
+                  <div>
+                    <h3 className="text-3xl font-black tracking-tight">Yearly Projection</h3>
+                    <p className="text-muted-foreground mt-2">See how your portfolio grows year after year</p>
+                  </div>
+                  <Button 
+                    onClick={exportToCsv} 
+                    variant="outline" 
+                    size="sm"
+                    className="rounded-xl border-2 font-bold h-11 shrink-0"
+                  >
+                    <Download className="h-4 w-4 mr-2" /> Export CSV
+                  </Button>
                 </div>
                 <div className="overflow-auto max-h-[600px]">
                   <table className="w-full text-left border-collapse">
