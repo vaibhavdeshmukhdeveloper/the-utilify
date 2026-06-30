@@ -2708,6 +2708,456 @@ export const useCases: UseCaseData[] = [
       "Temperature Checks: Converts Celsius to Fahrenheit and vice versa using exact scales.",
       "Cooking & Travel: Excellent for translating recipes and flight dimension limits."
     ]
+  },
+  {
+    slug: "convert-academic-transcript-pdf-to-png",
+    baseTool: "pdf-to-image",
+    title: "Academic Transcript PDF to PNG Converter",
+    seoTitle: "Convert Academic Transcript PDF to PNG Online",
+    seoDescription: "Extract transcript and report card pages from PDF to PNG images safely. Perfect for university and college online application portals.",
+    heading: "Academic Transcript PDF to PNG Converter",
+    introduction: "College admission portals often require transcripts or diplomas uploaded as clear image formats rather than multi-page PDFs. Instantly convert transcript pages to separate PNG images while retaining academic clarity.",
+    category: "PDF",
+    tips: [
+      "Readability Priority: Renders document text at high DPI to ensure tiny course codes and GPA numbers are fully readable.",
+      "Instant ZIP Download: Generates high-quality standalone PNGs for all pages, packaged into a single ZIP file.",
+      "100% Client-Side: Renders directly in your web browser for complete confidentiality of academic records."
+    ]
+  },
+  {
+    slug: "extract-pages-from-pdf-ebook",
+    baseTool: "split-pdf",
+    title: "Extract Pages from PDF eBook",
+    seoTitle: "Extract Specific Pages from PDF eBook Online & Free",
+    seoDescription: "Isolate, separate, and extract chapters or specific page ranges from large digital eBooks and PDF novels in-memory.",
+    heading: "Extract Specific Pages from PDF eBooks",
+    introduction: "Looking to share only a single chapter, appendix, or recipe page from a massive digital book? Easily extract custom pages and create a clean, lightweight PDF snippet in seconds.",
+    category: "PDF",
+    tips: [
+      "Maintain Formatting: Preserves high-resolution images, fonts, and internal book hyperlinks exactly as originally designed.",
+      "Custom Ranges: Extract contiguous ranges (e.g., 20-45) or discrete individual page configurations.",
+      "No Watermarks: Our serverless exporter guarantees clean, watermark-free document outputs."
+    ]
+  },
+  {
+    slug: "merge-pdf-medical-records",
+    baseTool: "merge-pdf",
+    title: "Merge Medical Records PDF",
+    seoTitle: "Merge PDF Medical Records & Test Reports Online (100% Private)",
+    seoDescription: "Combine medical scans, doctor prescriptions, lab test reports, and vaccination certificates into one secure PDF file. Processed fully in-memory.",
+    heading: "Merge PDF Medical Records & Test Reports",
+    introduction: "Keep all your medical reports, scan results, and prescriptions together. Upload separate health documents and combine them into a single chronological PDF to share with your healthcare provider.",
+    category: "PDF",
+    tips: [
+      "Absolute Privacy: Your medical data is processed locally in temporary RAM, ensuring compliance with strict privacy expectations.",
+      "Logical Order: Arrange files chronologically (e.g. oldest to newest) before merging to maintain clean patient histories.",
+      "No Quality Loss: Keeps high-contrast X-rays and fine-print text reports sharp and readable."
+    ]
+  },
+  {
+    slug: "convert-markdown-meeting-notes-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Markdown Meeting Notes to PDF",
+    seoTitle: "Convert Markdown Meeting Notes to Professional PDF",
+    seoDescription: "Format and convert markdown meeting notes, agendas, and minutes into a clean, print-ready PDF document with a professional corporate theme.",
+    heading: "Convert Markdown Meeting Notes to PDF",
+    introduction: "Tired of copying text to word processors just to generate a presentable copy of your team alignment notes? Paste your raw markdown meeting logs and generate a beautiful corporate PDF in seconds.",
+    category: "PDF",
+    tips: [
+      "Polished Styling: Applies a highly professional, readable corporate layout with clean headings.",
+      "A4/Letter Layout: Configured with standard print margins for clean printing and digital sharing.",
+      "Auto Highlights: Highlights checkboxes, list items, and bold text to track action items instantly."
+    ]
+  },
+  {
+    slug: "convert-presentation-slides-pdf-to-jpg",
+    baseTool: "pdf-to-image",
+    title: "Presentation Slides PDF to JPG Converter",
+    seoTitle: "Convert Presentation Slides PDF to JPG Online",
+    seoDescription: "Convert slide decks, keynote presentations, and lecture PDFs into individual high-resolution JPG images for social sharing.",
+    heading: "Convert Presentation Slides PDF to JPG",
+    introduction: "Ready to share your presentation or deck on LinkedIn, Twitter, or slide-sharing networks? Instantly convert each slide page from your PDF document into high-resolution, rich-color JPG images.",
+    category: "PDF",
+    tips: [
+      "Color Accuracy: Renders slide vectors and backgrounds with vivid color fidelity matching screen displays.",
+      "Social Optimization: Perfect for creating swipeable carousel decks on professional social networks.",
+      "Batch Exporter: Processes all slides simultaneously and compiles them into a convenient ZIP archive."
+    ]
+  },
+  {
+    slug: "split-pdf-tax-return-by-year",
+    baseTool: "split-pdf",
+    title: "Split Multi-Year Tax Return PDF",
+    seoTitle: "Split Multi-Year Tax Return PDF Pages Online",
+    seoDescription: "Separate combined tax transcripts, state returns, and schedules into clean individual pages or documents. 100% client-side security.",
+    heading: "Split Multi-Year Tax Return PDF",
+    introduction: "Need to submit only a single year's return or just the Schedule C from a combined tax transcript? Split pages securely and export only the required pages without exposing extra financial data.",
+    category: "PDF",
+    tips: [
+      "Bank Grade Security: Files are parsed in-browser using secure WebAssembly. No financial data leaves your device.",
+      "Precise Splits: Extract single pages or custom ranges without losing digital signature integrity.",
+      "Small Footprint: Minimizes document file sizes for error-free uploads to official government portals."
+    ]
+  },
+  {
+    slug: "combine-resumes-portfolio-into-single-pdf",
+    baseTool: "merge-pdf",
+    title: "Combine Resume and Portfolio PDF",
+    seoTitle: "Combine Resume, Cover Letter & Portfolio into One PDF",
+    seoDescription: "Merge your cover letter, resume CV, and design portfolio pages into a single, cohesive PDF document ready for job application portals.",
+    heading: "Combine Resume, Cover Letter, and Portfolio PDF",
+    introduction: "Job portals often restrict candidate uploads to a single document attachment. Combine your cover letter, resume CV, and visual portfolio sheets into one unified, high-quality PDF submission.",
+    category: "PDF",
+    tips: [
+      "Professional Sequence: Keep the cover letter first, followed by the resume, and ending with design portfolios.",
+      "Font Preservation: Maintains digital text layers, custom typography, and link elements completely intact.",
+      "Size Check: Ensure the final output is under portal limits (commonly 5MB or 10MB) by compressing if necessary."
+    ]
+  },
+  {
+    slug: "convert-markdown-api-docs-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Markdown API Docs to PDF",
+    seoTitle: "Convert Markdown API Documentation to API Reference PDF",
+    seoDescription: "Generate beautifully styled developer API references and technical manuals from markdown source files with modern dark-mode-inspired layouts.",
+    heading: "Convert Markdown API Documentation to PDF",
+    introduction: "Need a portable offline copy or print version of your software's developer reference manuals? Paste your markdown API specs and convert them to styled, readable PDF guide sheets.",
+    category: "PDF",
+    tips: [
+      "Monospace Code Blocks: Automatically formats code blocks, parameters, and payloads with clear syntax highlighting.",
+      "Navigable Table of Contents: Structures page numbering and headers dynamically based on markdown nesting levels.",
+      "Clean Layouts: Styled with modern engineering document templates for clean reading."
+    ]
+  },
+  {
+    slug: "remove-background-real-estate-agent-headshots",
+    baseTool: "background-remover",
+    title: "Real Estate Agent Headshot Background Remover",
+    seoTitle: "Remove Background from Real Estate Agent Headshots",
+    seoDescription: "Instantly isolate real estate agent portraits and realtor headshots. Get transparent PNG files to create professional yard signs or cards.",
+    heading: "Real Estate Agent Headshot Background Remover",
+    introduction: "A clean, isolated portrait is key for marketing billboards, email footers, and listing flyers. Automatically remove distractingly complex indoor backgrounds or street scenes from realtor headshots.",
+    category: "Image",
+    tips: [
+      "Hair and Shadow Details: Smart AI isolates fine flyaway hairs and collar edges cleanly.",
+      "Marketing Customization: Drop your transparent PNG output directly into business card generators or signs.",
+      "Professional Formats: Exports in alpha-channel transparent PNG format to match standard graphic overlays."
+    ]
+  },
+  {
+    slug: "compress-real-estate-listing-photos-mls",
+    baseTool: "image-compressor",
+    title: "Compress Listing Photos for MLS Upload",
+    seoTitle: "Compress Real Estate Listing Photos for MLS (Under 10MB)",
+    seoDescription: "Reduce the file size of real estate property listing images to meet MLS portal guidelines without losing brightness or resolution.",
+    heading: "Compress Real Estate Photos for MLS",
+    introduction: "Multiple Listing Service (MLS) portals place strict file size thresholds on property photo uploads. Compress high-resolution interior and exterior listings to comply with limits while preserving color highlights.",
+    category: "Image",
+    tips: [
+      "High Visual Quality: Preserves wall details, hardwood patterns, and dynamic lighting conditions intact.",
+      "Batch Uploader: Upload dozens of listing photos simultaneously to compress them into an organized list.",
+      "Speed Up Listings: Smaller images load faster for prospective home buyers browsing on slow mobile connections."
+    ]
+  },
+  {
+    slug: "remove-background-clothing-e-commerce-photos",
+    baseTool: "background-remover",
+    title: "E-commerce Clothing Background Remover",
+    seoTitle: "Remove Background from Clothing & Fashion Photos",
+    seoDescription: "Automatically clean up backgrounds from apparel, clothing, and fashion accessory photos. Perfect for Amazon, eBay, and Shopify listings.",
+    heading: "Remove Background from Clothing Photos",
+    introduction: "Consistent product listings are essential for e-commerce conversion rates. Isolate apparel, clothing items, shoes, and fashion accessories from background hanger templates or busy studios.",
+    category: "Image",
+    tips: [
+      "Edge Precision: Follows fabric folds, apparel straps, and mannequin contours with exact pixel borders.",
+      "Amazon & eBay Ready: Outputs clean transparent cutouts ready to place on solid white backdrops.",
+      "Boost Trust: Clean, distraction-free product images give online shops a highly professional feel."
+    ]
+  },
+  {
+    slug: "compress-screenshots-jira-tickets",
+    baseTool: "image-compressor",
+    title: "Compress Screenshots for Jira Tickets",
+    seoTitle: "Compress PNG Screenshots for Jira & Slack (Under 2MB)",
+    seoDescription: "Quickly reduce screenshot file sizes to attach to Jira bug reports, Slack channels, or GitHub issues without hitches.",
+    heading: "Compress Screenshots for Jira Tickets",
+    introduction: "High-resolution desktop screenshots can be massive, causing slow uploads or failing altogether on team collaboration boards. Shrink image files down instantly to accelerate developer ticketing.",
+    category: "Image",
+    tips: [
+      "Perfect Text Legibility: Reduces file sizes dramatically while keeping code snippets and log strings razor-sharp.",
+      "Faster Collaboration: Accelerate issue reporting over channels like Slack, Teams, and GitHub issues.",
+      "Metadata Removal: Strips hidden system details and coordinates from screenshots to maintain privacy."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-child-education-fund",
+    baseTool: "sip-calculator",
+    title: "SIP Calculator for Child's Education Fund",
+    seoTitle: "SIP Calculator - Plan Savings for Child's Higher Education",
+    seoDescription: "Calculate estimated compound growth and maturity corpus needed to secure your children's future university education via monthly SIP investments.",
+    heading: "SIP Calculator for Child's Education Planning",
+    introduction: "College and university tuition fees are rising rapidly. Calculate how establishing a systematic investment plan (SIP) early can help compile a substantial higher-education corpus for your child.",
+    category: "Finance",
+    tips: [
+      "Education Inflation: Factor in a higher education-specific inflation rate of 8-10% to set robust fund targets.",
+      "Compounding Period: The earlier you start (preferably from infancy), the lower the required monthly investment.",
+      "Diversified Portfolio: Choose balanced mutual funds or index equities to manage risk over a 15-year horizon."
+    ]
+  },
+  {
+    slug: "investment-calculator-for-dividend-reinvestment-drip",
+    baseTool: "investment-calculator",
+    title: "Dividend Reinvestment (DRIP) Calculator",
+    seoTitle: "DRIP Calculator - Dividend Reinvestment Compound Returns",
+    seoDescription: "Estimate long-term portfolio growth by modeling dividend reinvestment plans (DRIP) over 10, 20, or 30 years with fixed dividend yields.",
+    heading: "Dividend Reinvestment (DRIP) Wealth Calculator",
+    introduction: "Reinvesting dividend income back into buying more stock shares is a powerful wealth-building tool. Calculate the exponential compounding effects of DRIP portfolios over long-term timelines.",
+    category: "Finance",
+    tips: [
+      "Compound Yield: Dividend reinvestment boosts your effective yield over time by continuously buying fractional shares.",
+      "Growth Projection: Input estimated stock price appreciation along with annual dividend payout growth.",
+      "Tax Planning: Consider tax implications of dividends if holding in a non-tax-advantaged investment account."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-house-down-payment",
+    baseTool: "sip-calculator",
+    title: "SIP Calculator for House Down Payment",
+    seoTitle: "SIP Calculator - Plan Savings for Home Down Payment",
+    seoDescription: "Calculate the systematic monthly savings needed to reach your target home down payment corpus over a 3 to 7-year investment timeline.",
+    heading: "SIP Calculator for House Down Payment Fund",
+    introduction: "Buying a home is a major milestone, and saving for a down payment requires careful planning. Calculate how small, regular SIP contributions can help you build the required lump-sum target.",
+    category: "Finance",
+    tips: [
+      "Realistic Target: Aim for at least a 20% down payment to avoid high mortgage insurance surcharges.",
+      "Investment Profile: For timelines under 5 years, consider debt-oriented or conservative hybrid funds for security.",
+      "Discipline: Automate the monthly debit date right after paydays to ensure consistent savings."
+    ]
+  },
+  {
+    slug: "investment-calculator-for-index-funds",
+    baseTool: "investment-calculator",
+    title: "Index Fund Compound Return Calculator",
+    seoTitle: "Index Fund Investment Calculator - Compound Growth Projections",
+    seoDescription: "Project compound returns on passive index fund investments (like S&P 500, Nasdaq 100) using historical average growth metrics.",
+    heading: "Index Fund Investment Growth Calculator",
+    introduction: "Passive index investing has historically outperformed most active managers. Project the wealth gains of low-fee index fund portfolios over long periods using benchmark performance histories.",
+    category: "Finance",
+    tips: [
+      "Fee Savings: Passive index funds have minimal expense ratios, preserving more capital for compounding.",
+      "Diversification Advantage: Spreads risk automatically across hundreds of top publicly traded corporations.",
+      "Lump Sum vs. Recurring: Combine initial seed capital with monthly additions to model growth accurately."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-military-fitness-standards",
+    baseTool: "bmi-calculator",
+    title: "Military Fitness Standards BMI Calculator",
+    seoTitle: "Military BMI Calculator - Check Height-Weight Fitness Limits",
+    seoDescription: "Calculate your body mass index against official army, navy, and air force height-weight entry standards and enlistment rules.",
+    heading: "BMI Calculator for Military Fitness Screening",
+    introduction: "Military branches use height-and-weight benchmarks to assess enlistment candidate fitness levels. Calculate your baseline Body Mass Index to see if you meet recruit guidelines.",
+    category: "Health",
+    tips: [
+      "Official Ranges: Most military branches require a healthy BMI baseline of 19.0 to 25.0 for recruits.",
+      "Tape Test Option: If BMI exceeds limits due to high muscle mass, services offer secondary body fat tape measurements.",
+      "Enlistment Preparation: Use calculations to guide conditioning and nutrition plans prior to physical tests."
+    ]
+  },
+  {
+    slug: "bmi-calculator-for-athletes-muscle-mass",
+    baseTool: "bmi-calculator",
+    title: "Athlete & Bodybuilder BMI Calculator",
+    seoTitle: "Athlete BMI Calculator - Body Mass Index for High Muscle Mass",
+    seoDescription: "Evaluate your Body Mass Index as an athlete or weightlifter. Understand BMI limitations when accounting for dense skeletal muscle tissue.",
+    heading: "BMI Calculator for Athletes & Muscle Mass",
+    introduction: "Body Mass Index (BMI) does not distinguish between lean skeletal muscle mass and body fat. Calculate your BMI score while learning how to interpret results as an active athlete.",
+    category: "Health",
+    tips: [
+      "Muscle Bias: Dense muscle weighs more than fat, often pushing athletic individuals into overweight brackets.",
+      "Alternative Metrics: Supplement BMI with waist-to-height ratios or body fat skinfold measurements.",
+      "Clinical Context: Utilize findings to discuss body composition goals with sports nutritionists."
+    ]
+  },
+  {
+    slug: "format-rest-api-json-response",
+    baseTool: "json-formatter",
+    title: "REST API JSON Response Beautifier",
+    seoTitle: "Format and Beautify REST API JSON Responses Online",
+    seoDescription: "Paste minified HTTP response bodies or fetch outputs to check JSON structures, arrays, and sub-object keys clearly with color-coded syntax.",
+    heading: "REST API JSON Response Formatter & Beautifier",
+    introduction: "Raw HTTP API response logs can be hard to read when returned in flat, compressed text. Format minified response strings into beautifully nested code blocks to speed up web development.",
+    category: "Developer",
+    tips: [
+      "Visual Nesting: Collapsible object tags and clear spacing allow quick debugging of deep JSON payloads.",
+      "Validation Check: Detects missing brackets, stray commas, or incorrect quotes in response streams.",
+      "Safe Sandbox: Runs locally inside your browser cache. Sensitive database payloads never leave your sandbox."
+    ]
+  },
+  {
+    slug: "generate-cryptographically-secure-api-keys",
+    baseTool: "password-generator",
+    title: "Secure API Key Generator",
+    seoTitle: "Generate Cryptographically Secure API Keys Online",
+    seoDescription: "Create high-entropy, random API keys, client secrets, and auth tokens using web-crypto secure standard seeds in your browser.",
+    heading: "Generate Cryptographically Secure API Keys",
+    introduction: "Modern APIs require strong, high-entropy tokens to authenticate user calls securely. Generate cryptographically random keys and application secrets matching enterprise compliance standards.",
+    category: "Developer",
+    tips: [
+      "Web Cryptography Standard: Employs standard browser crypto libraries to ensure secure random entropy seeds.",
+      "Custom Prefixing: Add custom prefixes (e.g. `sk_live_...`) to easily organize key scopes in code repositories.",
+      "One-time display: Keys are generated client-side and never stored on any server logs. Save them immediately."
+    ]
+  },
+  {
+    slug: "generate-vcard-contact-qr-code",
+    baseTool: "qr-generator",
+    title: "vCard Contact Details QR Code Generator",
+    seoTitle: "Generate vCard Contact QR Codes for Digital Business Cards",
+    seoDescription: "Generate QR codes containing contact cards (vCard). Let clients scan to add your phone number, email, and website to their address book.",
+    heading: "vCard Contact Details QR Code Generator",
+    introduction: "Make networking fast and contactless. Generate a vCard QR code containing your name, company, email, and telephone lines. When scanned, it prompts smartphone users to save your contact info instantly.",
+    category: "Developer",
+    tips: [
+      "vCard Schema: Uses standardized vCard format compatible with native iOS and Android address books.",
+      "Static Generation: All contact details are encoded directly within the QR pattern, needing no external lookups.",
+      "Design Print: Perfect for printing on physical business cards, posters, or digital email footers."
+    ]
+  },
+  {
+    slug: "convert-text-to-kebab-case-slugs",
+    baseTool: "text-converter",
+    title: "Kebab-Case URL Slug Converter",
+    seoTitle: "Convert Plain Text to kebab-case URL Slugs Online",
+    seoDescription: "Convert blog titles, headings, and sentences into SEO-friendly, lowercase kebab-case url slugs. Cleans up spaces and non-alpha characters.",
+    heading: "Convert Text to kebab-case URL Slugs",
+    introduction: "Clean, lowercase hyphen-connected URLs are essential for search engine optimization. Paste headers or sentences and translate them instantly into clean kebab-case slugs.",
+    category: "Developer",
+    tips: [
+      "Special Character Filtering: Replaces spaces with hyphens and strips punctuation symbols automatically.",
+      "Lowercase Conversion: Forces all characters to lowercase to maintain clean, uniform server paths.",
+      "SEO Standard: Hyphen-connected terms are easily understood by indexers compared to underscore formats."
+    ]
+  },
+  {
+    slug: "decode-base64-image-to-png",
+    baseTool: "base64",
+    title: "Base64 to Image Decoder",
+    seoTitle: "Decode Base64 String to PNG/JPG Image Online",
+    seoDescription: "Decode base64 encoded data URI strings back into original, viewable, and downloadable PNG or JPG files safely in-memory.",
+    heading: "Decode Base64 String to PNG/JPG Image",
+    introduction: "Working with raw base64 data strings from a database or API response? Paste the text buffer and reconstruct it instantly into a clean, downloadable binary image file.",
+    category: "Developer",
+    tips: [
+      "Prefix Handling: Works with or without data URI headers (e.g. `data:image/png;base64,...`).",
+      "Immediate Preview: Renders the decoded image buffer directly inside your screen container before saving.",
+      "Client Protection: Processing is handled using browser Javascript, keeping your base64 strings secure."
+    ]
+  },
+  {
+    slug: "compare-package-json-dependencies",
+    baseTool: "diff-checker",
+    title: "Compare package.json Dependencies Diff",
+    seoTitle: "Compare package.json Dependency Files (Side-by-Side)",
+    seoDescription: "Compare package.json files from different git branches. Detect version drifts, missing dependencies, or devDependencies mismatch.",
+    heading: "Compare package.json Dependencies Side-by-Side",
+    introduction: "Upgrading software stacks or merging project branches can lead to version drift. Compare two package.json files side-by-side to highlight additions, updates, or deletions in seconds.",
+    category: "Developer",
+    tips: [
+      "Dependency Scope: Easily spot mismatch patterns in regular dependencies vs. development tools.",
+      "Local Checking: No project configuration code is uploaded, securing your library names.",
+      "Drift Resolution: Simplifies alignment of locks and module configurations prior to final builds."
+    ]
+  },
+  {
+    slug: "generate-lorem-ipsum-html-paragraphs",
+    baseTool: "lorem-ipsum",
+    title: "Lorem Ipsum HTML Tag Generator",
+    seoTitle: "Generate Lorem Ipsum Placeholders with HTML Tags",
+    seoDescription: "Generate standard placeholder paragraphs, lists, and headings wrapped in clean HTML tags like `<p>`, `<li>`, `<h2>` for web developers.",
+    heading: "Generate Lorem Ipsum Placeholder HTML Snippets",
+    introduction: "Building static HTML mockups or formatting content management themes? Generate placeholder lorem text pre-wrapped in valid HTML tag blocks to drag directly into code templates.",
+    category: "Developer",
+    tips: [
+      "Tag Selections: Configure paragraphs (`<p>`), lists (`<ul>`, `<li>`), or headers (`<h2>` to `<h4>`).",
+      "Clean Code: Outputs clean, minified, standard-compliant HTML tags without stray symbols.",
+      "Direct Copy: Click copy to copy code snippets directly to your workspace clipboard."
+    ]
+  },
+  {
+    slug: "generate-flat-ui-design-color-palette",
+    baseTool: "color-palette",
+    title: "Generate Flat UI Design Color Palette",
+    seoTitle: "Generate Flat UI Color Palettes Online (HEX & RGB)",
+    seoDescription: "Create clean, aesthetic flat UI design color schemes for websites and applications. Get ready-to-copy HEX, RGB, and HSL codes.",
+    heading: "Generate Flat UI Design Color Palette",
+    introduction: "Flat design relies on clean, vibrant colors without heavy gradients. Generate beautiful flat UI design palettes comprising eye-pleasing base colors, accents, and readable dark options.",
+    category: "Design",
+    tips: [
+      "Clean Minimalism: Flat UI colors work best on simple layouts with modern font selections.",
+      "Accessibility: Ensure text layered on top of flat fills meets standard contrast rules.",
+      "Figma Import: Copy the color array strings directly to seed style collections."
+    ]
+  },
+  {
+    slug: "generate-nordic-pastel-color-palette",
+    baseTool: "color-palette",
+    title: "Generate Nordic Pastel Color Palette",
+    seoTitle: "Generate Scandinavian Nordic Pastel Color Palettes",
+    seoDescription: "Generate soothing, muted Scandinavian pastel color schemes featuring soft blues, grays, and mint greens. Perfect for home decor and UI.",
+    heading: "Generate Nordic Pastel Color Palette",
+    introduction: "Scandinavian design focuses on soft, muted, nature-inspired pastel tones. Generate soothing palettes of grays, sand tones, ice blues, and soft foliage greens for minimalist branding.",
+    category: "Design",
+    tips: [
+      "Muted Accents: Combine neutral sand colors with light pastel accents to establish quiet focus points.",
+      "Modern Branding: Perfect for eco-friendly lifestyle brands, calm web designs, and lookbooks.",
+      "Values Export: Instantly get copyable HEX, RGB, and HSL codes to build CSS root variables."
+    ]
+  },
+  {
+    slug: "calculate-days-until-retirement-milestone",
+    baseTool: "date-calculator",
+    title: "Days Until Retirement Calculator",
+    seoTitle: "Calculate Days Until Retirement (Countdown Calendar)",
+    seoDescription: "Find out exactly how many days, weeks, or calendar dates are left before your targeted retirement or corporate exit date.",
+    heading: "Calculate Days & Weeks Until Retirement",
+    introduction: "Counting down the days to your well-deserved retirement or new venture? Calculate the exact number of days, weeks, or weekends remaining until your target career milestone date.",
+    category: "Productivity",
+    tips: [
+      "Target Date: Input your exact expected retirement date to launch the count dashboard.",
+      "Count Modes: See total calendar days, or filter out weekends to view only remaining work days.",
+      "Goal Focus: Ideal for setting milestone targets and staying motivated as your target date approaches."
+    ]
+  },
+  {
+    slug: "calculate-cat-age-in-human-years",
+    baseTool: "age-calculator",
+    title: "Calculate Cat Age in Human Years",
+    seoTitle: "Cat Age Calculator - Convert Cat Years to Human Years",
+    seoDescription: "Calculate your cat's age in human years based on feline growth phases, maturity curves, and indoor/outdoor lifestyle factors.",
+    heading: "Calculate Cat Age in Human Years",
+    introduction: "Cats mature extremely fast in their first two years before settling into a steady aging cycle. Calculate a reliable human-age equivalent for your cat based on feline developmental timelines.",
+    category: "Productivity",
+    tips: [
+      "Feline Milestones: A one-year-old cat is roughly equivalent to a 15-year-old human adolescent.",
+      "Indoor vs. Outdoor: Indoor cats generally age slower biologically and live longer than outdoor cats.",
+      "Health Planning: Use calculated life stage details to tailor veterinarian care and diet schedules."
+    ]
+  },
+  {
+    slug: "convert-cooking-measurements-cups-to-grams",
+    baseTool: "unit-converter",
+    title: "Convert Cooking Cups to Grams",
+    seoTitle: "Cups to Grams Converter - Baking & Cooking Measurements",
+    seoDescription: "Convert culinary volumes (cups, tablespoons) into weight standards (grams) for flour, sugar, butter, and key baking ingredients.",
+    heading: "Convert Cooking Cups to Grams (Baking Calculator)",
+    introduction: "Baking requires exact weight accuracy, but many recipes use volume cups. Convert baking measurements from cups or tablespoons to grams based on standard ingredient densities.",
+    category: "Productivity",
+    tips: [
+      "Ingredient Density: Flour, white sugar, brown sugar, and butter have different densities — choose the specific food item for precise accuracy.",
+      "Baking Success: Measuring by grams instead of cups yields more reliable cake rises and textures.",
+      "Metric Scaling: Easily double or triple recipes without conversion errors."
+    ]
   }
 ];
 
