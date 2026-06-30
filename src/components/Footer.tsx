@@ -32,7 +32,10 @@ export function Footer() {
             <p className="text-sm text-muted-foreground leading-relaxed">
               Fast, elegant, and 100% secure online utilities designed to simplify your digital life. No signups, no fees - just instant results.
             </p>
-            <div className="pt-2">
+            <div className="pt-2 space-y-1.5">
+              <span className="text-[10px] uppercase font-black tracking-wider text-muted-foreground block">
+                More Apps by Developer
+              </span>
               <a
                 href="https://play.google.com/store/apps/developer?id=Vaibhav+Deshmukh"
                 target="_blank"
