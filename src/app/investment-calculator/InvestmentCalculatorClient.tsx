@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +33,8 @@ export default function InvestmentCalculatorClient() {
     breakdown: YearlyBreakdown[];
   } | null>(null);
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const formatNumber = (val: string) => {
     const isNegative = val.startsWith("-");
     const num = val.replace(/[^0-9.]/g, "");
@@ -56,16 +58,15 @@ export default function InvestmentCalculatorClient() {
     }
   };
 
-  const calculateInvestment = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-
+  // Run calculation reactively when inputs change
+  useEffect(() => {
     const P = parseFloat(parseNumber(initialAmount)) || 0;
     const PMT = parseFloat(parseNumber(monthlyContribution)) || 0;
     const t = parseFloat(parseNumber(years));
     const annualRate = (parseFloat(parseNumber(interestRate)) || 0) / 100;
     
-    if (!t || t <= 0) {
-      toast.error("Please enter a valid number of years");
+    if (!t || t <= 0 || t > 100 || (!initialAmount && !monthlyContribution)) {
+      setResult(null);
       return;
     }
 
@@ -119,6 +120,14 @@ export default function InvestmentCalculatorClient() {
       returns: (currentBalance - totalInvested).toLocaleString('en-US', { maximumFractionDigits: 0 }),
       breakdown,
     });
+  }, [initialAmount, monthlyContribution, years, interestRate, compoundFrequency, contributionTiming]);
+
+  const calculateInvestment = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
+    if (resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     toast.success("Investment Projected!");
   };
 
@@ -216,7 +225,7 @@ export default function InvestmentCalculatorClient() {
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Inputs */}
-        <div className="lg:col-span-5 space-y-8">
+        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-8">
           <form onSubmit={calculateInvestment} className="space-y-6">
             <Card className="p-8 space-y-6 border-2 shadow-sm rounded-3xl">
               <div className="space-y-3">
@@ -317,7 +326,7 @@ export default function InvestmentCalculatorClient() {
         </div>
 
         {/* Right Column: Results & Table */}
-        <div className="lg:col-span-7 space-y-8">
+        <div ref={resultsRef} className="lg:col-span-7 space-y-8">
           {result ? (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
               {/* Main Result Card */}

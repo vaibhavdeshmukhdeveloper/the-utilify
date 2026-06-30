@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,13 +35,16 @@ export default function DateCalculatorClient() {
     dayOfWeek: string;
   } | null>(null);
 
-  const calculateDiff = (e: React.FormEvent) => {
-    e.preventDefault();
+  const diffResultsRef = useRef<HTMLDivElement>(null);
+  const mathResultsRef = useRef<HTMLDivElement>(null);
+
+  // Reactive Calculation: Date Difference
+  useEffect(() => {
     const d1 = new Date(startDate);
     const d2 = new Date(endDate);
 
     if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
-      toast.error("Please enter valid dates");
+      setDiffResult(null);
       return;
     }
 
@@ -85,14 +88,13 @@ export default function DateCalculatorClient() {
       totalDays,
       totalWeeks,
     });
-    toast.success("Date difference calculated");
-  };
+  }, [startDate, endDate, includeEndDate]);
 
-  const calculateMath = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Reactive Calculation: Date Math (Add / Subtract)
+  useEffect(() => {
     const d = new Date(baseDate);
     if (isNaN(d.getTime())) {
-      toast.error("Please enter a valid start date");
+      setMathResult(null);
       return;
     }
 
@@ -107,17 +109,25 @@ export default function DateCalculatorClient() {
     d.setMonth(d.getMonth() + mths * multiplier);
     d.setDate(d.getDate() + dys * multiplier);
 
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-
     setMathResult({
       formattedDate: d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
       dayOfWeek: d.toLocaleDateString("en-US", { weekday: "long" }),
     });
+  }, [baseDate, operation, addYears, addMonths, addDays]);
+
+  const calculateDiff = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (diffResultsRef.current) {
+      diffResultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    toast.success("Date difference calculated");
+  };
+
+  const calculateMath = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mathResultsRef.current) {
+      mathResultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     toast.success("Calculated target date");
   };
 
@@ -225,7 +235,7 @@ export default function DateCalculatorClient() {
             </form>
 
             {diffResult && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <div ref={diffResultsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-4 duration-300">
                 {/* Years-Months-Days layout */}
                 <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
                   <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Time Breakdown</div>
@@ -342,13 +352,15 @@ export default function DateCalculatorClient() {
             </form>
 
             {mathResult && (
-              <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-xl mx-auto">
-                <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Calculated Date</div>
-                <div className="text-3xl font-black text-primary tracking-tight">{mathResult.formattedDate}</div>
-                <div className="text-lg font-bold text-muted-foreground flex items-center justify-center gap-1.5">
-                  <ArrowRight className="h-4 w-4 text-primary" /> {mathResult.dayOfWeek}
-                </div>
-              </Card>
+              <div ref={mathResultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-xl mx-auto">
+                <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
+                  <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Calculated Date</div>
+                  <div className="text-3xl font-black text-primary tracking-tight">{mathResult.formattedDate}</div>
+                  <div className="text-lg font-bold text-muted-foreground flex items-center justify-center gap-1.5">
+                    <ArrowRight className="h-4 w-4 text-primary" /> {mathResult.dayOfWeek}
+                  </div>
+                </Card>
+              </div>
             )}
           </TabsContent>
         </Tabs>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +32,8 @@ export default function SipCalculatorClient() {
     breakdown: YearlyBreakdown[];
   } | null>(null);
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const formatNumber = (val: string) => {
     const isNegative = val.startsWith("-");
     const num = val.replace(/[^0-9.]/g, "");
@@ -55,15 +57,14 @@ export default function SipCalculatorClient() {
     }
   };
 
-  const calculateSip = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-
+  // Run calculation reactively when inputs change
+  useEffect(() => {
     const P = parseFloat(parseNumber(monthlyInvestment)) || 0;
     const t = parseFloat(parseNumber(years));
     const annualRate = (parseFloat(parseNumber(returnRate)) || 0) / 100;
     
-    if (!t || t <= 0) {
-      toast.error("Please enter a valid number of years");
+    if (!t || t <= 0 || t > 100 || !monthlyInvestment) {
+      setResult(null);
       return;
     }
 
@@ -114,6 +115,14 @@ export default function SipCalculatorClient() {
       returns: (currentBalance - totalInvested).toLocaleString('en-US', { maximumFractionDigits: 0 }),
       breakdown,
     });
+  }, [monthlyInvestment, years, returnRate, compoundFrequency, contributionTiming]);
+
+  const calculateSip = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
+    if (resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     toast.success("SIP Projection Ready!");
   };
 
@@ -195,7 +204,7 @@ export default function SipCalculatorClient() {
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Inputs */}
-        <div className="lg:col-span-5 space-y-8">
+        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-8">
           <form onSubmit={calculateSip} className="space-y-6">
             <Card className="p-8 space-y-8 border-2 shadow-sm rounded-3xl">
               <div className="space-y-4">
@@ -284,7 +293,7 @@ export default function SipCalculatorClient() {
         </div>
 
         {/* Right Column: Results */}
-        <div className="lg:col-span-7 space-y-8">
+        <div ref={resultsRef} className="lg:col-span-7 space-y-8">
           {result ? (
             <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
               {/* Main Result Card */}

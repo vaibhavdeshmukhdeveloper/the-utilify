@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,23 +11,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function BmiCalculatorClient() {
   const [unitSystem, setUnitSystem] = useState("metric");
-  const [weight, setWeight] = useState("");
-  const [height, setHeight] = useState("");
-  const [weightLbs, setWeightLbs] = useState("");
-  const [heightFt, setHeightFt] = useState("");
-  const [heightIn, setHeightIn] = useState("");
+  const [weight, setWeight] = useState("70");
+  const [height, setHeight] = useState("175");
+  const [weightLbs, setWeightLbs] = useState("154");
+  const [heightFt, setHeightFt] = useState("5");
+  const [heightIn, setHeightIn] = useState("9");
   const [result, setResult] = useState<{ bmi: string; category: string; color: string } | null>(null);
 
-  const calculateBmi = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const resultsRef = useRef<HTMLDivElement>(null);
 
+  // Run calculation reactively whenever inputs change
+  useEffect(() => {
     let bmiValue = 0;
 
     if (unitSystem === "metric") {
       const w = parseFloat(weight);
       const h = parseFloat(height) / 100;
       if (!w || !h || w <= 0 || h <= 0) {
-        toast.error("Please enter valid metric units");
+        setResult(null);
         return;
       }
       bmiValue = w / (h * h);
@@ -38,7 +39,7 @@ export default function BmiCalculatorClient() {
       const totalInches = ft * 12 + inch;
       
       if (!lbs || !totalInches || lbs <= 0 || totalInches <= 0) {
-        toast.error("Please enter valid US units");
+        setResult(null);
         return;
       }
       // BMI formula (US): 703 * (weight / height^2)
@@ -70,7 +71,51 @@ export default function BmiCalculatorClient() {
     }
 
     setResult({ bmi: bmiStr, category, color });
+  }, [unitSystem, weight, height, weightLbs, heightFt, heightIn]);
+
+  const calculateBmi = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+
+    if (resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     toast.success("BMI Calculated");
+  };
+
+  const handleUnitSystemChange = (newSystem: string) => {
+    setUnitSystem(newSystem);
+
+    if (newSystem === "us") {
+      // Convert metric to US
+      const w = parseFloat(weight);
+      const h = parseFloat(height);
+      if (w && w > 0) {
+        const lbs = w * 2.20462;
+        setWeightLbs(parseFloat(lbs.toFixed(1)).toString());
+      }
+      if (h && h > 0) {
+        const totalInches = h / 2.54;
+        const ft = Math.floor(totalInches / 12);
+        const inch = Math.round(totalInches % 12);
+        setHeightFt(ft.toString());
+        setHeightIn(inch.toString());
+      }
+    } else {
+      // Convert US to metric
+      const lbs = parseFloat(weightLbs);
+      const ft = parseFloat(heightFt) || 0;
+      const inch = parseFloat(heightIn) || 0;
+      const totalInches = ft * 12 + inch;
+
+      if (lbs && lbs > 0) {
+        const kg = lbs * 0.453592;
+        setWeight(parseFloat(kg.toFixed(1)).toString());
+      }
+      if (totalInches && totalInches > 0) {
+        const cm = totalInches * 2.54;
+        setHeight(Math.round(cm).toString());
+      }
+    }
   };
 
   const reset = () => {
@@ -151,7 +196,7 @@ export default function BmiCalculatorClient() {
       <ul>
         <li><strong>Muscle Density:</strong> Muscle tissue weighs more than fat tissue of the same volume, causing active individuals to register high BMIs.</li>
         <li><strong>Ethnic Variances:</strong> Research shows that healthy weight and fat distribution bounds differ slightly across different genetic groups.</li>
-        <li><strong>Aging:</strong> Older adults naturally lose muscle mass and carry more body fat than younger individuals at identical BMI scores.</li>
+        <li><strong>Aging:</strong> Oler adults naturally lose muscle mass and carry more body fat than younger individuals at identical BMI scores.</li>
       </ul>
     </article>
   );
@@ -167,7 +212,7 @@ export default function BmiCalculatorClient() {
     >
       <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         <div className="space-y-8">
-          <Tabs defaultValue="metric" className="w-full" onValueChange={setUnitSystem}>
+          <Tabs defaultValue="metric" className="w-full" value={unitSystem} onValueChange={handleUnitSystemChange}>
             <TabsList className="grid w-full grid-cols-2 h-14 rounded-2xl p-1 bg-zinc-100 dark:bg-zinc-900">
               <TabsTrigger value="metric" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">Metric Units</TabsTrigger>
               <TabsTrigger value="us" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">US Units</TabsTrigger>
@@ -250,7 +295,8 @@ export default function BmiCalculatorClient() {
           </Tabs>
 
           {result && (
-            <Card className="p-8 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl animate-in fade-in slide-in-from-bottom-4">
+            <div ref={resultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <Card className="p-8 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
               <div className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-black mb-4">Your Body Mass Index (BMI)</div>
               <div className={`text-7xl font-black mb-6 ${result.color} tracking-tighter`}>
                 {result.bmi}
@@ -262,7 +308,8 @@ export default function BmiCalculatorClient() {
                 Based on your input, your BMI indicates that you are in the <strong>{result.category}</strong> range.
               </p>
             </Card>
-          )}
+          </div>
+        )}
         </div>
 
         <div className="space-y-8">
