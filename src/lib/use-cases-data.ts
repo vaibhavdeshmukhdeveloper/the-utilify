@@ -3158,6 +3158,456 @@ export const useCases: UseCaseData[] = [
       "Baking Success: Measuring by grams instead of cups yields more reliable cake rises and textures.",
       "Metric Scaling: Easily double or triple recipes without conversion errors."
     ]
+  },
+  {
+    slug: "convert-academic-journal-pdf-to-jpg",
+    baseTool: "pdf-to-image",
+    title: "Academic Journal PDF to JPG Converter",
+    seoTitle: "Convert Academic Journal PDF to JPG Online & Free",
+    seoDescription: "Extract and convert pages of academic papers, research journals, or thesis PDFs into high-quality JPG images for presentations or citations.",
+    heading: "Convert Academic Journal PDF to JPG",
+    introduction: "Need to include a specific page of an academic journal, research paper, or thesis in a slideshow presentation or report? Convert high-resolution vector PDF pages into crystal-clear JPG images instantly.",
+    category: "PDF",
+    tips: [
+      "2x Resolution: Keeps small footnotes, equations, and references sharp and readable.",
+      "Visual Citations: Easily share specific graphs or flowcharts without sending heavy full-text files.",
+      "Private Extractor: Renders entirely in your browser memory so academic publications remain protected."
+    ]
+  },
+  {
+    slug: "convert-scanned-document-pdf-to-png",
+    baseTool: "pdf-to-image",
+    title: "Scanned Document PDF to PNG Converter",
+    seoTitle: "Convert Scanned PDF Documents to PNG Images Online",
+    seoDescription: "Extract pages from scanned document PDFs and convert them into clean PNG images. Ideal for OCR preparation, record-keeping, and sharing.",
+    heading: "Convert Scanned PDF Document to PNG",
+    introduction: "If you have a scanned PDF document and need to convert individual pages into high-fidelity, uncompressed PNG images for editing, archival, or OCR processing, our browser tool does it securely in-memory.",
+    category: "PDF",
+    tips: [
+      "Max Text Clarity: PNG formats preserve high contrast and edge sharpness, making them perfect for OCR search scans.",
+      "Local Rendition: Done completely in browser RAM, ensuring scanned sensitive files are never exposed.",
+      "ZIP Bundle: Converting multi-page PDFs automatically packages your images into a single zip file for convenience."
+    ]
+  },
+  {
+    slug: "split-scanned-document-pdf-pages",
+    baseTool: "split-pdf",
+    title: "Split Scanned Document PDF Pages",
+    seoTitle: "Split and Separate Scanned Document PDF Pages Online",
+    seoDescription: "Separate bundled scanner PDFs, receipts, or document packets into individual, single-page PDF files safely in your browser.",
+    heading: "Split Scanned Document PDF Pages",
+    introduction: "When you scan multiple separate documents on a flatbed office printer, they often combine into a single heavy PDF. Instantly split and export those pages into separate individual documents.",
+    category: "PDF",
+    tips: [
+      "Custom Ranges: Extract pages individually or split entire stacks in specific groupings in seconds.",
+      "Lossless Resolution: Retains original high-DPI image layers and color depth without compression loss.",
+      "Zero Storage: The split logic runs locally in browser JavaScript, keeping your scanned documents 100% private."
+    ]
+  },
+  {
+    slug: "extract-chapters-from-textbook-pdf",
+    baseTool: "split-pdf",
+    title: "Extract Chapters from Textbook PDF",
+    seoTitle: "Extract Specific Chapters or Sections from Textbook PDF",
+    seoDescription: "Isolate and extract specific chapters, assignments, or reading sections from thick digital textbooks. Get a lightweight PDF containing only what you need.",
+    heading: "Extract Specific Chapters from Textbook PDF",
+    introduction: "Stop carrying heavy multi-hundred-page digital textbook files. Extract exactly the chapters, syllabus parts, or pages you need for your study group or next exam study session.",
+    category: "PDF",
+    tips: [
+      "Targeted Reading: Avoid system slowdowns on mobile devices by loading only 10 pages instead of 1,000.",
+      "Easy Sharing: Share specific lecture pages or homework sections with classmates or professors.",
+      "Vector Layers: Maintains searchability, hyperlinks, and bookmark tables within extracted sections."
+    ]
+  },
+  {
+    slug: "merge-billing-invoices-monthly-pdf",
+    baseTool: "merge-pdf",
+    title: "Merge Billing Invoices into Monthly PDF",
+    seoTitle: "Merge Monthly Billing Invoices and Receipts into One PDF",
+    seoDescription: "Combine all your monthly utility bills, subscription invoices, and merchant receipts into a single PDF for tax filing or expense reporting.",
+    heading: "Merge Invoices into Monthly PDF Packets",
+    introduction: "Simplify your bookkeeping by consolidating separate PDF invoices, statements, and payment receipts from a single month into one structured PDF file.",
+    category: "PDF",
+    tips: [
+      "Chronological Ordering: Sort files by date order inside the uploader before initiating the merge.",
+      "Accounting Ready: Handing over one unified document to your tax team lowers processing overhead.",
+      "File Cleanups: Deletes trailing blank pages and unifies differing layout sizes automatically."
+    ]
+  },
+  {
+    slug: "combine-educational-worksheets-pdf",
+    baseTool: "merge-pdf",
+    title: "Combine Educational Worksheets PDF",
+    seoTitle: "Combine School & Class Worksheets into One PDF",
+    seoDescription: "Merge multiple educational worksheets, exercise sheets, and lesson plans into a single PDF packet for students or classroom printing.",
+    heading: "Combine Educational Worksheets into One PDF",
+    introduction: "Teachers can easily organize class resources by combining separate worksheet pages, activity guides, and answer keys into a single, cohesive PDF bundle.",
+    category: "PDF",
+    tips: [
+      "Answer Keys: Place answer reference lists at the very end of your file sequence for clean structure.",
+      "Format Alignment: Merges different page scales (Letter, A4) into a cohesive student printable PDF.",
+      "Quick Printing: Prints 20 worksheets at once instead of initiating 20 separate print jobs."
+    ]
+  },
+  {
+    slug: "convert-markdown-user-guide-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Markdown User Guide to PDF Converter",
+    seoTitle: "Convert Markdown User Guides and Manuals to PDF Online",
+    seoDescription: "Render markdown user manuals, developer documentation, or product guides into professional, clean PDF documents in seconds.",
+    heading: "Convert Markdown User Guides to PDF",
+    introduction: "Drafting software documentations or device manuals in markdown? Instantly convert your markdown files into beautifully formatted PDF documents complete with custom code styling and clean layout margins.",
+    category: "PDF",
+    tips: [
+      "Table of Contents: Structure headings hierarchy accurately for automated index mapping.",
+      "Code Highlighting: Fenced code blocks are styled with clean dark backgrounds for engineer legibility.",
+      "Media Links: Ensure all reference images use public web links for successful PDF embedding."
+    ]
+  },
+  {
+    slug: "convert-markdown-recipe-book-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Markdown Recipe Book to PDF Converter",
+    seoTitle: "Convert Markdown Recipes and Cookbooks to PDF",
+    seoDescription: "Compile your markdown recipes, kitchen instructions, or custom cookbooks into a beautifully formatted, printable PDF document.",
+    heading: "Convert Markdown Recipe Book to PDF",
+    introduction: "Gather your favorite markdown-formatted cooking recipes, list of ingredients, and preparation instructions, and translate them into a clean, ready-to-print kitchen handbook PDF.",
+    category: "PDF",
+    tips: [
+      "Page Breaks: Use clear markdown divider tags (`---`) to separate recipes onto fresh pages.",
+      "List Formats: Use bullet symbols (`-`) for ingredients and numbered lines (`1.`) for step-by-step methods.",
+      "Print Margins: Generous padding ensures your text won't get cut off when binding physical kitchen folders."
+    ]
+  },
+  {
+    slug: "remove-background-shoe-photos-poshmark",
+    baseTool: "background-remover",
+    title: "Shoe Photo Background Remover for Poshmark",
+    seoTitle: "Remove Background from Shoe Photos Online (Poshmark & eBay)",
+    seoDescription: "Instantly erase background shadows and clutter from shoe, sneaker, and boot product photos. Clean transparent PNG outputs ready for reseller apps.",
+    heading: "Remove Background from Shoe & Footwear Photos",
+    introduction: "Clean, distraction-free shoe photos get higher buyer interest on eBay, Poshmark, and Depop. Automatically isolate sneakers, heels, or boots from busy floor or room backgrounds.",
+    category: "Image",
+    tips: [
+      "Stitch Detail: Our model retains fine fabric textures, seams, and complex lace curves.",
+      "Clean Shadows: Removes ground shadows cleanly to avoid blurry outline halos.",
+      "Reseller Success: Standardize your shop layout by dropping isolated shoes onto pure white canvas backdrops."
+    ]
+  },
+  {
+    slug: "remove-background-plant-photos-ecommerce",
+    baseTool: "background-remover",
+    title: "Plant Photo Background Remover",
+    seoTitle: "Remove Background from Plant & Leaf Photos Online",
+    seoDescription: "Remove backgrounds from houseplant, flower, and leaf photos. Perfect for nursery catalogs, plant shops, and botanical collections.",
+    heading: "Remove Background from Plant & Botanical Photos",
+    introduction: "Foliage and leaves have complex, intricate borders that are hard to isolate manually. Our advanced AI detects plant outlines and removes distracting greenhouse or room backdrops in one click.",
+    category: "Image",
+    tips: [
+      "Fine Edges: Resolves thin stems, leaves, and twigs without jagged clipping patterns.",
+      "Hobbyist Ready: Quickly isolate plant structures for garden guides, identification apps, or blog art.",
+      "Catalog Sync: Drops all potted plants onto identical backgrounds for clean eCommerce grid layouts."
+    ]
+  },
+  {
+    slug: "remove-background-book-covers-publishing",
+    baseTool: "background-remover",
+    title: "Book Cover Photo Background Remover",
+    seoTitle: "Remove Background from Book Covers Online (Publishing)",
+    seoDescription: "Extract clean book covers and product photos from noisy table or shelf shots. Perfect for authors, publishers, and self-publishing platforms.",
+    heading: "Remove Background from Book Cover Photos",
+    introduction: "Upload physical book photos or drafts to isolate the cover. Our AI strips off shelf backdrops and reflections, delivering a transparent flat mockup ideal for marketing campaigns.",
+    category: "Image",
+    tips: [
+      "Perspective Straightening: Maintains straight book spine edges and rectangular aspect ratios.",
+      "Promotional Assets: Use transparent PNG covers to build mockups, Instagram banners, or Amazon ads.",
+      "Glare Free: Isolate book content cleanly even if the original photo has surface lighting flares."
+    ]
+  },
+  {
+    slug: "compress-digital-art-portfolio-images",
+    baseTool: "image-compressor",
+    title: "Digital Art Portfolio Image Compressor",
+    seoTitle: "Compress Digital Art and Illustration Portfolios Online",
+    seoDescription: "Reduce file sizes of high-resolution digital paintings, concept art, and illustrations without sacrificing color fidelity or sharpness.",
+    heading: "Compress Digital Art Portfolio Images",
+    introduction: "Displaying your creative portfolio online shouldn't slow down your website. Safely compress digital paintings, character illustrations, and vector designs to optimize load times for recruiters.",
+    category: "Image",
+    tips: [
+      "Color Accuracy: Keeps subtle gradients, shades, and brush strokes intact without artifact banding.",
+      "Fast Portfolio: Lowering illustration file sizes from 8MB to 400KB ensures immediate gallery load speeds.",
+      "Client Protections: Local processing means raw intellectual property never leaves your desktop."
+    ]
+  },
+  {
+    slug: "compress-screenshots-for-jira-bug-reports",
+    baseTool: "image-compressor",
+    title: "Bug Report Screenshot Compressor",
+    seoTitle: "Compress Screenshots for Jira, GitHub, & Trello Tickets",
+    seoDescription: "Instantly compress bug screenshots and screen captures to meet attachment size limits on Jira, GitHub issues, and Slack.",
+    heading: "Compress Screenshots for Bug & Issue Reports",
+    introduction: "High-resolution desktop screenshots are often too heavy for issue trackers or workspace channels. Quickly shrink file size while keeping error logs and text perfectly readable.",
+    category: "Image",
+    tips: [
+      "Text Readability: Retains absolute text contrast and sharpness for logs, console values, and stack traces.",
+      "Bypass Limits: Shrinks heavy PNG screenshots into lightweight PNG or JPG formats to slide under Jira limits.",
+      "Speedy Uploads: Saves upload bandwidth for remote engineering teams sending daily reports."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-buying-car",
+    baseTool: "sip-calculator",
+    title: "SIP Calculator for Buying a Car",
+    seoTitle: "SIP Calculator for Buying a Car - Plan Vehicle Purchase",
+    seoDescription: "Calculate the monthly mutual fund SIP investment required to build a target down payment or buy your dream car in a specific timeframe.",
+    heading: "SIP Calculator for Buying Your Dream Car",
+    introduction: "Planning to purchase a new car or upgrade your current ride? Determine how much you need to invest monthly in mutual funds or market portfolios to hit your purchase target without taking heavy high-interest car loans.",
+    category: "Finance",
+    tips: [
+      "Inflation Buffer: Factor in annual automotive inflation (around 4-6%) to adjust target amounts.",
+      "Loan Down-payments: Target saving 30-50% of the car's on-road price to secure lowest financing rates.",
+      "Conservative Rates: Model returns using a modest 10-12% expected yield for safer financial forecasts."
+    ]
+  },
+  {
+    slug: "sip-calculator-for-wedding-expenses",
+    baseTool: "sip-calculator",
+    title: "SIP Calculator for Wedding Expenses",
+    seoTitle: "SIP Calculator for Wedding & Marriage Savings Plan",
+    seoDescription: "Calculate how much you need to invest monthly in a SIP to build a wedding budget. Project compounding returns over your target wedding timeline.",
+    heading: "SIP Calculator for Wedding & Marriage Expenses",
+    introduction: "Weddings are major financial milestones. Calculate how structured, recurring monthly investments can compound to build your ideal wedding budget, allowing you to enjoy your big day stress-free.",
+    category: "Finance",
+    tips: [
+      "Realistic Timelines: Set a clear goal (e.g., 3-5 years) to match appropriate debt or equity funds.",
+      "Contingency buffer: Include a 15% backup margin to cover sudden catering, guest additions, or venue fees.",
+      "Automatic Step-up: Consider stepping up monthly savings annually as your income increases to reach targets faster."
+    ]
+  },
+  {
+    slug: "project-compound-interest-emergency-fund",
+    baseTool: "investment-calculator",
+    title: "Emergency Fund Compound Interest Projector",
+    seoTitle: "Calculate Compound Interest on Emergency Savings Funds",
+    seoDescription: "Project the growth and compound interest earned on your emergency cash fund stored in high-yield savings accounts or liquid mutual funds.",
+    heading: "Project Compound Interest for Emergency Funds",
+    introduction: "An emergency fund should be safe but should still earn interest. Project how your reserve liquid cash accumulates compounding returns in a High-Yield Savings Account (HYSA) or low-risk liquid fund over time.",
+    category: "Finance",
+    tips: [
+      "Living Reserves: Target accumulating 3 to 6 months of actual essential expenses as your principal value.",
+      "Interest Reinvestment: Select quarterly compounding parameters to simulate modern banking yields.",
+      "Immediate Liquidity: Keep emergency funds in accounts with no lock-in clauses to access cash instantly."
+    ]
+  },
+  {
+    slug: "calculate-gold-investment-compound-returns",
+    baseTool: "investment-calculator",
+    title: "Gold Investment Compound Returns Calculator",
+    seoTitle: "Calculate Gold Investment Compound Growth & Returns",
+    seoDescription: "Calculate the long-term compound annual growth rate (CAGR) and returns of digital gold, sovereign gold bonds, or physical gold investments.",
+    heading: "Calculate Gold Investment Compound Returns",
+    introduction: "Gold is a classic hedge against inflation. Calculate the projected growth of regular or lump-sum gold investments over years to see how it fits within your broader investment portfolio.",
+    category: "Finance",
+    tips: [
+      "Sovereign Gold Bonds (SGBs): Model an extra 2.5% fixed interest return added on top of capital gold appreciation.",
+      "Historic Baseline: Average returns of gold over past decades range from 6-8% CAGR.",
+      "Portfolio Balance: Financial advisors typically suggest dedicating 5-10% of total net worth to gold assets."
+    ]
+  },
+  {
+    slug: "bmi-calculator-body-composition-tracking",
+    baseTool: "bmi-calculator",
+    title: "BMI Body Composition Tracker",
+    seoTitle: "BMI Calculator for Body Composition & Weight Management",
+    seoDescription: "Calculate and monitor your Body Mass Index (BMI) to support body recomposition goals, fat loss journeys, and lean muscle building plans.",
+    heading: "BMI Calculator for Body Composition Tracking",
+    introduction: "If you are focusing on body recomposition (building muscle while losing fat), check where your current height-to-weight ratio sits on the universal BMI chart to track physical progress.",
+    category: "Health",
+    tips: [
+      "Recomposition Limits: BMI doesn't account for muscle mass vs fat mass, use it alongside caliper assessments.",
+      "Patience First: Body recomposition takes time; evaluate your baseline values once every 4-6 weeks.",
+      "Hydration and Time: Weigh yourself empty first thing in the morning to maintain accurate tracking logs."
+    ]
+  },
+  {
+    slug: "bmi-calculator-physical-therapy-assessment",
+    baseTool: "bmi-calculator",
+    title: "BMI Physical Therapy Assessment Calculator",
+    seoTitle: "BMI Calculator for Physical Therapy & Rehabilitation Assessments",
+    seoDescription: "Calculate Body Mass Index (BMI) to assist in physical therapy diagnostics, mobility analysis, and joint loading evaluations during rehab.",
+    heading: "BMI Calculator for Physical Therapy Assessments",
+    introduction: "Higher body weight alters joint loading dynamics on hips, knees, and ankles. Calculate a baseline BMI to help physical therapists structure customized mobility, strength, and recovery programs.",
+    category: "Health",
+    tips: [
+      "Joint Stress: Extra weight changes mechanics; structural alignment plans rely heavily on precise baseline details.",
+      "Injury Recovery: Maintain stable calorie profiles during rehab to prevent unwanted body weight jumps.",
+      "Professional Supervision: Combine calculations with actual movement tests directed by a qualified physiotherapist."
+    ]
+  },
+  {
+    slug: "minify-json-payload-aws-lambda-inputs",
+    baseTool: "json-formatter",
+    title: "AWS Lambda JSON Payload Minifier",
+    seoTitle: "Minify JSON Payloads for AWS Lambda Inputs Online",
+    seoDescription: "Compress and minify JSON configuration payloads and test events for AWS Lambda to ensure they stay within payload size limits.",
+    heading: "Minify JSON Payloads for AWS Lambda",
+    introduction: "AWS Lambda has strict request/response payload size limits (e.g., 6MB for synchronous invocations). Minify your input JSON and test events to strip unnecessary whitespace and comments, keeping data packets compact.",
+    category: "Developer",
+    tips: [
+      "Compact Structure: Removes indent spaces, line breaks, and comments while maintaining 100% compliant JSON.",
+      "Latency Boost: Smaller JSON arrays decrease transport payload durations and cold-start execution times.",
+      "Local Formats: Parsing is completed directly in the browser environment, keeping sensitive secrets secure."
+    ]
+  },
+  {
+    slug: "format-nested-graphql-response-json",
+    baseTool: "json-formatter",
+    title: "GraphQL JSON Response Formatter",
+    seoTitle: "Format and Prettify GraphQL Response JSON Online",
+    seoDescription: "Format deeply nested JSON response structures typical of GraphQL API queries. Makes complex nested data fields readable.",
+    heading: "Format Nested GraphQL Response JSON",
+    introduction: "GraphQL query outputs are often deeply nested, containing multiple levels of nodes, connections, and edges. Easily format these payloads into clean, collapsible hierarchical blocks to analyze response fields.",
+    category: "Developer",
+    tips: [
+      "GraphQL Node Debug: Collapsible lists make identifying specific connection errors or missing fields simple.",
+      "Error Highlighting: Finds missing brackets or misplaced quotes immediately with live syntax analysis.",
+      "Copy Key Paths: Prettifying structures lets developers trace path variables without parsing strings manually."
+    ]
+  },
+  {
+    slug: "generate-safe-password-router-admin-portal",
+    baseTool: "password-generator",
+    title: "Router Admin Portal Safe Password Generator",
+    seoTitle: "Generate Strong Passwords for Wi-Fi Router Admin Portals",
+    seoDescription: "Create high-strength, cryptographically secure passwords for your home Wi-Fi router admin panels to block unauthorized login attempts.",
+    heading: "Generate Secure Wi-Fi Router Admin Passwords",
+    introduction: "Default router logins are a major security vulnerability. Generate random, high-entropy passwords with custom length, symbols, and numbers to lock down your network gateway console.",
+    category: "Developer",
+    tips: [
+      "Ditch Defaults: Avoid utilizing weak preset login configurations (like 'admin' or 'password').",
+      "Character Mixes: Enable symbols and mixed capitalization parameters to maximize password strength.",
+      "Offline Processing: Credentials are generated client-side using Web-Crypto seeds for safety."
+    ]
+  },
+  {
+    slug: "generate-secure-password-database-credentials",
+    baseTool: "password-generator",
+    title: "Database Credentials Secure Password Generator",
+    seoTitle: "Generate Cryptographically Secure Passwords for Databases",
+    seoDescription: "Generate random, high-strength passwords for MySQL, PostgreSQL, or MongoDB users. Avoid characters that clash with connection strings.",
+    heading: "Generate Secure Database Credential Passwords",
+    introduction: "Database connections require strong auth credentials. Generate secure random passwords that avoid tricky connection string characters (like `@`, `:`, `/`, or space) while retaining high-entropy protection.",
+    category: "Developer",
+    tips: [
+      "Avoid Tricky Symbols: Deselect characters that conflict with URI parsers to prevent database connection failures.",
+      "Length Target: Use a minimum of 24 characters for administrative database logins.",
+      "Local Safety: Generated client-side, ensuring credentials never traverse databases or log history."
+    ]
+  },
+  {
+    slug: "generate-wifi-network-login-qr-code",
+    baseTool: "qr-generator",
+    title: "Wi-Fi Network Connection QR Code Generator",
+    seoTitle: "Generate Wi-Fi Login QR Codes (Scan to Connect)",
+    seoDescription: "Create a scan-to-connect Wi-Fi QR code containing your network name (SSID), security type (WPA/WEP), and password.",
+    heading: "Wi-Fi Network Login QR Code Generator",
+    introduction: "Stop spelling out long, complex Wi-Fi passwords to your guests. Generate a static QR code that users can scan with their phone camera to join your network instantly.",
+    category: "Developer",
+    tips: [
+      "SSID Match: Ensure the SSID name matches your Wi-Fi network spelling and casing exactly.",
+      "Standard Schema: Encoded using standard `WIFI:` formats, compatible with native iOS and Android cameras.",
+      "Print Display: Print the final QR graphic and attach it to walls, tables, or guest welcome books."
+    ]
+  },
+  {
+    slug: "compare-json-config-files-diff",
+    baseTool: "diff-checker",
+    title: "JSON Config Files Diff Checker",
+    seoTitle: "Compare JSON Configuration Files (Side-by-Side Diff)",
+    seoDescription: "Compare and verify changes between two JSON configuration payloads, API responses, or package locks side-by-side.",
+    heading: "Compare JSON Configuration Files Side-by-Side",
+    introduction: "Spotting tiny schema bugs in long nested JSON config files is incredibly difficult. Paste your target configuration files side-by-side to highlight added keys, deleted lines, or changed values instantly.",
+    category: "Developer",
+    tips: [
+      "Prettify First: Run files through a formatter first so indentation changes don't muddy diff results.",
+      "Verify Keys: Side-by-side line highlighting lets you spot version drifts in dependency mappings.",
+      "Secure Parsing: File differences are calculated in-browser, ensuring server details stay confidential."
+    ]
+  },
+  {
+    slug: "generate-cyberpunk-dark-neon-color-palette",
+    baseTool: "color-palette",
+    title: "Cyberpunk Neon Color Palette Generator",
+    seoTitle: "Generate Cyberpunk Neon & Dark Mode Color Palettes",
+    seoDescription: "Create striking, futuristic cyberpunk color palettes featuring bright neon pinks, cyber blues, and deep dark backgrounds.",
+    heading: "Generate Cyberpunk Dark Neon Color Palette",
+    introduction: "Looking to build a futuristic, neon-drenched layout or digital art piece? Generate high-contrast, glowing cyberpunk color schemes set against rich, slate-dark backdrops.",
+    category: "Design",
+    tips: [
+      "Contrast Rules: Layer high-excitation neon accent points (e.g. #00ffff) only over very dark base fills.",
+      "Design Tone: Ideal for esports platforms, synthwave album sleeves, and dark interfaces.",
+      "HEX Export: Copy CSS custom property tables instantly to seed tailwind or custom configuration classes."
+    ]
+  },
+  {
+    slug: "calculate-dog-age-in-human-years",
+    baseTool: "age-calculator",
+    title: "Dog Age Calculator",
+    seoTitle: "Dog Age Calculator - Convert Dog Years to Human Years",
+    seoDescription: "Convert your dog's age to human years based on size (small, medium, large, giant breed) and physiological growth formulas.",
+    heading: "Convert Dog Age to Human Years",
+    introduction: "Curious how old your dog is in human terms? Calculate an accurate biological age based on your dog's breed size and life stage milestones.",
+    category: "Productivity",
+    tips: [
+      "Size Matters: Large and giant dog breeds age significantly faster than small toy breeds.",
+      "Initial Development: All dogs mature rapidly in their first two years before slowing to breed-specific cycles.",
+      "Care Plans: Use calculated biological milestones to update diet profiles or senior wellness testing schedules."
+    ]
+  },
+  {
+    slug: "calculate-days-between-wedding-milestones",
+    baseTool: "date-calculator",
+    title: "Wedding Planning Date Calculator",
+    seoTitle: "Calculate Days Between Wedding Planning Milestones",
+    seoDescription: "Find the exact count of days and weeks between key wedding planning dates, booking deadlines, and your main wedding day.",
+    heading: "Calculate Days Between Wedding Milestones",
+    introduction: "Organizing catering, florist arrivals, invitations, and venue bookings requires precise date coordination. Find the exact days remaining between planning milestones to stay on schedule.",
+    category: "Productivity",
+    tips: [
+      "Countdown Tracking: Add or subtract dates to calculate exact deadlines for caterer down-payments.",
+      "Vendor Coordination: Share clear countdown timelines with organizers to synchronize arrival dates.",
+      "Task Lists: Keeps timelines readable, showing total weeks, weekdays, or weekends remaining."
+    ]
+  },
+  {
+    slug: "convert-pressure-units-psi-to-bar",
+    baseTool: "unit-converter",
+    title: "Pressure Units PSI to BAR Converter",
+    seoTitle: "Convert Pressure PSI to BAR Online (PSI to BAR)",
+    seoDescription: "Convert mechanical pressure measurements between pounds per square inch (PSI) and bar. Fast, high-accuracy conversion for automotive and engineering.",
+    heading: "Convert Pressure Units (PSI to BAR)",
+    introduction: "Working on car tires, hydraulic machinery, air compressors, or industrial gauges? Instantly convert pressure values between standard imperial PSI and metric bar units with absolute precision.",
+    category: "Productivity",
+    tips: [
+      "Metric Standard: 1 BAR is equivalent to approximately 14.50377 PSI.",
+      "Bidirectional Input: Change values in either box to view recalculated outputs instantly.",
+      "Real-world Specs: Ideal for calculating vehicle tyre values, compressor settings, or dive tank pressures."
+    ]
+  },
+  {
+    slug: "convert-speed-mph-to-kmh",
+    baseTool: "unit-converter",
+    title: "Speed MPH to KMH Converter",
+    seoTitle: "Convert Miles per Hour to Kilometers per Hour (MPH to KMH)",
+    seoDescription: "Quickly convert speed limits and driving speeds from miles per hour (MPH) to kilometers per hour (KMH) or vice versa.",
+    heading: "Convert Speed (MPH to KMH)",
+    introduction: "Traveling abroad or reading import car gauges? Translate speed measurements between imperial miles per hour and metric kilometers per hour dynamically.",
+    category: "Productivity",
+    tips: [
+      "Travel Planning: 1 MPH is equal to exactly 1.609344 KMH.",
+      "Dash Tuning: Quick conversion helps import vehicle owners map speed benchmarks easily.",
+      "Fluid Outputs: Converts numbers instantly without page reload delays."
+    ]
   }
 ];
 
