@@ -1,10 +1,8 @@
-import { useCases } from "@/lib/use-cases-data";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Sparkles, ArrowRight, Layers, FileText, PiggyBank, Activity, FileJson, Palette, Clock } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Metadata } from "next";
+import UseCasesListClient from "./UseCasesListClient";
 
 export const metadata: Metadata = {
   title: "Specialized Use Cases Directory - Utilify",
@@ -12,30 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function UseCasesDirectoryPage() {
-  // Group use cases by category
-  const categories = ["PDF", "Image", "Finance", "Health", "Developer", "Design", "Productivity"];
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case "PDF":
-        return FileText;
-      case "Image":
-        return Layers;
-      case "Finance":
-        return PiggyBank;
-      case "Health":
-        return Activity;
-      case "Developer":
-        return FileJson;
-      case "Design":
-        return Palette;
-      case "Productivity":
-        return Clock;
-      default:
-        return Sparkles;
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
@@ -55,55 +29,8 @@ export default function UseCasesDirectoryPage() {
             </p>
           </div>
 
-          {/* Categorized Directories */}
-          <div className="space-y-16">
-            {categories.map((category) => {
-              const items = useCases.filter((uc) => uc.category === category);
-              if (items.length === 0) return null;
-              const IconComp = getCategoryIcon(category);
-
-              return (
-                <div key={category} className="space-y-6">
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 pb-4 border-b border-zinc-100 dark:border-zinc-900">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                      <IconComp className="h-5 w-5" />
-                    </div>
-                    <h2 className="text-2xl font-black text-foreground tracking-tight">
-                      {category} Use Cases
-                    </h2>
-                    <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-muted text-muted-foreground ml-2">
-                      {items.length} use cases
-                    </span>
-                  </div>
-
-                  {/* Use Case Cards Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {items.map((uc, idx) => (
-                      <Link key={idx} href={`/use-case/${uc.slug}`} className="group">
-                        <Card className="h-full border-2 border-zinc-100 dark:border-zinc-900 bg-white dark:bg-zinc-950/40 rounded-[2rem] hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
-                          <CardHeader className="p-8">
-                            <div className="flex justify-between items-start mb-6">
-                              <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-primary/10 text-primary">
-                                {category}
-                              </span>
-                              <ArrowRight className="h-5 w-5 text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-10px] group-hover:translate-x-0" />
-                            </div>
-                            <CardTitle className="text-xl font-bold tracking-tight mb-3 text-zinc-900 dark:text-zinc-50 group-hover:text-primary transition-colors leading-snug">
-                              {uc.title}
-                            </CardTitle>
-                            <CardDescription className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                              {uc.seoDescription}
-                            </CardDescription>
-                          </CardHeader>
-                        </Card>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {/* Interactive Search & Filter Directory Grid */}
+          <UseCasesListClient />
         </div>
       </main>
 

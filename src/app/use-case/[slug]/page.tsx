@@ -135,10 +135,29 @@ export default async function UseCasePage({ params }: PageProps) {
     }
   };
 
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": `How to use ${data.title}`,
+    "description": data.seoDescription,
+    "step": data.tips.map((tip, index) => {
+      const parts = tip.split(":");
+      const stepName = parts[0] ? parts[0].trim() : `Step ${index + 1}`;
+      const stepText = parts.slice(1).join(":").trim() || tip;
+      return {
+        "@type": "HowToStep",
+        "position": index + 1,
+        "name": stepName,
+        "text": stepText
+      };
+    })
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <JsonLd data={schemaData} />
+      <JsonLd data={howToSchema} />
 
       <main className="flex-grow">
         {/* Niche Landing Page Header */}
@@ -195,6 +214,36 @@ export default async function UseCasePage({ params }: PageProps) {
               <span className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Interactive Console</span>
             </div>
             {renderClientTool()}
+          </div>
+        </section>
+
+        {/* Step-by-Step "How to Use" Guide */}
+        <section className="py-16 border-t bg-card">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center mb-12">
+              <h2 className="text-3xl font-black tracking-tight mb-4 text-foreground">
+                How to Use the {data.title}
+              </h2>
+              <p className="text-muted-foreground text-sm font-medium">
+                Follow these simple steps to process your file or calculate your results in seconds.
+              </p>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
+              {data.tips.map((tip, index) => {
+                const parts = tip.split(":");
+                const stepName = parts[0] ? parts[0].trim() : `Step ${index + 1}`;
+                const stepText = parts.slice(1).join(":").trim() || tip;
+                return (
+                  <div key={index} className="flex flex-col items-center text-center p-8 rounded-3xl bg-background border-2 border-zinc-100 dark:border-zinc-900 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center font-black text-lg mb-6">
+                      {index + 1}
+                    </div>
+                    <h3 className="font-extrabold text-lg mb-3 text-zinc-900 dark:text-zinc-50">{stepName}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed font-medium">{stepText}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 

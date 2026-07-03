@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/card";
 import { usePathname } from "next/navigation";
 import { AdBanner } from "./AdBanner";
 import { CrossPromo } from "./CrossPromo";
+import { useCases } from "@/lib/use-cases-data";
+import Link from "next/link";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -29,6 +31,12 @@ export function ToolLayout({
 }: ToolLayoutProps) {
   const pathname = usePathname();
   const isUseCase = pathname?.startsWith("/use-case/");
+  
+  // Extract the base tool slug (e.g. "/background-remover" -> "background-remover")
+  const toolSlug = pathname ? pathname.replace(/^\//, "") : "";
+  
+  // Find related use cases for this parent tool
+  const toolUseCases = useCases.filter((uc) => uc.baseTool === toolSlug);
 
   if (isUseCase) {
     return (
@@ -113,6 +121,26 @@ export function ToolLayout({
             </div>
           </div>
         </section>
+
+        {/* SEO Content: Specialized Use Cases */}
+        {toolUseCases.length > 0 && (
+          <section className="py-12 bg-muted/10 border-t flex flex-col items-center justify-center text-center">
+            <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto">
+              <h2 className="text-2xl font-bold mb-6 text-center text-foreground">Specialized Use Cases</h2>
+              <div className="flex flex-wrap justify-center gap-3">
+                {toolUseCases.map((uc, index) => (
+                  <Link
+                    key={index}
+                    href={`/use-case/${uc.slug}`}
+                    className="px-4 py-2 rounded-full border bg-card hover:bg-primary hover:text-primary-foreground transition-colors text-sm font-medium"
+                  >
+                    {uc.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* SEO Content: Related Tools */}
         <section className="py-12 flex flex-col items-center justify-center text-center">
