@@ -6,31 +6,41 @@ import Link from "next/link";
 import { ArrowLeft, Sparkles, AlertCircle, Shield, CheckCircle, Info } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { JsonLd } from "@/components/JsonLd";
+import dynamic from "next/dynamic";
 
-// Import all client tools dynamically or directly since this is a server wrapper
-import BackgroundRemoverClient from "@/app/background-remover/BackgroundRemoverClient";
-import PdfToImageClient from "@/app/pdf-to-image/PdfToImageClient";
-import SplitPdfClient from "@/app/split-pdf/SplitPdfClient";
-import MergePdfClient from "@/app/merge-pdf/MergePdfClient";
-import ImageCompressorClient from "@/app/image-compressor/ImageCompressorClient";
-import MarkdownToPdfClient from "@/app/markdown-to-pdf/MarkdownToPdfClient";
-import SipCalculatorClient from "@/app/sip-calculator/SipCalculatorClient";
-import InvestmentCalculatorClient from "@/app/investment-calculator/InvestmentCalculatorClient";
-import BmiCalculatorClient from "@/app/bmi-calculator/BmiCalculatorClient";
-import JsonFormatterClient from "@/app/json-formatter/JsonFormatterClient";
-import PasswordGeneratorClient from "@/app/password-generator/PasswordGeneratorClient";
-import QrGeneratorClient from "@/app/qr-generator/QrGeneratorClient";
-import TextConverterClient from "@/app/text-converter/TextConverterClient";
-import Base64Client from "@/app/base64/Base64Client";
-import ColorPaletteClient from "@/app/color-palette/ColorPaletteClient";
-import DateCalculatorClient from "@/app/date-calculator/DateCalculatorClient";
-import AgeCalculatorClient from "@/app/age-calculator/AgeCalculatorClient";
-import UnitConverterClient from "@/app/unit-converter/UnitConverterClient";
-import DiffCheckerClient from "@/app/diff-checker/DiffCheckerClient";
-import LoremIpsumClient from "@/app/lorem-ipsum/LoremIpsumClient";
+// Dynamically import all client tools to avoid bundle size bloat on dynamic routes
+const BackgroundRemoverClient = dynamic(() => import("@/app/background-remover/BackgroundRemoverClient"), {
+  loading: () => <div className="py-12 text-center text-muted-foreground">Loading tool...</div>
+});
+const PdfToImageClient = dynamic(() => import("@/app/pdf-to-image/PdfToImageClient"));
+const SplitPdfClient = dynamic(() => import("@/app/split-pdf/SplitPdfClient"));
+const MergePdfClient = dynamic(() => import("@/app/merge-pdf/MergePdfClient"));
+const ImageCompressorClient = dynamic(() => import("@/app/image-compressor/ImageCompressorClient"));
+const MarkdownToPdfClient = dynamic(() => import("@/app/markdown-to-pdf/MarkdownToPdfClient"));
+const SipCalculatorClient = dynamic(() => import("@/app/sip-calculator/SipCalculatorClient"));
+const InvestmentCalculatorClient = dynamic(() => import("@/app/investment-calculator/InvestmentCalculatorClient"));
+const BmiCalculatorClient = dynamic(() => import("@/app/bmi-calculator/BmiCalculatorClient"));
+const JsonFormatterClient = dynamic(() => import("@/app/json-formatter/JsonFormatterClient"));
+const PasswordGeneratorClient = dynamic(() => import("@/app/password-generator/PasswordGeneratorClient"));
+const QrGeneratorClient = dynamic(() => import("@/app/qr-generator/QrGeneratorClient"));
+const TextConverterClient = dynamic(() => import("@/app/text-converter/TextConverterClient"));
+const Base64Client = dynamic(() => import("@/app/base64/Base64Client"));
+const ColorPaletteClient = dynamic(() => import("@/app/color-palette/ColorPaletteClient"));
+const DateCalculatorClient = dynamic(() => import("@/app/date-calculator/DateCalculatorClient"));
+const AgeCalculatorClient = dynamic(() => import("@/app/age-calculator/AgeCalculatorClient"));
+const UnitConverterClient = dynamic(() => import("@/app/unit-converter/UnitConverterClient"));
+const DiffCheckerClient = dynamic(() => import("@/app/diff-checker/DiffCheckerClient"));
+const LoremIpsumClient = dynamic(() => import("@/app/lorem-ipsum/LoremIpsumClient"));
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+// Pre-render all dynamic use cases at build time (SSG) for edge performance
+export async function generateStaticParams() {
+  return useCases.map((uc) => ({
+    slug: uc.slug,
+  }));
 }
 
 // Generate dynamic metadata for absolute SEO perfection
@@ -63,7 +73,7 @@ export default async function UseCasePage({ params }: PageProps) {
     notFound();
   }
 
-  // Map the base tool slug to the correct Client Component
+  // Map the base tool slug to the correct Client Component dynamically loaded
   const renderClientTool = () => {
     switch (data.baseTool) {
       case "background-remover":
