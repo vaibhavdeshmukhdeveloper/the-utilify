@@ -297,19 +297,41 @@ export default function BmiCalculatorClient() {
           {result && (
             <div ref={resultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
               <Card className="p-8 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
-              <div className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-black mb-4">Your Body Mass Index (BMI)</div>
-              <div className={`text-7xl font-black mb-6 ${result.color} tracking-tighter`}>
-                {result.bmi}
-              </div>
-              <div className={`text-xl font-black ${result.color} bg-white dark:bg-zinc-800 inline-flex items-center px-6 py-2 rounded-2xl shadow-sm border`}>
-                {result.category}
-              </div>
-              <p className="mt-6 text-sm text-muted-foreground leading-relaxed">
-                Based on your input, your BMI indicates that you are in the <strong>{result.category}</strong> range.
-              </p>
-            </Card>
-          </div>
-        )}
+                <div className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-black mb-4">Your Body Mass Index (BMI)</div>
+                <div className={`text-7xl font-black mb-6 ${result.color} tracking-tighter`}>
+                  {result.bmi}
+                </div>
+                <div className={`text-xl font-black ${result.color} bg-white dark:bg-zinc-800 inline-flex items-center px-6 py-2 rounded-2xl shadow-sm border mb-8`}>
+                  {result.category}
+                </div>
+
+                {/* Visual Gauge Scale */}
+                <div className="w-full max-w-md mx-auto mb-8 px-2">
+                  <div className="relative h-3 rounded-full bg-gradient-to-r from-sky-400 via-green-400 via-yellow-400 to-red-400 overflow-visible mb-3">
+                    {/* Floating gauge pointer */}
+                    <div 
+                      className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-white border-4 border-primary shadow-md flex items-center justify-center transition-all duration-700"
+                      style={{ 
+                        left: `${Math.max(5, Math.min(95, ((Number(result.bmi) - 15) / 25) * 100))}%` 
+                      }}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-primary" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-[10px] text-muted-foreground font-black uppercase tracking-wider px-1">
+                    <span>15 (Under)</span>
+                    <span>18.5 (Normal)</span>
+                    <span>25 (Over)</span>
+                    <span>30+ (Obese)</span>
+                  </div>
+                </div>
+
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Based on your input, your BMI indicates that you are in the <strong>{result.category}</strong> range.
+                </p>
+              </Card>
+            </div>
+          )}
         </div>
 
         <div className="space-y-8">

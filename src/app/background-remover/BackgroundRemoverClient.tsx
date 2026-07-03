@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Maximize2, Zap, Settings, Eraser } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function BackgroundRemoverClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +19,8 @@ export default function BackgroundRemoverClient() {
   const [refineEdges, setRefineEdges] = useState(true);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
   const [modelMode, setModelMode] = useState<"u2net" | "u2net_human_seg" | "u2net_cloth_seg">("u2net");
+  const [bgPreviewMode, setBgPreviewMode] = useState<"transparent" | "white" | "black" | "blue" | "sunset" | "neon">("transparent");
+  const [applyShadow, setApplyShadow] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -292,6 +295,8 @@ export default function BackgroundRemoverClient() {
     setOriginalFile(null);
     setOriginalUrl(null);
     setUploaderKey(prev => prev + 1);
+    setBgPreviewMode("transparent");
+    setApplyShadow(false);
   };
 
   const handleUpload = async (files: File[]) => {
@@ -336,6 +341,85 @@ export default function BackgroundRemoverClient() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBakeAndDownload = () => {
+    if (!result) return;
+    
+    // Default transparent PNG download
+    if (bgPreviewMode === "transparent" && !applyShadow) {
+      const link = document.createElement("a");
+      link.href = result.url;
+      link.download = result.filename;
+      link.click();
+      return;
+    }
+    
+    // Render custom background & shadow on client canvas
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = result.url;
+    
+    toast.info("Preparing optimized download...");
+    
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      
+      // Draw background
+      if (bgPreviewMode === "white") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else if (bgPreviewMode === "black") {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else if (bgPreviewMode === "blue") {
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#60a5fa");
+        gradient.addColorStop(1, "#2563eb");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else if (bgPreviewMode === "sunset") {
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#fb923c");
+        gradient.addColorStop(1, "#db2777");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      } else if (bgPreviewMode === "neon") {
+        const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        gradient.addColorStop(0, "#34d399");
+        gradient.addColorStop(1, "#059669");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      
+      // Apply drop shadow parameters
+      if (applyShadow) {
+        ctx.shadowColor = "rgba(0, 0, 0, 0.45)";
+        ctx.shadowBlur = Math.round(canvas.width * 0.04);
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = Math.round(canvas.width * 0.025);
+      }
+      
+      // Draw actual cutout foreground
+      ctx.drawImage(img, 0, 0);
+      
+      // Download trigger
+      const dataUrl = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      const baseName = result.filename.replace(/\.[^/.]+$/, "");
+      link.download = `${baseName}_cutout.png`;
+      link.click();
+      toast.success("Download complete!");
+    };
+    
+    img.onerror = () => {
+      toast.error("Failed to generate download");
+    };
   };
 
   const howToUse = [
@@ -601,20 +685,38 @@ export default function BackgroundRemoverClient() {
                   <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider shadow-sm">
                     Background Removed
                   </div>
-                  {/* Transparency Grid Pattern */}
+                  {/* Transparency Grid Pattern or custom background color */}
                   <div
-                    className="absolute inset-4 rounded-[1.5rem] opacity-40 dark:opacity-10"
+                    className={cn(
+                      "absolute inset-4 rounded-[1.5rem] transition-all duration-300",
+                      bgPreviewMode === "transparent" ? "opacity-40 dark:opacity-10" : "opacity-100"
+                    )}
                     style={{
-                      backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
-                      backgroundSize: '20px 20px',
-                      backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+                      ...(bgPreviewMode === "transparent"
+                        ? {
+                            backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
+                            backgroundSize: '20px 20px',
+                            backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+                          }
+                        : bgPreviewMode === "white"
+                        ? { backgroundColor: "#ffffff" }
+                        : bgPreviewMode === "black"
+                        ? { backgroundColor: "#000000" }
+                        : bgPreviewMode === "blue"
+                        ? { backgroundImage: "linear-gradient(135deg, #60a5fa, #2563eb)" }
+                        : bgPreviewMode === "sunset"
+                        ? { backgroundImage: "linear-gradient(135deg, #fb923c, #db2777)" }
+                        : { backgroundImage: "linear-gradient(135deg, #34d399, #059669)" })
                     }}
                   />
                   <div className="relative z-10 p-4 min-h-[350px] flex items-center justify-center">
                     <img
                       src={result.url}
                       alt="Removed Background"
-                      className="max-w-full max-h-[350px] object-contain drop-shadow-2xl"
+                      className={cn(
+                        "max-w-full max-h-[350px] object-contain transition-all duration-300",
+                        applyShadow ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.55)]" : "drop-shadow-2xl"
+                      )}
                     />
                   </div>
                 </Card>
@@ -630,12 +732,92 @@ export default function BackgroundRemoverClient() {
                   </div>
                   <h2 className="text-4xl font-black tracking-tight mb-8">Pixel-perfect transparency.</h2>
 
+                  {/* Backdrop Quick Editor panel */}
+                  <div className="space-y-4 mb-8 pb-8 border-b border-zinc-800 animate-in fade-in duration-300">
+                    <label className="text-xs font-black uppercase tracking-wider text-zinc-400 block">
+                      Quick Backdrop Presets
+                    </label>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setBgPreviewMode("transparent")}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 transition-all relative overflow-hidden active:scale-95",
+                          bgPreviewMode === "transparent" ? "border-primary scale-110" : "border-zinc-700"
+                        )}
+                        title="Transparent Grid"
+                      >
+                        <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center text-[9px] text-zinc-400 font-black">Grid</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setBgPreviewMode("white")}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 bg-white transition-all active:scale-95",
+                          bgPreviewMode === "white" ? "border-primary scale-110" : "border-zinc-700"
+                        )}
+                        title="White backdrop"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setBgPreviewMode("black")}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 bg-black transition-all active:scale-95",
+                          bgPreviewMode === "black" ? "border-primary scale-110" : "border-zinc-700"
+                        )}
+                        title="Black backdrop"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setBgPreviewMode("blue")}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 transition-all active:scale-95",
+                          bgPreviewMode === "blue" ? "border-primary scale-110" : "border-zinc-700"
+                        )}
+                        style={{ backgroundImage: "linear-gradient(135deg, #60a5fa, #2563eb)" }}
+                        title="Blue Gradient"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setBgPreviewMode("sunset")}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 transition-all active:scale-95",
+                          bgPreviewMode === "sunset" ? "border-primary scale-110" : "border-zinc-700"
+                        )}
+                        style={{ backgroundImage: "linear-gradient(135deg, #fb923c, #db2777)" }}
+                        title="Sunset Gradient"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setBgPreviewMode("neon")}
+                        className={cn(
+                          "w-10 h-10 rounded-full border-2 transition-all active:scale-95",
+                          bgPreviewMode === "neon" ? "border-primary scale-110" : "border-zinc-700"
+                        )}
+                        style={{ backgroundImage: "linear-gradient(135deg, #34d399, #059669)" }}
+                        title="Neon Gradient"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => setApplyShadow(!applyShadow)}
+                        className={cn(
+                          "ml-auto px-4 py-2 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95",
+                          applyShadow ? "bg-primary border-primary text-primary-foreground" : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
+                        )}
+                      >
+                        Soft Shadow
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
-                    <a href={result.url} download={result.filename} className="flex-1">
-                      <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                        <Download className="mr-2 h-6 w-6" /> Download (PNG)
-                      </Button>
-                    </a>
+                    <Button 
+                      onClick={handleBakeAndDownload} 
+                      className="flex-1 h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                    >
+                      <Download className="mr-2 h-6 w-6" /> Download Result
+                    </Button>
                     <Button
                       type="button"
                       onClick={() => setIsEditing(true)}

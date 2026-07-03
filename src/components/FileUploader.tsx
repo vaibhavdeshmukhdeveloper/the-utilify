@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Upload, X, FileText, CheckCircle2, Loader2, Download } from "lucide-react";
@@ -42,6 +42,42 @@ export function FileUploader({
       setFiles(acceptedFiles);
     }
   }, [autoUpload, onUpload]);
+
+  // Support pasting image from clipboard (Ctrl + V)
+  const acceptsImages = Object.keys(accept).some((key) => key.startsWith("image/"));
+
+  useEffect(() => {
+    if (!acceptsImages) return;
+
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      const pastedFiles: File[] = [];
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") !== -1) {
+          const file = items[i].getAsFile();
+          if (file) {
+            pastedFiles.push(file);
+          }
+        }
+      }
+
+      if (pastedFiles.length > 0) {
+        toast.success("Pasted image from clipboard");
+        if (autoUpload) {
+          onUpload(pastedFiles);
+        } else {
+          setFiles(pastedFiles);
+        }
+      }
+    };
+
+    window.addEventListener("paste", handlePaste);
+    return () => {
+      window.removeEventListener("paste", handlePaste);
+    };
+  }, [acceptsImages, autoUpload, onUpload]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -100,7 +136,13 @@ export function FileUploader({
         </div>
         <h3 className="text-xl font-bold mb-2">{label}</h3>
         <p className="text-muted-foreground text-sm max-w-xs">
-          Drag & drop your files here, or click to browse
+          Drag & drop your files here, click to browse
+          {acceptsImages && (
+            <>
+              , or paste with{" "}
+              <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 border font-mono text-xs text-foreground font-black">Ctrl + V</kbd>
+            </>
+          )}
         </p>
       </div>
 

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Copy, Trash2, Clipboard, Type, Sparkles } from "lucide-react";
+import { Trash2, Clipboard, Type, Sparkles } from "lucide-react";
+import { CopyButton } from "@/components/CopyButton";
 
 export default function TextConverterClient() {
   const [text, setText] = useState("Type or paste your text here to convert it...");
@@ -19,14 +20,6 @@ export default function TextConverterClient() {
   const sentenceCount = text.split(/[.!?]+/).filter((s) => s.trim().length > 0).length;
   const paragraphCount = text.split(/\n\s*\n/).filter((p) => p.trim().length > 0).length;
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast.success("Text copied to clipboard");
-    } catch {
-      toast.error("Failed to copy text");
-    }
-  };
 
   const pasteFromClipboard = async () => {
     try {
@@ -222,14 +215,12 @@ export default function TextConverterClient() {
               value={text}
               onChange={(e) => setText(e.target.value)}
             />
-            <Button
-              className="absolute right-4 bottom-4 w-10 h-10 rounded-xl shadow-md"
+            <CopyButton
+              value={text}
+              className="absolute right-4 bottom-4 w-10 h-10 shadow-md"
               size="icon"
-              onClick={copyToClipboard}
               title="Copy converted text"
-            >
-              <Copy className="h-4 w-4" />
-            </Button>
+            />
           </div>
         </div>
 

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
-import { AlignLeft, Copy, Sliders, LayoutGrid, Check } from "lucide-react";
+import { AlignLeft, LayoutGrid, Info, Sliders } from "lucide-react";
+import { CopyButton } from "@/components/CopyButton";
 
 const LOREM_WORDS = [
   "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", "sed", "do",
@@ -24,7 +25,7 @@ export default function LoremIpsumClient() {
   const [startWithLorem, setStartWithLorem] = useState(true);
   const [includeHtml, setIncludeHtml] = useState(false);
   const [output, setOutput] = useState("");
-  const [copied, setCopied] = useState(false);
+
 
   // Helper to generate a random word
   const getWord = () => LOREM_WORDS[Math.floor(Math.random() * LOREM_WORDS.length)];
@@ -118,7 +119,6 @@ export default function LoremIpsumClient() {
     }
 
     setOutput(result);
-    setCopied(false);
   }, [type, count, startWithLorem, includeHtml]);
 
   // Adjust count bounds depending on generation type
@@ -138,16 +138,7 @@ export default function LoremIpsumClient() {
     generateLorem();
   }, [generateLorem]);
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(output);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      toast.success("Placeholder text copied");
-    } catch {
-      toast.error("Failed to copy text");
-    }
-  };
+
 
   const getSliderMax = () => {
     switch (type) {
@@ -299,9 +290,13 @@ export default function LoremIpsumClient() {
         <div className="lg:col-span-7 space-y-4 scroll-mt-24">
           <div className="flex justify-between items-center">
             <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><AlignLeft className="h-4 w-4" /> Generated Output</span>
-            <Button onClick={copyToClipboard} size="sm" className="rounded-xl shadow-md font-bold px-4">
-              {copied ? <Check className="h-4 w-4 mr-1.5" /> : <Copy className="h-4 w-4 mr-1.5" />} Copy Text
-            </Button>
+            <CopyButton
+              value={output}
+              label="Copy Text"
+              size="sm"
+              className="rounded-xl shadow-md font-bold px-4"
+              title="Copy placeholder text"
+            />
           </div>
           <Card className="p-6 md:p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-[2rem] shadow-inner min-h-[350px] max-h-[500px] overflow-y-auto font-medium leading-relaxed select-all">
             <div className="whitespace-pre-wrap font-sans text-base text-zinc-800 dark:text-zinc-200">

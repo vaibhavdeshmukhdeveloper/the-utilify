@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Copy, Trash2, Clipboard, FileText, ArrowLeftRight, Upload, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CopyButton } from "@/components/CopyButton";
 
 export default function Base64Client() {
   const [activeTab, setActiveTab] = useState("encode");
@@ -168,14 +169,7 @@ export default function Base64Client() {
     reader.readAsDataURL(file);
   };
 
-  const copyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast.success("Copied to clipboard");
-    } catch {
-      toast.error("Failed to copy content");
-    }
-  };
+
 
   const clearFile = () => {
     setFileBase64("");
@@ -278,9 +272,15 @@ export default function Base64Client() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Base64 String (Output)</label>
-                  <Button variant="ghost" size="sm" onClick={() => copyToClipboard(base64Output)} className="text-xs font-bold text-primary hover:bg-primary/5">
-                    <Copy className="h-3.5 w-3.5 mr-1" /> Copy
-                  </Button>
+                  <CopyButton
+                    value={base64Output}
+                    label="Copy"
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs font-bold text-primary hover:bg-primary/5"
+                    disabled={!base64Output}
+                    title="Copy Base64 Output"
+                  />
                 </div>
                 <Textarea
                   readOnly
@@ -323,9 +323,15 @@ export default function Base64Client() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Plain Text (Output)</label>
-                  <Button variant="ghost" size="sm" onClick={() => copyToClipboard(plainOutput)} className="text-xs font-bold text-primary hover:bg-primary/5">
-                    <Copy className="h-3.5 w-3.5 mr-1" /> Copy
-                  </Button>
+                  <CopyButton
+                    value={plainOutput}
+                    label="Copy"
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs font-bold text-primary hover:bg-primary/5"
+                    disabled={!plainOutput}
+                    title="Copy Plain Text Output"
+                  />
                 </div>
                 <Textarea
                   readOnly
@@ -375,9 +381,14 @@ export default function Base64Client() {
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><ArrowLeftRight className="h-4 w-4 text-primary" /> Generated Base64 Data URI</label>
                   {fileBase64 && (
-                    <Button variant="ghost" size="sm" onClick={() => copyToClipboard(`data:${fileType};base64,${fileBase64}`)} className="text-xs font-bold text-primary hover:bg-primary/5">
-                      <Copy className="h-3.5 w-3.5 mr-1" /> Copy Data URI
-                    </Button>
+                    <CopyButton
+                      value={fileBase64 ? `data:${fileType};base64,${fileBase64}` : ""}
+                      label="Copy Data URI"
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs font-bold text-primary hover:bg-primary/5"
+                      title="Copy Base64 Data URI"
+                    />
                   )}
                 </div>
                 <Textarea

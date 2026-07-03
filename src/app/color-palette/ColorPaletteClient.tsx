@@ -5,6 +5,7 @@ import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { CopyButton } from "@/components/CopyButton";
 import { Copy, Lock, Unlock, RefreshCw, Sparkles, Code, Check } from "lucide-react";
 
 // Convert HSL to Hex
@@ -399,14 +400,13 @@ export default function ColorPaletteClient() {
                   </div>
 
                   {/* Copy Button */}
-                  <Button
-                    variant="ghost"
+                  <CopyButton
+                    value={formattedVal}
                     size="icon"
-                    onClick={() => copyToClipboard(formattedVal)}
+                    variant="ghost"
                     className={`rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${textClass}`}
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
+                    title="Copy Color Value"
+                  />
                 </div>
               );
             })}

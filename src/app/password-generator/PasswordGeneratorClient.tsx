@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { Copy, Check, RefreshCw, Key, Shield, Info, List } from "lucide-react";
+import { CopyButton } from "@/components/CopyButton";
 
 export default function PasswordGeneratorClient() {
   const [password, setPassword] = useState("");
@@ -17,7 +18,7 @@ export default function PasswordGeneratorClient() {
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
   const [excludeSimilar, setExcludeSimilar] = useState(false);
-  const [copied, setCopied] = useState(false);
+
   const [strength, setStrength] = useState({ label: "Weak", color: "text-red-500", percent: 25, bg: "bg-red-500" });
   const [history, setHistory] = useState<string[]>([]);
 
@@ -46,7 +47,6 @@ export default function PasswordGeneratorClient() {
     }
 
     setPassword(generated);
-    setCopied(false);
 
     // Save to history (keep last 5)
     setHistory((prev) => [generated, ...prev.slice(0, 4)]);
@@ -100,18 +100,7 @@ export default function PasswordGeneratorClient() {
     setStrength({ label, color, percent, bg });
   }, [password, length, includeUpper, includeLower, includeNumbers, includeSymbols, excludeSimilar]);
 
-  const copyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      if (text === password) {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      }
-      toast.success("Password copied to clipboard");
-    } catch {
-      toast.error("Failed to copy password");
-    }
-  };
+
 
   const howToUse = [
     { step: "Configure Settings", description: "Select the desired length and check character types you want to include." },
@@ -193,13 +182,12 @@ export default function PasswordGeneratorClient() {
               >
                 <RefreshCw className="h-5 w-5" />
               </Button>
-              <Button
-                onClick={() => copyToClipboard(password)}
-                className="w-12 h-12 rounded-xl shadow-md"
+              <CopyButton
+                value={password}
+                className="w-12 h-12 shadow-md animate-in fade-in"
+                size="icon"
                 title="Copy Password"
-              >
-                {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-              </Button>
+              />
             </div>
           </div>
 
@@ -318,14 +306,13 @@ export default function PasswordGeneratorClient() {
                 {history.map((pw, index) => (
                   <div key={index} className="flex justify-between items-center bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm animate-in fade-in slide-in-from-right-3 duration-200">
                     <span className="font-mono text-xs select-all truncate max-w-[150px]">{pw}</span>
-                    <Button
+                    <CopyButton
+                      value={pw}
                       variant="ghost"
                       size="icon"
-                      onClick={() => copyToClipboard(pw)}
                       className="w-8 h-8 rounded-lg text-muted-foreground hover:text-primary hover:bg-zinc-100"
-                    >
-                      <Copy className="h-3.5 w-3.5" />
-                    </Button>
+                      title="Copy Password"
+                    />
                   </div>
                 ))}
               </div>
