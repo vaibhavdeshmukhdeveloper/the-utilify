@@ -9,6 +9,7 @@ import { AdBanner } from "./AdBanner";
 import { CrossPromo } from "./CrossPromo";
 import { useCases } from "@/lib/use-cases-data";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -37,6 +38,8 @@ export function ToolLayout({
   
   // Find related use cases for this parent tool
   const toolUseCases = useCases.filter((uc) => uc.baseTool === toolSlug);
+  const visibleUseCases = toolUseCases.slice(0, 6);
+  const hasMoreUseCases = toolUseCases.length > 6;
 
   if (isUseCase) {
     return (
@@ -125,19 +128,30 @@ export function ToolLayout({
         {/* SEO Content: Specialized Use Cases */}
         {toolUseCases.length > 0 && (
           <section className="py-12 bg-muted/10 border-t flex flex-col items-center justify-center text-center">
-            <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto">
-              <h2 className="text-2xl font-bold mb-6 text-center text-foreground">Specialized Use Cases</h2>
-              <div className="flex flex-wrap justify-center gap-3">
-                {toolUseCases.map((uc, index) => (
+            <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto px-4">
+              <h2 className="text-2xl font-bold mb-2 text-center text-foreground">Specialized Use Cases</h2>
+              <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+                Explore popular custom templates and calculations optimized for our {title} engine.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3 mb-6">
+                {visibleUseCases.map((uc, index) => (
                   <Link
                     key={index}
                     href={`/use-case/${uc.slug}`}
-                    className="px-4 py-2 rounded-full border bg-card hover:bg-primary hover:text-primary-foreground transition-colors text-sm font-medium"
+                    className="px-4 py-2 rounded-full border bg-card hover:bg-primary hover:text-primary-foreground hover:scale-[1.03] transition-all duration-200 text-sm font-medium"
                   >
                     {uc.title}
                   </Link>
                 ))}
               </div>
+              {hasMoreUseCases && (
+                <Link
+                  href={`/use-cases?search=${encodeURIComponent(title)}`}
+                  className="inline-flex items-center gap-1.5 text-sm font-black text-primary hover:underline transition-all duration-200"
+                >
+                  View all {toolUseCases.length} {title} use cases <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
             </div>
           </section>
         )}

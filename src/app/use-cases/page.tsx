@@ -2,6 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Sparkles } from "lucide-react";
 import { Metadata } from "next";
+import { Suspense } from "react";
 import UseCasesListClient from "./UseCasesListClient";
 
 export const metadata: Metadata = {
@@ -30,7 +31,9 @@ export default function UseCasesDirectoryPage() {
           </div>
 
           {/* Interactive Search & Filter Directory Grid */}
-          <UseCasesListClient />
+          <Suspense fallback={<div className="text-center py-12 text-muted-foreground">Loading directory...</div>}>
+            <UseCasesListClient />
+          </Suspense>
         </div>
       </main>
 

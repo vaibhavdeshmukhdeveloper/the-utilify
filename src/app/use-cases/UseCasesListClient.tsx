@@ -5,13 +5,23 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Sparkles, ArrowRight, Search, X, Layers, FileText, PiggyBank, Activity, FileJson, Palette, Clock } from "lucide-react";
 import { useCases } from "@/lib/use-cases-data";
+import { useSearchParams } from "next/navigation";
 
 export default function UseCasesListClient() {
+  const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState("All");
   const [query, setQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const categories = ["All", "PDF", "Image", "Finance", "Health", "Developer", "Design", "Productivity"];
+
+  // Set query from URL search parameters on load
+  useEffect(() => {
+    const search = searchParams?.get("search");
+    if (search) {
+      setQuery(search);
+    }
+  }, [searchParams]);
 
   // Focus search input when pressing "/"
   useEffect(() => {
