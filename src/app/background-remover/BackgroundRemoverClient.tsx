@@ -625,8 +625,16 @@ export default function BackgroundRemoverClient() {
 
           {originalFile && (
             <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-white dark:bg-zinc-950 shadow-sm animate-in fade-in slide-in-from-left-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <ImageIcon className="h-6 w-6" />
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 overflow-hidden">
+                {originalUrl ? (
+                  <img
+                    src={originalUrl}
+                    alt="Original Thumbnail"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <ImageIcon className="h-6 w-6" />
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold truncate text-sm">{originalFile.name}</p>
@@ -652,9 +660,16 @@ export default function BackgroundRemoverClient() {
         <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24">
           {isLoading ? (
             <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
-              <div className="relative mb-6">
-                <Loader2 className="h-20 w-20 text-primary animate-spin" />
-                <Sparkles className="h-10 w-10 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              <div className="relative mb-6 w-32 h-32 rounded-3xl border border-primary/20 overflow-hidden flex items-center justify-center bg-zinc-100 dark:bg-zinc-900 shadow-md">
+                {originalUrl && (
+                  <img
+                    src={originalUrl}
+                    alt="Processing Preview"
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 filter blur-[1px]"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent animate-pulse" />
+                <Loader2 className="h-12 w-12 text-primary animate-spin relative z-10" />
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2">Removing Background...</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
