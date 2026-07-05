@@ -27,20 +27,30 @@ if "OMP_WAIT_POLICY" not in os.environ:
 rembg_sessions = {}
 
 def get_rembg_session(model_name: str):
+    global rembg_sessions
     if model_name not in rembg_sessions:
         from rembg import new_session
         print(f"Loading AI background removal model ({model_name})...")
+        
+        # To avoid OOM in memory-constrained environments (e.g. Cloud Run),
+        # keep at most one model session loaded in RAM at a time.
+        if len(rembg_sessions) >= 1:
+            print("Clearing cached sessions from memory...")
+            rembg_sessions.clear()
+            import gc
+            gc.collect()
+            
         rembg_sessions[model_name] = new_session(model_name)
         print(f"Model {model_name} loaded successfully!")
     return rembg_sessions[model_name]
 
-# Asynchronously pre-load default u2net model in the background so it doesn't block startup
+# Asynchronously pre-load default high-fidelity model in the background so it doesn't block startup
 async def preload_models():
     def load():
         try:
-            get_rembg_session("u2net")
+            get_rembg_session("isnet-general-use")
         except Exception as e:
-            print(f"Failed to pre-load default u2net model: {e}")
+            print(f"Failed to pre-load default isnet-general-use model: {e}")
     await asyncio.to_thread(load)
 
 @asynccontextmanager
@@ -165,12 +175,12 @@ def clean_solid_background(img: Image.Image, tolerance: int = 20) -> Image.Image
 async def remove_background(
     file: UploadFile = File(...),
     post_process: bool = Form(False),
-    model: str = Form("u2net")
+    model: str = Form("isnet-general-use")
 ):
     """
     Removes the background from an uploaded image.
     Uses an instant high-fidelity floodfill cutout if a flat background is detected,
-    otherwise falls back to the u2net AI neural network model.
+    otherwise falls back to the high-fidelity AI neural network model.
     """
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
@@ -190,8 +200,8 @@ async def remove_background(
             solid_cutout.save(output_buffer, format="PNG")
         else:
             # Fallback to AI-based neural network model for photographs/complex backgrounds
-            valid_models = ["u2net", "u2net_human_seg", "u2net_cloth_seg"]
-            target_model = model if model in valid_models else "u2net"
+            valid_models = ["isnet-general-use", "silueta", "u2net", "u2net_human_seg", "u2net_cloth_seg"]
+            target_model = model if model in valid_models else "isnet-general-use"
             
             print(f"Complex scene detected. Utilizing global AI background removal model ({target_model}, post_process={post_process}).")
             session = get_rembg_session(target_model)

@@ -18,7 +18,7 @@ export default function BackgroundRemoverClient() {
   const [uploaderKey, setUploaderKey] = useState(0);
   const [refineEdges, setRefineEdges] = useState(true);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
-  const [modelMode, setModelMode] = useState<"u2net" | "u2net_human_seg" | "u2net_cloth_seg">("u2net");
+  const [modelMode, setModelMode] = useState<"isnet-general-use" | "silueta" | "u2net" | "u2net_human_seg" | "u2net_cloth_seg">("isnet-general-use");
   const [bgPreviewMode, setBgPreviewMode] = useState<"transparent" | "white" | "black" | "blue" | "sunset" | "neon">("transparent");
   const [applyShadow, setApplyShadow] = useState(false);
 
@@ -553,45 +553,73 @@ export default function BackgroundRemoverClient() {
             {/* Subject Mode Selection */}
             <div className="space-y-3 pt-2 border-t">
               <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block">
-                Subject Type
+                AI Segmentation Model
               </label>
-              <div className="grid grid-cols-3 gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setModelMode("u2net")}
-                  className={`py-2 px-1 rounded-lg text-center flex flex-col justify-center items-center gap-0.5 border transition-all ${
-                    modelMode === "u2net"
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-muted-foreground"
-                  }`}
-                >
-                  <span className="font-extrabold text-[11px] leading-tight">General</span>
-                  <span className="text-[9px] opacity-75 leading-tight">Products/Auto</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setModelMode("u2net_human_seg")}
-                  className={`py-2 px-1 rounded-lg text-center flex flex-col justify-center items-center gap-0.5 border transition-all ${
-                    modelMode === "u2net_human_seg"
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-muted-foreground"
-                  }`}
-                >
-                  <span className="font-extrabold text-[11px] leading-tight">Portraits</span>
-                  <span className="text-[9px] opacity-75 leading-tight">People only</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setModelMode("u2net_cloth_seg")}
-                  className={`py-2 px-1 rounded-lg text-center flex flex-col justify-center items-center gap-0.5 border transition-all ${
-                    modelMode === "u2net_cloth_seg"
-                      ? "border-primary bg-primary/5 text-primary"
-                      : "border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-muted-foreground"
-                  }`}
-                >
-                  <span className="font-extrabold text-[11px] leading-tight">Clothing</span>
-                  <span className="text-[9px] opacity-75 leading-tight">Fashion items</span>
-                </button>
+              <div className="space-y-2">
+                {[
+                  {
+                    id: "isnet-general-use" as const,
+                    name: "Ultra Detail (High Fidelity)",
+                    desc: "Recommended. Best overall quality. Excels at complex details, hair, and transparent gaps/holes.",
+                    badge: "Best Quality",
+                    badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                  },
+                  {
+                    id: "u2net" as const,
+                    name: "Balanced (General)",
+                    desc: "Good balance of speed and detail. Best for standard products and isolated objects.",
+                    badge: "Standard",
+                    badgeColor: "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20"
+                  },
+                  {
+                    id: "u2net_human_seg" as const,
+                    name: "Portraits (Human)",
+                    desc: "Optimized specifically for human silhouette detection.",
+                    badge: "People",
+                    badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
+                  },
+                  {
+                    id: "u2net_cloth_seg" as const,
+                    name: "Clothing / Apparel",
+                    desc: "Specifically tuned for apparel, fashion retail, and clothing layers.",
+                    badge: "E-Commerce",
+                    badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20"
+                  },
+                  {
+                    id: "silueta" as const,
+                    name: "Eco / Fast",
+                    desc: "Extremely lightweight model. Fast processing on lower resolution images.",
+                    badge: "Fastest",
+                    badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                  }
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setModelMode(item.id)}
+                    className={cn(
+                      "w-full text-left p-3 rounded-xl border-2 transition-all duration-300 flex flex-col gap-1 hover:shadow-sm active:scale-[0.99]",
+                      modelMode === item.id
+                        ? "border-primary bg-primary/[0.03] text-foreground"
+                        : "border-zinc-200 dark:border-zinc-800 bg-muted/20 hover:bg-muted/40 text-muted-foreground"
+                    )}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className={cn(
+                        "font-extrabold text-xs transition-colors duration-300",
+                        modelMode === item.id ? "text-primary" : "text-foreground"
+                      )}>
+                        {item.name}
+                      </span>
+                      <span className={cn("text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded border", item.badgeColor)}>
+                        {item.badge}
+                      </span>
+                    </div>
+                    <span className="text-[10px] opacity-80 leading-relaxed font-medium">
+                      {item.desc}
+                    </span>
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -823,6 +851,17 @@ export default function BackgroundRemoverClient() {
                       >
                         Soft Shadow
                       </button>
+                    </div>
+                  </div>
+
+                  {/* Leftover background helper tip */}
+                  <div className="mb-8 p-5 rounded-[1.5rem] bg-zinc-900 border border-zinc-800/80 flex items-start gap-4 animate-in fade-in duration-500">
+                    <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5 animate-pulse" />
+                    <div className="text-left space-y-1">
+                      <p className="text-xs font-black text-zinc-200">Leftover background elements?</p>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                        If objects directly behind you (like the hanging t-shirt) overlap with your silhouette, AI models interpret them as part of the foreground. You can easily remove them in seconds by clicking the <strong className="text-primary font-black">Edit Cutout</strong> tool below and brushing over them.
+                      </p>
                     </div>
                   </div>
 
