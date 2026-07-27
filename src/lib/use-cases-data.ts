@@ -3608,6 +3608,457 @@ export const useCases: UseCaseData[] = [
       "Dash Tuning: Quick conversion helps import vehicle owners map speed benchmarks easily.",
       "Fluid Outputs: Converts numbers instantly without page reload delays."
     ]
+  },
+
+  // Additional 30 SEO Use Cases
+  {
+    slug: "generate-secure-mysql-root-password",
+    baseTool: "password-generator",
+    title: "Secure MySQL & PostgreSQL Password Generator",
+    seoTitle: "Generate Secure MySQL & PostgreSQL Database Passwords Online",
+    seoDescription: "Generate random, high-entropy passwords for MySQL, PostgreSQL, and Redis databases. Client-side, zero server logging.",
+    heading: "Generate Secure Database Passwords for MySQL & PostgreSQL",
+    introduction: "Database root passwords and application secrets must withstand brute-force attacks and dictionary leaks. Generate high-entropy, cryptographically strong passwords containing uppercase letters, numbers, and special characters, processed 100% locally in your browser.",
+    category: "Developer",
+    tips: [
+      "Cryptographic Security: Uses browser window.crypto APIs for non-predictable random sequence generation.",
+      "Custom Rules: Exclude confusing symbols (like l, 1, O, 0) if manually typing credentials into terminal prompts.",
+      "Zero Network Overhead: Passwords never touch external servers, databases, or cloud logs."
+    ]
+  },
+  {
+    slug: "generate-strong-wifi-wpa3-passphrase",
+    baseTool: "password-generator",
+    title: "Wi-Fi WPA3 / WPA2 Passphrase Generator",
+    seoTitle: "Generate Strong WPA3 / WPA2 Wi-Fi Passphrases (100% Client-Side)",
+    seoDescription: "Create uncrackable Wi-Fi network passphrases for home and office routers. Protect against dictionary and handshake attacks.",
+    heading: "Generate Strong WPA3 & WPA2 Wi-Fi Router Passphrases",
+    introduction: "Secure your home, office, or guest Wi-Fi networks against unauthorized access and wireless handshake cracking. Generate 20+ character random passphrases that fulfill all router security standards without sending data anywhere.",
+    category: "Developer",
+    tips: [
+      "Handshake Protection: Long 24+ character passphrases make offline WPA2/WPA3 dictionary attacks computationally impossible.",
+      "Router Compatible: Select standard alphanumeric and special character sets compatible with all router gateways.",
+      "Instant Clipboard Copy: One-click copying lets you paste credentials straight into router admin dashboards."
+    ]
+  },
+  {
+    slug: "generate-digital-restaurant-menu-qr-code",
+    baseTool: "qr-generator",
+    title: "Digital Restaurant Menu QR Code Generator",
+    seoTitle: "Generate Digital Restaurant Menu QR Codes Free & Online",
+    seoDescription: "Create instant scan-to-view QR codes for digital restaurant, café, and bar menus. Fast mobile loading for PDF and web menus.",
+    heading: "Digital Restaurant & Café Menu QR Code Generator",
+    introduction: "Upgrade your dining experience with touchless digital menus. Convert your restaurant PDF menu link or mobile web page URL into a high-density, easily scannable QR code ready for printing on table stands, tent cards, and windows.",
+    category: "Developer",
+    tips: [
+      "High Contrast: Ensures dark QR pixels on light backgrounds so smartphones scan instantaneously in low-light restaurant settings.",
+      "Print Resolution: Download SVG or high-res PNG formats for razor-sharp physical menu print runs.",
+      "Instant Access: Directs customers straight to your menu without requiring app installations."
+    ]
+  },
+  {
+    slug: "generate-google-maps-location-qr-code",
+    baseTool: "qr-generator",
+    title: "Google Maps Store Location QR Code Generator",
+    seoTitle: "Generate Google Maps Location QR Codes (Scan for Directions)",
+    seoDescription: "Generate scannable QR codes linking directly to your business location on Google Maps. Help customers navigate to your store.",
+    heading: "Google Maps Store Location QR Code Generator",
+    introduction: "Help local customers find your retail shop, office, or event venue without typing long addresses. Convert your Google Maps share link into a vector QR code that opens turn-by-turn navigation on iOS and Android camera scans.",
+    category: "Developer",
+    tips: [
+      "Direct Navigation: Automatically launches Google Maps or Apple Maps app on the customer's smartphone.",
+      "Marketing Collateral: Add location QR codes to flyers, business cards, mailers, and storefront posters.",
+      "Custom Styling: Adjust colors and borders while maintaining standard QR error correction levels."
+    ]
+  },
+  {
+    slug: "generate-event-ticket-checkin-qr-code",
+    baseTool: "qr-generator",
+    title: "Event Ticket Check-In QR Code Generator",
+    seoTitle: "Generate Event Registration & Ticket Check-In QR Codes",
+    seoDescription: "Generate unique scannable QR codes for event tickets, guest badges, conference passes, and entry validation systems.",
+    heading: "Event Ticket & Guest Badge Check-In QR Code Generator",
+    introduction: "Streamline event registration and attendee access control. Generate scannable vector QR codes containing encoded ticket IDs, registration tokens, or guest URLs for rapid doorway scanning at conferences and meetups.",
+    category: "Developer",
+    tips: [
+      "Error Correction: High error correction ensures tickets scan reliably even on damaged or creased paper prints.",
+      "Fast Door Operations: Encodes compact strings for split-second scanning by handheld barcode devices.",
+      "Vector Downloads: Download SVG graphics for seamless embedding into automated email ticketing systems."
+    ]
+  },
+  {
+    slug: "convert-pascal-case-to-camel-case-json",
+    baseTool: "text-converter",
+    title: "PascalCase to camelCase JSON Key Converter",
+    seoTitle: "Convert PascalCase to camelCase Online (JSON & Code Identifiers)",
+    seoDescription: "Convert C# / .NET PascalCase model properties and JSON payloads into JavaScript / TypeScript camelCase instantly.",
+    heading: "Convert PascalCase to camelCase for API Payloads",
+    introduction: "Working between C#, .NET backend services and JavaScript or React frontends? Transform PascalCase object keys and variable declarations into clean camelCase format instantly without tedious manual editing.",
+    category: "Developer",
+    tips: [
+      "Backend Integration: Perfect for converting C# DTOs and database models into standard JavaScript conventions.",
+      "Preserves Structure: Leaves quotes, brackets, and values intact while converting key casing accurately.",
+      "Batch Conversion: Handles large multi-line payloads and nested JSON strings in milliseconds."
+    ]
+  },
+  {
+    slug: "convert-all-caps-shouting-text-to-sentence-case",
+    baseTool: "text-converter",
+    title: "ALL CAPS Shouting Text to Sentence Case Converter",
+    seoTitle: "Convert ALL CAPS Text to Clean Sentence Case & Title Case",
+    seoDescription: "Convert ALL CAPS screaming text into clean, professional sentence case. Automatically fixes capitalization after periods.",
+    heading: "Convert ALL CAPS Text to Clean Sentence Case",
+    introduction: "Received a block of emails, documents, or data dumps written entirely in upper-case shouting text? Normalize your text instantly into clean, readable sentence case with proper capitalization after sentence delimiters.",
+    category: "Productivity",
+    tips: [
+      "Grammar Precision: Automatically capitalizes first words after periods, question marks, and exclamation points.",
+      "Multiple Formats: Switch between sentence case, lower case, title case, and camelCase with a single click.",
+      "Clean Output: Removes unnecessary capitalization quirks while preserving numbers and punctuation."
+    ]
+  },
+  {
+    slug: "clean-extra-whitespace-and-blank-lines-text",
+    baseTool: "text-converter",
+    title: "Remove Extra Whitespace & Blank Lines Tool",
+    seoTitle: "Remove Duplicate Spaces, Tabs & Empty Lines from Text Online",
+    seoDescription: "Clean messy text, remove duplicate spaces, trim leading/trailing whitespace, and delete consecutive empty lines online.",
+    heading: "Remove Extra Whitespace, Tabs & Blank Lines",
+    introduction: "Clean up raw OCR extracts, unformatted copied documents, and messy CSV logs. Strip out accidental double spaces, tab indents, trailing spaces, and redundant empty lines instantly for publishing or database insertion.",
+    category: "Productivity",
+    tips: [
+      "Compact Formatting: Collapses multiple consecutive blank lines into clean single line breaks.",
+      "Space Trimming: Strips invisible trailing whitespace from line ends that break parser scripts.",
+      "Copy-Paste Ready: One-click copying puts formatted, production-clean text straight to your clipboard."
+    ]
+  },
+  {
+    slug: "convert-png-favicon-to-base64-data-uri",
+    baseTool: "base64",
+    title: "Favicon & PNG Icon Base64 Data URI Converter",
+    seoTitle: "Convert PNG Favicon to Base64 Data URI (Inline HTML Image)",
+    seoDescription: "Convert PNG icons, favicons, and SVG graphics into Base64 Data URI strings. Embed images directly into inline HTML/CSS.",
+    heading: "Convert PNG Favicons & Small Icons to Base64 Data URI",
+    introduction: "Optimize front-end page load speed by eliminating extra HTTP image requests. Convert small PNG icons, logos, and favicons into Base64 Data URI strings (`data:image/png;base64,...`) for direct embedding into HTML templates and CSS files.",
+    category: "Developer",
+    tips: [
+      "HTTP Request Reduction: Inlining small icons reduces round-trip HTTP request overhead for web pages.",
+      "Single-File Distribution: Ideal for single-page HTML emails, widgets, and standalone offline web apps.",
+      "Client-Side Conversion: Image bytes are encoded entirely in browser RAM without uploading files to servers."
+    ]
+  },
+  {
+    slug: "decode-jwt-token-payload-base64",
+    baseTool: "base64",
+    title: "JWT Token Payload Base64 Decoder",
+    seoTitle: "Decode Base64 JWT Authorization Headers & Payloads Safely",
+    seoDescription: "Decode Base64URL encoded JSON Web Tokens (JWT). Inspect header, payload claims, expiration timestamps, and scopes locally.",
+    heading: "Decode Base64 Encoded JWT Authorization Payloads",
+    introduction: "Debugging OAuth2, OpenID Connect, or API auth tokens? Safely decode and inspect the Base64URL encoded header and payload JSON parameters of JWT strings to verify issuer, expiration timestamps, user IDs, and permission scopes.",
+    category: "Developer",
+    tips: [
+      "Client Privacy: Decodes tokens strictly client-side so private authentication tokens are never exposed over the network.",
+      "Header & Payload Split: Automatically separates JWT header, body payload, and signature components.",
+      "Readable Formatting: Prettifies raw JSON claims into clear, readable properties with syntax highlighting."
+    ]
+  },
+  {
+    slug: "generate-accessible-wcag-contrast-color-palette",
+    baseTool: "color-palette",
+    title: "WCAG Accessible High-Contrast Color Palette Generator",
+    seoTitle: "Generate WCAG Compliant High-Contrast Color Palettes for Web Apps",
+    seoDescription: "Generate accessible, high-contrast color palettes meeting WCAG AA and AAA standards for web applications and mobile UI.",
+    heading: "Generate WCAG Accessible High-Contrast Color Palettes",
+    introduction: "Ensure your website or SaaS application is accessible to all users, including those with visual impairments. Generate color palettes with guaranteed contrast ratios meeting Web Content Accessibility Guidelines (WCAG 2.1 AA & AAA requirements).",
+    category: "Design",
+    tips: [
+      "Contrast Checking: Ensures text and background pairs meet minimum 4.5:1 (AA) and 7:1 (AAA) contrast ratios.",
+      "Diverse Palettes: Generates background, foreground, card, primary, and accent color pairs for cohesive design systems.",
+      "HEX & CSS Export: Copy HEX, RGB, and CSS custom variable definitions directly into your stylesheet."
+    ]
+  },
+  {
+    slug: "generate-saas-dark-mode-color-palette",
+    baseTool: "color-palette",
+    title: "SaaS Dark Mode & Slate Color Palette Generator",
+    seoTitle: "Generate Modern SaaS Dark Mode & Slate Color Palettes (HEX / HSL)",
+    seoDescription: "Create sleek dark mode color schemes for modern SaaS products, developer tools, and web dashboards with rich slate grays.",
+    heading: "Generate Modern SaaS Dark Mode & Slate Color Palettes",
+    introduction: "Build premium, futuristic dark interfaces for your web applications. Generate sleek slate, zinc, and dark obsidian color schemes paired with vivid accent highlights that minimize eye strain and enhance component depth.",
+    category: "Design",
+    tips: [
+      "Layered Surfaces: Generates distinct background, surface, border, and elevated card shade levels.",
+      "Vibrant Accents: Pairs muted slate backgrounds with high-excitation primary accents (cyan, violet, emerald).",
+      "Tailwind Ready: Outputs CSS variables compatible with Tailwind CSS color extension tokens."
+    ]
+  },
+  {
+    slug: "calculate-project-deadline-working-days",
+    baseTool: "date-calculator",
+    title: "Project Deadline & Working Days Calculator",
+    seoTitle: "Calculate Project Delivery Date & Working Days (Excluding Weekends)",
+    seoDescription: "Calculate project target completion dates by adding business working days (excluding Saturdays and Sundays) to a start date.",
+    heading: "Calculate Project Deadline & Business Working Days",
+    introduction: "Accurately plan software sprints, client deliverables, and construction milestones. Add or subtract business working days from any start date while automatically skipping weekends to determine exact completion dates.",
+    category: "Productivity",
+    tips: [
+      "Weekend Exclusion: Automatically filters out Saturdays and Sundays to reflect true operational capacity.",
+      "Sprint Planning: Easily calculate 10-day or 14-day agile sprint end dates and milestone deadlines.",
+      "Bidirectional Calculation: Calculate ending date from working days, or total working days between two dates."
+    ]
+  },
+  {
+    slug: "calculate-lease-expiry-and-notice-period-date",
+    baseTool: "date-calculator",
+    title: "Lease Expiry & Tenant Notice Period Date Calculator",
+    seoTitle: "Calculate Lease Expiry & Tenant Notice Period Dates Online",
+    seoDescription: "Calculate rental agreement expiration dates, 30-day or 60-day tenant notice period deadlines, and renewal timelines.",
+    heading: "Calculate Lease Expiry & Tenant Notice Period Dates",
+    introduction: "Never miss a lease renewal deadline or landlord notice requirement. Calculate exact calendar dates for 30-day, 60-day, or 90-day advance notice periods relative to commercial or residential tenancy expiration dates.",
+    category: "Productivity",
+    tips: [
+      "Notice Tracking: Input your contract end date to find the exact last day for delivering written move-out notice.",
+      "Calendar Breakdown: View total days, weeks, and months remaining on current lease agreements.",
+      "Landlord & Tenant Friendly: Works for residential leases, commercial space agreements, and storage rentals."
+    ]
+  },
+  {
+    slug: "calculate-retirement-eligibility-age",
+    baseTool: "age-calculator",
+    title: "Retirement Eligibility & Years Remaining Calculator",
+    seoTitle: "Calculate Retirement Age & Years Remaining to Pension Eligibility",
+    seoDescription: "Calculate exact years, months, and days remaining until your target retirement age or official pension eligibility date.",
+    heading: "Calculate Retirement Age & Years Remaining",
+    introduction: "Planning your financial freedom milestone? Enter your date of birth and target retirement age (e.g. 60 or 65) to calculate the precise count of years, months, weeks, and days remaining until you reach your goal.",
+    category: "Productivity",
+    tips: [
+      "Milestone Precision: Calculates exact age down to days and total work hours remaining.",
+      "FIRE Planning: Adjust target retirement ages dynamically to see how early retirement goals change your timeline.",
+      "Financial Alignment: Combine with our SIP Calculator to sync monthly savings targets with remaining years."
+    ]
+  },
+  {
+    slug: "calculate-exact-age-for-passport-application",
+    baseTool: "age-calculator",
+    title: "Passport & Visa Application Exact Age Calculator",
+    seoTitle: "Calculate Exact Age in Years, Months & Days for Passport Applications",
+    seoDescription: "Calculate exact age down to years, months, and days on specific cutoff dates for passport renewals, visa forms, and government applications.",
+    heading: "Calculate Exact Age for Passport & Visa Applications",
+    introduction: "Government visa forms and international passport applications frequently require reporting your exact age in years, months, and days on a specific application deadline or cutoff date. Get 100% precise age breakdowns instantly.",
+    category: "Productivity",
+    tips: [
+      "Cutoff Date Support: Calculate age on any custom date (e.g. travel date, filing date, or school intake date).",
+      "Minor vs Adult Status: Easily verify if an applicant is under 18 on the exact day of travel or filing.",
+      "Zero Errors: Eliminates manual calendar arithmetic errors on official application documentation."
+    ]
+  },
+  {
+    slug: "convert-cooking-cups-to-grams-milliliters",
+    baseTool: "unit-converter",
+    title: "Culinary & Baking Unit Converter (Cups to Grams & mL)",
+    seoTitle: "Convert Culinary Units - Cups to Grams, Ounces & Milliliters",
+    seoDescription: "Convert culinary recipe measurements between cups, grams, ounces, tablespoons, teaspoons, and milliliters for baking.",
+    heading: "Convert Culinary Units (Cups, Grams & Milliliters)",
+    introduction: "Baking requires exact weight and volume precision. Effortlessly convert international recipe ingredients between volume cups, fluid ounces, tablespoons, teaspoons, and metric weight grams or milliliters.",
+    category: "Productivity",
+    tips: [
+      "Baking Accuracy: Convert recipe cups directly into grams for accurate kitchen scale measurement.",
+      "Metric & Imperial: Bridge North American cup measurements with European metric gram standards.",
+      "Real-Time Output: Numbers update instantly as you type values."
+    ]
+  },
+  {
+    slug: "convert-data-transfer-rates-mbps-to-gbps",
+    baseTool: "unit-converter",
+    title: "Internet Speed & Bandwidth Unit Converter (Mbps to Gbps)",
+    seoTitle: "Convert Data Transfer Rates - Mbps to Gbps & MB/s Online",
+    seoDescription: "Convert data transfer speeds between Megabits per second (Mbps), Gigabits per second (Gbps), and Megabytes per second (MB/s).",
+    heading: "Convert Data Transfer Rates (Mbps to Gbps & MB/s)",
+    introduction: "Confused by ISP internet speed marketing? Convert network bandwidth units between Megabits per second (Mbps), Gigabits per second (Gbps), Megabytes per second (MB/s), and Terabytes per hour to calculate real file download speeds.",
+    category: "Productivity",
+    tips: [
+      "Bits vs Bytes: Remembers that 8 Megabits (Mb) equals 1 Megabyte (MB) of actual file download payload.",
+      "Cloud & Storage Planning: Ideal for estimating server backup times and fiber connection throughput.",
+      "Instant Bidirectional Conversion: Recalculates all data rate metrics dynamically."
+    ]
+  },
+  {
+    slug: "compare-terms-of-service-privacy-policy-diff",
+    baseTool: "diff-checker",
+    title: "Terms of Service & Privacy Policy Diff Checker",
+    seoTitle: "Compare Terms of Service & Privacy Policy Changes Side-by-Side",
+    seoDescription: "Compare updated Terms of Service, Privacy Policies, or legal contracts side-by-side. Highlight added, deleted, and modified clauses.",
+    heading: "Compare Terms of Service & Privacy Policy Revisions",
+    introduction: "Easily audit legal updates and contract changes. Paste the original and updated versions of any Terms of Service, Privacy Policy, or NDA to highlight altered paragraphs, deleted clauses, and newly added text side-by-side.",
+    category: "Developer",
+    tips: [
+      "Visual Highlighting: Color-coded line diffing flags additions in green and removals in red.",
+      "Client Privacy: File comparisons are calculated locally inside browser memory — zero contract data is sent to external servers.",
+      "Compliance Audits: Essential for legal teams, privacy officers, and software vendors reviewing vendor updates."
+    ]
+  },
+  {
+    slug: "compare-markdown-documentation-revisions-diff",
+    baseTool: "diff-checker",
+    title: "Markdown Specs & Documentation Diff Checker",
+    seoTitle: "Compare Markdown Documentation Revisions & Pull Request Changes",
+    seoDescription: "Compare two versions of markdown files, API specs, or code documentation. Side-by-side visual diff highlighting.",
+    heading: "Compare Markdown Documentation Revisions",
+    introduction: "Review documentation edits and technical spec changes before publishing. Paste two revisions of your `.md` files or README documents to spot missing headings, changed code blocks, and text edits with precision.",
+    category: "Developer",
+    tips: [
+      "Side-by-Side View: View original and modified text synchronized in parallel panes.",
+      "Line & Character Precision: Detects subtle typos, changed variable names, and formatting edits.",
+      "Fast Developer Workflow: Instant parsing with zero page reload latency."
+    ]
+  },
+  {
+    slug: "generate-legal-disclaimer-placeholder-text",
+    baseTool: "lorem-ipsum",
+    title: "Legal Terms & Contract Placeholder Text Generator",
+    seoTitle: "Generate Legal Disclaimer & Contract Terms Placeholder Text",
+    seoDescription: "Generate structured dummy legal text and placeholder paragraphs for contract wireframes, mockups, and legal UI templates.",
+    heading: "Generate Legal Terms & Contract Placeholder Text",
+    introduction: "Designing legal document mockups, terms of service layouts, or contract preview templates? Generate structured placeholder paragraphs formatted specifically for legal sections, clauses, and disclaimers.",
+    category: "Design",
+    tips: [
+      "Custom Paragraph Counts: Generate 1 to 20 paragraphs tailored to fit your mockup layout containers.",
+      "Formal Tone: Provides neutral, realistic Latin dummy text resembling formal document structure.",
+      "Instant Clipboard Copy: One-click copying to paste directly into Figma, Adobe XD, or code components."
+    ]
+  },
+  {
+    slug: "generate-mobile-app-ui-card-placeholder-text",
+    baseTool: "lorem-ipsum",
+    title: "Mobile App UI Card & Badge Microcopy Generator",
+    seoTitle: "Generate Short Microcopy & Card Placeholder Text for Mobile UI",
+    seoDescription: "Generate concise 1-sentence and short paragraph placeholder text designed specifically for mobile app cards, notifications, and tooltips.",
+    heading: "Generate Mobile App UI Card & Badge Microcopy",
+    introduction: "Stop struggling to find short dummy text that fits tight mobile screens. Generate clean 5-to-15 word microcopy strings perfect for UI cards, notification banners, push message mockups, and dashboard widgets.",
+    category: "Design",
+    tips: [
+      "Short Sentences: Sized specifically to test mobile responsiveness without overflowing component boundaries.",
+      "Clean Formatting: Generates single-line sentences, subheadings, or bullet points.",
+      "Figma Ready: Copy microcopy snippets directly into UI prototype designs."
+    ]
+  },
+  {
+    slug: "remove-background-amazon-fba-product-photos",
+    baseTool: "background-remover",
+    title: "Amazon FBA Product Photo Pure White Background Remover",
+    seoTitle: "Remove Background for Amazon FBA Product Photos (Pure White 255/255/255)",
+    seoDescription: "Remove product backgrounds and convert them to pure RGB (255, 255, 255) white backgrounds compliant with Amazon FBA image requirements.",
+    heading: "Remove Background for Amazon FBA Product Photos",
+    introduction: "Amazon FBA product listings strictly mandate pure white backgrounds (`RGB 255, 255, 255`) for main image shots. Our AI isolator strips away studio shadows, glares, and props, placing your product on a compliant pure white backplate.",
+    category: "Image",
+    tips: [
+      "Amazon Compliant: Guarantees pure 255/255/255 white backdrop output matching seller portal guidelines.",
+      "Sharp Edges: Accurately isolates product boundaries while retaining natural object reflections.",
+      "High Resolution: Preserves full original photo megapixels for crisp zoom view on Amazon product listings."
+    ]
+  },
+  {
+    slug: "remove-background-passport-visa-photo-online",
+    baseTool: "background-remover",
+    title: "Passport & Visa Photo White Background Isolator",
+    seoTitle: "Remove Background from Passport & Visa Photos (Government Sizing)",
+    seoDescription: "Remove home background from self-taken passport photos and isolate portraits on a clean white or light gray background for visa portals.",
+    heading: "Remove Background from Passport & Visa Photos",
+    introduction: "Taking a passport or visa photo at home? Strip away living room walls, shadows, and busy backdrops. Our portrait AI isolates your head and shoulders, placing you on a clean, solid white background required by government passport agencies.",
+    category: "Image",
+    tips: [
+      "Official Specs: Meets background color uniformity requirements for US Passport, Schengen Visa, and Indian Passport portals.",
+      "Hair Edge Precision: Intelligently isolates fine hair strands without creating unnatural jagged cutouts.",
+      "100% In-Memory: Facial photos are processed privately inside your browser RAM and never stored on disk."
+    ]
+  },
+  {
+    slug: "convert-cad-architectural-drawing-pdf-to-png",
+    baseTool: "pdf-to-image",
+    title: "CAD Blueprint & Architectural PDF to High-Res PNG Converter",
+    seoTitle: "Convert Architectural CAD Drawings & Blueprints (PDF to High-Res PNG)",
+    seoDescription: "Convert heavy architectural CAD drawings, engineering blueprints, and vector schematics from PDF into high-density PNG images.",
+    heading: "Convert CAD Blueprint & Architectural PDF to High-Res PNG",
+    introduction: "Need to share architectural blueprints, civil engineering plans, or CAD drawings with clients who can't open heavy PDF files? Convert vector schematic PDF pages into high-density, crystal-clear PNG images.",
+    category: "PDF",
+    tips: [
+      "High DPI Rendering: Renders delicate vector line work, measurements, and annotations with zero pixelation.",
+      "Cross-Platform Viewing: PNG images load smoothly on smartphones, mobile chat apps, and client presentation slides.",
+      "Multi-Page Extraction: Export all blueprint sheets or choose specific pages to convert in seconds."
+    ]
+  },
+  {
+    slug: "split-w2-tax-forms-by-employee-pdf",
+    baseTool: "split-pdf",
+    title: "Bulk W-2 Tax PDF Form Splitter by Employee",
+    seoTitle: "Split Bulk W-2 & 1099 Tax PDF Forms by Employee Pages Privately",
+    seoDescription: "Split bulk payroll W-2, 1099, and tax statement PDFs into individual employee PDF documents securely in-memory.",
+    heading: "Split Bulk W-2 & 1099 Tax PDF Forms by Employee",
+    introduction: "HR managers and accountants handling payroll: separate large multi-page consolidated tax PDFs into individual 1-page or 2-page employee tax documents. Process files completely in your local browser memory for total data privacy.",
+    category: "PDF",
+    tips: [
+      "Zero Disk Retention: SSNs, salary details, and employee addresses stay 100% confidential in transient RAM.",
+      "Custom Ranges: Extract page ranges (e.g., '1-2, 3-4, 5-6') to separate each employee record cleanly.",
+      "Preserves Fonts & Vectors: Maintains original IRS form vectors, barcodes, and text search layers."
+    ]
+  },
+  {
+    slug: "combine-pitch-deck-and-financial-model-pdf",
+    baseTool: "merge-pdf",
+    title: "Pitch Deck & Financial Model PDF Merger",
+    seoTitle: "Merge Startup Pitch Deck & Financial Model into Single PDF",
+    seoDescription: "Merge investor presentation slides, financial projections, and team resumes into a single cohesive investor PDF packet.",
+    heading: "Merge Startup Pitch Deck & Financial Projections into One PDF",
+    introduction: "Preparing for investor due diligence? Don't send angel investors and VCs four separate attachments. Merge your startup slide deck, 3-year financial model PDF, founder resumes, and term sheet into a single, polished PDF dossier.",
+    category: "PDF",
+    tips: [
+      "Professional Presentation: A unified PDF packet looks executive-ready and simplifies investor review.",
+      "Custom Order: Drag and drop files to ensure slides lead into financial models and appendices in logical sequence.",
+      "Retains Vector Crispness: Keeps charts, typography, and logo branding perfectly sharp."
+    ]
+  },
+  {
+    slug: "compress-hero-banner-image-for-website",
+    baseTool: "image-compressor",
+    title: "Website Hero Banner & Header Image Compressor",
+    seoTitle: "Compress Website Hero Banners & Stock Photos (Boost Core Web Vitals)",
+    seoDescription: "Compress large website hero graphics, homepage stock photos, and banner images to shrink load times and improve Google Core Web Vitals.",
+    heading: "Compress Website Hero Banners & Stock Photos",
+    introduction: "Heavy 5MB hero images slow down homepage loading, hurting your Google LCP (Largest Contentful Paint) score. Squeeze homepage banner graphics and stock photos by up to 80% while preserving crisp visual quality for high-DPI displays.",
+    category: "Image",
+    tips: [
+      "Core Web Vitals Booster: Faster image loading directly improves Google search rankings and bounce rates.",
+      "Retains High Fidelity: Smart lossy compression removes invisible file metadata while keeping colors vibrant.",
+      "Supports WebP, JPEG & PNG: Squeeze all web image formats down to light, production-ready assets."
+    ]
+  },
+  {
+    slug: "convert-notion-export-markdown-to-pdf",
+    baseTool: "markdown-to-pdf",
+    title: "Notion Export Markdown to PDF Document Compiler",
+    seoTitle: "Convert Notion Export (.md) to PDF Documents (Clean Layout)",
+    seoDescription: "Convert exported Notion markdown (.md) pages, wiki notes, and database docs into beautifully styled PDF documents.",
+    heading: "Convert Notion Export Markdown to Beautiful PDF",
+    introduction: "Love writing in Notion but need to deliver clean PDF reports to external clients? Export your Notion pages as Markdown (`.md`), paste the text into our compiler, and render a beautifully formatted A4 PDF complete with syntax-highlighted code blocks and clean typography.",
+    category: "PDF",
+    tips: [
+      "Clean Layout Engine: Applies modern geometric fonts, clean headings, and optimized page margins.",
+      "Code & Quote Support: Renders code blocks, task lists, and quotes formatted cleanly for printing.",
+      "100% In-Browser: Your internal docs and proprietary notes are compiled privately without server storage."
+    ]
+  },
+  {
+    slug: "calculate-fire-financial-independence-sip-target",
+    baseTool: "sip-calculator",
+    title: "FIRE Movement Financial Independence SIP Calculator",
+    seoTitle: "FIRE Movement SIP Calculator - Early Retirement Wealth Target",
+    seoDescription: "Calculate required monthly SIP savings and compounding timeline to achieve FIRE (Financial Independence, Retire Early).",
+    heading: "FIRE Movement Financial Independence SIP Calculator",
+    introduction: "Aiming for early retirement through the FIRE (Financial Independence, Retire Early) movement? Calculate the exact monthly SIP investment required in index funds to reach your target 25x annual expense net worth portfolio.",
+    category: "Finance",
+    tips: [
+      "25x Rule Projection: Helps determine portfolio targets based on the standard 4% safe withdrawal rate (SWR).",
+      "Compounding Acceleration: See how compounding growth speeds up net worth accumulation in years 10 through 20.",
+      "Custom Yields: Toggle expected index fund return rates (e.g. 10% - 14%) to stress-test market scenarios."
+    ]
   }
 ];
-
