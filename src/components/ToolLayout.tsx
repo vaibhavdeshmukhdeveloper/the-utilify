@@ -9,7 +9,7 @@ import { AdBanner } from "./AdBanner";
 import { CrossPromo } from "./CrossPromo";
 import { useCases } from "@/lib/use-cases-data";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -126,35 +126,74 @@ export function ToolLayout({
         </section>
 
         {/* SEO Content: Specialized Use Cases */}
-        {toolUseCases.length > 0 && (
-          <section className="py-12 bg-muted/10 border-t flex flex-col items-center justify-center text-center">
-            <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto px-4">
-              <h2 className="text-2xl font-bold mb-2 text-center text-foreground">Specialized Use Cases</h2>
-              <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
-                Explore popular custom templates and calculations optimized for our {title} engine.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3 mb-6">
-                {visibleUseCases.map((uc, index) => (
+        {toolUseCases.length > 0 && (() => {
+          const sortedUseCases = [...toolUseCases].sort((a, b) => {
+            if (a.featured && !b.featured) return -1;
+            if (!a.featured && b.featured) return 1;
+            return 0;
+          });
+          const visibleUseCases = sortedUseCases.slice(0, 6);
+          const hasMoreUseCases = toolUseCases.length > 6;
+
+          return (
+            <section className="py-16 bg-muted/10 border-t flex flex-col items-center justify-center">
+              <div className="container max-w-6xl flex flex-col items-center justify-center text-center mx-auto px-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-black uppercase tracking-wider mb-3">
+                  <Sparkles className="h-3.5 w-3.5" /> Popular Templates & Solutions
+                </div>
+                <h2 className="text-3xl font-extrabold mb-3 text-center text-foreground">
+                  Specialized {title} Use Cases
+                </h2>
+                <p className="text-base text-muted-foreground mb-10 max-w-xl mx-auto font-medium">
+                  Explore real-world examples, custom presets, and specialized workflows optimized for our {title} engine.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-left w-full mb-10">
+                  {visibleUseCases.map((uc, index) => (
+                    <Link
+                      key={index}
+                      href={`/use-case/${uc.slug}`}
+                      className="group relative bg-card dark:bg-zinc-900/60 border-2 border-zinc-100 dark:border-zinc-800/80 hover:border-primary/40 dark:hover:border-primary/50 shadow-sm hover:shadow-xl hover:shadow-primary/5 rounded-2xl p-6 transition-all duration-300 flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="px-2.5 py-1 rounded-md bg-primary/10 text-primary font-bold text-[11px] uppercase tracking-wider">
+                            {uc.category}
+                          </span>
+                          {uc.featured && (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-500 bg-amber-500/10 dark:bg-amber-500/20 px-2 py-0.5 rounded-full">
+                              <Sparkles className="h-3 w-3" /> Featured
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="font-extrabold text-base text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2 leading-snug">
+                          {uc.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed font-medium mb-4">
+                          {uc.seoDescription}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/60 flex items-center justify-between text-xs font-bold text-primary">
+                        <span>Explore Use Case</span>
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-200" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {hasMoreUseCases && (
                   <Link
-                    key={index}
-                    href={`/use-case/${uc.slug}`}
-                    className="px-4 py-2 rounded-full border bg-card hover:bg-primary hover:text-primary-foreground hover:scale-[1.03] transition-all duration-200 text-sm font-medium"
+                    href={`/use-cases?tool=${encodeURIComponent(toolSlug)}`}
+                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-primary text-primary-foreground font-black text-sm shadow-lg shadow-primary/20 hover:shadow-xl hover:bg-primary/90 hover:scale-[1.02] transition-all duration-200"
                   >
-                    {uc.title}
+                    View all {toolUseCases.length} {title} use cases <ArrowRight className="h-4 w-4" />
                   </Link>
-                ))}
+                )}
               </div>
-              {hasMoreUseCases && (
-                <Link
-                  href={`/use-cases?search=${encodeURIComponent(title)}`}
-                  className="inline-flex items-center gap-1.5 text-sm font-black text-primary hover:underline transition-all duration-200"
-                >
-                  View all {toolUseCases.length} {title} use cases <ArrowRight className="h-4 w-4" />
-                </Link>
-              )}
-            </div>
-          </section>
-        )}
+            </section>
+          );
+        })()}
 
         {/* SEO Content: Related Tools */}
         <section className="py-12 flex flex-col items-center justify-center text-center">

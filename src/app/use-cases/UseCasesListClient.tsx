@@ -7,19 +7,47 @@ import { Sparkles, ArrowRight, Search, X, Layers, FileText, PiggyBank, Activity,
 import { useCases } from "@/lib/use-cases-data";
 import { useSearchParams } from "next/navigation";
 
+const TOOL_NAMES: Record<string, string> = {
+  "background-remover": "Background Remover",
+  "pdf-to-image": "PDF to Image",
+  "split-pdf": "Split PDF",
+  "merge-pdf": "Merge PDF",
+  "image-compressor": "Image Compressor",
+  "markdown-to-pdf": "Markdown to PDF",
+  "sip-calculator": "SIP Calculator",
+  "investment-calculator": "Investment Calculator",
+  "bmi-calculator": "BMI Calculator",
+  "json-formatter": "JSON Formatter",
+  "password-generator": "Password Generator",
+  "qr-generator": "QR Generator",
+  "text-converter": "Text Converter",
+  "base64": "Base64 Encoder/Decoder",
+  "color-palette": "Color Palette Generator",
+  "date-calculator": "Date Calculator",
+  "age-calculator": "Age Calculator",
+  "unit-converter": "Unit Converter",
+  "diff-checker": "Diff Checker",
+  "lorem-ipsum": "Lorem Ipsum Generator",
+};
+
 export default function UseCasesListClient() {
   const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState("All");
+  const [selectedTool, setSelectedTool] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const categories = ["All", "PDF", "Image", "Finance", "Health", "Developer", "Design", "Productivity"];
 
-  // Set query from URL search parameters on load
+  // Set query or tool filter from URL search parameters on load
   useEffect(() => {
-    const search = searchParams?.get("search");
-    if (search) {
-      setQuery(search);
+    const toolParam = searchParams?.get("tool");
+    const searchParam = searchParams?.get("search");
+    if (toolParam) {
+      setSelectedTool(toolParam);
+    }
+    if (searchParam) {
+      setQuery(searchParam);
     }
   }, [searchParams]);
 
@@ -61,8 +89,9 @@ export default function UseCasesListClient() {
     }
   };
 
-  // Filter use cases based on active category and query
+  // Filter use cases based on active tool, category, and query
   const filteredUseCases = useCases.filter((uc) => {
+    const matchesTool = !selectedTool || uc.baseTool === selectedTool;
     const matchesCategory = activeCategory === "All" || uc.category === activeCategory;
     const matchesQuery =
       query.trim() === "" ||
@@ -70,9 +99,10 @@ export default function UseCasesListClient() {
       uc.seoTitle.toLowerCase().includes(query.toLowerCase()) ||
       uc.seoDescription.toLowerCase().includes(query.toLowerCase()) ||
       uc.heading.toLowerCase().includes(query.toLowerCase()) ||
-      uc.introduction.toLowerCase().includes(query.toLowerCase());
+      uc.introduction.toLowerCase().includes(query.toLowerCase()) ||
+      uc.baseTool.replaceAll("-", " ").toLowerCase().includes(query.toLowerCase());
 
-    return matchesCategory && matchesQuery;
+    return matchesTool && matchesCategory && matchesQuery;
   });
 
   const displayCategories = activeCategory === "All"
@@ -83,6 +113,20 @@ export default function UseCasesListClient() {
     <div className="space-y-12">
       {/* Search and Filters Controller */}
       <div className="w-full max-w-4xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
+        {selectedTool && (
+          <div className="flex items-center justify-between px-5 py-3.5 rounded-2xl bg-primary/10 border-2 border-primary/20 text-primary text-sm font-bold animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 shrink-0" />
+              <span>Showing all <strong>{filteredUseCases.length} {TOOL_NAMES[selectedTool] || selectedTool}</strong> use cases</span>
+            </div>
+            <button
+              onClick={() => setSelectedTool(null)}
+              className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider px-3 py-1 rounded-xl bg-primary/20 hover:bg-primary/30 text-primary transition-colors"
+            >
+              <X className="h-3.5 w-3.5" /> Reset Tool Filter
+            </button>
+          </div>
+        )}
         {/* Search Bar Container */}
         <div className="relative group">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-violet-500/10 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -148,6 +192,7 @@ export default function UseCasesListClient() {
             <button
               onClick={() => {
                 setQuery("");
+                setSelectedTool(null);
                 setActiveCategory("All");
               }}
               className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-black uppercase tracking-wider transition-colors shadow-md"

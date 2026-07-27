@@ -28,12 +28,14 @@ export interface UseCaseData {
   introduction: string;
   category: string;
   tips: string[];
+  featured?: boolean;
 }
 
 export const useCases: UseCaseData[] = [
   // 1. AI Background Remover Use Cases
   {
     slug: "remove-background-jewelry-photos-shopify",
+    featured: true,
     baseTool: "background-remover",
     title: "AI Jewelry Photo Background Remover",
     seoTitle: "Remove Background from Jewelry Photos (Shopify Ready)",
@@ -64,6 +66,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "make-signature-background-transparent",
+    featured: true,
     baseTool: "background-remover",
     title: "Make Signature Background Transparent Online",
     seoTitle: "Make Signature Background Transparent (Convert JPG to PNG)",
@@ -79,6 +82,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "make-logo-background-transparent-png",
+    featured: true,
     baseTool: "background-remover",
     title: "Make Logo Background Transparent Online",
     seoTitle: "Convert Logo Background to Transparent PNG Online",
@@ -96,6 +100,7 @@ export const useCases: UseCaseData[] = [
   // 2. PDF to Image Use Cases
   {
     slug: "convert-bank-statement-pdf-to-jpg",
+    featured: true,
     baseTool: "pdf-to-image",
     title: "Bank Statement PDF to Secure JPG Converter",
     seoTitle: "Convert Bank Statement PDF to JPG Online (100% Private)",
@@ -110,6 +115,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-pdf-invoice-to-png-image",
+    featured: true,
     baseTool: "pdf-to-image",
     title: "PDF Invoice to PNG Image Converter",
     seoTitle: "Convert PDF Invoice to PNG Image Free & Online",
@@ -126,6 +132,7 @@ export const useCases: UseCaseData[] = [
   // 3. Split PDF Use Cases
   {
     slug: "extract-pages-from-bank-statement-pdf",
+    featured: true,
     baseTool: "split-pdf",
     title: "Extract Pages from Bank Statement PDF",
     seoTitle: "Extract Pages from Bank Statement PDF Free (Specific Pages)",
@@ -141,6 +148,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "split-pdf-contract-into-single-pages",
+    featured: true,
     baseTool: "split-pdf",
     title: "Split PDF Contract into Single Pages",
     seoTitle: "Split PDF Contract into Single Pages Online & Free",
@@ -157,6 +165,7 @@ export const useCases: UseCaseData[] = [
   // 4. Merge PDF Use Cases
   {
     slug: "combine-multiple-receipts-into-single-pdf",
+    featured: true,
     baseTool: "merge-pdf",
     title: "Combine Receipts into Single PDF",
     seoTitle: "Combine Multiple Receipts into a Single PDF Online",
@@ -171,6 +180,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "merge-pdf-forms-for-tax-filing",
+    featured: true,
     baseTool: "merge-pdf",
     title: "Merge PDF Tax Forms Online",
     seoTitle: "Merge PDF Tax Forms & W2s Online (Secure)",
@@ -187,6 +197,7 @@ export const useCases: UseCaseData[] = [
   // 5. Image Compressor Use Cases
   {
     slug: "compress-image-for-passport-application",
+    featured: true,
     baseTool: "image-compressor",
     title: "Compress Image for Passport Application",
     seoTitle: "Compress Passport & Visa Application Photos (Under 100KB)",
@@ -204,6 +215,7 @@ export const useCases: UseCaseData[] = [
   // 6. Markdown to PDF Use Cases
   {
     slug: "convert-github-readme-to-beautiful-pdf",
+    featured: true,
     baseTool: "markdown-to-pdf",
     title: "GitHub README Markdown to PDF Converter",
     seoTitle: "Convert GitHub README Markdown to PDF Online (Stunning Theme)",
@@ -218,6 +230,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-markdown-resume-to-clean-pdf",
+    featured: true,
     baseTool: "markdown-to-pdf",
     title: "Markdown Resume to PDF Converter",
     seoTitle: "Convert Markdown Resume to Clean PDF (A4 Ready)",
@@ -234,6 +247,7 @@ export const useCases: UseCaseData[] = [
   // 7. SIP Calculator Use Cases
   {
     slug: "calculate-mutual-fund-sip-returns",
+    featured: true,
     baseTool: "sip-calculator",
     title: "Mutual Fund SIP Wealth Calculator",
     seoTitle: "Mutual Fund SIP Calculator - Project Systematic Savings Wealth",
@@ -248,6 +262,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "sip-calculator-for-retirement-wealth",
+    featured: true,
     baseTool: "sip-calculator",
     title: "Retirement Savings SIP Calculator",
     seoTitle: "Retirement Savings SIP Wealth Projector - Compound Wealth",
@@ -264,6 +279,7 @@ export const useCases: UseCaseData[] = [
   // 8. Investment Calculator Use Cases
   {
     slug: "project-compound-interest-wealth-growth",
+    featured: true,
     baseTool: "investment-calculator",
     title: "Index Fund Compound Interest Growth Projector",
     seoTitle: "Long-Term Compound Interest Projector for Index Funds",
@@ -280,6 +296,7 @@ export const useCases: UseCaseData[] = [
   // 9. BMI Calculator Use Cases
   {
     slug: "calculate-body-mass-index-health-range",
+    featured: true,
     baseTool: "bmi-calculator",
     title: "Body Mass Index & Weight Range Calculator",
     seoTitle: "Calculate Body Mass Index (BMI) & Ideal Weight Category",
@@ -296,6 +313,7 @@ export const useCases: UseCaseData[] = [
   // 10. JSON Formatter Use Cases
   {
     slug: "prettify-nested-rest-api-json-payloads",
+    featured: true,
     baseTool: "json-formatter",
     title: "REST API JSON Payload Prettifier",
     seoTitle: "Prettify Nested REST API JSON Data (Online Formatter)",
@@ -310,6 +328,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "remove-background-linkedin-headshot",
+    featured: true,
     baseTool: "background-remover",
     title: "Professional LinkedIn Headshot Background Remover",
     seoTitle: "Remove Background from LinkedIn Headshot Online (AI Portrait)",
@@ -355,6 +374,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-pdf-certificate-to-png-image",
+    featured: true,
     baseTool: "pdf-to-image",
     title: "Certificate PDF to PNG Image Converter",
     seoTitle: "Convert PDF Certificates to PNG Online (LinkedIn Sharing)",
@@ -370,6 +390,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-pdf-resume-to-jpg-image",
+    featured: true,
     baseTool: "pdf-to-image",
     title: "PDF Resume to JPG Image Converter",
     seoTitle: "Convert PDF Resume to JPG Image Online (Application Portals)",
@@ -385,6 +406,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-pdf-menu-to-jpg-online",
+    featured: true,
     baseTool: "pdf-to-image",
     title: "Restaurant Menu PDF to JPG Converter",
     seoTitle: "Convert Restaurant Menu PDF to JPG Online (Yelp & Google Maps)",
@@ -400,6 +422,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "extract-syllabus-pages-from-textbook-pdf",
+    featured: true,
     baseTool: "split-pdf",
     title: "Syllabus PDF Page Extractor",
     seoTitle: "Extract Syllabus Pages from Textbook PDF Free & Online",
@@ -415,6 +438,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "split-medical-records-pdf-pages",
+    featured: true,
     baseTool: "split-pdf",
     title: "Medical Records PDF Splitter & Page Extractor",
     seoTitle: "Split Medical Records PDF Online (100% Secure & Private)",
@@ -430,6 +454,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "split-tax-returns-pdf-by-year",
+    featured: true,
     baseTool: "split-pdf",
     title: "Tax Returns PDF Splitter & Page Extractor",
     seoTitle: "Split Tax Returns PDF by Year Online (W2s & Schedules)",
@@ -445,6 +470,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "merge-medical-reports-into-single-pdf",
+    featured: true,
     baseTool: "merge-pdf",
     title: "Medical Reports & Lab Results PDF Merger",
     seoTitle: "Merge Medical Reports & Lab Results into One PDF Online",
@@ -460,6 +486,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "combine-rent-agreement-and-id-pdf",
+    featured: true,
     baseTool: "merge-pdf",
     title: "Tenant Verification Document PDF Merger",
     seoTitle: "Combine Rental Agreement and ID Scans into One PDF Online",
@@ -475,6 +502,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "merge-transcripts-and-degree-pdf",
+    featured: true,
     baseTool: "merge-pdf",
     title: "Academic Credentials PDF Merger",
     seoTitle: "Merge Transcripts and Degree Certificate into One PDF Online",
@@ -490,6 +518,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "compress-image-for-aadhaar-pan-card",
+    featured: true,
     baseTool: "image-compressor",
     title: "Gov ID Photo & Scan Compressor",
     seoTitle: "Compress Aadhaar & PAN Card Photo Online (Under 100KB)",
@@ -505,6 +534,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "compress-real-estate-listing-photos",
+    featured: true,
     baseTool: "image-compressor",
     title: "MLS & Real Estate Listing Photo Compressor",
     seoTitle: "Compress Real Estate Photos Online (Zillow & MLS Ready)",
@@ -520,6 +550,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "compress-shopify-product-images-speed",
+    featured: true,
     baseTool: "image-compressor",
     title: "Shopify Product Image Compressor",
     seoTitle: "Compress Shopify Product Images Online (Boost Page Speed)",
@@ -535,6 +566,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-markdown-academic-paper-to-pdf",
+    featured: true,
     baseTool: "markdown-to-pdf",
     title: "Academic Paper Markdown to PDF Converter",
     seoTitle: "Convert Markdown Academic Paper to PDF (Beautiful Thesis Theme)",
@@ -550,6 +582,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-markdown-meeting-notes-to-pdf",
+    featured: true,
     baseTool: "markdown-to-pdf",
     title: "Meeting Notes Markdown to PDF Converter",
     seoTitle: "Convert Markdown Meeting Minutes to Professional PDF",
@@ -565,6 +598,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-markdown-software-spec-to-pdf",
+    featured: true,
     baseTool: "markdown-to-pdf",
     title: "Software Spec Markdown to PDF Converter",
     seoTitle: "Convert Software Spec (PRD) Markdown to PDF Online",
@@ -580,6 +614,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "sip-calculator-for-child-education-fund",
+    featured: true,
     baseTool: "sip-calculator",
     title: "Child Higher Education SIP Wealth Calculator",
     seoTitle: "SIP Calculator for Child's College Education Fund (Inflation Adjusted)",
@@ -595,6 +630,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "sip-calculator-for-buying-dream-house",
+    featured: true,
     baseTool: "sip-calculator",
     title: "House Down Payment SIP Calculator",
     seoTitle: "SIP Calculator for Buying a House (Down Payment Goal)",
@@ -610,6 +646,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "sip-calculator-with-annual-step-up",
+    featured: true,
     baseTool: "sip-calculator",
     title: "Step-Up SIP Wealth Calculator",
     seoTitle: "Step-Up SIP Calculator Online (Annual Contribution Top-Up)",
@@ -625,6 +662,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-lump-sum-mutual-fund-returns",
+    featured: true,
     baseTool: "investment-calculator",
     title: "Lump Sum Mutual Fund Return Calculator",
     seoTitle: "Lump Sum Mutual Fund Return Calculator Online (One-Time Investment)",
@@ -640,6 +678,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-fd-fixed-deposit-interest-returns",
+    featured: true,
     baseTool: "investment-calculator",
     title: "Fixed Deposit (FD) Maturity Calculator",
     seoTitle: "Fixed Deposit (FD) Interest and Maturity Calculator Online",
@@ -655,6 +694,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-dividend-reinvestment-drip-returns",
+    featured: true,
     baseTool: "investment-calculator",
     title: "Dividend Reinvestment (DRIP) Return Calculator",
     seoTitle: "Dividend Reinvestment (DRIP) Calculator (Compound Yields)",
@@ -670,6 +710,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "bmi-calculator-for-military-fitness-standards",
+    featured: true,
     baseTool: "bmi-calculator",
     title: "Military & Police Recruitment BMI Calculator",
     seoTitle: "Military BMI Calculator - Police & Defense Recruitment Standards",
@@ -685,6 +726,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "bmi-calculator-for-kids-and-teens",
+    featured: true,
     baseTool: "bmi-calculator",
     title: "Child & Teenager BMI Growth Chart Calculator",
     seoTitle: "BMI Calculator for Kids and Teens (Growth Percentiles)",
@@ -2681,6 +2723,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-dog-age-in-human-years",
+    featured: true,
     baseTool: "age-calculator",
     title: "Calculate Dog Age in Human Years",
     seoTitle: "Dog Age Calculator - Convert Dog Years to Human Years",
@@ -3506,6 +3549,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-wifi-network-login-qr-code",
+    featured: true,
     baseTool: "qr-generator",
     title: "Wi-Fi Network Connection QR Code Generator",
     seoTitle: "Generate Wi-Fi Login QR Codes (Scan to Connect)",
@@ -3521,6 +3565,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "compare-json-config-files-diff",
+    featured: true,
     baseTool: "diff-checker",
     title: "JSON Config Files Diff Checker",
     seoTitle: "Compare JSON Configuration Files (Side-by-Side Diff)",
@@ -3536,6 +3581,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-cyberpunk-dark-neon-color-palette",
+    featured: true,
     baseTool: "color-palette",
     title: "Cyberpunk Neon Color Palette Generator",
     seoTitle: "Generate Cyberpunk Neon & Dark Mode Color Palettes",
@@ -3566,6 +3612,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-days-between-wedding-milestones",
+    featured: true,
     baseTool: "date-calculator",
     title: "Wedding Planning Date Calculator",
     seoTitle: "Calculate Days Between Wedding Planning Milestones",
@@ -3581,6 +3628,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-pressure-units-psi-to-bar",
+    featured: true,
     baseTool: "unit-converter",
     title: "Pressure Units PSI to BAR Converter",
     seoTitle: "Convert Pressure PSI to BAR Online (PSI to BAR)",
@@ -3596,6 +3644,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-speed-mph-to-kmh",
+    featured: true,
     baseTool: "unit-converter",
     title: "Speed MPH to KMH Converter",
     seoTitle: "Convert Miles per Hour to Kilometers per Hour (MPH to KMH)",
@@ -3613,6 +3662,7 @@ export const useCases: UseCaseData[] = [
   // Additional 30 SEO Use Cases
   {
     slug: "generate-secure-mysql-root-password",
+    featured: true,
     baseTool: "password-generator",
     title: "Secure MySQL & PostgreSQL Password Generator",
     seoTitle: "Generate Secure MySQL & PostgreSQL Database Passwords Online",
@@ -3628,6 +3678,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-strong-wifi-wpa3-passphrase",
+    featured: true,
     baseTool: "password-generator",
     title: "Wi-Fi WPA3 / WPA2 Passphrase Generator",
     seoTitle: "Generate Strong WPA3 / WPA2 Wi-Fi Passphrases (100% Client-Side)",
@@ -3643,6 +3694,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-digital-restaurant-menu-qr-code",
+    featured: true,
     baseTool: "qr-generator",
     title: "Digital Restaurant Menu QR Code Generator",
     seoTitle: "Generate Digital Restaurant Menu QR Codes Free & Online",
@@ -3658,6 +3710,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-google-maps-location-qr-code",
+    featured: true,
     baseTool: "qr-generator",
     title: "Google Maps Store Location QR Code Generator",
     seoTitle: "Generate Google Maps Location QR Codes (Scan for Directions)",
@@ -3688,6 +3741,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-pascal-case-to-camel-case-json",
+    featured: true,
     baseTool: "text-converter",
     title: "PascalCase to camelCase JSON Key Converter",
     seoTitle: "Convert PascalCase to camelCase Online (JSON & Code Identifiers)",
@@ -3703,6 +3757,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-all-caps-shouting-text-to-sentence-case",
+    featured: true,
     baseTool: "text-converter",
     title: "ALL CAPS Shouting Text to Sentence Case Converter",
     seoTitle: "Convert ALL CAPS Text to Clean Sentence Case & Title Case",
@@ -3718,6 +3773,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "clean-extra-whitespace-and-blank-lines-text",
+    featured: true,
     baseTool: "text-converter",
     title: "Remove Extra Whitespace & Blank Lines Tool",
     seoTitle: "Remove Duplicate Spaces, Tabs & Empty Lines from Text Online",
@@ -3733,6 +3789,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-png-favicon-to-base64-data-uri",
+    featured: true,
     baseTool: "base64",
     title: "Favicon & PNG Icon Base64 Data URI Converter",
     seoTitle: "Convert PNG Favicon to Base64 Data URI (Inline HTML Image)",
@@ -3748,6 +3805,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "decode-jwt-token-payload-base64",
+    featured: true,
     baseTool: "base64",
     title: "JWT Token Payload Base64 Decoder",
     seoTitle: "Decode Base64 JWT Authorization Headers & Payloads Safely",
@@ -3763,6 +3821,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-accessible-wcag-contrast-color-palette",
+    featured: true,
     baseTool: "color-palette",
     title: "WCAG Accessible High-Contrast Color Palette Generator",
     seoTitle: "Generate WCAG Compliant High-Contrast Color Palettes for Web Apps",
@@ -3778,6 +3837,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-saas-dark-mode-color-palette",
+    featured: true,
     baseTool: "color-palette",
     title: "SaaS Dark Mode & Slate Color Palette Generator",
     seoTitle: "Generate Modern SaaS Dark Mode & Slate Color Palettes (HEX / HSL)",
@@ -3793,6 +3853,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-project-deadline-working-days",
+    featured: true,
     baseTool: "date-calculator",
     title: "Project Deadline & Working Days Calculator",
     seoTitle: "Calculate Project Delivery Date & Working Days (Excluding Weekends)",
@@ -3808,6 +3869,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-lease-expiry-and-notice-period-date",
+    featured: true,
     baseTool: "date-calculator",
     title: "Lease Expiry & Tenant Notice Period Date Calculator",
     seoTitle: "Calculate Lease Expiry & Tenant Notice Period Dates Online",
@@ -3823,6 +3885,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-retirement-eligibility-age",
+    featured: true,
     baseTool: "age-calculator",
     title: "Retirement Eligibility & Years Remaining Calculator",
     seoTitle: "Calculate Retirement Age & Years Remaining to Pension Eligibility",
@@ -3838,6 +3901,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-exact-age-for-passport-application",
+    featured: true,
     baseTool: "age-calculator",
     title: "Passport & Visa Application Exact Age Calculator",
     seoTitle: "Calculate Exact Age in Years, Months & Days for Passport Applications",
@@ -3853,6 +3917,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-cooking-cups-to-grams-milliliters",
+    featured: true,
     baseTool: "unit-converter",
     title: "Culinary & Baking Unit Converter (Cups to Grams & mL)",
     seoTitle: "Convert Culinary Units - Cups to Grams, Ounces & Milliliters",
@@ -3868,6 +3933,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-data-transfer-rates-mbps-to-gbps",
+    featured: true,
     baseTool: "unit-converter",
     title: "Internet Speed & Bandwidth Unit Converter (Mbps to Gbps)",
     seoTitle: "Convert Data Transfer Rates - Mbps to Gbps & MB/s Online",
@@ -3883,6 +3949,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "compare-terms-of-service-privacy-policy-diff",
+    featured: true,
     baseTool: "diff-checker",
     title: "Terms of Service & Privacy Policy Diff Checker",
     seoTitle: "Compare Terms of Service & Privacy Policy Changes Side-by-Side",
@@ -3898,6 +3965,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "compare-markdown-documentation-revisions-diff",
+    featured: true,
     baseTool: "diff-checker",
     title: "Markdown Specs & Documentation Diff Checker",
     seoTitle: "Compare Markdown Documentation Revisions & Pull Request Changes",
@@ -3913,6 +3981,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-legal-disclaimer-placeholder-text",
+    featured: true,
     baseTool: "lorem-ipsum",
     title: "Legal Terms & Contract Placeholder Text Generator",
     seoTitle: "Generate Legal Disclaimer & Contract Terms Placeholder Text",
@@ -3928,6 +3997,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "generate-mobile-app-ui-card-placeholder-text",
+    featured: true,
     baseTool: "lorem-ipsum",
     title: "Mobile App UI Card & Badge Microcopy Generator",
     seoTitle: "Generate Short Microcopy & Card Placeholder Text for Mobile UI",
@@ -3943,6 +4013,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "remove-background-amazon-fba-product-photos",
+    featured: true,
     baseTool: "background-remover",
     title: "Amazon FBA Product Photo Pure White Background Remover",
     seoTitle: "Remove Background for Amazon FBA Product Photos (Pure White 255/255/255)",
@@ -3958,6 +4029,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "remove-background-passport-visa-photo-online",
+    featured: true,
     baseTool: "background-remover",
     title: "Passport & Visa Photo White Background Isolator",
     seoTitle: "Remove Background from Passport & Visa Photos (Government Sizing)",
@@ -3973,6 +4045,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-cad-architectural-drawing-pdf-to-png",
+    featured: true,
     baseTool: "pdf-to-image",
     title: "CAD Blueprint & Architectural PDF to High-Res PNG Converter",
     seoTitle: "Convert Architectural CAD Drawings & Blueprints (PDF to High-Res PNG)",
@@ -3988,6 +4061,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "split-w2-tax-forms-by-employee-pdf",
+    featured: true,
     baseTool: "split-pdf",
     title: "Bulk W-2 Tax PDF Form Splitter by Employee",
     seoTitle: "Split Bulk W-2 & 1099 Tax PDF Forms by Employee Pages Privately",
@@ -4003,6 +4077,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "combine-pitch-deck-and-financial-model-pdf",
+    featured: true,
     baseTool: "merge-pdf",
     title: "Pitch Deck & Financial Model PDF Merger",
     seoTitle: "Merge Startup Pitch Deck & Financial Model into Single PDF",
@@ -4018,6 +4093,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "compress-hero-banner-image-for-website",
+    featured: true,
     baseTool: "image-compressor",
     title: "Website Hero Banner & Header Image Compressor",
     seoTitle: "Compress Website Hero Banners & Stock Photos (Boost Core Web Vitals)",
@@ -4033,6 +4109,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "convert-notion-export-markdown-to-pdf",
+    featured: true,
     baseTool: "markdown-to-pdf",
     title: "Notion Export Markdown to PDF Document Compiler",
     seoTitle: "Convert Notion Export (.md) to PDF Documents (Clean Layout)",
@@ -4048,6 +4125,7 @@ export const useCases: UseCaseData[] = [
   },
   {
     slug: "calculate-fire-financial-independence-sip-target",
+    featured: true,
     baseTool: "sip-calculator",
     title: "FIRE Movement Financial Independence SIP Calculator",
     seoTitle: "FIRE Movement SIP Calculator - Early Retirement Wealth Target",
