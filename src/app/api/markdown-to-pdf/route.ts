@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { marked } from "marked";
+import { Marked } from "marked";
+import markedKatex from "marked-katex-extension";
+
+const customMarked = new Marked();
+customMarked.use(
+  markedKatex({
+    throwOnError: false,
+    nonStandard: true,
+  })
+);
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +26,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No markdown content provided" }, { status: 400 });
     }
 
-    const htmlContent = await marked(content);
+    const htmlContent = await customMarked.parse(content);
     
     // Choose custom stylesheet matching chosen theme
     let stylesheet = "";

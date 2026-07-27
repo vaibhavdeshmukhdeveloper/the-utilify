@@ -22,8 +22,18 @@ import {
   Zap,
   BookOpen
 } from "lucide-react";
-import { marked } from "marked";
+import { Marked } from "marked";
+import markedKatex from "marked-katex-extension";
+import "katex/dist/katex.min.css";
 import { cn } from "@/lib/utils";
+
+const customMarked = new Marked();
+customMarked.use(
+  markedKatex({
+    throwOnError: false,
+    nonStandard: true,
+  })
+);
 
 const SAMPLE_MARKDOWN = `# Utilify Professional Report
 
@@ -89,7 +99,7 @@ export default function MarkdownToPdfClient() {
   useEffect(() => {
     const renderMarkdown = async () => {
       try {
-        const rawHtml = await marked(markdown);
+        const rawHtml = await customMarked.parse(markdown);
         setHtmlContent(rawHtml);
       } catch (err) {
         console.error("Marked parsing error:", err);
@@ -97,48 +107,6 @@ export default function MarkdownToPdfClient() {
     };
     renderMarkdown();
   }, [markdown]);
-
-  // Dynamically load KaTeX and auto-render math formulas in the client preview
-  useEffect(() => {
-    if (!htmlContent) return;
-
-    const renderKaTeX = async () => {
-      if (!document.getElementById("katex-css")) {
-        const link = document.createElement("link");
-        link.id = "katex-css";
-        link.rel = "stylesheet";
-        link.href = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
-        document.head.appendChild(link);
-      }
-
-      if (!(window as any).katex) {
-        const script1 = document.createElement("script");
-        script1.src = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js";
-        script1.defer = true;
-        document.head.appendChild(script1);
-
-        await new Promise((res) => { script1.onload = res; });
-
-        const script2 = document.createElement("script");
-        script2.src = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js";
-        script2.defer = true;
-        document.head.appendChild(script2);
-
-        await new Promise((res) => { script2.onload = res; });
-      }
-
-      if ((window as any).renderMathInElement && previewRef.current) {
-        (window as any).renderMathInElement(previewRef.current, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-          ],
-        });
-      }
-    };
-
-    renderKaTeX();
-  }, [htmlContent]);
 
   const handleUpload = async (files: File[]) => {
     setIsLoading(true);
