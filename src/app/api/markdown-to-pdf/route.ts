@@ -92,10 +92,15 @@ export async function POST(req: NextRequest) {
       <html>
         <head>
           <meta charset="UTF-8">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
           <style>
             ${stylesheet}
             body { background-color: ${pageBackground}; }
             img { max-width: 100%; height: auto; }
+            .katex-display { overflow-x: auto; overflow-y: hidden; max-width: 100%; margin: 1.5em 0; }
+            .katex { font-size: 1.05em; }
           </style>
         </head>
         <body>

@@ -71,6 +71,7 @@ export default function MarkdownToPdfClient() {
   const [viewMode, setViewMode] = useState<ViewMode>("split");
 
   const actionAreaRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (result && actionAreaRef.current) {
@@ -96,6 +97,48 @@ export default function MarkdownToPdfClient() {
     };
     renderMarkdown();
   }, [markdown]);
+
+  // Dynamically load KaTeX and auto-render math formulas in the client preview
+  useEffect(() => {
+    if (!htmlContent) return;
+
+    const renderKaTeX = async () => {
+      if (!document.getElementById("katex-css")) {
+        const link = document.createElement("link");
+        link.id = "katex-css";
+        link.rel = "stylesheet";
+        link.href = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css";
+        document.head.appendChild(link);
+      }
+
+      if (!(window as any).katex) {
+        const script1 = document.createElement("script");
+        script1.src = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js";
+        script1.defer = true;
+        document.head.appendChild(script1);
+
+        await new Promise((res) => { script1.onload = res; });
+
+        const script2 = document.createElement("script");
+        script2.src = "https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js";
+        script2.defer = true;
+        document.head.appendChild(script2);
+
+        await new Promise((res) => { script2.onload = res; });
+      }
+
+      if ((window as any).renderMathInElement && previewRef.current) {
+        (window as any).renderMathInElement(previewRef.current, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false },
+          ],
+        });
+      }
+    };
+
+    renderKaTeX();
+  }, [htmlContent]);
 
   const handleUpload = async (files: File[]) => {
     setIsLoading(true);
@@ -380,7 +423,7 @@ export default function MarkdownToPdfClient() {
                 activeTheme === "editorial" && "bg-[#faf8f5] theme-editorial"
               )}>
                 {htmlContent ? (
-                  <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+                  <div ref={previewRef} dangerouslySetInnerHTML={{ __html: htmlContent }} />
                 ) : (
                   <p className="text-muted-foreground italic text-center py-20 text-sm">No content composed to preview...</p>
                 )}
