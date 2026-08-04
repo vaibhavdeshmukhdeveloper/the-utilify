@@ -326,16 +326,24 @@ export default function InvestmentCalculatorClient() {
                 </div>
                 <div className="relative z-10">
                   <div className="text-xs font-black uppercase tracking-[0.4em] text-zinc-500 mb-4">Total Future Wealth</div>
-                  <div className="text-6xl md:text-7xl font-black tracking-tighter text-white mb-8">${result.total}</div>
+                  <div className="text-6xl md:text-7xl font-black tracking-tighter text-white mb-8">
+                    {result.total.startsWith("-") ? `-$${result.total.slice(1)}` : `$${result.total}`}
+                  </div>
                   
                   <div className="grid grid-cols-2 gap-12 pt-8 border-t border-zinc-800">
                     <div>
                       <div className="text-[11px] font-black uppercase tracking-widest text-zinc-500 mb-2">Total Principal</div>
-                      <div className="text-2xl font-bold">${result.invested}</div>
+                      <div className="text-2xl font-bold">
+                        {result.invested.startsWith("-") ? `-$${result.invested.slice(1)}` : `$${result.invested}`}
+                      </div>
                     </div>
                     <div>
-                      <div className="text-[11px] font-black uppercase tracking-widest text-zinc-500 mb-2">Total Interest</div>
-                      <div className="text-2xl font-bold text-green-500">${result.returns}</div>
+                      <div className="text-[11px] font-black uppercase tracking-widest text-zinc-500 mb-2">
+                        {result.returns.startsWith("-") ? "Total Loss" : "Total Interest"}
+                      </div>
+                      <div className={`text-2xl font-bold ${result.returns.startsWith("-") ? "text-red-500" : "text-green-500"}`}>
+                        {result.returns.startsWith("-") ? `-$${result.returns.slice(1)}` : `$${result.returns}`}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -377,14 +385,22 @@ export default function InvestmentCalculatorClient() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                      {result.breakdown.map((row) => (
-                        <tr key={row.year} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
-                          <td className="p-5 font-black text-primary">Year {row.year}</td>
-                          <td className="p-5 text-sm font-medium text-zinc-600 dark:text-zinc-400">${row.principal.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
-                          <td className="p-5 text-sm font-bold text-green-500">+${row.interest.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
-                          <td className="p-5 text-right font-black tracking-tight">${row.balance.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
-                        </tr>
-                      ))}
+                      {result.breakdown.map((row) => {
+                        const isPrinNeg = row.principal < 0;
+                        const isIntNeg = row.interest < 0;
+                        const isBalNeg = row.balance < 0;
+                        const prinStr = (isPrinNeg ? "-$" : "$") + Math.abs(Math.round(row.principal)).toLocaleString('en-US');
+                        const intStr = (isIntNeg ? "-$" : "+$") + Math.abs(Math.round(row.interest)).toLocaleString('en-US');
+                        const balStr = (isBalNeg ? "-$" : "$") + Math.abs(Math.round(row.balance)).toLocaleString('en-US');
+                        return (
+                          <tr key={row.year} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
+                            <td className="p-5 font-black text-primary">Year {row.year}</td>
+                            <td className="p-5 text-sm font-medium text-zinc-600 dark:text-zinc-400">{prinStr}</td>
+                            <td className={`p-5 text-sm font-bold ${isIntNeg ? "text-red-500" : "text-green-500"}`}>{intStr}</td>
+                            <td className="p-5 text-right font-black tracking-tight">{balStr}</td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

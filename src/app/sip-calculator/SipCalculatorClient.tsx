@@ -340,16 +340,24 @@ export default function SipCalculatorClient() {
                 </div>
                 <div className="relative z-10">
                   <div className="text-xs font-black uppercase tracking-[0.5em] text-zinc-500 mb-6">Total Estimated Value</div>
-                  <div className="text-6xl md:text-8xl font-black tracking-tighter text-white mb-12">${result.total}</div>
+                  <div className="text-6xl md:text-8xl font-black tracking-tighter text-white mb-12">
+                    {result.total.startsWith("-") ? `-$${result.total.slice(1)}` : `$${result.total}`}
+                  </div>
                   
                   <div className="grid grid-cols-2 gap-16 pt-10 border-t border-zinc-800">
                     <div>
                       <div className="text-[12px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-3">Total Invested</div>
-                      <div className="text-3xl font-bold">${result.invested}</div>
+                      <div className="text-3xl font-bold">
+                        {result.invested.startsWith("-") ? `-$${result.invested.slice(1)}` : `$${result.invested}`}
+                      </div>
                     </div>
                     <div>
-                      <div className="text-[12px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-3">Wealth Gain</div>
-                      <div className="text-3xl font-bold text-green-500">${result.returns}</div>
+                      <div className="text-[12px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-3">
+                        {result.returns.startsWith("-") ? "Total Loss" : "Wealth Gain"}
+                      </div>
+                      <div className={`text-3xl font-bold ${result.returns.startsWith("-") ? "text-red-500" : "text-green-500"}`}>
+                        {result.returns.startsWith("-") ? `-$${result.returns.slice(1)}` : `$${result.returns}`}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -391,14 +399,22 @@ export default function SipCalculatorClient() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                      {result.breakdown.map((row) => (
-                        <tr key={row.year} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
-                          <td className="p-6 font-black text-primary text-lg">Year {row.year}</td>
-                          <td className="p-6 text-base font-medium text-zinc-600 dark:text-zinc-400">${row.principal.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
-                          <td className="p-6 text-base font-bold text-green-500">+${row.interest.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
-                          <td className="p-6 text-right font-black tracking-tight text-xl">${row.balance.toLocaleString('en-US', { maximumFractionDigits: 0 })}</td>
-                        </tr>
-                      ))}
+                      {result.breakdown.map((row) => {
+                        const isPrinNeg = row.principal < 0;
+                        const isIntNeg = row.interest < 0;
+                        const isBalNeg = row.balance < 0;
+                        const prinStr = (isPrinNeg ? "-$" : "$") + Math.abs(Math.round(row.principal)).toLocaleString('en-US');
+                        const intStr = (isIntNeg ? "-$" : "+$") + Math.abs(Math.round(row.interest)).toLocaleString('en-US');
+                        const balStr = (isBalNeg ? "-$" : "$") + Math.abs(Math.round(row.balance)).toLocaleString('en-US');
+                        return (
+                          <tr key={row.year} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
+                            <td className="p-6 font-black text-primary text-lg">Year {row.year}</td>
+                            <td className="p-6 text-base font-medium text-zinc-600 dark:text-zinc-400">{prinStr}</td>
+                            <td className={`p-6 text-base font-bold ${isIntNeg ? "text-red-500" : "text-green-500"}`}>{intStr}</td>
+                            <td className="p-6 text-right font-black tracking-tight text-xl">{balStr}</td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
