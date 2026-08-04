@@ -222,7 +222,7 @@ export function GrowthChart({
   const width = 500;
   const height = 240;
   const paddingLeft = 65; // increased padding for negative labels like -$100M
-  const paddingRight = 15;
+  const paddingRight = 35; // increased padding to ensure right-aligned X labels fit comfortably
   const paddingTop = 20;
   const paddingBottom = 30;
 
@@ -374,16 +374,17 @@ export function GrowthChart({
           )}
 
           {/* Year X labels */}
-          {breakdown.length > 0 && [0, Math.floor((totalYears - 1) / 2), totalYears - 1].map((yearIdx) => {
+          {breakdown.length > 0 && [0, Math.floor((totalYears - 1) / 2), totalYears - 1].map((yearIdx, idx, arr) => {
             if (yearIdx >= totalYears) return null;
             const yearItem = breakdown[yearIdx];
             const coord = getCoordinates(yearIdx, 0);
+            const anchor = idx === 0 ? "start" : idx === arr.length - 1 ? "end" : "middle";
             return (
               <text
                 key={yearIdx}
                 x={coord.x}
                 y={height - 8}
-                textAnchor="middle"
+                textAnchor={anchor}
                 fill="var(--muted-foreground)"
                 className="font-black text-[10px] uppercase tracking-wider"
               >
