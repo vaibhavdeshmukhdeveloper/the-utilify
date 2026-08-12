@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/password-generator",
     "/qr-generator",
     "/text-converter",
+    "/word-counter",
     "/base64",
     "/color-palette",
     "/date-calculator",
