@@ -121,6 +121,13 @@ const toolsList = [
     category: "Developer"
   },
   {
+    title: "Word Counter",
+    description: "Count words, characters, reading time, and social media limits live.",
+    href: "/word-counter",
+    icon: FileText,
+    category: "Utility"
+  },
+  {
     title: "Text Case Converter",
     description: "Convert texts between UPPER, lower, Title, or sentence case.",
     href: "/text-converter",

@@ -124,6 +124,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/word-counter" className={getLinkClass("/word-counter")}>
+                  Word Counter
+                </Link>
+              </li>
+              <li>
                 <Link href="/diff-checker" className={getLinkClass("/diff-checker")}>
                   Diff Checker
                 </Link>
