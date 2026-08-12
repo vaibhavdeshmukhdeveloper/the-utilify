@@ -28,6 +28,7 @@ const TOOL_NAMES: Record<string, string> = {
   "unit-converter": "Unit Converter",
   "diff-checker": "Diff Checker",
   "lorem-ipsum": "Lorem Ipsum Generator",
+  "word-counter": "Word Counter",
 };
 
 export default function UseCasesListClient() {

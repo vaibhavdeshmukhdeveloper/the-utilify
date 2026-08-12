@@ -31,6 +31,7 @@ const AgeCalculatorClient = dynamic(() => import("@/app/age-calculator/AgeCalcul
 const UnitConverterClient = dynamic(() => import("@/app/unit-converter/UnitConverterClient"));
 const DiffCheckerClient = dynamic(() => import("@/app/diff-checker/DiffCheckerClient"));
 const LoremIpsumClient = dynamic(() => import("@/app/lorem-ipsum/LoremIpsumClient"));
+const WordCounterClient = dynamic(() => import("@/app/word-counter/WordCounterClient"));
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -116,6 +117,8 @@ export default async function UseCasePage({ params }: PageProps) {
         return <DiffCheckerClient />;
       case "lorem-ipsum":
         return <LoremIpsumClient />;
+      case "word-counter":
+        return <WordCounterClient />;
       default:
         return notFound();
     }

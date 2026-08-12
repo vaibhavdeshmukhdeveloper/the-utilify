@@ -20,7 +20,8 @@ export interface UseCaseData {
     | "age-calculator"
     | "unit-converter"
     | "diff-checker"
-    | "lorem-ipsum";
+    | "lorem-ipsum"
+    | "word-counter";
   title: string;
   seoTitle: string;
   seoDescription: string;
@@ -4137,6 +4138,86 @@ export const useCases: UseCaseData[] = [
       "25x Rule Projection: Helps determine portfolio targets based on the standard 4% safe withdrawal rate (SWR).",
       "Compounding Acceleration: See how compounding growth speeds up net worth accumulation in years 10 through 20.",
       "Custom Yields: Toggle expected index fund return rates (e.g. 10% - 14%) to stress-test market scenarios."
+    ]
+  },
+
+  // Word Counter Use Cases
+  {
+    slug: "college-essay-word-counter-online",
+    featured: true,
+    baseTool: "word-counter",
+    title: "College Essay & Application Word Counter",
+    seoTitle: "College Essay Word Counter Online - Live Application Limit Checker",
+    seoDescription: "Check word counts, character limits, sentence structures, and estimated page counts for college application essays (Common App, UC Essays, Personal Statements).",
+    heading: "College Essay & Application Word Counter",
+    introduction: "College application portals enforce strict word limits, such as the 650-word maximum for the Common App Personal Statement and 350-word bounds for UC Personal Insight Questions. Use our real-time counter to monitor words, sentences, and estimated printed pages with zero risk of submitting truncated essays.",
+    category: "Productivity",
+    tips: [
+      "Common App Bound: Keep your main personal essay strictly under the 650-word ceiling.",
+      "Paragraph Structure: Monitor paragraph and sentence breakdown to ensure smooth readability flow.",
+      "Auto-Save Protection: Drafts are saved automatically in your browser so your progress is never lost."
+    ]
+  },
+  {
+    slug: "x-twitter-character-counter-online",
+    featured: true,
+    baseTool: "word-counter",
+    title: "X / Twitter Post & Thread Character Counter",
+    seoTitle: "X (Twitter) Character Counter Online - Live 280 Limit Checker",
+    seoDescription: "Verify tweet length and thread boundaries instantly with our live 280-character tracker for X (Twitter). Avoid truncated posts and optimize your content.",
+    heading: "X / Twitter Character Limit Checker",
+    introduction: "Writing compelling X (Twitter) posts requires packing maximum value into 280 characters. Our live tracker visually alerts you as you approach the character threshold and displays reading speed metrics for thread planning.",
+    category: "Productivity",
+    tips: [
+      "280-Char Threshold: Visual progress bar turns red when your tweet exceeds X's 280-character boundary.",
+      "Thread Planning: Split longer posts into distinct paragraphs to estimate multi-tweet threads.",
+      "One-Click Copy: Instantly copy your formatted text directly into the X composer."
+    ]
+  },
+  {
+    slug: "linkedin-post-character-counter",
+    baseTool: "word-counter",
+    title: "LinkedIn Post Character Counter & Hook Length Checker",
+    seoTitle: "LinkedIn Character Counter Online - Check 3,000 Char Limit & 'See More' Cutoff",
+    seoDescription: "Analyze LinkedIn post lengths, stay within the 3,000 character limit, and optimize your first 140 characters before the '...see more' fold.",
+    heading: "LinkedIn Post & Hook Character Counter",
+    introduction: "LinkedIn posts allow up to 3,000 characters, but getting readers to click relies heavily on the first 140–200 characters before the '...see more' button. Monitor character count and reading speed in real-time.",
+    category: "Productivity",
+    tips: [
+      "The 140-Char Hook: Craft compelling opening lines before the fold to boost post click-through rates.",
+      "Limit Compliance: Stay safely under LinkedIn's 3,000 character ceiling.",
+      "Line Breaks: Use built-in text cleaners to standardize line spacing for clean mobile reading."
+    ]
+  },
+  {
+    slug: "seo-meta-title-description-length-checker",
+    featured: true,
+    baseTool: "word-counter",
+    title: "SEO Meta Title & Meta Description Length Checker",
+    seoTitle: "SEO Meta Title & Description Character Counter Online",
+    seoDescription: "Calculate exact character counts for Google Search meta titles (60 chars) and meta descriptions (160 chars) to prevent SERP truncation.",
+    heading: "SEO Meta Title & Description Character Counter",
+    introduction: "Prevent search engines from truncating your organic search snippets. Easily count characters for page titles (stay under 60 chars) and meta descriptions (stay under 160 chars) in real-time.",
+    category: "Developer",
+    tips: [
+      "Meta Title Boundary: Keep page titles between 50 and 60 characters (~600px width limit).",
+      "Meta Description Target: Aim for 150 to 160 characters to fit desktop and mobile search snippets.",
+      "Keyword Density: Inspect top keywords to ensure primary target search terms are emphasized."
+    ]
+  },
+  {
+    slug: "speech-reading-time-calculator-online",
+    baseTool: "word-counter",
+    title: "Speech & Article Reading Time Calculator",
+    seoTitle: "Speech & Article Reading Time Calculator - Estimate WPM Online",
+    seoDescription: "Calculate exact reading time (~200 WPM) and speaking time (~130 WPM) for public speeches, podcasts, presentations, and blog articles.",
+    heading: "Speech & Article Reading Time Calculator",
+    introduction: "Preparing a keynote speech, presentation, or estimating blog post reading time? Get instant reading (~200 wpm) and speaking (~130 wpm) time metrics for any document.",
+    category: "Productivity",
+    tips: [
+      "Keynote Pacing: Public speeches average 130 words per minute for clear audience comprehension.",
+      "Article UX: Displaying an accurate 'X min read' badge improves reader engagement.",
+      "Page Estimation: Calculate standard 250-word printed page equivalents for script printouts."
     ]
   }
 ];
