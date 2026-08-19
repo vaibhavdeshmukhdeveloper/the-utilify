@@ -274,6 +274,14 @@ export function GrowthChart({
   const gridSteps = 4;
   const gridLines = Array.from({ length: gridSteps + 1 }, (_, i) => minVal + (range * i) / gridSteps);
 
+  // X-axis year labels (deduplicate for small durations like 1 or 2 years)
+  const labelIndices = (() => {
+    if (totalYears <= 0) return [];
+    if (totalYears === 1) return [0];
+    if (totalYears === 2) return [0, 1];
+    return [0, Math.floor((totalYears - 1) / 2), totalYears - 1];
+  })();
+
   const formatCurrencyAbbrev = (val: number) => {
     const isNeg = val < 0;
     const abs = Math.abs(val);
@@ -374,14 +382,14 @@ export function GrowthChart({
           )}
 
           {/* Year X labels */}
-          {breakdown.length > 0 && [0, Math.floor((totalYears - 1) / 2), totalYears - 1].map((yearIdx, idx, arr) => {
-            if (yearIdx >= totalYears) return null;
+          {labelIndices.map((yearIdx, idx) => {
             const yearItem = breakdown[yearIdx];
+            if (!yearItem) return null;
             const coord = getCoordinates(yearIdx, 0);
-            const anchor = idx === 0 ? "start" : idx === arr.length - 1 ? "end" : "middle";
+            const anchor = idx === 0 ? "start" : idx === labelIndices.length - 1 ? "end" : "middle";
             return (
               <text
-                key={yearIdx}
+                key={`year-label-${yearItem.year}`}
                 x={coord.x}
                 y={height - 8}
                 textAnchor={anchor}
