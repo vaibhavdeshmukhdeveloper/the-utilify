@@ -4219,5 +4219,487 @@ export const useCases: UseCaseData[] = [
       "Article UX: Displaying an accurate 'X min read' badge improves reader engagement.",
       "Page Estimation: Calculate standard 250-word printed page equivalents for script printouts."
     ]
+  },
+
+  // 12. 30 New Programmatic SEO Use Cases (Social, QR, Developer, Security, Productivity & Units)
+  {
+    slug: "instagram-caption-and-bio-character-counter",
+    featured: true,
+    baseTool: "word-counter",
+    title: "Instagram Caption & Bio Character Counter",
+    seoTitle: "Instagram Character Counter Online - Bio (150) & Caption (2,200 Limit)",
+    seoDescription: "Track character counts for Instagram captions (2,200 limit) and profile bios (150 limit) in real time. Optimize first lines before the fold.",
+    heading: "Instagram Caption & Bio Character Counter",
+    introduction: "Instagram enforces strict limits: 150 characters for profile bios and 2,200 characters for captions. More importantly, only the first 125 characters appear before the '...more' link in mobile feeds. Craft engaging hooks and keep your Instagram copy within perfect boundaries.",
+    category: "Productivity",
+    tips: [
+      "125-Character Hook: Place your most compelling call-to-action or hook in the first 125 characters before the fold.",
+      "Bio Sizing: Ensure your bio stays strictly under 150 characters while fitting your contact info and links.",
+      "Hashtag Spacing: Count hashtags towards your total 2,200 character cap to avoid truncated posting errors."
+    ]
+  },
+  {
+    slug: "youtube-title-description-character-counter",
+    featured: true,
+    baseTool: "word-counter",
+    title: "YouTube Title & Description Character Counter",
+    seoTitle: "YouTube Title (100 Char) & Description (5,000 Char) Limit Counter",
+    seoDescription: "Count characters for YouTube video titles (100 char limit) and descriptions (5,000 char limit). Optimize first 3 lines for higher CTR.",
+    heading: "YouTube Title & Description Character Counter",
+    introduction: "YouTube allows up to 100 characters in video titles and 5,000 characters in descriptions. However, search snippets truncate titles after 60–70 characters, and viewers only see the first 3 lines before clicking 'Show more'. Monitor your text lengths live to maximize click-through rate and search ranking.",
+    category: "Productivity",
+    tips: [
+      "60-Character Title Sweet Spot: Keep essential video keywords within the first 60 characters for mobile readability.",
+      "Above-the-Fold Description: Put primary links, affiliate disclosures, and summaries in the first 200 characters.",
+      "Timestamp Organization: Plan chapter timestamps within the 5,000-character description envelope."
+    ]
+  },
+  {
+    slug: "amazon-product-listing-character-counter",
+    featured: true,
+    baseTool: "word-counter",
+    title: "Amazon Product Title & Bullet Points Character Counter",
+    seoTitle: "Amazon Listing Character Counter - Title (200) & Bullet Point Limits",
+    seoDescription: "Check character counts for Amazon FBA product titles (200 limit) and key feature bullet points. Ensure Seller Central compliance.",
+    heading: "Amazon Product Listing Character Counter",
+    introduction: "Amazon Seller Central mandates strict length rules: product titles must not exceed 200 characters, and bullet points perform best when kept under 250 characters (or 1,000 characters total across 5 bullets). Verify your listing copy in real-time to avoid Amazon search suppression.",
+    category: "Productivity",
+    tips: [
+      "200-Character Ceiling: Never exceed 200 characters in titles to prevent automated Amazon algorithmic de-ranking.",
+      "Bullet Point Readability: Keep each key feature bullet under 250 characters for effortless mobile scanning.",
+      "Keyword Optimization: Ensure top search terms are distributed naturally without keyword stuffing."
+    ]
+  },
+  {
+    slug: "academic-abstract-word-counter",
+    featured: true,
+    baseTool: "word-counter",
+    title: "Academic Journal Abstract Word Counter",
+    seoTitle: "Academic Abstract Word Counter - 150-250 Word Limits (IEEE, APA, Nature)",
+    seoDescription: "Verify academic paper, thesis, and journal abstract word counts online. Adhere to strict 150-250 word publication requirements.",
+    heading: "Academic Journal Abstract Word Counter",
+    introduction: "Leading academic journals (such as IEEE, Nature, Science, and Elsevier) enforce hard limits of 150 to 250 words for manuscript abstracts. Submissions that exceed these bounds face immediate desk rejection. Count words, characters, and sentences live with zero distraction.",
+    category: "Productivity",
+    tips: [
+      "Target Word Envelope: Aim for 180 to 220 words to provide complete context while staying safely under the 250-word ceiling.",
+      "Sentence Conciseness: Structure your abstract with 1 sentence for problem statement, 2 for methodology, and 2 for findings.",
+      "Client Privacy: Your unpublished research text is analyzed strictly in browser RAM without server transmission."
+    ]
+  },
+  {
+    slug: "tiktok-caption-character-counter",
+    featured: true,
+    baseTool: "word-counter",
+    title: "TikTok Video Caption Character Counter",
+    seoTitle: "TikTok Caption Character Counter Online (2,200 & 4,000 Char Limit)",
+    seoDescription: "Monitor TikTok video caption and description length in real time. Optimize TikTok SEO keywords and hashtags within character limits.",
+    heading: "TikTok Caption & Description Character Counter",
+    introduction: "TikTok has evolved from short 150-character captions into a major search engine supporting up to 2,200 (and in some regions 4,000) characters. Ensure your video descriptions pack relevant search keywords, timestamps, and hashtags without exceeding platform limits.",
+    category: "Productivity",
+    tips: [
+      "TikTok SEO: Include long-tail search phrases in your caption body to rank in TikTok search results.",
+      "First 2 Lines Matter: Place your hook and main caption text upfront before hashtags to grab viewer attention.",
+      "Hashtag Budgeting: Reserve 100–200 characters at the end for 4–6 high-relevance hashtags."
+    ]
+  },
+  {
+    slug: "restaurant-digital-table-menu-qr-code",
+    featured: true,
+    baseTool: "qr-generator",
+    title: "Restaurant Digital Table Menu QR Code Generator",
+    seoTitle: "Restaurant Table Menu QR Code Generator (Contactless PDF Menu)",
+    seoDescription: "Generate scannable QR codes linking directly to your restaurant's digital menu or PDF. Download high-resolution PNG & SVG for table tents.",
+    heading: "Restaurant Digital Table Menu QR Code Generator",
+    introduction: "Create contactless digital dining experiences for your cafe, bar, or restaurant. Generate high-density QR codes linking diners directly to your online menu, PDF drink list, or mobile ordering page. Download crystal-clear vector codes ready for table tents, coasters, and window decals.",
+    category: "Productivity",
+    tips: [
+      "Direct PDF / URL Link: Link directly to a fast-loading mobile-friendly menu URL or PDF file.",
+      "High Print Density: Export in SVG or high-resolution PNG to ensure instant camera scanning even in dim restaurant lighting.",
+      "Call-to-Action Frame: Add a simple 'Scan for Menu' label above or below the printed code on table stands."
+    ]
+  },
+  {
+    slug: "airbnb-wifi-guest-network-qr-code",
+    featured: true,
+    baseTool: "qr-generator",
+    title: "Airbnb Guest Wi-Fi Network QR Code Generator",
+    seoTitle: "Airbnb Wi-Fi QR Code Generator for Guests (Instant Connect)",
+    seoDescription: "Create instant-connect Wi-Fi QR codes for Airbnb and vacation rental guests. Print clean welcome book cards with zero password typing.",
+    heading: "Airbnb Guest Wi-Fi Network QR Code Generator",
+    introduction: "Delight your Airbnb and vacation rental guests with seamless Wi-Fi onboarding. Generate a dedicated Wi-Fi QR code containing your SSID and network password. Guests simply point their iPhone or Android camera to connect instantly without typing complex 20-character passwords.",
+    category: "Productivity",
+    tips: [
+      "WPA/WPA2 Support: Compatible with standard home Wi-Fi protocols for instant iOS and Android auto-connection.",
+      "Welcome Book Display: Print the generated QR code on your welcome stand or kitchen refrigerator magnet.",
+      "Zero Network Leaks: QR encoding runs 100% in your browser session; your Wi-Fi credentials are never stored."
+    ]
+  },
+  {
+    slug: "google-maps-business-location-qr-code",
+    featured: true,
+    baseTool: "qr-generator",
+    title: "Google Maps Business Location QR Code Generator",
+    seoTitle: "Google Maps Location QR Code Generator for Storefronts & Flyers",
+    seoDescription: "Generate QR codes linking directly to your business Google Maps location, reviews page, or storefront directions. Perfect for print marketing.",
+    heading: "Google Maps Business Location QR Code Generator",
+    introduction: "Drive foot traffic and customer reviews to your physical storefront, clinic, or office. Generate a scannable QR code linking directly to your Google Maps pin or Google Business review page. Print on promotional flyers, receipts, and business cards.",
+    category: "Productivity",
+    tips: [
+      "Google Maps Share Link: Paste the shortened 'maps.app.goo.gl' or full Google Maps URL into the generator.",
+      "Review Generation: Link directly to your 'Leave a Review' Google Business page to boost local 5-star ratings.",
+      "Vector Print Quality: Export in SVG or 1000px PNG to ensure sharp readability on outdoor banners and window posters."
+    ]
+  },
+  {
+    slug: "event-invitation-rsvp-qr-code",
+    featured: true,
+    baseTool: "qr-generator",
+    title: "Wedding & Event RSVP Calendar QR Code Generator",
+    seoTitle: "Event & Wedding RSVP QR Code Generator (Google Calendar & Forms)",
+    seoDescription: "Create custom QR codes for wedding invitations, event RSVPs, and Google Calendar invites. Fast scanning for printed invitations.",
+    heading: "Wedding & Event RSVP Calendar QR Code Generator",
+    introduction: "Make RSVPing effortless for your wedding guests, conference attendees, or party invitees. Generate a QR code linking directly to your RSVP Google Form, event website, or one-click Google Calendar add-event link. Print cleanly on paper invitation cards and save-the-date mailers.",
+    category: "Productivity",
+    tips: [
+      "RSVP Form Link: Link straight to your online RSVP submission form or wedding registry page.",
+      "Calendar Invites: Encode a calendar event link so guests can add the date to their digital calendar with one tap.",
+      "Print Margins: Leave a clean white quiet zone around the QR code on invitation card templates for easy scanning."
+    ]
+  },
+  {
+    slug: "crypto-bitcoin-ethereum-wallet-qr-code",
+    featured: true,
+    baseTool: "qr-generator",
+    title: "Cryptocurrency Wallet Address QR Code Generator",
+    seoTitle: "Bitcoin & Crypto Wallet Address QR Code Generator Online",
+    seoDescription: "Generate scannable QR codes for Bitcoin, Ethereum, Solana, and USDT wallet public addresses. Eliminate manual typing errors.",
+    heading: "Cryptocurrency Wallet Address QR Code Generator",
+    introduction: "Never risk losing crypto to mistyped public addresses. Generate clean, high-precision QR codes for your Bitcoin (BTC), Ethereum (ETH), Solana (SOL), or USDT receiving addresses. Send or print for point-of-sale crypto payments, donation boxes, or peer transfers.",
+    category: "Finance",
+    tips: [
+      "Public Keys Only: Only encode your public deposit address or URI scheme (e.g. `bitcoin:1A1zP1...`). Never share private keys.",
+      "Test Scan First: Always test scan the generated QR code with your mobile wallet before publishing or printing.",
+      "In-Browser Security: Address encoding is computed client-side in RAM with zero backend network transmission."
+    ]
+  },
+  {
+    slug: "strong-wifi-router-wpa3-password-generator",
+    featured: true,
+    baseTool: "password-generator",
+    title: "Secure Wi-Fi Router (WPA2/WPA3) Password Generator",
+    seoTitle: "Strong Wi-Fi Router Password Generator (WPA2 / WPA3 Compliant)",
+    seoDescription: "Generate cryptographically secure 20-30 character passwords for home and office Wi-Fi routers. Prevent unauthorized wireless network access.",
+    heading: "Secure Wi-Fi Router (WPA2/WPA3) Password Generator",
+    introduction: "Default factory router passwords and weak Wi-Fi keys leave your home network vulnerable to packet sniffing and unauthorized access. Generate high-entropy 24-to-32 character passwords compliant with WPA2 and WPA3 security standards to protect your connected devices.",
+    category: "Developer",
+    tips: [
+      "WPA3 Optimal Length: Generate a 24–32 character passphrase mixing uppercase, lowercase, numbers, and symbols.",
+      "Avoid Ambiguous Characters: Exclude easily confused characters (like 0 and O, or 1 and l) for hassle-free manual entry.",
+      "Pair with Wi-Fi QR Code: Use our QR Generator to create a Wi-Fi scan card so you never have to type the long password manually."
+    ]
+  },
+  {
+    slug: "database-root-mysql-postgres-password-generator",
+    featured: true,
+    baseTool: "password-generator",
+    title: "Database Admin & MySQL / PostgreSQL Password Generator",
+    seoTitle: "Database Admin Password Generator (MySQL, Postgres, MongoDB)",
+    seoDescription: "Generate high-entropy alphanumeric passwords for database root users, MySQL, PostgreSQL, and Redis. Filter syntax-breaking symbols.",
+    heading: "Database Admin & Root Password Generator",
+    introduction: "Setting up MySQL, PostgreSQL, MongoDB, or Redis instances requires robust root passwords that prevent brute-force database intrusions while avoiding special characters (like quotes or backslashes) that break database connection strings and CLI flags.",
+    category: "Developer",
+    tips: [
+      "Connection String Safe: Filter out quotation marks (`\"`, `'`), backticks, and ampersands that break `.env` connection URLs.",
+      "32+ Character Entropy: Use 32 to 64 characters for production database clusters and cloud service credentials.",
+      "Cryptographic Randomness: Utilizes `crypto.getRandomValues()` for cryptographically secure pseudo-random number generation."
+    ]
+  },
+  {
+    slug: "memorable-diceware-passphrase-generator",
+    featured: true,
+    baseTool: "password-generator",
+    title: "Memorable Diceware Passphrase Generator",
+    seoTitle: "Memorable Diceware Passphrase Generator (Multi-Word Password)",
+    seoDescription: "Generate strong, human-memorable multi-word passphrases using the Diceware method. High entropy with easy recall.",
+    heading: "Memorable Diceware Passphrase Generator",
+    introduction: "Struggling to remember complex random strings like `xK9#mQ2$vL`? Diceware passphrases combine 4 to 6 randomly selected dictionary words separated by hyphens (e.g. `correct-horse-battery-staple`). They deliver immense mathematical entropy while remaining effortless for humans to type and remember.",
+    category: "Developer",
+    tips: [
+      "4-to-5 Word Standard: A 5-word passphrase provides over 64 bits of entropy, making brute-force cracking practically impossible.",
+      "Separator Customization: Use hyphens or underscores between words for clean readability across terminal prompts.",
+      "Master Password Ideal: Perfect for master passwords protecting Bitwarden, 1Password, or disk encryption keys."
+    ]
+  },
+  {
+    slug: "banking-and-financial-account-password-generator",
+    featured: true,
+    baseTool: "password-generator",
+    title: "Online Banking & Financial Security Password Generator",
+    seoTitle: "High-Entropy Banking Password Generator (Zero Special Character Bugs)",
+    seoDescription: "Generate ultra-secure passwords tailored for online banking portals, brokerage accounts, and fintech apps within strict portal constraints.",
+    heading: "Online Banking & Financial Security Password Generator",
+    introduction: "Financial institutions often enforce idiosyncratic password constraints (e.g. exactly 16–20 characters, requiring at least one number and specific allowed symbols). Generate mathematically random passwords tailored to satisfy strict banking portal criteria without triggering validation errors.",
+    category: "Finance",
+    tips: [
+      "Custom Length Tuning: Match your bank's exact maximum character cap (typically 16, 20, or 24 characters).",
+      "Character Set Mix: Toggle lowercase, uppercase, numbers, and allowed punctuation to satisfy all security criteria.",
+      "Local Generation: Generated 100% inside your browser memory — passwords are never sent over the internet or logged."
+    ]
+  },
+  {
+    slug: "title-case-converter-for-book-and-blog-headlines",
+    featured: true,
+    baseTool: "text-converter",
+    title: "Title Case Converter for Book & Article Headlines",
+    seoTitle: "Title Case Converter Online (APA, Chicago, MLA Capitalization)",
+    seoDescription: "Convert article titles, blog headlines, and book titles into proper Title Case following APA, MLA, and Chicago manual standards.",
+    heading: "Title Case Converter for Book & Article Headlines",
+    introduction: "Capitalizing headlines manually often leads to grammatical inconsistencies. Convert any raw sentence or blog title into polished Title Case. Automatically capitalizes major words while keeping minor prepositions, articles, and conjunctions (like 'and', 'in', 'of', 'the') in lowercase.",
+    category: "Productivity",
+    tips: [
+      "Style Guide Compliant: Adheres to standard publishing rules (capitalizes first and last words regardless of part of speech).",
+      "Instant Clipboard Copy: One-click copying to paste directly into CMS editors like WordPress, Ghost, or Medium.",
+      "Batch Conversion: Paste multiple headlines separated by line breaks to format entire editorial calendars."
+    ]
+  },
+  {
+    slug: "clean-invisible-zero-width-spaces-remover",
+    featured: true,
+    baseTool: "text-converter",
+    title: "Zero-Width Space & Hidden Unicode Cleaner",
+    seoTitle: "Clean Invisible Zero-Width Characters & Unicode Spaces Online",
+    seoDescription: "Detect and remove invisible zero-width spaces (U+200B), non-breaking spaces, and hidden Unicode characters breaking code or text.",
+    heading: "Zero-Width Space & Hidden Unicode Cleaner",
+    introduction: "Copying text from chat apps, PDFs, or rich text editors often introduces invisible zero-width spaces (`U+200B`), zero-width joiners (`U+200D`), and byte-order marks that cause compilation errors, database validation bugs, or JSON parse failures. Strip hidden characters with one click.",
+    category: "Developer",
+    tips: [
+      "Code Sanitization: Cleans copy-pasted code snippets before compiling in IDEs or terminals.",
+      "Character Counter Verification: Use our Word Counter after cleaning to confirm true character lengths.",
+      "Instant Detection: Strips non-breaking spaces (`&nbsp;`), soft hyphens, and zero-width spaces instantly."
+    ]
+  },
+  {
+    slug: "camelcase-pascalcase-variable-converter",
+    featured: true,
+    baseTool: "text-converter",
+    title: "camelCase & PascalCase Code Variable Naming Converter",
+    seoTitle: "Convert Text to camelCase, PascalCase & snake_case Online",
+    seoDescription: "Convert plain text, sentence strings, and database column names into camelCase, PascalCase, snake_case, and kebab-case for developers.",
+    heading: "camelCase & PascalCase Variable Naming Converter",
+    introduction: "Speed up software development workflows. Transform raw sentence strings, table names, or JSON keys into standard programming case conventions including `camelCase` (JavaScript/TypeScript), `PascalCase` (C#/React Components), `snake_case` (Python/PostgreSQL), and `kebab-case` (CSS/URLs).",
+    category: "Developer",
+    tips: [
+      "Multi-Case Output: Generates camelCase, PascalCase, snake_case, and SCREAMING_SNAKE_CASE simultaneously.",
+      "Symbol Stripping: Automatically removes punctuation, extra spaces, and special symbols.",
+      "Code Refactoring: Ideal for converting database schema names into frontend TypeScript interface keys."
+    ]
+  },
+  {
+    slug: "slugify-url-string-cleaner-seo",
+    featured: true,
+    baseTool: "text-converter",
+    title: "SEO URL Slug Cleaner & Slugify Generator",
+    seoTitle: "Clean & Slugify URL Strings Online (SEO Friendly Permalinks)",
+    seoDescription: "Convert blog titles and article headlines into clean, URL-safe kebab-case slugs. Remove special characters and accents for SEO.",
+    heading: "SEO URL Slug Cleaner & Slugify Generator",
+    introduction: "Generate clean, human-readable, and search-engine-optimized permalink slugs from article titles. Automatically converts uppercase characters to lowercase, replaces spaces with hyphens, strips punctuation, and transliterates accented characters into clean ASCII slugs.",
+    category: "Developer",
+    tips: [
+      "Kebab-Case Permalinks: Replaces spaces with hyphens to match Google SEO URL naming best practices.",
+      "Special Character Filtering: Erases question marks, emojis, slashes, and quotes that break web server routing.",
+      "Direct CMS Ready: Paste the generated slug directly into Next.js dynamic route parameters or WordPress permalink fields."
+    ]
+  },
+  {
+    slug: "kilowatt-hours-kwh-to-megawatt-joules-converter",
+    featured: true,
+    baseTool: "unit-converter",
+    title: "Kilowatt-Hours (kWh) to Megajoules & BTU Energy Converter",
+    seoTitle: "Convert Kilowatt-Hours (kWh) to Megajoules, BTU & Joules Online",
+    seoDescription: "Convert electricity and energy measurements between Kilowatt-hours (kWh), Megajoules (MJ), Joules (J), and British Thermal Units (BTU).",
+    heading: "Kilowatt-Hours (kWh) to Megajoules & BTU Energy Converter",
+    introduction: "Analyze electricity consumption, solar power generation, and heating energy. Convert energy metrics between Kilowatt-hours (kWh), Megawatt-hours (MWh), Joules (J), Megajoules (MJ), and British Thermal Units (BTU) with high decimal precision.",
+    category: "Productivity",
+    tips: [
+      "Solar & Utility Billing: Convert monthly kWh utility meter readings into Megajoules (1 kWh = 3.6 MJ).",
+      "HVAC & Heating: Calculate equivalent BTU ratings for air conditioners and heat pumps (1 kWh ≈ 3,412 BTU).",
+      "Real-Time Math: Values update instantaneously across all energy units as you type."
+    ]
+  },
+  {
+    slug: "square-feet-to-square-meters-real-estate-converter",
+    featured: true,
+    baseTool: "unit-converter",
+    title: "Square Feet to Square Meters (sq ft to sq m) Area Converter",
+    seoTitle: "Convert Square Feet to Square Meters Online (Real Estate Units)",
+    seoDescription: "Convert property area and floor plans between square feet (sq ft), square meters (sq m), acres, and hectares with high precision.",
+    heading: "Square Feet to Square Meters Area Converter",
+    introduction: "Navigating international real estate listings or architectural blueprints? Convert apartment sizes, land parcels, and room dimensions between Imperial square feet (`sq ft`) and Metric square meters (`sq m`, `m²`), acres, and hectares in real-time.",
+    category: "Productivity",
+    tips: [
+      "Real Estate Standard: Remember that 1 Square Meter equals approximately 10.7639 Square Feet.",
+      "Land Parcel Metrics: Seamlessly switch between square feet, square yards, acres, and hectares.",
+      "Accurate Flooring Estimates: Calculate exact floor tile or carpet material requirements for renovations."
+    ]
+  },
+  {
+    slug: "tire-pressure-psi-to-bar-kpa-converter",
+    featured: true,
+    baseTool: "unit-converter",
+    title: "Vehicle Tire Pressure Converter (PSI to Bar & kPa)",
+    seoTitle: "Convert Tire Pressure PSI to Bar & Kilopascals (kPa) Online",
+    seoDescription: "Convert automotive tire pressure units between Pounds per Square Inch (PSI), Bar, and Kilopascals (kPa). Ensure proper tire inflation.",
+    heading: "Vehicle Tire Pressure Converter (PSI to Bar & kPa)",
+    introduction: "Inflating vehicle tires or reading imported car manuals? Convert automotive pressure metrics between PSI (Pounds per Square Inch), Bar, and kPa (Kilopascals). Maintain optimal tire inflation to improve vehicle fuel economy and safety.",
+    category: "Productivity",
+    tips: [
+      "Car Door Placard: Check your driver door jamb for the manufacturer recommended cold tire pressure (typically 32–36 PSI / 2.2–2.5 Bar).",
+      "Metric Conversion: 1 Bar equals 14.5038 PSI or 100 Kilopascals (kPa).",
+      "Seasonal Adjustment: Pressure drops ~1 PSI for every 10°F (5.5°C) drop in ambient temperature."
+    ]
+  },
+  {
+    slug: "employee-probation-and-notice-period-date-calculator",
+    featured: true,
+    baseTool: "date-calculator",
+    title: "Employee Probation & Notice Period Date Calculator",
+    seoTitle: "Calculate Employee Probation End Date & Notice Period Deadlines",
+    seoDescription: "Calculate exact employee 30-day, 60-day, or 90-day probation end dates, notice period last working days, and HR contract milestones.",
+    heading: "Employee Probation & Notice Period Date Calculator",
+    introduction: "HR managers, recruiters, and employees: calculate exact calendar end dates for 3-month probation periods, 30-day or 90-day employment notice periods, and contractual review dates. Avoid manual calendar counting errors on official offer letters.",
+    category: "Productivity",
+    tips: [
+      "Last Working Day: Input resignation date and contractual notice duration (e.g. 60 days) to calculate your exact final working day.",
+      "Probation Milestones: Accurately determine 90-day or 180-day probation completion dates for performance reviews.",
+      "Working vs Calendar Days: Use our business days calculator if notice contracts specify working days instead of calendar days."
+    ]
+  },
+  {
+    slug: "schengen-90-180-day-visa-stay-calculator",
+    featured: true,
+    baseTool: "date-calculator",
+    title: "Schengen 90/180-Day Rule Travel Stay Calculator",
+    seoTitle: "Calculate Schengen 90/180-Day Visa Stay Days & Exit Deadlines",
+    seoDescription: "Calculate Schengen area stay duration under the 90/180-day short-stay rule. Track remaining visa-free travel days and exit dates.",
+    heading: "Schengen 90/180-Day Visa Stay Calculator",
+    introduction: "Digital nomads and international travelers visiting the European Schengen Zone must adhere to the strict 90/180-day rule (a maximum of 90 days of stay within any rolling 180-day window). Calculate exact trip lengths, remaining stay allowances, and mandatory departure dates to prevent visa overstays.",
+    category: "Productivity",
+    tips: [
+      "Rolling Window: The 180-day reference period is dynamic and looks back exactly 180 days from each day of your stay.",
+      "Entry & Exit Days: Both entry and exit calendar days count as full days of stay in the Schengen Area.",
+      "Passport Compliance: Ensure your passport is valid for at least 3 months beyond your planned departure date."
+    ]
+  },
+  {
+    slug: "school-kindergarten-admission-cutoff-age-calculator",
+    featured: true,
+    baseTool: "age-calculator",
+    title: "Kindergarten & School Admission Cutoff Age Calculator",
+    seoTitle: "Calculate Exact Age on School Admission Cutoff Date (Years & Months)",
+    seoDescription: "Calculate child exact age in years, months, and days on school registration cutoff dates (e.g. September 1st or December 31st).",
+    heading: "School & Kindergarten Admission Cutoff Age Calculator",
+    introduction: "School districts and preschools enforce strict age cutoff rules (for instance, requiring a child to be exactly 5 years old on or before September 1st). Input your child's birth date and the school cutoff deadline to determine exact eligibility in years, months, and days.",
+    category: "Productivity",
+    tips: [
+      "Cutoff Date Precision: Calculate age against specific institutional intake dates rather than today's date.",
+      "Preschool & K-12 Eligibility: Easily check if your toddler meets 3-year preschool or 5-year kindergarten minimum thresholds.",
+      "Official Documentation: Print the exact breakdown to attach with school application forms."
+    ]
+  },
+  {
+    slug: "driving-license-minimum-eligibility-age-calculator",
+    featured: true,
+    baseTool: "age-calculator",
+    title: "Driving License Minimum Eligibility Age Calculator",
+    seoTitle: "Driving License Age Eligibility Calculator (Days Until 18th Birthday)",
+    seoDescription: "Calculate exact age and remaining days until 16th, 17th, or 18th birthday for learner permits and driving license applications.",
+    heading: "Driving License Minimum Eligibility Age Calculator",
+    introduction: "Counting down the days until you can legally drive? Enter your date of birth to calculate your exact current age down to days and hours, along with the precise countdown of days remaining until you reach the legal driving age (16 for learner permits, 18 for full licenses).",
+    category: "Productivity",
+    tips: [
+      "Learner Permit Countdown: View exact days remaining until your 16th or 18th birthday.",
+      "DMV / RTO Compliance: Verify eligibility before booking driving test appointments.",
+      "Milestone Tracking: Displays total days, weeks, and hours lived."
+    ]
+  },
+  {
+    slug: "compare-sql-schema-ddl-migration-scripts-diff",
+    featured: true,
+    baseTool: "diff-checker",
+    title: "SQL Schema & Database Migration DDL Diff Checker",
+    seoTitle: "Compare SQL Schemas & Database Migration Scripts Side-by-Side",
+    seoDescription: "Compare SQL table definitions, DDL migration scripts, and schema revisions side-by-side. Spot altered columns and indexes instantly.",
+    heading: "SQL Schema & Database Migration DDL Diff Checker",
+    introduction: "Reviewing database migrations before running them on production? Paste the current schema and proposed DDL migration script to highlight modified columns, altered data types, new foreign keys, and dropped indexes with color-coded side-by-side diffing.",
+    category: "Developer",
+    tips: [
+      "Side-by-Side Comparison: View old and new schema scripts in synchronized parallel panes.",
+      "Zero Data Leaks: Comparison runs entirely in browser memory; your private database schemas are never uploaded.",
+      "Migration Audits: Catch dangerous `DROP COLUMN` or type conversion changes before applying migrations."
+    ]
+  },
+  {
+    slug: "compare-dockerfile-kubernetes-yaml-revisions-diff",
+    featured: true,
+    baseTool: "diff-checker",
+    title: "Dockerfile & Kubernetes Deployment YAML Diff Checker",
+    seoTitle: "Compare Dockerfile & Kubernetes YAML Config Revisions Online",
+    seoDescription: "Compare two versions of Dockerfiles, Helm values, or Kubernetes YAML manifests. Highlight configuration drift and changed environment tags.",
+    heading: "Dockerfile & Kubernetes YAML Config Diff Checker",
+    introduction: "Debugging production deployment drift or container build failures? Paste two versions of your `Dockerfile`, `docker-compose.yml`, or Kubernetes deployment manifests to spot changed container image tags, missing environment variables, and modified resource limits.",
+    category: "Developer",
+    tips: [
+      "Highlight Config Drift: Flags added lines in green, removed lines in red, and inline parameter edits.",
+      "DevOps Ready: Inspect Helm values and Kubernetes ConfigMaps before applying `kubectl apply`.",
+      "Whitespace Sensitivity: Easily spot indentation differences that cause YAML syntax parsing errors."
+    ]
+  },
+  {
+    slug: "generate-ecommerce-product-description-dummy-text",
+    featured: true,
+    baseTool: "lorem-ipsum",
+    title: "E-Commerce Product Description Dummy Text Generator",
+    seoTitle: "Generate E-Commerce Product Spec & Description Dummy Text",
+    seoDescription: "Generate realistic placeholder product descriptions, feature bullets, and marketing copy for Shopify and e-commerce UI templates.",
+    heading: "E-Commerce Product Description Dummy Text Generator",
+    introduction: "Designing Shopify storefronts, product cards, or WooCommerce themes? Generic Latin dummy text doesn't fit realistic e-commerce component heights. Generate structured placeholder paragraphs styled specifically for product descriptions, dimensions, materials, and bullet features.",
+    category: "Design",
+    tips: [
+      "Realistic Lengths: Generates 2–3 sentence product highlights that match real catalog card heights.",
+      "Component Prototyping: Perfect for testing product detail pages, checkout summaries, and mobile grids.",
+      "Figma Ready: One-click clipboard copy to populate UI wireframes in seconds."
+    ]
+  },
+  {
+    slug: "encode-svg-icons-to-base64-css-data-uri",
+    featured: true,
+    baseTool: "base64",
+    title: "SVG Icon to Base64 CSS Data URI Encoder",
+    seoTitle: "Encode SVG Icons to Base64 CSS Data URI Online (Fast Inlining)",
+    seoDescription: "Convert raw SVG vector markup and icons into Base64 encoded `data:image/svg+xml;base64` strings for CSS background-image inlining.",
+    heading: "SVG Icon to Base64 CSS Data URI Encoder",
+    introduction: "Inline SVG icons directly into CSS stylesheets or HTML templates without external HTTP requests. Paste your raw `<svg>` code to generate clean `data:image/svg+xml;base64,...` data URIs ready for `background-image: url(...)` styling.",
+    category: "Developer",
+    tips: [
+      "Zero HTTP Overhead: Inlining small UI icons into CSS eliminates round-trip asset requests.",
+      "Data URI Formatting: Outputs complete `data:image/svg+xml;base64,...` format ready for CSS rules.",
+      "Client-Side Encoding: Vector strings are encoded locally in your browser with zero latency."
+    ]
+  },
+  {
+    slug: "generate-pastel-aesthetic-color-palettes",
+    featured: true,
+    baseTool: "color-palette",
+    title: "Pastel Aesthetic & Soft Minimalist Color Palette Generator",
+    seoTitle: "Generate Soft Pastel Aesthetic Color Palettes (HEX / HSL Codes)",
+    seoDescription: "Generate cohesive soft pastel aesthetic color palettes for web design, branding, and modern UI. Export HEX and CSS variables.",
+    heading: "Pastel Aesthetic & Soft Minimalist Color Palette Generator",
+    introduction: "Create soothing, modern, and aesthetically pleasing interfaces. Generate harmonious pastel color palettes featuring soft blush pinks, gentle mint greens, lavender tints, and warm cream tones with optimal lightness and saturation balances.",
+    category: "Design",
+    tips: [
+      "Harmonious Hues: Generates balanced tints with high lightness (80–90%) and low saturation (20–40%).",
+      "CSS & HEX Export: Copy HEX color codes or CSS custom variables with a single click.",
+      "Design System Cohesion: Combine with our dark mode palettes for versatile light/dark UI themes."
+    ]
   }
 ];
