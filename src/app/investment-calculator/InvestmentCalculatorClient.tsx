@@ -203,6 +203,40 @@ export default function InvestmentCalculatorClient() {
     { name: "Date Calculator", href: "/date-calculator" }
   ];
 
+  const detailedContent = (
+    <article className="space-y-6">
+      <div className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200">
+        <h4 className="font-bold text-base mb-2 text-amber-800 dark:text-amber-300">Important Financial Disclaimer</h4>
+        <p className="text-sm leading-relaxed m-0">
+          This Investment Growth Calculator is designed strictly for informational and simulation purposes. Calculations represent idealized compound projections and do not account for inflation, management fees, capital gains taxes, or unexpected market downturns. It does not constitute investment advice or personalized portfolio recommendations.
+        </p>
+      </div>
+
+      <h3>Understanding Compound Investment Growth</h3>
+      <p>
+        The core mechanism of long-term investing is the compounding effect of returns earned both on your initial starting capital and continuous periodic additions. Over extended multi-year horizons, accumulated compound interest often dwarfs the original deposited principal.
+      </p>
+      <h4>The Mathematical Compound Formula</h4>
+      <p>
+        For a starting lump sum with recurring periodic contributions, total ending portfolio balance is governed by:
+      </p>
+      <p className="bg-muted p-4 rounded-xl font-mono text-center">
+        A = P &times; (1 + r/n)^(nt) + PMT &times; [ ((1 + r/n)^(nt) - 1) / (r/n) ]
+      </p>
+      <p>
+        Where:
+      </p>
+      <ul>
+        <li><strong>A:</strong> Total accumulated future wealth balance.</li>
+        <li><strong>P:</strong> Initial starting deposit (Principal).</li>
+        <li><strong>r:</strong> Nominal annual interest rate (in decimal format).</li>
+        <li><strong>n:</strong> Compounding frequency per year (e.g. 12 for monthly, 1 for annually).</li>
+        <li><strong>t:</strong> Number of years capital stays invested.</li>
+        <li><strong>PMT:</strong> Periodic recurring contribution per interval.</li>
+      </ul>
+    </article>
+  );
+
   return (
     <ToolLayout
       title="Investment Calculator"
@@ -210,6 +244,7 @@ export default function InvestmentCalculatorClient() {
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
+      detailedContent={detailedContent}
     >
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Column: Inputs */}

@@ -212,6 +212,13 @@ export default function SipCalculatorClient() {
       ]}
       detailedContent={(
         <article className="space-y-6">
+          <div className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200">
+            <h4 className="font-bold text-base mb-2 text-amber-800 dark:text-amber-300">Important Financial Disclaimer</h4>
+            <p className="text-sm leading-relaxed m-0">
+              This SIP Calculator is provided solely for educational and illustrative purposes. Projections and compound interest calculations are mathematical estimates based on user-provided assumptions and do not guarantee future investment returns. This tool does not constitute financial, investment, or tax advice. Consult a certified financial planner before making financial decisions.
+            </p>
+          </div>
+
           <h3>Detailed Guide: Understanding SIP Compounding Projections</h3>
           <p>
             A Systematic Investment Plan (SIP) is widely considered the safest and most efficient path for long-term wealth accumulation. Unlike lump-sum investments, which expose all your capital to immediate market fluctuations, SIPs utilize consistency and time to generate exponential compound growth.

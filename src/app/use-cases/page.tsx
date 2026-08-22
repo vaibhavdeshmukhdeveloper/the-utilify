@@ -8,6 +8,10 @@ import UseCasesListClient from "./UseCasesListClient";
 export const metadata: Metadata = {
   title: "Specialized Use Cases Directory - Utilify",
   description: "Browse our programmatic directory of specialized use cases. Safely convert, compress, remove backgrounds, and calculate complex financial SIP returns.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function UseCasesDirectoryPage() {

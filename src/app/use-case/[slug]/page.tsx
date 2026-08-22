@@ -53,6 +53,10 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: data.seoTitle,
     description: data.seoDescription,
+    robots: {
+      index: false,
+      follow: false,
+    },
     alternates: {
       canonical: `https://www.theutilify.com/use-case/${slug}`,
     },

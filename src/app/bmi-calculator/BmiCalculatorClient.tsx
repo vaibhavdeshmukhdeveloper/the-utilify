@@ -177,6 +177,13 @@ export default function BmiCalculatorClient() {
 
   const detailedContent = (
     <article className="space-y-6">
+      <div className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200">
+        <h4 className="font-bold text-base mb-2 text-amber-800 dark:text-amber-300">Medical & Health Disclaimer</h4>
+        <p className="text-sm leading-relaxed m-0">
+          Body Mass Index (BMI) is an anthropometric screening ratio, not a clinical diagnostic assessment of body composition or health risk. Factors such as muscle mass, bone density, age, and genetics significantly influence body composition. This tool is provided solely for educational reference and should not replace clinical diagnosis or professional medical advice. Always consult a certified healthcare professional for individual medical recommendations.
+        </p>
+      </div>
+
       <h3>Detailed Guide: Understanding Body Mass Index (BMI)</h3>
       <p>
         Body Mass Index (BMI) is a standard screening measurement adopted by the World Health Organization (WHO) and global health agencies to identify weight categories that may lead to health concerns. However, BMI is not a diagnostic tool; it is a general statistical indicator.

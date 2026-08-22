@@ -1,9 +1,8 @@
 import { MetadataRoute } from "next";
-import { useCases } from "@/lib/use-cases-data";
 import { blogPosts } from "@/lib/blog-data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.theutilify.com"; // Correct active brand domain
+  const baseUrl = "https://www.theutilify.com";
 
   const tools = [
     "/json-formatter",
@@ -41,15 +40,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogSlugs = blogPosts.map((post) => `/blog/${post.slug}`);
 
-  // Dynamic programmatic SEO routes
-  const useCasePaths = useCases.map((uc) => `/use-case/${uc.slug}`);
-
-  const allPaths = [...marketingPages, ...tools, ...blogSlugs, ...useCasePaths];
+  // High-value canonical routes submitted to Google Search Console
+  const allPaths = [...marketingPages, ...tools, ...blogSlugs];
 
   return allPaths.map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),
     changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1.0 : path.includes("/use-case/") ? 0.7 : path.includes("/blog/") ? 0.6 : 0.8,
+    priority: path === "" ? 1.0 : path.includes("/blog/") ? 0.7 : 0.9,
   }));
 }

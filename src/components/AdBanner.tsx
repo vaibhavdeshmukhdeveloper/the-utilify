@@ -4,9 +4,10 @@ import { useEffect, useRef } from "react";
 
 export function AdBanner() {
   const initialized = useRef(false);
+  const adsEnabled = process.env.NEXT_PUBLIC_ADS_ENABLED === "true";
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (adsEnabled && typeof window !== "undefined") {
       try {
         // Prevent duplicate pushes during dev fast-refresh or react strict mounts
         if (!initialized.current) {
@@ -17,7 +18,11 @@ export function AdBanner() {
         console.error("AdSense initialization error: ", err);
       }
     }
-  }, []);
+  }, [adsEnabled]);
+
+  if (!adsEnabled) {
+    return null;
+  }
 
   return (
     <div className="w-full max-w-4xl mt-8 flex flex-col items-center justify-center overflow-hidden min-h-[120px] border border-dashed border-zinc-200 dark:border-zinc-800 bg-muted/10 rounded-[1.5rem] p-6 mx-auto">
@@ -39,3 +44,4 @@ export function AdBanner() {
     </div>
   );
 }
+
