@@ -197,11 +197,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/use-cases" className={getLinkClass("/use-cases")}>
-                  Use Cases
-                </Link>
-              </li>
-              <li>
                 <Link href="/blog" className={getLinkClass("/blog")}>
                   Blog
                 </Link>
