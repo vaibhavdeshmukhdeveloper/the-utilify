@@ -6,7 +6,11 @@ import { Footer } from "./Footer";
 import { Card } from "@/components/ui/card";
 import { AdBanner } from "./AdBanner";
 import { CrossPromo } from "./CrossPromo";
+import { JsonLd } from "./JsonLd";
+import { blogPosts } from "@/lib/blog-data";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BookOpen, ArrowRight, Sparkles, Clock, Calendar } from "lucide-react";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -27,8 +31,41 @@ export function ToolLayout({
   relatedTools,
   detailedContent,
 }: ToolLayoutProps) {
+  const pathname = usePathname();
+  const currentSlug = pathname ? pathname.replace(/^\//, "") : "";
+
+  // Dynamic automatic FAQPage Schema.org structured data
+  const faqSchema = faqs && faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  } : null;
+
+  // Contextual related guides matching current tool category/topic
+  const relatedGuides = blogPosts.filter(post => {
+    const postSlug = post.slug.toLowerCase();
+    const tool = currentSlug.toLowerCase();
+    if (tool.includes("background") && postSlug.includes("background")) return true;
+    if (tool.includes("image") && (postSlug.includes("image") || postSlug.includes("compression"))) return true;
+    if (tool.includes("pdf") && postSlug.includes("pdf")) return true;
+    if ((tool.includes("sip") || tool.includes("investment")) && (postSlug.includes("investing") || postSlug.includes("compound"))) return true;
+    if ((tool.includes("json") || tool.includes("diff") || tool.includes("base64")) && (postSlug.includes("json") || postSlug.includes("developer"))) return true;
+    return false;
+  }).slice(0, 3);
+
+  // Fallback to latest posts if no direct keyword match
+  const displayGuides = relatedGuides.length > 0 ? relatedGuides : blogPosts.slice(0, 3);
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      {faqSchema && <JsonLd data={faqSchema} />}
       <Navbar />
 
       <main className="flex-grow">
@@ -97,6 +134,51 @@ export function ToolLayout({
           </div>
         </section>
 
+        {/* Contextual Hub-and-Spoke In-Depth Guides */}
+        {displayGuides.length > 0 && (
+          <section className="py-16 bg-muted/5 border-b">
+            <div className="container max-w-5xl mx-auto px-4">
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-black uppercase tracking-wider mb-3">
+                  <BookOpen className="h-3.5 w-3.5" /> Comprehensive Tutorials
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  In-Depth Guides & Walkthroughs
+                </h2>
+                <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
+                  Master advanced techniques, workflows, and industry best practices.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {displayGuides.map((guide, idx) => (
+                  <Link key={idx} href={`/blog/${guide.slug}`} className="group">
+                    <div className="h-full p-6 rounded-2xl bg-card border border-zinc-200 dark:border-zinc-800 hover:border-primary/50 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
+                      <div>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-primary px-2.5 py-1 rounded-md bg-primary/10 inline-block mb-3">
+                          {guide.category}
+                        </span>
+                        <h3 className="font-bold text-base text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2 leading-snug">
+                          {guide.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                          {guide.excerpt}
+                        </p>
+                      </div>
+                      <div className="mt-4 pt-4 border-t flex items-center justify-between text-xs text-muted-foreground font-medium">
+                        <span>{guide.readTime}</span>
+                        <span className="flex items-center gap-1 font-bold text-primary group-hover:translate-x-1 transition-transform">
+                          Read Guide <ArrowRight className="h-3.5 w-3.5" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* SEO Content: Related Tools */}
         <section className="py-12 flex flex-col items-center justify-center text-center">
           <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto">
@@ -120,4 +202,5 @@ export function ToolLayout({
     </div>
   );
 }
+
 
