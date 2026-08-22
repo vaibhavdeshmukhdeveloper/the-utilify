@@ -10,15 +10,56 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ToolsGrid } from "@/components/ToolsGrid";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata = {
   title: "Utilify - Free Online Utility & Productivity Tools Suite",
   description: "A professional-grade, privacy-first suite of free online utilities. Split, merge, and convert PDFs, remove background with AI, compress images, and calculate financials in seconds.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Utilify - Free Online Utility & Productivity Tools Suite",
+    description: "A professional-grade, privacy-first suite of free online utilities. Split, merge, and convert PDFs, remove background with AI, compress images, and calculate financials in seconds.",
+    url: "https://www.theutilify.com",
+    siteName: "Utilify",
+    type: "website",
+  },
 };
 
 export default function Home() {
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Utilify",
+    "url": "https://www.theutilify.com",
+    "description": "Professional-grade, privacy-first free online utilities and developer tools suite.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.theutilify.com/#tools?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Utilify",
+    "url": "https://www.theutilify.com",
+    "logo": "https://www.theutilify.com/icon.svg",
+    "sameAs": [
+      "https://github.com/vaibhavdeshmukhdeveloper/the-utilify"
+    ],
+    "description": "Creator of high-performance, privacy-first web utilities and developer productivity tools."
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <JsonLd data={websiteSchema} />
+      <JsonLd data={organizationSchema} />
       <Navbar />
 
       <main className="flex-grow">

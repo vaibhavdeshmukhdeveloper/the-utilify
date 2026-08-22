@@ -48,6 +48,40 @@ export function ToolLayout({
     }))
   } : null;
 
+  // Dynamic automatic HowTo Schema.org structured data
+  const howToSchema = howToUse && howToUse.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": `How to Use ${title}`,
+    "description": description,
+    "step": howToUse.map((item, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": item.step,
+      "text": item.description,
+    }))
+  } : null;
+
+  // Dynamic automatic BreadcrumbList Schema.org structured data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.theutilify.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": title,
+        "item": `https://www.theutilify.com/${currentSlug}`
+      }
+    ]
+  };
+
   // Contextual related guides matching current tool category/topic
   const relatedGuides = blogPosts.filter(post => {
     const postSlug = post.slug.toLowerCase();
@@ -66,6 +100,8 @@ export function ToolLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {faqSchema && <JsonLd data={faqSchema} />}
+      {howToSchema && <JsonLd data={howToSchema} />}
+      <JsonLd data={breadcrumbSchema} />
       <Navbar />
 
       <main className="flex-grow">

@@ -2,15 +2,43 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Shield, Zap, Heart, Globe, Lock, Code, Terminal, Cpu, Sparkles, CheckCircle2 } from "lucide-react";
 import { Metadata } from "next";
+import { JsonLd } from "@/components/JsonLd";
 
 export const metadata: Metadata = {
-  title: "About Us - Utilify",
+  title: "About Us - Free Online Utilities Suite | Utilify",
   description: "Learn more about Utilify, our origin story from an IT engineer's personal master library, and our mission to provide free, privacy-first online tools for the world.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Us - Free Online Utilities Suite | Utilify",
+    description: "Learn more about Utilify, our origin story from an IT engineer's personal master library, and our mission to provide free, privacy-first online tools for the world.",
+    url: "https://www.theutilify.com/about",
+    siteName: "Utilify",
+    type: "website",
+  },
 };
 
 export default function AboutPage() {
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Utilify",
+    "description": "The mission and architectural principles behind Utilify: privacy-first, zero-storage free online utilities.",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "The Utilify Editorial Team",
+      "url": "https://www.theutilify.com",
+      "logo": "https://www.theutilify.com/icon.svg",
+      "sameAs": [
+        "https://github.com/vaibhavdeshmukhdeveloper/the-utilify"
+      ]
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <JsonLd data={aboutSchema} />
       <Navbar />
 
       <main className="flex-grow">
