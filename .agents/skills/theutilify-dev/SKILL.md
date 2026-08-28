@@ -1,11 +1,22 @@
 ---
 name: theutilify-dev
-description: Developer runbooks and architectural guide for The Utilify web application (Next.js 16 App Router, FastAPI backend, Schema.org SEO, AdSense compliance, and deployment).
+description: Developer runbooks and architectural guide for The Utilify web application (Next.js 16 App Router, FastAPI backend, Schema.org SEO, AdSense compliance, OpenGraph generator, embeddable widgets, and deployment).
 ---
 
 # The Utilify Developer & Engineering Runbooks
 
 This skill provides step-by-step procedures for building, maintaining, and scaling tools, blog articles, and backend microservices on **The Utilify** (`https://www.theutilify.com`).
+
+---
+
+## Architecture Quick Reference
+
+- **Frontend:** Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS v4.
+- **Client Execution:** Client-side formats, encoders, calculators, batch image compressor (`jszip`), and KaTeX formula cards (`katex`).
+- **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social previews.
+- **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks.
+- **Backend:** FastAPI (Python 3.11) with PyMuPDF (`fitz`), Playwright Chromium, and ONNX runtime (`rembg`).
+- **Deployments:** Auto-deployed to Vercel (frontend) and Google Cloud (backend) upon push to `main`.
 
 ---
 
@@ -21,6 +32,8 @@ Create `src/app/<tool-slug>/`:
   import ToolClient from "./ToolClient";
   import { JsonLd } from "@/components/JsonLd";
 
+  const ogUrl = "https://www.theutilify.com/api/og?title=Tool%20Name&category=Category&badge=100%25%20Free";
+
   export const metadata: Metadata = {
     title: "Tool Name - Free Online Utility | Utilify",
     description: "Perform tool action fast, free, and securely in your browser.",
@@ -29,6 +42,13 @@ Create `src/app/<tool-slug>/`:
       title: "Tool Name - Free Online Utility | Utilify",
       description: "Perform tool action fast, free, and securely in your browser.",
       url: "https://www.theutilify.com/<tool-slug>",
+      images: [{ url: ogUrl, width: 1200, height: 630, alt: "Tool Name" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Tool Name | Utilify",
+      description: "Perform tool action fast, free, and securely in your browser.",
+      images: [ogUrl],
     }
   };
 
@@ -55,6 +75,7 @@ Create `src/app/<tool-slug>/`:
   ```tsx
   "use client";
   import { ToolLayout } from "@/components/ToolLayout";
+  import { triggerConfetti } from "@/lib/confetti";
 
   export default function ToolClient() {
     return (
@@ -87,9 +108,10 @@ Create `src/app/<tool-slug>/`:
   }
   ```
 
-### 2. Register in Sitemap & Home Grid
+### 2. Register in Sitemap, Home Grid & Embed Route
 - Add `/<tool-slug>` to `tools` array in `src/app/sitemap.ts`.
 - Add tool card definition to `src/components/ToolsGrid.tsx`.
+- If client-side embeddable, register in `EMBEDDABLE_TOOLS` inside `src/app/embed/[tool]/page.tsx`.
 
 ---
 
@@ -102,10 +124,10 @@ When targeting a new long-tail search intent:
    - `slug`: kebab-case URL identifier (e.g. `how-to-compress-images-web-performance`).
    - `title`: High-intent headline (e.g. *"How to Optimize Images for Web Performance"*).
    - `excerpt`: 1–2 sentence compelling summary.
-   - `date`: Current date string (e.g. `"August 25, 2026"`).
+   - `date`: Current date string (e.g. `"August 28, 2026"`).
    - `author`: Always `"The Utilify Editorial Team"`.
    - `readTime`: Estimated reading time (e.g. `"8 min read"`).
-   - `category`: `"Productivity" | "Design" | "Finance" | "Development"`.
+   - `category`: `"Productivity" | "Design" | "Finance" | "Development" | "PDF"`.
    - `content`: 800+ words of markdown structured with `###` headings, comparison tables, step-by-step instructions, and markdown links to related tools (`[Image Compressor](/image-compressor)`). Note: escape any backticks inside template literals as `\``.
 
 ---
@@ -135,13 +157,18 @@ When a tool requires Python computation (ONNX AI inference, PyMuPDF, Playwright)
 
 ## Runbook 4: Verification & Deployment
 
-1. **Verify Frontend:**
+1. **Verify Frontend Locally:**
    ```bash
    npm run build
    ```
-   Ensure 0 TypeScript errors and clean static page generation.
+   Ensure 0 TypeScript errors and clean static page generation for all routes.
 
 2. **Deploy:**
    Commit and push to `main` branch:
-   - Vercel automatically deploys the frontend.
+   ```bash
+   git add .
+   git commit -m "feat: description of changes"
+   git push origin main
+   ```
+   - Vercel automatically builds and deploys the frontend.
    - Google Cloud automatically builds the Docker container and deploys the backend.

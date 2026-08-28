@@ -5,54 +5,66 @@
 [![Tech Stack](https://img.shields.io/badge/Stack-Next.js%2016%20%7C%20FastAPI%20%7C%20Tailwind%20v4-emerald?style=for-the-badge)](https://github.com/vaibhavdeshmukhdeveloper/the-utilify)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://github.com/vaibhavdeshmukhdeveloper/the-utilify)
 
-Welcome to **The Utilify** — a professional-grade, privacy-first, and completely free online suite of utility and productivity tools. The application is live at **[theutilify.com](https://www.theutilify.com/)** and is engineered from the ground up to offer lightning-fast, high-fidelity operations without the bloat, ads, or premium subscriptions of traditional file converters.
+Welcome to **The Utilify** — a professional-grade, privacy-first, and completely free online suite of 21+ productivity and developer utilities. The application is live at **[theutilify.com](https://www.theutilify.com/)** and is engineered from the ground up to offer lightning-fast, client-side execution, rich interactive UI, and zero persistent file retention.
 
-This repository hosts the complete codebase, comprising a high-performance **Next.js 16 (App Router)** frontend and an optimized **FastAPI (Python 3.11)** microservices backend. Both services are hooked to automatic Git-based deployment workflows: the frontend is auto-deployed to **Vercel**, and the backend is containerized and auto-deployed to **Google Cloud** on every push to the `main` branch.
+The platform combines a modern **Next.js 16 (App Router, React 19, TypeScript)** frontend with an asynchronous **FastAPI (Python 3.11)** AI and document compilation backend. Changes pushed to `main` auto-deploy to **Vercel** (frontend) and **Google Cloud** (backend).
 
 ---
 
-## 🌟 Key Features & Tools
-
-The Utilify is organized into clear, focused categories. Each tool is designed to work client-side where possible, falling back to secure, transient cloud computation only when heavy AI or headless browser-level rendering is required.
+## 🌟 Key Features & Tools Suite
 
 ### 🖼️ Image Utilities
-*   **AI Background Remover (`/background-remover`):** Automatically isolates subjects and removes complex backgrounds in milliseconds.
-    *   *Hybrid Engine:* Employs a fast mathematical flood-fill algorithm for flat graphic and vector backgrounds, and instantly falls back to a **u2netp** neural network model for photographs.
-*   **Image Compressor (`/image-compressor`):** Compresses and optimizes image formats (PNG, JPG, WebP) directly in the browser with zero quality loss.
-*   **Color Palette Generator (`/color-palette`):** Create harmonic color schemes (analogous, triadic, monochromatic), check color contrast against WCAG standards, and export configuration variables.
+*   **AI Background Remover (`/background-remover`):** Automatically isolates subjects and removes complex backgrounds using multi-model neural networks (`isnet-general-use`, `u2net`, `u2net_human_seg`, `silueta`). Features an interactive **Before/After Comparison Slider**, manual eraser brush, and custom background tinting.
+*   **Image Compressor (`/image-compressor`):** Multi-file batch image compressor (PNG, JPG, WebP) running 100% in-browser. Includes live quality sliders, interactive Before/After comparison, individual download buttons, and a **1-click "Download All as ZIP"** export powered by `jszip`.
+*   **Color Palette Generator (`/color-palette`):** Create harmonic color schemes (analogous, triadic, monochromatic), check contrast ratios against WCAG 2.1 standards, and export CSS/Tailwind variables.
 
 ### 📄 PDF Utilities
-*   **PDF to Image (`/pdf-to-image`):** Converts PDF document pages into individual high-resolution PNG images packed inside a structured `.zip` file using **PyMuPDF (fitz)** rendered at `2x` resolution (~150 DPI).
+*   **PDF to Image (`/pdf-to-image`):** Converts PDF document pages into high-resolution PNG images packed inside a structured `.zip` archive using **PyMuPDF (`fitz`)** rendered at `2x` resolution (~150 DPI).
 *   **Split PDF (`/split-pdf`):** Extracts specific pages, ranges, or custom indices (e.g. `1-3, 5, 8-10`) into separate, lightweight PDF files.
-*   **Merge PDF (`/merge-pdf`):** Sequentially combines multiple PDF documents of any size into a single, perfectly structured file.
-*   **Markdown to PDF (`/markdown-to-pdf`):** Converts styled markdown files or raw strings directly into beautiful, custom-styled A4 PDF files. Uses a headless Playwright Chromium instance for pixel-perfect browser-level rendering.
+*   **Merge PDF (`/merge-pdf`):** Sequentially combines multiple PDF documents of any size into a single, clean document.
+*   **Markdown to PDF (`/markdown-to-pdf`):** Converts styled markdown files or raw strings directly into clean A4 PDF documents using headless Chromium rendering.
 
 ### 💻 Developer & Text Tools
-*   **JSON Formatter (`/json-formatter`):** Prettifies, validates, minifies, and syntax-highlights raw JSON data in real-time.
-*   **Password Generator (`/password-generator`):** Generate highly secure, random passwords client-side using cryptographic browser APIs, with strength metrics.
-*   **QR Code Generator (`/qr-generator`):** Create custom QR codes for Wi-Fi configurations, URLs, SMS, or plain texts with color layouts and download features.
-*   **Text Case Converter (`/text-converter`):** Transform text between UPPER, lower, Title, sentence, camelCase, or snake_case instantly, with detailed layout statistics.
-*   **Base64 Encoder/Decoder (`/base64`):** Encode plain text or upload binary files (up to 5MB) to Base64 format, and decode Base64 strings back safely.
-*   **Diff Checker (`/diff-checker`):** Compare two texts side-by-side or inline to highlight additions and deletions using a custom Longest Common Subsequence algorithm.
-*   **Lorem Ipsum Generator (`/lorem-ipsum`):** Generate customizable placeholder text paragraphs, sentences, words, or lists with optional HTML wrapper tags.
+*   **JSON Formatter (`/json-formatter`):** Prettifies, validates, minifies, and syntax-highlights raw JSON data in real-time with error line highlighting.
+*   **Password Generator (`/password-generator`):** Generate cryptographically secure random passwords client-side using Web Crypto APIs with strength indicators.
+*   **QR Code Generator (`/qr-generator`):** Create custom high-resolution QR codes for URLs, Wi-Fi networks, emails, SMS, and plain text with color palettes and PNG downloads.
+*   **Text Case Converter (`/text-converter`):** Transform text between UPPER, lower, Title, sentence, camelCase, PascalCase, or snake_case with live statistics.
+*   **Word Counter (`/word-counter`):** Real-time word, character, sentence, paragraph, reading time, and social media character limit tracking.
+*   **Base64 Encoder/Decoder (`/base64`):** Encode plain text or binary files to Base64 format and decode Base64 strings back safely.
+*   **Diff Checker (`/diff-checker`):** Compare two chunks of text side-by-side or inline to highlight additions, removals, and character-level edits.
+*   **Lorem Ipsum Generator (`/lorem-ipsum`):** Generate customizable placeholder text in paragraphs, sentences, words, or lists with optional HTML wrapper tags.
 
-### 📉 Financial & Utility Calculators
-*   **SIP Calculator (`/sip-calculator`):** Projects compound returns and wealth gain for monthly Systematic Investment Plans in mutual funds.
-*   **Investment Calculator (`/investment-calculator`):** Models long-term wealth growth under initial capital, recurring contributions, compound intervals, and rate of return assumptions.
-*   **BMI Calculator (`/bmi-calculator`):** Calculates Body Mass Index and provides interactive categorizations and healthy weight suggestions.
+### 📉 Financial & Utility Calculators (with KaTeX Formulas & Embeds)
+*   **SIP Calculator (`/sip-calculator`):** Projects compound returns and wealth accumulation for Systematic Investment Plans with interactive growth charts and rendered LaTeX formula cards ($FV = P \times \left[ \frac{(1+r)^n - 1}{r} \right] \times (1+r)$).
+*   **Investment Calculator (`/investment-calculator`):** Simulates long-term wealth growth under initial capital, recurring contributions, compound intervals, and rate of return assumptions with KaTeX mathematical proofs.
+*   **BMI Calculator (`/bmi-calculator`):** Calculates Body Mass Index across Metric and US Imperial units with WHO categorizations and formula explanations.
 *   **Date Calculator (`/date-calculator`):** Calculate exact calendar duration between dates or add/subtract time intervals.
 *   **Age Calculator (`/age-calculator`):** Track precise age with a live seconds ticking counter and countdown to your next birthday.
-*   **Unit Converter (`/unit-converter`):** Convert dimensions for length, weight, temperature, area, and volume with dynamic lookup tables.
+*   **Unit Converter (`/unit-converter`):** Instant conversion across length, weight, temperature, area, and volume dimensions.
+
+---
+
+## ⚡ UI, UX & SEO Superpowers
+
+1.  **Interactive Above-the-Fold Hero Playground:** Live interactive widget on the homepage for instant QR code generation, password generation, live text transformations, and Base64 conversion without scrolling.
+2.  **⭐ Pinned / Favorite Tools System:** Users can star their most frequently used utilities, automatically pinned to the top of the grid and persisted in `localStorage`.
+3.  **🎛️ Interactive Before/After Comparison Drag Slider:** Touch-friendly, keyboard-accessible drag slider for Background Remover and Image Compressor.
+4.  **📦 Multi-File Batch Processing & ZIP Export:** Process up to 20 images in parallel client-side with 1-click ZIP downloads.
+5.  **🎉 Celebratory Micro-Animations:** Lightweight confetti bursts upon copying passwords, calculating financials, or downloading output files.
+6.  **🖼️ Dynamic Edge OpenGraph Social Generator (`/api/og`):** Generates high-converting 1200x630 social preview cards for every tool and blog post.
+7.  **🔗 Embeddable Calculator Widgets (`/embed/[tool]`):** Standalone embed route providing responsive iframe widgets with canonical backlinks for external websites and blogs.
+8.  **📐 E-E-A-T KaTeX Math Formula Cards:** Rendered LaTeX mathematical equations explaining compound interest and health screening formulas.
+9.  **🔍 Rich Schema.org Structured Data:** Automatically injects `SoftwareApplication`, `HowTo`, `FAQPage`, `Article`, and `BreadcrumbList` JSON-LD schemas.
 
 ---
 
 ## 🛡️ Architecture & Philosophy
 
-The Utilify operates under a strict **privacy-first schema**. 
+The Utilify operates under a strict **privacy-first schema**:
 
-1.  **Zero Storage Retention:** Neither the frontend nor the backend databases store user-uploaded images or PDFs. Files are processed transiently in-memory on our secure API servers and are deleted immediately after streaming the binary response back to the client.
-2.  **Edge Decoupling:** General layout, local configurations, routing, formatting, and calculators execute purely inside the client's web browser, maximizing responsiveness and lowering server loads.
-3.  **Dockerized Backend Pipelines:** Computationally intensive tasks (ONNX runtime AI inferences, PDF manipulation, and Chromium rendering) run on a scale-to-zero Dockerized microservices stack deployed on Google Cloud.
+1.  **Zero Storage Retention:** Neither the frontend nor the backend databases store user-uploaded images or PDFs. Files sent to Python microservices are processed entirely in RAM streams and destroyed immediately upon returning binary responses.
+2.  **Client-Side Computation:** Calculators, converters, formatters, and batch image compression execute 100% locally in browser memory for zero server latency.
+3.  **Dockerized Backend Pipelines:** Heavy AI segmentation (ONNX runtime) and Playwright Chromium PDF compilation run on a scale-to-zero Dockerized microservices stack deployed on Google Cloud.
 
 ```mermaid
 sequenceDiagram
@@ -61,23 +73,25 @@ sequenceDiagram
     participant FE as Next.js 16 (Vercel)
     participant BE as FastAPI (Google Cloud Run)
     
-    User->>FE: Upload File / Input Data
+    User->>FE: Input Data / Upload Image
     rect rgb(240, 248, 255)
-        note right of User: Standard calculators, converters & JSON formatters<br/>resolve instantly in the browser client-side.
+        note right of User: Calculators, converters, formatters & batch image compression<br/>execute 100% client-side in browser RAM.
     end
-    FE->>BE: POST /api/endpoint (Multipart Form Data / JSON)
-    activate BE
-    note over BE: File parsed entirely in-memory.<br/>NO persistent storage/disk write occurs.
-    alt AI Background Removal
-        BE->>BE: Run hybrid flood-fill OR u2netp AI Model
-    else PDF Page Extract / Merge
-        BE->>BE: Perform PyMuPDF fitz byte operations
-    else Markdown to PDF
-        BE->>BE: Playwright Chromium Headless compiles HTML to A4 PDF
+    opt Heavy AI / PDF Operations
+        FE->>BE: POST /api/endpoint (Multipart Form Data)
+        activate BE
+        note over BE: Streamed entirely in memory.<br/>NO persistent disk storage.
+        alt AI Background Removal
+            BE->>BE: Run ONNX isnet/u2net model
+        else PDF Extract / Merge
+            BE->>BE: PyMuPDF fitz byte operations
+        else Markdown to PDF
+            BE->>BE: Playwright Chromium Headless compiles A4 PDF
+        end
+        BE-->>FE: Stream Binary Octet Stream / File Blob
+        deactivate BE
     end
-    BE-->>FE: Stream Binary Octet Stream / File Blob
-    deactivate BE
-    FE-->>User: Trigger Automatic Browser Download
+    FE-->>User: Trigger Instant Browser Download
 ```
 
 ---
@@ -85,17 +99,19 @@ sequenceDiagram
 ## 🛠️ Tech Stack & Dependencies
 
 ### Frontend (`/src`)
-*   **Framework:** Next.js 16 (React 19 & TypeScript)
-*   **Styling:** Tailwind CSS v4 (Modern HSL colors, premium custom variables, clean dark/light mode system)
-*   **Theme Control:** `next-themes` (Sleek glassmorphism navigation and responsive elements)
-*   **Components:** Base UI, Lucide React (Icons), `react-dropzone` (File Upload), Shadcn (Radix-primitives)
-*   **Notifications:** `sonner` (Toast notifications)
+*   **Framework:** Next.js 16 (React 19 & TypeScript, App Router)
+*   **Styling:** Tailwind CSS v4 + custom CSS variables in `src/app/globals.css`
+*   **Theme Control:** `next-themes` (Dark/Light mode with glassmorphism navigation)
+*   **Icons & UI:** Lucide React, Radix Primitives (`components.json`), `sonner` (Toast notifications)
+*   **Math Rendering:** KaTeX (`katex`) for rendered LaTeX equations
+*   **Micro-Interactions:** `canvas-confetti` for celebratory action feedback
+*   **Archive Packaging:** `jszip` for client-side batch ZIP downloads
 
 ### Backend (`/backend`)
 *   **Runtime:** Python 3.11
 *   **API Framework:** FastAPI & Uvicorn (Asynchronous endpoints)
-*   **AI Inference:** `rembg[cpu]` (ONNX Runtime, preloaded with u2netp weights for highly optimized CPU background removal)
-*   **PDF Engine:** PyMuPDF (`fitz`) for ultra-fast, robust document manipulation
+*   **AI Inference:** `rembg[cpu]` (ONNX Runtime with pre-baked neural network models)
+*   **PDF Engine:** PyMuPDF (`fitz`) for fast document manipulation
 *   **HTML/MD Rendering Engine:** Playwright Chromium (Headless browser rendering)
 *   **Image Processing:** Pillow (`PIL`)
 
@@ -106,46 +122,53 @@ sequenceDiagram
 ```text
 theutilify/
 ├── src/                         # Next.js Frontend Application
-│   ├── app/                     # Page routing, layouts, and style global configurations
-│   │   ├── background-remover/  # Page & Client logic for AI Background Remover
-│   │   ├── pdf-to-image/        # Page & Client logic for PDF to Image
-│   │   ├── split-pdf/           # Page & Client logic for Split PDF
-│   │   ├── merge-pdf/           # Page & Client logic for Merge PDF
-│   │   ├── image-compressor/    # Page & Client logic for Image Compressor
-│   │   ├── markdown-to-pdf/     # Page & Client logic for Markdown to PDF
-│   │   ├── sip-calculator/      # Page & Client logic for SIP Calculator
-│   │   ├── investment-calculator/# Page & Client logic for Investment Calculator
-│   │   ├── bmi-calculator/      # Page & Client logic for BMI Calculator
-│   │   ├── json-formatter/      # Page & Client logic for JSON Formatter
-│   │   ├── password-generator/  # Page & Client logic for Password Generator
-│   │   ├── qr-generator/        # Page & Client logic for QR Code Generator
-│   │   ├── text-converter/      # Page & Client logic for Text Case Converter
-│   │   ├── base64/              # Page & Client logic for Base64 Converter
-│   │   ├── color-palette/       # Page & Client logic for Color Palette Generator
-│   │   ├── date-calculator/     # Page & Client logic for Date Calculator
-│   │   ├── age-calculator/      # Page & Client logic for Age Calculator
-│   │   ├── unit-converter/      # Page & Client logic for Unit Converter
-│   │   ├── diff-checker/        # Page & Client logic for Diff Checker
-│   │   ├── lorem-ipsum/         # Page & Client logic for Lorem Ipsum Generator
-│   │   ├── about/               # About & Mission Page
-│   │   ├── contact/             # Contact Page
-│   │   ├── globals.css          # Tailwind CSS v4 globals, variables & custom utility classes
-│   │   ├── layout.tsx           # Global HTML viewport structure & Providers
-│   │   └── page.tsx             # Homepage UI showcasing 20 core tools
+│   ├── app/                     # App Router pages, layouts, and API routes
+│   │   ├── api/                 # Next.js API Routes (Dynamic /api/og generator)
+│   │   ├── embed/[tool]/        # Standalone embeddable widget route
+│   │   ├── background-remover/  # AI Background Remover (with Before/After Slider)
+│   │   ├── image-compressor/    # Batch Image Compressor (with ZIP export)
+│   │   ├── pdf-to-image/        # PDF to PNG Image Converter
+│   │   ├── split-pdf/           # PDF Splitter & Page Range Extractor
+│   │   ├── merge-pdf/           # PDF Merger
+│   │   ├── markdown-to-pdf/     # Markdown to PDF Compiler
+│   │   ├── sip-calculator/      # SIP Calculator (with KaTeX formulas)
+│   │   ├── investment-calculator/# Investment Calculator (with KaTeX formulas)
+│   │   ├── bmi-calculator/      # BMI Calculator (with KaTeX formulas)
+│   │   ├── json-formatter/      # JSON Prettifier & Validator
+│   │   ├── password-generator/  # Secure Password Generator
+│   │   ├── qr-generator/        # Custom QR Code Studio
+│   │   ├── word-counter/        # Word & Character Counter
+│   │   ├── text-converter/      # Text Case Converter
+│   │   ├── base64/              # Base64 Encoder/Decoder
+│   │   ├── color-palette/       # Color Palette & Contrast Checker
+│   │   ├── diff-checker/        # Side-by-side Text Diff Checker
+│   │   ├── date-calculator/     # Date Duration Calculator
+│   │   ├── age-calculator/      # Live Age & Birthday Countdown
+│   │   ├── unit-converter/      # Multi-dimensional Unit Converter
+│   │   ├── lorem-ipsum/         # Lorem Ipsum Placeholder Generator
+│   │   ├── blog/                # SEO Hub-and-Spoke Comprehensive Guides
+│   │   ├── layout.tsx           # Global Root Layout with Providers & Fonts
+│   │   └── page.tsx             # Homepage with Hero Playground & Pinned Tools
 │   ├── components/              # Reusable React UI Components
-│   │   ├── ui/                  # Shared shadcn styling primitives (buttons, cards, dialogs, etc.)
-│   │   ├── FileUploader.tsx     # Custom Drag-and-Drop file uploader
-│   │   ├── Navbar.tsx           # Responsive premium glassmorphic navigation
-│   │   ├── Footer.tsx           # Multi-column footer layout
-│   │   └── ToolLayout.tsx       # Standard SEO wrapper layout for all individual tool pages
+│   │   ├── HeroPlayground.tsx   # Instant above-the-fold utility playground
+│   │   ├── BeforeAfterSlider.tsx# Interactive Before/After drag slider
+│   │   ├── EmbedModal.tsx       # Embeddable iframe code generator
+│   │   ├── MathFormula.tsx      # KaTeX LaTeX math formula renderer
+│   │   ├── ToolCard.tsx         # Interactive tool card with Pin/Favorite toggle
+│   │   ├── ToolsGrid.tsx        # Searchable tools grid with Pinned section
+│   │   ├── ToolLayout.tsx       # Standard SEO wrapper layout with Schema.org
+│   │   ├── Navbar.tsx           # Glassmorphic navbar with search trigger
+│   │   ├── Footer.tsx           # Multi-column footer
+│   │   └── CommandPalette.tsx   # Global Cmd+K quick search palette
 │   └── lib/                     # Custom helper functions & clients
-│       └── api.ts               # Universal backend upload & file download handler
+│       ├── api.ts               # Universal backend upload & file download handler
+│       ├── confetti.ts          # Canvas-confetti celebration triggers
+│       └── blog-data.ts         # In-depth SEO guides and article registry
 │
 ├── backend/                     # FastAPI Backend Application
 │   ├── .u2net/                  # Local cache folder for baked-in AI model weights
-│   ├── temp_processing/         # Transient processing directories
 │   ├── Dockerfile               # System containerization config (Playwright & AI pre-installation)
-│   ├── main.py                  # FastAPI server, endpoints, range parsers, and processing pipelines
+│   ├── main.py                  # FastAPI server, endpoints, and processing pipelines
 │   └── requirements.txt         # Python application dependencies
 ```
 
@@ -153,79 +176,44 @@ theutilify/
 
 ## 🚀 Local Development Setup
 
-Follow these instructions to run the entire stack locally in minutes.
-
 ### Prerequisites
 *   Node.js (v18+)
 *   Python (3.10+)
 
 ### 1. Backend Setup
-
-Navigate into the backend directory:
 ```bash
 cd backend
-```
 
-Create a virtual environment and activate it:
-```bash
-# Windows (PowerShell)
+# Create & activate virtual environment (Windows PowerShell)
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 
-# macOS/Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
-Install the dependencies:
-```bash
+# Install dependencies & Playwright Chromium
 pip install -r requirements.txt
-```
-
-Install Playwright Chromium dependencies:
-```bash
 playwright install --with-deps chromium
-```
 
-Run the backend server:
-```bash
+# Run backend server (boots on http://localhost:8000)
 python main.py
 ```
-The server will boot on `http://localhost:8000`. You can inspect the interactive OpenAPI/Swagger docs at `http://localhost:8000/docs`.
-
----
 
 ### 2. Frontend Setup
-
-Open a new terminal session in the root project folder (`theutilify/`):
-
-Install the package dependencies:
 ```bash
+# In the root project directory (theutilify/)
 npm install
-```
 
-Create a `.env.local` file in the root directory:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
+# Create .env.local
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
 
-Run the local Next.js development server:
-```bash
+# Run development server (boots on http://localhost:3000)
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser. All API requests made by the frontend tools will now resolve to your local Python microservice backend.
 
 ---
 
-## 🐳 Dockerization & Production Deployments
+## 🐳 Docker & Production Deployments
 
-The backend application is designed to be fully containerized. A high-performance, multi-layered `Dockerfile` is provided which handles several key runtime requirements:
+The backend includes a multi-stage `Dockerfile` optimized for serverless container runtimes (Google Cloud Run):
 
-1.  **Model Pre-baking:** Installs `rembg` and pre-downloads the `u2netp` AI model inside `/app/.u2net` during the Docker image building phase. This prevents slow first-time requests and avoids ephemeral runtime download timeouts when hosted on serverless systems.
-2.  **Playwright Dependencies:** Automatically downloads headless Chromium and installs the required Linux dependencies directly in the container layer.
-3.  **Concurrency Optimization:** Limits ONNX Runtime threading via environmental flags (`OMP_NUM_THREADS=1` and `OMP_WAIT_POLICY=PASSIVE`) to prevent CPU throttling, resource starvation, and container deadlocks in cloud environments.
-
-### Build and Run Docker Container Locally
 ```bash
 cd backend
 docker build -t theutilify-backend .
