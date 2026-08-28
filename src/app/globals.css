@@ -577,6 +577,10 @@ body {
    Utilify Blog & Article Custom Prose Style Rules
    ========================================================================== */
 
+.prose {
+  max-width: 100%;
+}
+
 .prose h1,
 .prose h2,
 .prose h3,
@@ -588,8 +592,13 @@ body {
   letter-spacing: -0.025em;
 }
 
+.prose h2 {
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
 .prose h3 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   line-height: 1.4;
 }
 
@@ -638,12 +647,127 @@ body {
   color: var(--primary);
   font-weight: 700;
   text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
 }
 
 .prose a:hover {
   text-decoration: none;
+  opacity: 0.85;
 }
 
+/* Tables in Prose */
+.prose table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.prose thead {
+  background-color: #f8fafc;
+}
+
+.prose th {
+  padding: 0.875rem 1.25rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--foreground);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+.prose th:last-child {
+  border-right: none;
+}
+
+.prose td {
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  vertical-align: middle;
+}
+
+.prose td:last-child {
+  border-right: none;
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.prose tbody tr:nth-child(even) {
+  background-color: #fafbfd;
+}
+
+.prose tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Code & Pre in Prose */
+.prose code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.875em;
+  background-color: rgba(79, 70, 229, 0.08);
+  color: var(--primary);
+  padding: 0.2em 0.45em;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  border: 1px solid rgba(79, 70, 229, 0.12);
+}
+
+.prose pre {
+  background-color: #0c0d14;
+  color: #f8fafc;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.875rem;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.prose pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  font-weight: 400;
+  border: none;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--primary);
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  background-color: rgba(99, 102, 241, 0.04);
+  border-radius: 0 0.75rem 0.75rem 0;
+  color: var(--muted-foreground);
+}
+
+/* Dark Mode Prose Overrides */
 .dark .prose h1,
 .dark .prose h2,
 .dark .prose h3,
@@ -656,4 +780,49 @@ body {
 .dark .prose p,
 .dark .prose li {
   color: #cbd5e1;
+}
+
+.dark .prose table {
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(13, 12, 22, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dark .prose thead {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.dark .prose th {
+  background-color: #0b0b12;
+  color: #f8fafc;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .prose td {
+  color: #cbd5e1;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .prose tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.dark .prose tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.08);
+}
+
+.dark .prose code {
+  background-color: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.dark .prose hr {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .prose blockquote {
+  background-color: rgba(99, 102, 241, 0.08);
 }
