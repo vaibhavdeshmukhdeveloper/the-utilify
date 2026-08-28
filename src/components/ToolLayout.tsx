@@ -6,6 +6,7 @@ import { Footer } from "./Footer";
 import { Card } from "@/components/ui/card";
 import { AdBanner } from "./AdBanner";
 import { CrossPromo } from "./CrossPromo";
+import { ToolWorkflowChaining } from "./ToolWorkflowChaining";
 import { JsonLd } from "./JsonLd";
 import { blogPosts } from "@/lib/blog-data";
 import Link from "next/link";
@@ -33,6 +34,17 @@ export function ToolLayout({
 }: ToolLayoutProps) {
   const pathname = usePathname();
   const currentSlug = pathname ? pathname.replace(/^\//, "") : "";
+
+  // Automatically record visited tool in localStorage for Recently Used tray
+  React.useEffect(() => {
+    if (!pathname || pathname === "/") return;
+    try {
+      const stored = localStorage.getItem("utilify-recent-tools");
+      const currentList: string[] = stored ? JSON.parse(stored) : [];
+      const updatedList = [pathname, ...currentList.filter((x) => x !== pathname)].slice(0, 4);
+      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
+    } catch {}
+  }, [pathname]);
 
   // Dynamic automatic FAQPage Schema.org structured data
   const faqSchema = faqs && faqs.length > 0 ? {
@@ -123,6 +135,7 @@ export function ToolLayout({
             <Card className="w-full p-6 md:p-12 lg:p-16 border-2 border-dashed bg-card backdrop-blur-sm min-h-[500px] flex flex-col items-center justify-center shadow-2xl shadow-primary/5 rounded-[2rem] text-center">
               {children}
             </Card>
+            <ToolWorkflowChaining />
             <CrossPromo />
             <AdBanner />
           </div>
