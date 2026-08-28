@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import "katex/dist/katex.min.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Script from "next/script";
@@ -57,11 +58,22 @@ export const metadata: Metadata = {
     siteName: "Utilify",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "https://www.theutilify.com/api/og?title=Free%20Online%20Utility%20%26%20Productivity%20Tools&category=Utilify%20Suite&badge=100%25%20Free%20%E2%80%A2%20Zero%20Data%20Retention",
+        width: 1200,
+        height: 630,
+        alt: "Utilify - Free Online Productivity & Utility Suite",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Utilify - Free Online Utility & Productivity Tools Suite",
     description: "Professional-grade, privacy-first free online utilities. Fast, client-side, zero file retention.",
+    images: [
+      "https://www.theutilify.com/api/og?title=Free%20Online%20Utility%20%26%20Productivity%20Tools&category=Utilify%20Suite&badge=100%25%20Free%20%E2%80%A2%20Zero%20Data%20Retention",
+    ],
   },
   robots: {
     index: true,

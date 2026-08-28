@@ -3,214 +3,288 @@
 import { useState, useRef, useEffect } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { FileUploader } from "@/components/FileUploader";
+import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { toast } from "sonner";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
-import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Minimize2, Zap, Settings } from "lucide-react";
+import { 
+  Image as ImageIcon, 
+  Download, 
+  Sparkles, 
+  CheckCircle2, 
+  AlertCircle, 
+  ArrowRight, 
+  Loader2, 
+  Minimize2, 
+  Zap, 
+  Settings, 
+  Archive, 
+  Layers,
+  Trash2,
+  Eye
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { triggerConfetti, triggerCelebration } from "@/lib/confetti";
+import JSZip from "jszip";
 import { cn } from "@/lib/utils";
+
+interface CompressedItem {
+  id: string;
+  name: string;
+  originalSize: number;
+  originalSizeFormatted: string;
+  originalUrl: string;
+  compressedBlob?: Blob;
+  compressedUrl?: string;
+  compressedSize?: number;
+  compressedSizeFormatted?: string;
+  savingsPercent?: number;
+  filename: string;
+  status: "idle" | "compressing" | "done" | "error";
+  errorMsg?: string;
+}
 
 export default function ImageCompressorClient() {
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<{ url: string; filename: string; originalSize: string; compressedSize: string } | null>(null);
+  const [items, setItems] = useState<CompressedItem[]>([]);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [quality, setQuality] = useState([80]);
-  const [originalFile, setOriginalFile] = useState<{ name: string; size: string; type: string } | null>(null);
-  const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [format, setFormat] = useState<"original" | "png" | "jpeg" | "webp">("original");
-
-  const activeFormat = format === "original" ? (originalFile?.type || "") : `image/${format}`;
-  const isPngOutput = activeFormat === "image/png";
+  const [isZipping, setIsZipping] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement>(null);
+  const selectedItem = items.find((it) => it.id === selectedItemId) || items[0];
 
   useEffect(() => {
-    if (result && resultsRef.current) {
+    if (items.length > 0 && resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [result]);
+  }, [items.length]);
 
-  useEffect(() => {
-    if (isLoading && resultsRef.current) {
-      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [isLoading]);
+  const compressSingleFile = async (file: File, qValue: number, fmt: string): Promise<{ blob: Blob; filename: string }> => {
+    return new Promise<{ blob: Blob; filename: string }>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("Could not create canvas context"));
+            return;
+          }
 
-  const handleReset = () => {
-    if (originalUrl) {
-      URL.revokeObjectURL(originalUrl);
-    }
-    setResult(null);
-    setOriginalFile(null);
-    setOriginalUrl(null);
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          ctx.drawImage(img, 0, 0);
+
+          const q = qValue / 100;
+          let mimeType = file.type || "image/jpeg";
+
+          if (fmt === "png") mimeType = "image/png";
+          else if (fmt === "jpeg") mimeType = "image/jpeg";
+          else if (fmt === "webp") mimeType = "image/webp";
+          else mimeType = file.type || "image/jpeg";
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                // Determine output extension
+                let extension = "jpg";
+                if (blob.type === "image/png") extension = "png";
+                else if (blob.type === "image/webp") extension = "webp";
+                else if (blob.type === "image/jpeg") extension = "jpg";
+
+                const baseName = file.name.replace(/\.[^/.]+$/, "");
+                const outputFilename = `compressed_${baseName}.${extension}`;
+
+                if (blob.size > file.size && mimeType === file.type) {
+                  resolve({ blob: file, filename: outputFilename });
+                } else {
+                  resolve({ blob, filename: outputFilename });
+                }
+              } else {
+                reject(new Error("Image compression failed"));
+              }
+            },
+            mimeType,
+            q
+          );
+        };
+        img.onerror = () => reject(new Error("Failed to load image"));
+      };
+      reader.onerror = () => reject(new Error("Failed to read file"));
+    });
   };
 
   const handleUpload = async (files: File[]) => {
-    const file = files[0];
+    if (files.length === 0) return;
 
-    // Proactively validate the 20MB file size limit
-    const fileSizeInMB = file.size / (1024 * 1024);
-    if (fileSizeInMB > 20) {
-      toast.error("File is too large! Maximum supported size is 20MB.");
-      return;
+    // Filter files > 25MB
+    const validFiles: File[] = [];
+    for (const f of files) {
+      if (f.size > 25 * 1024 * 1024) {
+        toast.error(`${f.name} is too large (>25MB)! Skipped.`);
+      } else {
+        validFiles.push(f);
+      }
     }
 
-    if (originalUrl) {
-      URL.revokeObjectURL(originalUrl);
-    }
-    const url = URL.createObjectURL(file);
-    setOriginalUrl(url);
-
-    setOriginalFile({
-      name: file.name,
-      size: fileSizeInMB.toFixed(2) + " MB",
-      type: file.type
-    });
+    if (validFiles.length === 0) return;
 
     setIsLoading(true);
-    setResult(null);
-    
-    try {
-      // Compress entirely on the client-side to bypass Vercel's 4.5MB payload limit
-      const compressedBlob = await new Promise<Blob>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-          const img = new Image();
-          img.src = event.target?.result as string;
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            if (!ctx) {
-              reject(new Error("Could not create canvas context"));
-              return;
-            }
 
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-            ctx.drawImage(img, 0, 0);
+    const newItems: CompressedItem[] = validFiles.map((file, idx) => ({
+      id: `${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 5)}`,
+      name: file.name,
+      originalSize: file.size,
+      originalSizeFormatted: (file.size / (1024 * 1024)).toFixed(2) + " MB",
+      originalUrl: URL.createObjectURL(file),
+      filename: `compressed_${file.name}`,
+      status: "compressing",
+    }));
 
-            const q = quality[0] / 100;
-            let mimeType = file.type || "image/jpeg";
-            
-            if (format === "png") {
-              mimeType = "image/png";
-            } else if (format === "jpeg") {
-              mimeType = "image/jpeg";
-            } else if (format === "webp") {
-              mimeType = "image/webp";
-            } else {
-              // format === "original"
-              mimeType = file.type || "image/jpeg";
-            }
+    setItems(newItems);
+    setSelectedItemId(newItems[0].id);
 
-            canvas.toBlob(
-              (blob) => {
-                if (blob) {
-                  // Fallback: If compressed blob is larger than original file, return original file
-                  if (blob.size > file.size && mimeType === file.type) {
-                    resolve(file);
-                  } else {
-                    resolve(blob);
-                  }
-                } else {
-                  reject(new Error("Image compression failed"));
-                }
-              },
-              mimeType,
-              q
-            );
-          };
-          img.onerror = () => reject(new Error("Failed to load image"));
-        };
-        reader.onerror = () => reject(new Error("Failed to read file"));
-      });
+    const processedItems: CompressedItem[] = [];
 
-      const compressedSize = (compressedBlob.size / (1024 * 1024)).toFixed(2) + " MB";
-      const url = window.URL.createObjectURL(compressedBlob);
-      
-      // Determine output extension/name
-      let extension = "jpg";
-      if (compressedBlob.type === "image/png") {
-        extension = "png";
-      } else if (compressedBlob.type === "image/webp") {
-        extension = "webp";
-      } else if (compressedBlob.type === "image/jpeg") {
-        extension = "jpg";
+    for (const item of newItems) {
+      const originalFile = validFiles.find((f) => f.name === item.name);
+      if (!originalFile) continue;
+
+      try {
+        const { blob, filename } = await compressSingleFile(originalFile, quality[0], format);
+        const compressedSize = blob.size;
+        const compressedSizeFormatted = (compressedSize / (1024 * 1024)).toFixed(2) + " MB";
+        const compressedUrl = URL.createObjectURL(blob);
+        const savingsPercent = Math.max(0, Math.round(((item.originalSize - compressedSize) / item.originalSize) * 100));
+
+        processedItems.push({
+          ...item,
+          compressedBlob: blob,
+          compressedUrl,
+          compressedSize,
+          compressedSizeFormatted,
+          savingsPercent,
+          filename,
+          status: "done",
+        });
+      } catch (err: any) {
+        processedItems.push({
+          ...item,
+          status: "error",
+          errorMsg: err.message || "Failed to compress",
+        });
       }
-      
-      const baseName = file.name.replace(/\.[^/.]+$/, "");
-      const outputFilename = `compressed_${baseName}.${extension}`;
+    }
 
-      setResult({ 
-        url, 
-        filename: outputFilename,
-        originalSize: fileSizeInMB.toFixed(2) + " MB",
-        compressedSize 
+    setItems(processedItems);
+    setIsLoading(false);
+    triggerCelebration();
+    toast.success(`Successfully compressed ${processedItems.filter((i) => i.status === "done").length} images!`);
+  };
+
+  const handleDownloadAllZip = async () => {
+    const doneItems = items.filter((it) => it.status === "done" && it.compressedBlob);
+    if (doneItems.length === 0) return;
+
+    setIsZipping(true);
+    try {
+      const zip = new JSZip();
+      doneItems.forEach((item) => {
+        if (item.compressedBlob) {
+          zip.file(item.filename, item.compressedBlob);
+        }
       });
-      toast.success("Image compressed successfully!");
-    } catch (error: any) {
-      console.error("Compression error:", error);
-      toast.error(error.message || "Failed to compress image");
+
+      const content = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(content);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `utilify_compressed_images_${Date.now()}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      triggerCelebration();
+      toast.success("ZIP archive downloaded successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate ZIP archive");
     } finally {
-      setIsLoading(false);
+      setIsZipping(false);
     }
   };
 
+  const handleClear = () => {
+    items.forEach((it) => {
+      if (it.originalUrl) URL.revokeObjectURL(it.originalUrl);
+      if (it.compressedUrl) URL.revokeObjectURL(it.compressedUrl);
+    });
+    setItems([]);
+    setSelectedItemId(null);
+  };
+
+  const totalOriginalSize = items.reduce((acc, it) => acc + it.originalSize, 0);
+  const totalCompressedSize = items.reduce((acc, it) => acc + (it.compressedSize || it.originalSize), 0);
+  const overallSavingsPercent = totalOriginalSize > 0 ? Math.max(0, Math.round(((totalOriginalSize - totalCompressedSize) / totalOriginalSize) * 100)) : 0;
+
   const howToUse = [
-    { step: "Upload Image", description: "Select the JPG, PNG, or WebP image you want to compress." },
-    { step: "Adjust Quality", description: "Use the slider to set your desired balance between size and quality." },
-    { step: "Download", description: "Download your optimized image instantly." },
+    { step: "Upload Images", description: "Select single or multiple JPG, PNG, or WebP images up to 25MB." },
+    { step: "Adjust Quality", description: "Use the slider to customize compression strength and choose output format." },
+    { step: "Download or Export ZIP", description: "Download individual photos or export all compressed images as a single ZIP archive." },
   ];
 
   const faqs = [
-    { 
-      question: "Will I lose image quality during compression?", 
-      answer: "We employ advanced lossy and lossless algorithms. When compressing at the default 80% quality level, file size is reduced by up to 80% while the visual difference remains completely indistinguishable to the human eye." 
-    },
-    { 
-      question: "Which file formats are supported?", 
-      answer: "We support the three major web image formats: JPEG/JPG, PNG, and WebP. Transparent layers inside PNG and WebP files are fully preserved." 
-    },
-    { 
-      question: "Is there a limit on upload file size?", 
-      answer: "Our compressor supports images up to 20MB in size. Very large high-resolution camera photos are optimized in seconds." 
+    {
+      question: "Will I lose image quality during compression?",
+      answer: "We employ advanced lossy and lossless algorithms. At the default 80% quality level, file size is reduced by up to 80% while remaining visually indistinguishable from the original.",
     },
     {
-      question: "Are my uploaded photos stored on your servers?",
-      answer: "No. Security is part of our design system. Images are processed entirely in-memory (RAM) inside your local web browser and are never uploaded to any server. Your photos never leave your device."
+      question: "Can I compress multiple images at once?",
+      answer: "Yes! You can upload up to 20 images simultaneously. Our tool compresses each in parallel and lets you download all files in one click as a ZIP archive.",
     },
     {
-      question: "How does the quality slider affect file size?",
-      answer: "Lowering the slider increases compression strength, yielding smaller file sizes but potentially introducing compression artifacts. Keeping the slider between 70% and 85% is ideal for the web."
+      question: "Which image file formats are supported?",
+      answer: "We support JPEG, PNG, and WebP. You can also convert between formats (e.g. PNG to WebP) for even greater file size savings.",
     },
     {
-      question: "Do you support batch image compression?",
-      answer: "Currently, our tool processes images one by one to ensure maximum optimization accuracy for each file. You can refresh and compress as many files as you like."
-    }
+      question: "Are my photos uploaded to any remote server?",
+      answer: "Never. All compression runs 100% locally in your browser RAM. Your private pictures never leave your device.",
+    },
+    {
+      question: "What is the optimal compression setting for web performance?",
+      answer: "Keeping the slider between 75% and 85% is ideal for Shopify, WordPress, web apps, and email newsletters.",
+    },
   ];
 
   const relatedTools = [
     { name: "Background Remover", href: "/background-remover" },
     { name: "PDF to Image", href: "/pdf-to-image" },
     { name: "Split PDF", href: "/split-pdf" },
+    { name: "Color Palette", href: "/color-palette" },
   ];
 
   const detailedContent = (
     <article className="space-y-6">
-      <h3>Detailed Guide: Squeezing Web Graphics for Performance</h3>
+      <h3>Detailed Guide: Squeezing Web Graphics for Speed & SEO</h3>
       <p>
-        Uncompressed images are the leading cause of slow page speeds. When loading heavy 5MB photos onto web platforms like Shopify, WordPress, or custom portals, your users experience long load times, which can lead to higher bounce rates and poor SEO rankings. Image compression shrinks files while keeping visual structures clean.
+        Uncompressed images are the single largest bottleneck for website load times and Core Web Vitals (Largest Contentful Paint). Compressing images reduces bandwidth consumption, speeds up mobile page rendering, and improves Google search rankings.
       </p>
       <h4>Understanding Image Compression Formats</h4>
       <ul>
-        <li><strong>JPEG Compression:</strong> Eliminates high-frequency noise that is hard for the human eye to detect. Perfect for photos.</li>
-        <li><strong>PNG Compression:</strong> Squeezes color palettes and removes redundant pixel patterns without discarding details, maintaining crisp text outlines and transparent backdrops.</li>
-        <li><strong>WebP Compression:</strong> A modern Google standard combining the best features of both, yielding files up to 30% smaller than JPEGs.</li>
+        <li><strong>JPEG Compression:</strong> Eliminates high-frequency noise imperceptible to the human eye. Best for camera photos and detailed graphics.</li>
+        <li><strong>PNG Compression:</strong> Optimizes color tables and indexed palettes while preserving crisp text outlines and transparency.</li>
+        <li><strong>WebP Compression:</strong> Modern web standard developed by Google, delivering 25–35% smaller file sizes than comparable JPEGs.</li>
       </ul>
-      <h4>How to Balance Quality vs. File Size</h4>
+      <h4>Batch Processing & Privacy</h4>
       <p>
-        For standard web storefronts and email attachments, setting the compression quality slider to <strong>80%</strong> offers the perfect sweet spot. This provides significant weight savings (often reducing a 3MB file to less than 400KB) while ensuring graphics look completely crisp and clear on high-resolution screens.
+        The Utilify's Image Compressor executes entirely client-side using browser Canvas API and WebAssembly algorithms. Sensitive business graphics and personal photos are processed securely with zero server storage.
       </p>
     </article>
   );
@@ -218,203 +292,228 @@ export default function ImageCompressorClient() {
   return (
     <ToolLayout
       title="Image Compressor"
-      description="Compress PNG, JPEG, and WebP images up to 20MB entirely in your browser. Files are never uploaded, ensuring 100% privacy."
+      description="Compress PNG, JPEG, and WebP images in batch with zero quality loss. 100% client-side privacy with 1-click ZIP export."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Left Column: Upload and Settings */}
-        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
-          <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem] space-y-8">
-            <div className="space-y-4 px-2">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-start text-left">
+        {/* Left Column: Settings & Upload */}
+        <div className="lg:col-span-5 space-y-6">
+          <Card className="p-6 sm:p-8 bg-card border rounded-3xl space-y-6 shadow-sm">
+            <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <label className={cn("text-sm font-bold flex items-center gap-2", isPngOutput && "text-muted-foreground")}>
+                <label className="text-sm font-bold flex items-center gap-2 text-foreground">
                   <Settings className="w-4 h-4 text-primary" />
-                  Compression Quality: {isPngOutput ? "N/A" : `${quality[0]}%`}
+                  Quality: {quality[0]}%
                 </label>
-                <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                  {isPngOutput ? "Lossless" : quality[0] < 50 ? "High Compression" : quality[0] < 80 ? "Balanced" : "High Quality"}
+                <span className="text-xs font-semibold text-muted-foreground bg-muted px-2.5 py-0.5 rounded-full">
+                  {quality[0] < 50 ? "High Compression" : quality[0] < 80 ? "Balanced" : "High Quality"}
                 </span>
               </div>
-              <Slider 
-                value={quality} 
-                onValueChange={(val) => setQuality(Array.isArray(val) ? val : [val])} 
-                max={100} 
-                min={10} 
-                step={1} 
-                className="py-4"
-                disabled={isPngOutput}
+              <Slider
+                value={quality}
+                onValueChange={(val) => setQuality(Array.isArray(val) ? val : [val])}
+                max={100}
+                min={10}
+                step={1}
+                className="py-3"
               />
             </div>
 
-            <div className="space-y-4 px-2">
-              <label className="text-sm font-bold flex items-center gap-2">
+            <div className="space-y-3">
+              <label className="text-sm font-bold flex items-center gap-2 text-foreground">
                 <ImageIcon className="w-4 h-4 text-primary" />
                 Output Format
               </label>
               <Tabs value={format} onValueChange={(val) => setFormat(val as any)} className="w-full">
-                <TabsList className="grid grid-cols-4 w-full h-10">
+                <TabsList className="grid grid-cols-4 w-full h-10 rounded-xl">
                   <TabsTrigger value="original">Original</TabsTrigger>
                   <TabsTrigger value="png">PNG</TabsTrigger>
                   <TabsTrigger value="jpeg">JPEG</TabsTrigger>
                   <TabsTrigger value="webp">WebP</TabsTrigger>
                 </TabsList>
               </Tabs>
-              
-              {isPngOutput && (
-                <div className="mt-2 p-3 bg-blue-50/50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-start gap-2.5 text-xs leading-relaxed border border-blue-100 dark:border-blue-950/50 animate-in fade-in slide-in-from-top-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>PNG compression is lossless</strong> in browser environments. For significant file size reduction of transparent images, consider converting to <strong>WebP</strong>.
-                  </span>
-                </div>
-              )}
             </div>
-            
+
             <FileUploader
-              label="Upload Image"
+              label="Drop single or multiple images"
               accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
+              multiple={true}
+              maxFiles={20}
               onUpload={handleUpload}
               isLoading={isLoading}
               hideDownload={true}
             />
 
-            <div className="p-4 bg-muted/50 rounded-2xl border border-border flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <p className="text-xs font-bold leading-none">In-Browser Compression</p>
-                <p className="text-[11px] text-muted-foreground leading-relaxed">
-                  Your image is processed entirely inside your browser. No files are uploaded to our servers, enabling fast operations and 100% privacy. Supports files up to <strong>20MB</strong>.
-                </p>
-              </div>
+            <div className="p-4 bg-muted/40 rounded-2xl border flex items-start gap-3 text-xs text-muted-foreground">
+              <AlertCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <p className="leading-relaxed">
+                Supports batch processing up to <strong>20 files (25MB each)</strong>. Processed entirely in RAM on your device.
+              </p>
             </div>
           </Card>
-          
-          {originalFile && (
-            <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-white dark:bg-zinc-950 shadow-sm animate-in fade-in slide-in-from-left-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 overflow-hidden">
-                {originalUrl ? (
-                  <img
-                    src={originalUrl}
-                    alt="Original Thumbnail"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <ImageIcon className="h-6 w-6" />
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-bold truncate text-sm">{originalFile.name}</p>
-                <p className="text-xs text-muted-foreground">{originalFile.size}</p>
-              </div>
-              {result && <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />}
-            </Card>
-          )}
 
-          <div className="grid grid-cols-2 gap-4">
-            <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-none rounded-2xl flex items-center gap-3">
-              <Minimize2 className="h-4 w-4 text-amber-500 shrink-0" />
-              <span className="text-xs font-bold leading-tight">Reduce Size</span>
+          {/* Quick Metrics Badges */}
+          <div className="grid grid-cols-2 gap-3">
+            <Card className="p-4 bg-card/60 border rounded-2xl flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                <Minimize2 className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground font-medium">Size Reduction</p>
+                <p className="text-sm font-bold text-foreground">Up to 85%</p>
+              </div>
             </Card>
-            <Card className="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-none rounded-2xl flex items-center gap-3">
-              <Sparkles className="h-4 w-4 text-blue-500 shrink-0" />
-              <span className="text-xs font-bold leading-tight">Keep Quality</span>
+            <Card className="p-4 bg-card/60 border rounded-2xl flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <Layers className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground font-medium">Batch Queue</p>
+                <p className="text-sm font-bold text-foreground">ZIP Export</p>
+              </div>
             </Card>
           </div>
         </div>
 
-        {/* Right Column: Results */}
-        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24">
+        {/* Right Column: Interactive Results & Batch Queue */}
+        <div ref={resultsRef} className="lg:col-span-7 space-y-6">
           {isLoading ? (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
-              <div className="relative mb-6 w-32 h-32 rounded-3xl border border-primary/20 overflow-hidden flex items-center justify-center bg-zinc-100 dark:bg-zinc-900 shadow-md">
-                {originalUrl && (
-                  <img
-                    src={originalUrl}
-                    alt="Processing Preview"
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 filter blur-[1px]"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent animate-pulse" />
-                <Loader2 className="h-12 w-12 text-primary animate-spin relative z-10" />
+            <Card className="h-[460px] flex flex-col items-center justify-center p-8 text-center border-primary/20 bg-primary/5 rounded-3xl">
+              <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary animate-pulse">
+                <Loader2 className="h-10 w-10 animate-spin" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">Compressing Image...</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
-                We are optimizing your image to reduce file size while maintaining visual fidelity.
+              <h3 className="text-2xl font-black mb-2 text-foreground">Compressing Images...</h3>
+              <p className="text-sm text-muted-foreground max-w-sm">
+                Optimizing pixel payload and converting image buffers with local WebAssembly.
               </p>
             </Card>
-          ) : result ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative group">
-                <div className="relative z-10 p-4 min-h-[400px] flex items-center justify-center">
-                  <img 
-                    src={result.url} 
-                    alt="Compressed Image" 
-                    className="max-w-full max-h-[450px] object-contain drop-shadow-2xl rounded-xl"
-                  />
+          ) : items.length > 0 ? (
+            <div className="space-y-6">
+              {/* Batch Summary Bar */}
+              <Card className="p-6 bg-card border rounded-3xl flex flex-wrap items-center justify-between gap-4 shadow-sm">
+                <div>
+                  <span className="text-xs font-black uppercase tracking-wider text-green-500 flex items-center gap-1.5 mb-1">
+                    <Zap className="h-3.5 w-3.5" /> Batch Complete
+                  </span>
+                  <h3 className="text-xl font-black text-foreground">
+                    {items.filter((i) => i.status === "done").length} Images Compressed
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Saved {((totalOriginalSize - totalCompressedSize) / (1024 * 1024)).toFixed(2)} MB total ({overallSavingsPercent}% reduction)
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleClear}
+                    className="rounded-xl text-xs gap-1"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" /> Clear All
+                  </Button>
+                  <Button
+                    onClick={handleDownloadAllZip}
+                    disabled={isZipping}
+                    size="sm"
+                    className="rounded-xl font-bold text-xs gap-1.5 shadow-md"
+                  >
+                    {isZipping ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Archive className="h-3.5 w-3.5" />}
+                    Download All (ZIP)
+                  </Button>
                 </div>
               </Card>
 
-              <Card className="p-10 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
-                  <Minimize2 className="h-32 w-32" />
+              {/* Interactive Before/After Drag Slider on Selected Image */}
+              {selectedItem && selectedItem.compressedUrl && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold text-muted-foreground px-1">
+                    <span>INTERACTIVE COMPARISON: {selectedItem.name}</span>
+                    <span className="text-green-500 font-bold">-{selectedItem.savingsPercent}% Smaller</span>
+                  </div>
+                  <BeforeAfterSlider
+                    beforeImage={selectedItem.originalUrl}
+                    afterImage={selectedItem.compressedUrl}
+                    beforeLabel={`Original (${selectedItem.originalSizeFormatted})`}
+                    afterLabel={`Compressed (${selectedItem.compressedSizeFormatted})`}
+                    alt={selectedItem.name}
+                  />
                 </div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
-                    <Zap className="h-4 w-4" /> Optimization Complete
-                  </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">Ready for the web.</h2>
-                  
-                  <div className="flex gap-8 mb-8 pb-8 border-b border-zinc-800">
-                    <div>
-                      <p className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-1">Original Size</p>
-                      <p className="text-xl font-bold text-zinc-300">{result.originalSize}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-green-500 font-medium uppercase tracking-wider mb-1">Compressed Size</p>
-                      <p className="text-xl font-bold text-green-400">{result.compressedSize}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                    <a href={result.url} download={result.filename} className="flex-1">
-                      <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                        <Download className="mr-2 h-6 w-6" /> Download Image
-                      </Button>
-                    </a>
-                    <Button 
-                      variant="outline" 
-                      onClick={handleReset} 
-                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
+              )}
+
+              {/* Batch Queue List */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black uppercase tracking-wider text-muted-foreground px-1">
+                  Queue Items ({items.length})
+                </h4>
+                <div className="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+                  {items.map((item) => (
+                    <Card
+                      key={item.id}
+                      onClick={() => setSelectedItemId(item.id)}
+                      className={cn(
+                        "p-4 rounded-2xl border transition-all flex items-center justify-between gap-4 cursor-pointer hover:border-primary/50",
+                        selectedItemId === item.id ? "border-primary bg-primary/5 shadow-sm" : "bg-card"
+                      )}
                     >
-                      Process Another
-                    </Button>
-                  </div>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <img
+                          src={item.originalUrl}
+                          alt={item.name}
+                          className="w-12 h-12 rounded-xl object-cover border shrink-0 bg-zinc-100 dark:bg-zinc-900"
+                        />
+                        <div className="min-w-0">
+                          <p className="font-bold text-sm text-foreground truncate">{item.name}</p>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>{item.originalSizeFormatted}</span>
+                            <span>→</span>
+                            <span className="font-bold text-green-500">{item.compressedSizeFormatted || "..."}</span>
+                            {item.savingsPercent !== undefined && (
+                              <span className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-500 font-black text-[10px]">
+                                -{item.savingsPercent}%
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {item.compressedUrl && (
+                          <a
+                            href={item.compressedUrl}
+                            download={item.filename}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              triggerConfetti();
+                            }}
+                          >
+                            <Button size="sm" variant="outline" className="rounded-xl h-9 px-3 text-xs font-bold gap-1.5">
+                              <Download className="h-3.5 w-3.5" /> Download
+                            </Button>
+                          </a>
+                        )}
+                      </div>
+                    </Card>
+                  ))}
                 </div>
-              </Card>
+              </div>
             </div>
           ) : (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
-              <div className="w-24 h-24 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
-                <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
+            <Card className="h-[460px] flex flex-col items-center justify-center p-8 text-center border-2 border-dashed bg-card rounded-3xl">
+              <div className="w-20 h-20 rounded-3xl bg-muted/60 flex items-center justify-center mb-6">
+                <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">Compress Without Compromise</h3>
-              <p className="text-muted-foreground max-w-sm mx-auto text-sm leading-relaxed">
-                Adjust the quality slider and upload your image. We'll instantly process it and provide a lightweight, high-quality result.
+              <h3 className="text-2xl font-black mb-2 text-foreground">High-Speed Image Compression</h3>
+              <p className="text-sm text-muted-foreground max-w-md leading-relaxed mb-6">
+                Upload one or multiple photos to instantly shrink file sizes while retaining crystal-clear quality.
               </p>
-              <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> Select a photo to begin
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-full">
+                <ArrowRight className="h-3.5 w-3.5" /> Upload images to begin
               </div>
             </Card>
-          )}
-
-          {!isLoading && !result && originalFile && (
-             <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
-                <AlertCircle className="h-5 w-5 shrink-0" />
-                <span>Something went wrong. Please try again.</span>
-             </div>
           )}
         </div>
       </div>

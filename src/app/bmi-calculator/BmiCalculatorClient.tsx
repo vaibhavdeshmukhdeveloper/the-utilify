@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Calculator, RefreshCw, Info } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MathFormula } from "@/components/MathFormula";
+import { triggerConfetti } from "@/lib/confetti";
 
 export default function BmiCalculatorClient() {
   const [unitSystem, setUnitSystem] = useState("metric");
@@ -75,11 +77,12 @@ export default function BmiCalculatorClient() {
 
   const calculateBmi = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    triggerConfetti();
 
     if (resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    toast.success("BMI Calculated");
+    toast.success("BMI Calculated!");
   };
 
   const handleUnitSystemChange = (newSystem: string) => {
@@ -192,10 +195,16 @@ export default function BmiCalculatorClient() {
       <p>
         The calculation varies depending on your preferred measurement units:
       </p>
-      <ul>
-        <li><strong>Metric Formula:</strong> <code>BMI = weight (kg) / [height (m)]²</code></li>
-        <li><strong>US Imperial Formula:</strong> <code>BMI = 703 &times; weight (lbs) / [height (inches)]²</code></li>
-      </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+        <div className="p-4 rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-inner flex flex-col items-center justify-center">
+          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Metric Formula</span>
+          <MathFormula formula="\text{BMI} = \frac{\text{Weight (kg)}}{[\text{Height (m)}]^2}" />
+        </div>
+        <div className="p-4 rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-inner flex flex-col items-center justify-center">
+          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">US Imperial Formula</span>
+          <MathFormula formula="\text{BMI} = 703 \times \frac{\text{Weight (lbs)}}{[\text{Height (inches)}]^2}" />
+        </div>
+      </div>
       <h4>Biological Factors to Consider</h4>
       <p>
         Because BMI is a simple weight-to-height ratio, it is important to factor in other metrics when evaluating overall health:

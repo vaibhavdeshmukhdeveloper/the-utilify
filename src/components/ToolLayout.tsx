@@ -12,6 +12,7 @@ import { blogPosts } from "@/lib/blog-data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, ArrowRight, Sparkles, Clock, Calendar } from "lucide-react";
+import { EmbedModal } from "./EmbedModal";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -108,6 +109,47 @@ export function ToolLayout({
 
   // Fallback to latest posts if no direct keyword match
   const displayGuides = relatedGuides.length > 0 ? relatedGuides : blogPosts.slice(0, 3);
+  const isEmbed = pathname?.startsWith("/embed");
+  const [isEmbedModalOpen, setIsEmbedModalOpen] = React.useState(false);
+
+  if (isEmbed) {
+    return (
+      <div className="min-h-screen bg-background text-foreground p-3 sm:p-5 flex flex-col justify-between font-sans">
+        <div className="w-full max-w-4xl mx-auto space-y-4">
+          <div className="flex items-center justify-between border-b pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-primary to-violet-600 flex items-center justify-center text-white text-xs font-black shadow-sm">
+                U
+              </div>
+              <span className="font-bold text-sm tracking-tight text-foreground">{title}</span>
+            </div>
+            <a
+              href={`https://www.theutilify.com/${currentSlug.replace(/^embed\/?/, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-primary hover:underline flex items-center gap-1"
+            >
+              Open in Utilify ↗
+            </a>
+          </div>
+          <div className="w-full">
+            {children}
+          </div>
+        </div>
+        <footer className="mt-4 pt-3 border-t text-center text-xs text-muted-foreground flex items-center justify-between max-w-4xl mx-auto w-full">
+          <span className="text-[11px]">Free, Private & Client-Side</span>
+          <a
+            href="https://www.theutilify.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-primary hover:underline text-[11px]"
+          >
+            Powered by The Utilify
+          </a>
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -118,21 +160,30 @@ export function ToolLayout({
 
       <main className="flex-grow">
         {/* Tool Header */}
-        <section className="py-12 bg-card border-b flex flex-col items-center justify-center text-center">
-          <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto">
+        <section className="py-12 bg-card border-b flex flex-col items-center justify-center text-center relative overflow-hidden">
+          <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto px-4 relative z-10">
+            <div className="flex items-center gap-2 mb-3">
+              <button
+                onClick={() => setIsEmbedModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary text-xs font-bold transition-colors cursor-pointer"
+                title="Embed this interactive tool on your website"
+              >
+                <span>&lt;/&gt;</span> Embed Widget
+              </button>
+            </div>
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl mb-4 text-foreground text-center">
               {title}
             </h1>
-            <p className="text-xl text-muted-foreground text-center">
+            <p className="text-lg sm:text-xl text-muted-foreground text-center max-w-2xl">
               {description}
             </p>
           </div>
         </section>
 
         {/* Tool Area */}
-        <section className="py-12 md:py-20 flex-grow flex items-center justify-center text-center">
+        <section className="py-10 md:py-16 flex-grow flex items-center justify-center text-center">
           <div className="container flex flex-col items-center justify-center text-center mx-auto px-4">
-            <Card className="w-full p-6 md:p-12 lg:p-16 border-2 border-dashed bg-card backdrop-blur-sm min-h-[500px] flex flex-col items-center justify-center shadow-2xl shadow-primary/5 rounded-[2rem] text-center">
+            <Card className="w-full p-6 md:p-10 lg:p-14 border bg-card/60 backdrop-blur-md min-h-[480px] flex flex-col items-center justify-center shadow-xl shadow-primary/5 rounded-[2rem] text-center">
               {children}
             </Card>
             <ToolWorkflowChaining />
@@ -140,6 +191,13 @@ export function ToolLayout({
             <AdBanner />
           </div>
         </section>
+
+        <EmbedModal
+          isOpen={isEmbedModalOpen}
+          onClose={() => setIsEmbedModalOpen(false)}
+          toolSlug={currentSlug}
+          toolTitle={title}
+        />
 
         {/* Detailed Guide Content */}
         {detailedContent && (

@@ -11,6 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DonutChart, GrowthChart } from "@/components/CalculatorCharts";
+import { MathFormula } from "@/components/MathFormula";
+import { triggerConfetti } from "@/lib/confetti";
 
 interface YearlyBreakdown {
   year: number;
@@ -134,6 +136,7 @@ export default function SipCalculatorClient() {
 
   const calculateSip = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    triggerConfetti();
 
     if (resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -225,19 +228,19 @@ export default function SipCalculatorClient() {
           </p>
           <h4>The Math Behind SIP Growth</h4>
           <p>
-            When you invest a flat monthly amount, the portfolio compounds continuously. The future value is calculated using the following formula:
+            When you invest a flat monthly amount, the portfolio compounds continuously. The future value is calculated using the following mathematical formula:
           </p>
-          <p className="bg-muted p-4 rounded-xl font-mono text-center">
-            FV = P &times; [ ( (1 + r)^n - 1 ) / r ] &times; (1 + r)
-          </p>
+          <div className="my-4 p-5 rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-inner flex flex-col items-center justify-center overflow-x-auto">
+            <MathFormula formula="FV = P \times \left[ \frac{(1 + r)^n - 1}{r} \right] \times (1 + r)" />
+          </div>
           <p>
             Where:
           </p>
           <ul>
             <li><strong>FV:</strong> Future Value (Maturity Amount).</li>
-            <li><strong>P:</strong> Monthly investment contribution.</li>
-            <li><strong>r:</strong> Monthly rate of return (Annual Rate / 12 / 100).</li>
-            <li><strong>n:</strong> Total number of monthly contributions (Years &times; 12).</li>
+            <li><strong>P:</strong> Monthly investment contribution amount.</li>
+            <li><strong>r:</strong> Monthly periodic rate of return (<MathFormula formula="r = \frac{\text{Annual Rate}}{12 \times 100}" displayMode={false} />).</li>
+            <li><strong>n:</strong> Total number of monthly contributions (<MathFormula formula="n = \text{Years} \times 12" displayMode={false} />).</li>
           </ul>
           <h4>Why Start a SIP Early?</h4>
           <p>

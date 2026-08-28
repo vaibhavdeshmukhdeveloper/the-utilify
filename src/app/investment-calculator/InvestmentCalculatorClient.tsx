@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DonutChart, GrowthChart } from "@/components/CalculatorCharts";
+import { MathFormula } from "@/components/MathFormula";
+import { triggerConfetti } from "@/lib/confetti";
 
 interface YearlyBreakdown {
   year: number;
@@ -139,6 +141,7 @@ export default function InvestmentCalculatorClient() {
 
   const calculateInvestment = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    triggerConfetti();
 
     if (resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -220,9 +223,9 @@ export default function InvestmentCalculatorClient() {
       <p>
         For a starting lump sum with recurring periodic contributions, total ending portfolio balance is governed by:
       </p>
-      <p className="bg-muted p-4 rounded-xl font-mono text-center">
-        A = P &times; (1 + r/n)^(nt) + PMT &times; [ ((1 + r/n)^(nt) - 1) / (r/n) ]
-      </p>
+      <div className="my-4 p-5 rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-inner flex flex-col items-center justify-center overflow-x-auto">
+        <MathFormula formula="A = P \left(1 + \frac{r}{n}\right)^{nt} + \text{PMT} \times \left[ \frac{\left(1 + \frac{r}{n}\right)^{nt} - 1}{\frac{r}{n}} \right]" />
+      </div>
       <p>
         Where:
       </p>

@@ -9,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Image as ImageIcon, Download, Sparkles, CheckCircle2, AlertCircle, ArrowRight, Loader2, Maximize2, Zap, Settings, Eraser } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { triggerCelebration, triggerConfetti } from "@/lib/confetti";
 
 export default function BackgroundRemoverClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +20,7 @@ export default function BackgroundRemoverClient() {
   const [uploaderKey, setUploaderKey] = useState(0);
   const [refineEdges, setRefineEdges] = useState(true);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
+  const [viewMode, setViewMode] = useState<"slider" | "side-by-side">("slider");
   const [modelMode, setModelMode] = useState<"isnet-general-use" | "silueta" | "u2net" | "u2net_human_seg" | "u2net_cloth_seg">("isnet-general-use");
   const [bgPreviewMode, setBgPreviewMode] = useState<"transparent" | "white" | "black" | "blue" | "sunset" | "neon">("transparent");
   const [applyShadow, setApplyShadow] = useState(false);
@@ -334,6 +337,7 @@ export default function BackgroundRemoverClient() {
         model: modelMode
       });
       setResult(data);
+      triggerCelebration();
       toast.success("Background removed successfully!");
     } catch (error: any) {
       console.error("BG Removal error:", error);
@@ -414,6 +418,7 @@ export default function BackgroundRemoverClient() {
       const baseName = result.filename.replace(/\.[^/.]+$/, "");
       link.download = `${baseName}_cutout.png`;
       link.click();
+      triggerConfetti();
       toast.success("Download complete!");
     };
     
@@ -706,64 +711,103 @@ export default function BackgroundRemoverClient() {
             </Card>
           ) : result ? (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Original Preview */}
-                <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
-                  <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-zinc-950/80 text-zinc-50 text-[10px] font-black uppercase tracking-wider shadow-sm">
-                    Original
-                  </div>
-                  <div className="p-4 min-h-[350px] flex items-center justify-center">
-                    {originalUrl && (
-                      <img
-                        src={originalUrl}
-                        alt="Original Upload"
-                        className="max-w-full max-h-[350px] object-contain rounded-2xl shadow-md"
-                      />
-                    )}
-                  </div>
-                </Card>
-
-                {/* Background Removed */}
-                <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
-                  <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider shadow-sm">
-                    Background Removed
-                  </div>
-                  {/* Transparency Grid Pattern or custom background color */}
-                  <div
+              {/* View Mode Switcher */}
+              <div className="flex items-center justify-between px-2">
+                <span className="text-xs font-black uppercase tracking-wider text-muted-foreground">
+                  Preview Mode
+                </span>
+                <div className="flex items-center gap-1.5 p-1 bg-muted rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("slider")}
                     className={cn(
-                      "absolute inset-4 rounded-[1.5rem] transition-all duration-300",
-                      bgPreviewMode === "transparent" ? "opacity-40 dark:opacity-10" : "opacity-100"
+                      "px-3 py-1 rounded-lg text-xs font-bold transition-all",
+                      viewMode === "slider" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     )}
-                    style={{
-                      ...(bgPreviewMode === "transparent"
-                        ? {
-                            backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
-                            backgroundSize: '20px 20px',
-                            backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
-                          }
-                        : bgPreviewMode === "white"
-                        ? { backgroundColor: "#ffffff" }
-                        : bgPreviewMode === "black"
-                        ? { backgroundColor: "#000000" }
-                        : bgPreviewMode === "blue"
-                        ? { backgroundImage: "linear-gradient(135deg, #60a5fa, #2563eb)" }
-                        : bgPreviewMode === "sunset"
-                        ? { backgroundImage: "linear-gradient(135deg, #fb923c, #db2777)" }
-                        : { backgroundImage: "linear-gradient(135deg, #34d399, #059669)" })
-                    }}
-                  />
-                  <div className="relative z-10 p-4 min-h-[350px] flex items-center justify-center">
-                    <img
-                      src={result.url}
-                      alt="Removed Background"
-                      className={cn(
-                        "max-w-full max-h-[350px] object-contain transition-all duration-300",
-                        applyShadow ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.55)]" : "drop-shadow-2xl"
-                      )}
-                    />
-                  </div>
-                </Card>
+                  >
+                    Interactive Slider
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("side-by-side")}
+                    className={cn(
+                      "px-3 py-1 rounded-lg text-xs font-bold transition-all",
+                      viewMode === "side-by-side" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    Side by Side
+                  </button>
+                </div>
               </div>
+
+              {viewMode === "slider" && originalUrl ? (
+                <BeforeAfterSlider
+                  beforeImage={originalUrl}
+                  afterImage={result.url}
+                  beforeLabel="Original Image"
+                  afterLabel="Cutout (AI)"
+                  alt={originalFile?.name || "Removed Background"}
+                />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Original Preview */}
+                  <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
+                    <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-zinc-950/80 text-zinc-50 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                      Original
+                    </div>
+                    <div className="p-4 min-h-[350px] flex items-center justify-center">
+                      {originalUrl && (
+                        <img
+                          src={originalUrl}
+                          alt="Original Upload"
+                          className="max-w-full max-h-[350px] object-contain rounded-2xl shadow-md"
+                        />
+                      )}
+                    </div>
+                  </Card>
+
+                  {/* Background Removed */}
+                  <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
+                    <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider shadow-sm">
+                      Background Removed
+                    </div>
+                    {/* Transparency Grid Pattern or custom background color */}
+                    <div
+                      className={cn(
+                        "absolute inset-4 rounded-[1.5rem] transition-all duration-300",
+                        bgPreviewMode === "transparent" ? "opacity-40 dark:opacity-10" : "opacity-100"
+                      )}
+                      style={{
+                        ...(bgPreviewMode === "transparent"
+                          ? {
+                              backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
+                              backgroundSize: '20px 20px',
+                              backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+                            }
+                          : bgPreviewMode === "white"
+                          ? { backgroundColor: "#ffffff" }
+                          : bgPreviewMode === "black"
+                          ? { backgroundColor: "#000000" }
+                          : bgPreviewMode === "blue"
+                          ? { backgroundImage: "linear-gradient(135deg, #60a5fa, #2563eb)" }
+                          : bgPreviewMode === "sunset"
+                          ? { backgroundImage: "linear-gradient(135deg, #fb923c, #db2777)" }
+                          : { backgroundImage: "linear-gradient(135deg, #34d399, #059669)" })
+                      }}
+                    />
+                    <div className="relative z-10 p-4 min-h-[350px] flex items-center justify-center">
+                      <img
+                        src={result.url}
+                        alt="Removed Background"
+                        className={cn(
+                          "max-w-full max-h-[350px] object-contain transition-all duration-300",
+                          applyShadow ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.55)]" : "drop-shadow-2xl"
+                        )}
+                      />
+                    </div>
+                  </Card>
+                </div>
+              )}
 
               <Card className="p-10 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-8 opacity-10">

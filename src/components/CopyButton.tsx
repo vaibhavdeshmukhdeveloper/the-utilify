@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { triggerConfetti } from "@/lib/confetti";
 
 interface CopyButtonProps {
   value: string;
@@ -32,6 +33,7 @@ export function CopyButton({
     try {
       await navigator.clipboard.writeText(value);
       setIsCopied(true);
+      triggerConfetti();
       toast.success("Copied to clipboard!");
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {

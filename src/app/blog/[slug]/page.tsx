@@ -20,6 +20,7 @@ export async function generateMetadata({ params }: PageProps) {
   if (!post) return {};
 
   const publishedDate = new Date(post.date).toISOString();
+  const ogImageUrl = `https://www.theutilify.com/api/og?title=${encodeURIComponent(post.title)}&category=${encodeURIComponent(post.category)}&badge=Utilify%20Guide`;
 
   return {
     title: `${post.title} - Utilify Blog`,
@@ -35,11 +36,20 @@ export async function generateMetadata({ params }: PageProps) {
       type: "article",
       publishedTime: publishedDate,
       authors: ["The Utilify Editorial Team"],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
+      images: [ogImageUrl],
     },
   };
 }

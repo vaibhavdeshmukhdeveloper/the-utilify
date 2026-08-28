@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ToolsGrid } from "@/components/ToolsGrid";
 import { JsonLd } from "@/components/JsonLd";
+import { HeroPlayground } from "@/components/HeroPlayground";
 
 export const metadata = {
   title: "Utilify - Free Online Utility & Productivity Tools Suite",
@@ -97,6 +98,9 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
+
+            {/* Instant Quick-Utility Playground */}
+            <HeroPlayground />
           </div>
         </section>
 

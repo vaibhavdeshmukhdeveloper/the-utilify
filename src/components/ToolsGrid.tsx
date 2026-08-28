@@ -22,10 +22,13 @@ import {
   X,
   History,
   Activity,
+  Star,
   Image as ImageIcon
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { triggerConfetti } from "@/lib/confetti";
+import { toast } from "sonner";
 
 const allTools = [
   {
@@ -187,6 +190,7 @@ export function ToolsGrid() {
   const [filter, setFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [recentTools, setRecentTools] = useState<typeof allTools>([]);
+  const [pinnedHrefs, setPinnedHrefs] = useState<string[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const categories = ["All", "PDF", "Image", "Developer", "Finance", "Health", "Utility"];
@@ -208,16 +212,21 @@ export function ToolsGrid() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Fetch recently used tools from localStorage
+  // Fetch recently used and pinned tools from localStorage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("utilify-recent-tools");
-      if (stored) {
-        const parsed = JSON.parse(stored) as string[];
+      const storedRecent = localStorage.getItem("utilify-recent-tools");
+      if (storedRecent) {
+        const parsed = JSON.parse(storedRecent) as string[];
         const matched = parsed
           .map((href) => allTools.find((t) => t.href === href))
           .filter((t): t is typeof allTools[0] => !!t);
         setRecentTools(matched);
+      }
+
+      const storedPinned = localStorage.getItem("utilify-pinned-tools");
+      if (storedPinned) {
+        setPinnedHrefs(JSON.parse(storedPinned));
       }
     } catch (e) {
       console.error(e);
@@ -244,6 +253,27 @@ export function ToolsGrid() {
     }
   };
 
+  const handleTogglePin = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const isPinned = pinnedHrefs.includes(href);
+      let updated: string[];
+      if (isPinned) {
+        updated = pinnedHrefs.filter((h) => h !== href);
+        toast.info("Unpinned from favorites");
+      } else {
+        updated = [...pinnedHrefs, href];
+        triggerConfetti();
+        toast.success("Pinned to favorites!");
+      }
+      setPinnedHrefs(updated);
+      localStorage.setItem("utilify-pinned-tools", JSON.stringify(updated));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Filter tools based on search query and category active tab
   const filteredTools = allTools.filter((tool) => {
     const matchesCategory = filter === "All" || tool.category === filter;
@@ -251,6 +281,8 @@ export function ToolsGrid() {
     const matchesSearch = text.includes(query.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const pinnedTools = allTools.filter((tool) => pinnedHrefs.includes(tool.href));
 
   return (
     <section id="tools" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -299,6 +331,34 @@ export function ToolsGrid() {
         </div>
       </div>
 
+      {/* Pinned / Favorites Section */}
+      {pinnedTools.length > 0 && !query && filter === "All" && (
+        <div className="mb-16 animate-in fade-in slide-in-from-bottom-3 duration-500">
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-black uppercase tracking-widest text-amber-500 flex items-center gap-2">
+              <Star className="h-5 w-5 fill-amber-500 text-amber-500" /> Pinned Favorites
+            </h3>
+            <span className="text-xs text-muted-foreground font-semibold">
+              {pinnedTools.length} {pinnedTools.length === 1 ? "tool" : "tools"} pinned
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {pinnedTools.map((tool) => {
+              return (
+                <div key={tool.href} onClick={() => handleRecentClick(tool.href)}>
+                  <ToolCard
+                    {...tool}
+                    isPinned={true}
+                    onTogglePin={handleTogglePin}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className="border-b border-border/60 pt-12" />
+        </div>
+      )}
+
       {/* Recently Visited Tools Section */}
       {recentTools.length > 0 && !query && filter === "All" && (
         <div className="mb-16 animate-in fade-in slide-in-from-bottom-3 duration-500">
@@ -317,7 +377,11 @@ export function ToolsGrid() {
             {recentTools.map((tool) => {
               return (
                 <div key={tool.href} onClick={() => handleRecentClick(tool.href)}>
-                  <ToolCard {...tool} />
+                  <ToolCard
+                    {...tool}
+                    isPinned={pinnedHrefs.includes(tool.href)}
+                    onTogglePin={handleTogglePin}
+                  />
                 </div>
               );
             })}
@@ -341,7 +405,11 @@ export function ToolsGrid() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTools.map((tool) => (
               <div key={tool.href} onClick={() => handleRecentClick(tool.href)}>
-                <ToolCard {...tool} />
+                <ToolCard
+                  {...tool}
+                  isPinned={pinnedHrefs.includes(tool.href)}
+                  onTogglePin={handleTogglePin}
+                />
               </div>
             ))}
           </div>
