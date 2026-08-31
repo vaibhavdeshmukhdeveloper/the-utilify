@@ -12,7 +12,23 @@ import { cn } from "@/lib/utils";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { triggerCelebration, triggerConfetti } from "@/lib/confetti";
 
-export default function BackgroundRemoverClient() {
+export interface BackgroundRemoverClientProps {
+  initialBgMode?: "transparent" | "white" | "black" | "blue" | "sunset" | "neon";
+  initialModel?: "isnet-general-use" | "silueta" | "u2net" | "u2net_human_seg" | "u2net_cloth_seg";
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function BackgroundRemoverClient({
+  initialBgMode = "transparent",
+  initialModel = "isnet-general-use",
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: BackgroundRemoverClientProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
@@ -21,8 +37,8 @@ export default function BackgroundRemoverClient() {
   const [refineEdges, setRefineEdges] = useState(true);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
   const [viewMode, setViewMode] = useState<"slider" | "side-by-side">("slider");
-  const [modelMode, setModelMode] = useState<"isnet-general-use" | "silueta" | "u2net" | "u2net_human_seg" | "u2net_cloth_seg">("isnet-general-use");
-  const [bgPreviewMode, setBgPreviewMode] = useState<"transparent" | "white" | "black" | "blue" | "sunset" | "neon">("transparent");
+  const [modelMode, setModelMode] = useState<"isnet-general-use" | "silueta" | "u2net" | "u2net_human_seg" | "u2net_cloth_seg">(initialModel);
+  const [bgPreviewMode, setBgPreviewMode] = useState<"transparent" | "white" | "black" | "blue" | "sunset" | "neon">(initialBgMode);
   const [applyShadow, setApplyShadow] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -499,11 +515,11 @@ export default function BackgroundRemoverClient() {
 
   return (
     <ToolLayout
-      title="Background Remover"
-      description="Remove image backgrounds automatically in seconds. Powered by professional-grade AI for pixel-perfect results."
+      title={customTitle || "Background Remover"}
+      description={customDescription || "Remove image backgrounds automatically in seconds. Powered by professional-grade AI for pixel-perfect results."}
       summaryDefinition="An AI background remover isolates foreground subjects (portraits, products, signatures, and graphics) and removes unwanted backdrops. It generates full-resolution transparent PNG cutouts without watermarks, subscription paywalls, or credit limits."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

@@ -29,6 +29,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/date-calculator",
     "/age-calculator",
     "/unit-converter",
+    "/compress-png",
+    "/compress-jpeg",
+    "/make-signature-transparent",
+    "/white-background-product-photos",
+    "/fire-calculator",
+    "/px-to-rem",
   ];
 
   const categoryHubs = [

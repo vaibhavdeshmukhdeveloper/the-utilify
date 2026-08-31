@@ -71,6 +71,26 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/compress-png" className={getLinkClass("/compress-png")}>
+                  Compress PNG
+                </Link>
+              </li>
+              <li>
+                <Link href="/compress-jpeg" className={getLinkClass("/compress-jpeg")}>
+                  Compress JPEG
+                </Link>
+              </li>
+              <li>
+                <Link href="/make-signature-transparent" className={getLinkClass("/make-signature-transparent")}>
+                  Transparent Signature
+                </Link>
+              </li>
+              <li>
+                <Link href="/white-background-product-photos" className={getLinkClass("/white-background-product-photos")}>
+                  White Background Photos
+                </Link>
+              </li>
+              <li>
                 <Link href="/pdf-to-image" className={getLinkClass("/pdf-to-image")}>
                   PDF to Image
                 </Link>
@@ -99,6 +119,11 @@ export function Footer() {
               Developer &amp; Text
             </h4>
             <ul className="space-y-2.5">
+              <li>
+                <Link href="/px-to-rem" className={getLinkClass("/px-to-rem")}>
+                  PX to REM Converter
+                </Link>
+              </li>
               <li>
                 <Link href="/json-formatter" className={getLinkClass("/json-formatter")}>
                   JSON Formatter
@@ -148,6 +173,11 @@ export function Footer() {
               Calculators &amp; Design
             </h4>
             <ul className="space-y-2.5">
+              <li>
+                <Link href="/fire-calculator" className={getLinkClass("/fire-calculator")}>
+                  FIRE Calculator (4% Rule)
+                </Link>
+              </li>
               <li>
                 <Link href="/sip-calculator" className={getLinkClass("/sip-calculator")}>
                   SIP Calculator

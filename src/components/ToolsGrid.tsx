@@ -23,6 +23,7 @@ import {
   History,
   Activity,
   Star,
+  Flame,
   Image as ImageIcon
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -182,6 +183,49 @@ const allTools = [
     icon: Ruler,
     category: "Utility",
     popular: true
+  },
+  {
+    title: "FIRE Calculator",
+    description: "Calculate your Financial Independence number and retirement timeline using the 4% rule.",
+    href: "/fire-calculator",
+    icon: Flame,
+    category: "Finance",
+    popular: true
+  },
+  {
+    title: "PX to REM Converter",
+    description: "Convert pixel values to REM/EM and generate responsive CSS clamp() typography.",
+    href: "/px-to-rem",
+    icon: Type,
+    category: "Developer"
+  },
+  {
+    title: "Compress PNG",
+    description: "Shrink transparent PNG images with lossless compression.",
+    href: "/compress-png",
+    icon: ImageIcon,
+    category: "Image"
+  },
+  {
+    title: "Compress JPEG",
+    description: "Reduce JPG photo file sizes by up to 85% without quality loss.",
+    href: "/compress-jpeg",
+    icon: ImageIcon,
+    category: "Image"
+  },
+  {
+    title: "Make Signature Transparent",
+    description: "Extract ink signatures from paper photos for PDF and document signing.",
+    href: "/make-signature-transparent",
+    icon: Layers,
+    category: "Image"
+  },
+  {
+    title: "White Background Photos",
+    description: "Convert product photos to pure studio-white (#FFFFFF) for Amazon and Shopify.",
+    href: "/white-background-product-photos",
+    icon: Palette,
+    category: "Image"
   }
 ];
 

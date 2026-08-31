@@ -44,12 +44,26 @@ interface CompressedItem {
   errorMsg?: string;
 }
 
-export default function ImageCompressorClient() {
+export interface ImageCompressorClientProps {
+  initialFormat?: "original" | "png" | "jpeg" | "webp";
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function ImageCompressorClient({
+  initialFormat = "original",
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: ImageCompressorClientProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<CompressedItem[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [quality, setQuality] = useState([80]);
-  const [format, setFormat] = useState<"original" | "png" | "jpeg" | "webp">("original");
+  const [format, setFormat] = useState<"original" | "png" | "jpeg" | "webp">(initialFormat);
   const [isZipping, setIsZipping] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -296,11 +310,11 @@ export default function ImageCompressorClient() {
 
   return (
     <ToolLayout
-      title="Image Compressor"
-      description="Compress PNG, JPEG, and WebP images in batch with zero quality loss. 100% client-side privacy with 1-click ZIP export."
+      title={customTitle || "Image Compressor"}
+      description={customDescription || "Compress PNG, JPEG, and WebP images in batch with zero quality loss. 100% client-side privacy with 1-click ZIP export."}
       summaryDefinition="An image compressor reduces the file size of WebP, JPEG, and PNG images through lossy and lossless algorithms without visible quality degradation. It runs 100% locally in the browser with zero server uploads and batch ZIP export."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
