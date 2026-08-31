@@ -8,8 +8,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Download, Link as LinkIcon, FileText, Wifi, Mail, MessageSquare, Palette, Sliders, RefreshCw, QrCode } from "lucide-react";
+import { Download, Link as LinkIcon, FileText, Wifi, Mail, MessageSquare, Palette, Sliders, RefreshCw, QrCode, Share2 } from "lucide-react";
 import QRCode from "qrcode";
+import { copyShareUrl } from "@/lib/share-utils";
 
 export default function QrGeneratorClient() {
   const [activeTab, setActiveTab] = useState("url");
@@ -33,6 +34,38 @@ export default function QrGeneratorClient() {
   const [errorCorrection, setErrorCorrection] = useState<"L" | "M" | "Q" | "H">("M");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Parse deep link query parameters on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get("type") || params.get("tab");
+        const u = params.get("url");
+        const t = params.get("text");
+        const ssid = params.get("ssid");
+        const pass = params.get("password");
+        const email = params.get("email");
+        const phone = params.get("phone");
+        const fg = params.get("fg");
+        const bg = params.get("bg");
+
+        if (type && ["url", "text", "wifi", "email", "sms"].includes(type)) {
+          setActiveTab(type);
+        }
+        if (u) setUrl(u);
+        if (t) setText(t);
+        if (ssid) setWifiSsid(ssid);
+        if (pass) setWifiPassword(pass);
+        if (email) setEmailTo(email);
+        if (phone) setSmsPhone(phone);
+        if (fg) setFgColor(fg.startsWith("#") ? fg : `#${fg}`);
+        if (bg) setBgColor(bg.startsWith("#") ? bg : `#${bg}`);
+      }
+    } catch (e) {
+      console.error("Error parsing QR params", e);
+    }
+  }, []);
 
   // Generate the formatted QR code data string
   const getQrData = () => {
@@ -385,9 +418,28 @@ export default function QrGeneratorClient() {
               <canvas ref={canvasRef} className="mx-auto rounded-xl max-w-full" style={{ width: "260px", height: "260px" }} />
             </div>
 
-            <Button onClick={downloadQr} className="w-full mt-8 h-12 rounded-xl shadow-md font-bold flex items-center justify-center gap-2">
-              <Download className="h-5 w-5" /> Download QR Image
-            </Button>
+            <div className="w-full mt-8 space-y-3">
+              <Button onClick={downloadQr} className="w-full h-12 rounded-xl shadow-md font-bold flex items-center justify-center gap-2">
+                <Download className="h-5 w-5" /> Download QR Image
+              </Button>
+              <Button
+                type="button"
+                onClick={() => copyShareUrl({
+                  type: activeTab,
+                  url: activeTab === "url" ? url : undefined,
+                  text: activeTab === "text" ? text : undefined,
+                  ssid: activeTab === "wifi" ? wifiSsid : undefined,
+                  email: activeTab === "email" ? emailTo : undefined,
+                  phone: activeTab === "sms" ? smsPhone : undefined,
+                  fg: fgColor !== "#000000" ? fgColor.replace("#", "") : undefined,
+                  bg: bgColor !== "#ffffff" ? bgColor.replace("#", "") : undefined,
+                }, "QR Code Preset")}
+                variant="outline"
+                className="w-full h-11 rounded-xl border-2 font-bold text-primary border-primary/30 hover:bg-primary/5 flex items-center justify-center gap-2"
+              >
+                <Share2 className="h-4 w-4" /> Share QR Preset Link
+              </Button>
+            </div>
           </Card>
         </div>
       </div>

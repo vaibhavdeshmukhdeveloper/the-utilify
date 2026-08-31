@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
-import { Copy, Check, RefreshCw, Key, Shield, Info, List } from "lucide-react";
+import { Copy, Check, RefreshCw, Key, Shield, Info, List, Share2 } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
+import { copyShareUrl } from "@/lib/share-utils";
 
 export default function PasswordGeneratorClient() {
   const [password, setPassword] = useState("");
@@ -21,6 +22,30 @@ export default function PasswordGeneratorClient() {
 
   const [strength, setStrength] = useState({ label: "Weak", color: "text-red-500", percent: 25, bg: "bg-red-500" });
   const [history, setHistory] = useState<string[]>([]);
+
+  // Parse deep link parameters on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const l = params.get("length") || params.get("len");
+        const upper = params.get("upper") || params.get("uppercase");
+        const lower = params.get("lower") || params.get("lowercase");
+        const numbers = params.get("numbers") || params.get("digits");
+        const symbols = params.get("symbols") || params.get("sym");
+        const similar = params.get("excludeSimilar");
+
+        if (l && !isNaN(Number(l))) setLength(Math.max(4, Math.min(64, Number(l))));
+        if (upper !== null) setIncludeUpper(upper === "true" || upper === "1");
+        if (lower !== null) setIncludeLower(lower === "true" || lower === "1");
+        if (numbers !== null) setIncludeNumbers(numbers === "true" || numbers === "1");
+        if (symbols !== null) setIncludeSymbols(symbols === "true" || symbols === "1");
+        if (similar !== null) setExcludeSimilar(similar === "true" || similar === "1");
+      }
+    } catch (e) {
+      console.error("Error parsing password params", e);
+    }
+  }, []);
 
   const generatePassword = useCallback(() => {
     let charset = "";
@@ -290,6 +315,23 @@ export default function PasswordGeneratorClient() {
                 </div>
               </label>
             </div>
+
+            <Button
+              type="button"
+              onClick={() => copyShareUrl({
+                length,
+                upper: includeUpper ? "true" : "false",
+                lower: includeLower ? "true" : "false",
+                numbers: includeNumbers ? "true" : "false",
+                symbols: includeSymbols ? "true" : "false",
+                excludeSimilar: excludeSimilar ? "true" : undefined,
+              }, "Password Preset")}
+              variant="outline"
+              size="sm"
+              className="w-full rounded-2xl border-2 font-bold h-12 text-primary border-primary/30 hover:bg-primary/5"
+            >
+              <Share2 className="h-4 w-4 mr-2" /> Share Password Preset URL
+            </Button>
           </div>
         </div>
 

@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Ruler, Scale, Thermometer, Box, Layers, ArrowLeftRight, Info } from "lucide-react";
+import { Ruler, Scale, Thermometer, Box, Layers, ArrowLeftRight, Info, Share2 } from "lucide-react";
+import { copyShareUrl } from "@/lib/share-utils";
 
 type UnitType = "length" | "weight" | "temperature" | "area" | "volume";
 
@@ -85,11 +86,45 @@ export default function UnitConverterClient() {
   const [resultValue, setResultValue] = useState("");
   const [allConversions, setAllConversions] = useState<{ label: string; value: string }[]>([]);
 
+  // Parse deep link query parameters on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const cat = params.get("category") || params.get("cat");
+        const val = params.get("value") || params.get("v") || params.get("amount");
+        const from = params.get("from");
+        const to = params.get("to");
+
+        if (cat && Object.keys(unitsConfig).includes(cat)) {
+          setCategory(cat as UnitType);
+        }
+        if (val && !isNaN(Number(val))) {
+          setInputValue(val);
+        }
+        if (from) {
+          setFromUnit(from);
+        }
+        if (to) {
+          setToUnit(to);
+        }
+      }
+    } catch (e) {
+      console.error("Error parsing unit params", e);
+    }
+  }, []);
+
   // Update default units on category change
   useEffect(() => {
     const config = unitsConfig[category];
-    setFromUnit(config.list[2]?.value || config.list[0].value);
-    setToUnit(config.list[3]?.value || config.list[1].value);
+    const hasFrom = config.list.some(u => u.value === fromUnit);
+    const hasTo = config.list.some(u => u.value === toUnit);
+    if (!hasFrom) {
+      setFromUnit(config.list[2]?.value || config.list[0].value);
+    }
+    if (!hasTo) {
+      setToUnit(config.list[3]?.value || config.list[1].value);
+    }
   }, [category]);
 
   const performConversion = (valStr: string, from: string, to: string, cat: UnitType) => {
@@ -313,7 +348,22 @@ export default function UnitConverterClient() {
         {/* Breakdown table */}
         {allConversions.length > 0 && (
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
-            <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">All Conversion Mappings</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">All Conversion Mappings</h3>
+              <Button
+                onClick={() => copyShareUrl({
+                  category,
+                  value: inputValue,
+                  from: fromUnit,
+                  to: toUnit,
+                }, `${fromUnit.toUpperCase()} to ${toUnit.toUpperCase()} Conversion`)}
+                variant="outline"
+                size="sm"
+                className="rounded-xl border-2 font-bold h-10 text-primary border-primary/30 hover:bg-primary/5"
+              >
+                <Share2 className="h-4 w-4 mr-2" /> Share Conversion
+              </Button>
+            </div>
             <Card className="overflow-hidden border border-zinc-100 dark:border-zinc-800 rounded-3xl shadow-sm">
               <table className="w-full text-left border-collapse">
                 <thead>

@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { TrendingUp, RefreshCw, DollarSign, Calendar, Percent, Info, Settings2, ArrowRight, Download } from "lucide-react";
+import { TrendingUp, RefreshCw, DollarSign, Calendar, Percent, Info, Settings2, ArrowRight, Download, Share2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DonutChart, GrowthChart } from "@/components/CalculatorCharts";
 import { MathFormula } from "@/components/MathFormula";
 import { triggerConfetti } from "@/lib/confetti";
+import { copyShareUrl } from "@/lib/share-utils";
 
 interface YearlyBreakdown {
   year: number;
@@ -61,9 +62,38 @@ export default function InvestmentCalculatorClient() {
     }
   };
 
-  // Save to recently used history in local storage
+  // Parse deep link query parameters on mount & save to recently used
   useEffect(() => {
     try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const init = params.get("initial") || params.get("principal") || params.get("lumpSum");
+        const monthly = params.get("monthly") || params.get("contribution") || params.get("pmt");
+        const y = params.get("years") || params.get("duration") || params.get("term");
+        const r = params.get("rate") || params.get("interest") || params.get("return");
+        const compound = params.get("compound") || params.get("freq") || params.get("frequency");
+        const timing = params.get("timing");
+
+        if (init && !isNaN(Number(init.replace(/,/g, "")))) {
+          setInitialAmount(formatNumber(init.replace(/,/g, "")));
+        }
+        if (monthly && !isNaN(Number(monthly.replace(/,/g, "")))) {
+          setMonthlyContribution(formatNumber(monthly.replace(/,/g, "")));
+        }
+        if (y && !isNaN(Number(y))) {
+          setYears(y);
+        }
+        if (r && !isNaN(Number(r))) {
+          setInterestRate(r);
+        }
+        if (compound && (compound === "annually" || compound === "monthly" || compound === "daily" || compound === "quarterly")) {
+          setCompoundFrequency(compound);
+        }
+        if (timing && (timing === "beginning" || timing === "end")) {
+          setContributionTiming(timing);
+        }
+      }
+
       const stored = localStorage.getItem("utilify-recent-tools");
       const currentList: string[] = stored ? JSON.parse(stored) : [];
       const href = "/investment-calculator";
@@ -404,14 +434,31 @@ export default function InvestmentCalculatorClient() {
                     <h3 className="text-2xl font-black tracking-tight">Yearly Breakdown</h3>
                     <p className="text-sm text-muted-foreground mt-1">Growth projection for {years} years</p>
                   </div>
-                  <Button 
-                    onClick={exportToCsv} 
-                    variant="outline" 
-                    size="sm"
-                    className="rounded-xl border-2 font-bold h-11 shrink-0"
-                  >
-                    <Download className="h-4 w-4 mr-2" /> Export CSV
-                  </Button>
+                  <div className="flex items-center gap-3">
+                    <Button 
+                      onClick={() => copyShareUrl({
+                        initial: parseNumber(initialAmount),
+                        monthly: parseNumber(monthlyContribution),
+                        years: parseNumber(years),
+                        rate: parseNumber(interestRate),
+                        compound: compoundFrequency !== "annually" ? compoundFrequency : undefined,
+                        timing: contributionTiming !== "end" ? contributionTiming : undefined,
+                      }, "Investment Calculation")} 
+                      variant="outline" 
+                      size="sm"
+                      className="rounded-xl border-2 font-bold h-11 shrink-0 text-primary border-primary/30 hover:bg-primary/5"
+                    >
+                      <Share2 className="h-4 w-4 mr-2" /> Share Link
+                    </Button>
+                    <Button 
+                      onClick={exportToCsv} 
+                      variant="outline" 
+                      size="sm"
+                      className="rounded-xl border-2 font-bold h-11 shrink-0"
+                    >
+                      <Download className="h-4 w-4 mr-2" /> Export CSV
+                    </Button>
+                  </div>
                 </div>
                 <div className="overflow-auto max-h-[500px]">
                   <table className="w-full text-left border-collapse">

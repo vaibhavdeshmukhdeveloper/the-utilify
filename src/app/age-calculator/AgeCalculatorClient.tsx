@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Hourglass, Calendar, Gift, Clock, Info } from "lucide-react";
+import { Hourglass, Calendar, Gift, Clock, Info, Share2 } from "lucide-react";
+import { copyShareUrl } from "@/lib/share-utils";
 
 export default function AgeCalculatorClient() {
   const [dob, setDob] = useState("1995-01-01");
@@ -26,6 +27,22 @@ export default function AgeCalculatorClient() {
 
   const [liveMode, setLiveMode] = useState(true);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Parse deep link parameters on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const dobParam = params.get("dob") || params.get("birth") || params.get("birthDate");
+        const targetParam = params.get("target") || params.get("targetDate") || params.get("at");
+
+        if (dobParam) setDob(dobParam);
+        if (targetParam) setTargetDate(targetParam);
+      }
+    } catch (e) {
+      console.error("Error parsing age params", e);
+    }
+  }, []);
 
   const calculateAge = useCallback(() => {
     const dobDate = new Date(dob);
@@ -287,7 +304,21 @@ export default function AgeCalculatorClient() {
 
             {/* Cumulative stats */}
             <div className="space-y-4">
-              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Lived Cumulative Milestones</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Lived Cumulative Milestones</h3>
+                <Button
+                  type="button"
+                  onClick={() => copyShareUrl({
+                    dob,
+                    target: targetDate,
+                  }, "Age Calculation")}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-xl border-2 font-bold h-10 text-primary border-primary/30 hover:bg-primary/5"
+                >
+                  <Share2 className="h-4 w-4 mr-2" /> Share Age Milestones
+                </Button>
+              </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
                 <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none rounded-2xl shadow-sm">
                   <div className="text-lg font-black text-primary font-mono truncate">{result.totalMonths.toLocaleString()}</div>

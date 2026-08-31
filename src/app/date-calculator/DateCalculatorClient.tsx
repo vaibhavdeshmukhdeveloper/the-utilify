@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Calendar, Plus, Minus, Info, ArrowRight } from "lucide-react";
+import { Calendar, Plus, Minus, Info, ArrowRight, Share2 } from "lucide-react";
+import { copyShareUrl } from "@/lib/share-utils";
 
 export default function DateCalculatorClient() {
   const [activeTab, setActiveTab] = useState("diff");
@@ -37,6 +38,34 @@ export default function DateCalculatorClient() {
 
   const diffResultsRef = useRef<HTMLDivElement>(null);
   const mathResultsRef = useRef<HTMLDivElement>(null);
+
+  // Parse deep link query parameters on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get("tab") || params.get("mode");
+        const start = params.get("start") || params.get("startDate");
+        const end = params.get("end") || params.get("endDate");
+        const base = params.get("base") || params.get("baseDate");
+        const op = params.get("op") || params.get("operation");
+        const y = params.get("years");
+        const m = params.get("months");
+        const d = params.get("days");
+
+        if (tab && (tab === "diff" || tab === "math")) setActiveTab(tab);
+        if (start) setStartDate(start);
+        if (end) setEndDate(end);
+        if (base) setBaseDate(base);
+        if (op && (op === "add" || op === "subtract")) setOperation(op);
+        if (y) setAddYears(y);
+        if (m) setAddMonths(m);
+        if (d) setAddDays(d);
+      }
+    } catch (e) {
+      console.error("Error parsing date params", e);
+    }
+  }, []);
 
   // Reactive Calculation: Date Difference
   useEffect(() => {
@@ -267,6 +296,21 @@ export default function DateCalculatorClient() {
                     <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Total Weeks</span>
                     <span className="text-3xl font-black text-primary font-mono mt-2">{diffResult.totalWeeks.toLocaleString()}</span>
                   </Card>
+                  <div className="col-span-2 pt-2">
+                    <Button
+                      type="button"
+                      onClick={() => copyShareUrl({
+                        tab: "diff",
+                        start: startDate,
+                        end: endDate,
+                      }, "Date Interval")}
+                      variant="outline"
+                      size="sm"
+                      className="w-full rounded-xl border-2 font-bold h-11 text-primary border-primary/30 hover:bg-primary/5"
+                    >
+                      <Share2 className="h-4 w-4 mr-2" /> Share Date Interval
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
@@ -356,9 +400,25 @@ export default function DateCalculatorClient() {
                 <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
                   <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Calculated Date</div>
                   <div className="text-3xl font-black text-primary tracking-tight">{mathResult.formattedDate}</div>
-                  <div className="text-lg font-bold text-muted-foreground flex items-center justify-center gap-1.5">
+                  <div className="text-lg font-bold text-muted-foreground flex items-center justify-center gap-1.5 mb-4">
                     <ArrowRight className="h-4 w-4 text-primary" /> {mathResult.dayOfWeek}
                   </div>
+                  <Button
+                    type="button"
+                    onClick={() => copyShareUrl({
+                      tab: "math",
+                      base: baseDate,
+                      op: operation,
+                      years: addYears !== "0" ? addYears : undefined,
+                      months: addMonths !== "0" ? addMonths : undefined,
+                      days: addDays !== "0" ? addDays : undefined,
+                    }, "Date Calculation")}
+                    variant="outline"
+                    size="sm"
+                    className="rounded-xl border-2 font-bold h-11 text-primary border-primary/30 hover:bg-primary/5 mx-auto"
+                  >
+                    <Share2 className="h-4 w-4 mr-2" /> Share Calculation
+                  </Button>
                 </Card>
               </div>
             )}

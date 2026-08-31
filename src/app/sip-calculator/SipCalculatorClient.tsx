@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { PiggyBank, RefreshCw, DollarSign, Calendar, Percent, TrendingUp, ArrowRight, Settings2, Download } from "lucide-react";
+import { PiggyBank, RefreshCw, DollarSign, Calendar, Percent, TrendingUp, ArrowRight, Settings2, Download, Share2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DonutChart, GrowthChart } from "@/components/CalculatorCharts";
 import { MathFormula } from "@/components/MathFormula";
 import { triggerConfetti } from "@/lib/confetti";
+import { copyShareUrl } from "@/lib/share-utils";
 
 interface YearlyBreakdown {
   year: number;
@@ -60,9 +61,34 @@ export default function SipCalculatorClient() {
     }
   };
 
-  // Save to recently used history in local storage
+  // Parse deep link query parameters on mount & save to recently used
   useEffect(() => {
     try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const inv = params.get("investment") || params.get("amount") || params.get("monthly");
+        const y = params.get("years") || params.get("duration") || params.get("term");
+        const r = params.get("rate") || params.get("return") || params.get("cagr");
+        const freq = params.get("freq") || params.get("frequency") || params.get("compound");
+        const timing = params.get("timing");
+
+        if (inv && !isNaN(Number(inv.replace(/,/g, "")))) {
+          setMonthlyInvestment(formatNumber(inv.replace(/,/g, "")));
+        }
+        if (y && !isNaN(Number(y))) {
+          setYears(y);
+        }
+        if (r && !isNaN(Number(r))) {
+          setReturnRate(r);
+        }
+        if (freq && (freq === "monthly" || freq === "annually")) {
+          setCompoundFrequency(freq);
+        }
+        if (timing && (timing === "beginning" || timing === "end")) {
+          setContributionTiming(timing);
+        }
+      }
+
       const stored = localStorage.getItem("utilify-recent-tools");
       const currentList: string[] = stored ? JSON.parse(stored) : [];
       const href = "/sip-calculator";
@@ -390,14 +416,30 @@ export default function SipCalculatorClient() {
                     <h3 className="text-3xl font-black tracking-tight">Yearly Projection</h3>
                     <p className="text-muted-foreground mt-2">See how your portfolio grows year after year</p>
                   </div>
-                  <Button 
-                    onClick={exportToCsv} 
-                    variant="outline" 
-                    size="sm"
-                    className="rounded-xl border-2 font-bold h-11 shrink-0"
-                  >
-                    <Download className="h-4 w-4 mr-2" /> Export CSV
-                  </Button>
+                  <div className="flex items-center gap-3">
+                    <Button 
+                      onClick={() => copyShareUrl({
+                        investment: parseNumber(monthlyInvestment),
+                        years: parseNumber(years),
+                        rate: parseNumber(returnRate),
+                        freq: compoundFrequency !== "monthly" ? compoundFrequency : undefined,
+                        timing: contributionTiming !== "beginning" ? contributionTiming : undefined,
+                      }, "SIP Calculation")} 
+                      variant="outline" 
+                      size="sm"
+                      className="rounded-xl border-2 font-bold h-11 shrink-0 text-primary border-primary/30 hover:bg-primary/5"
+                    >
+                      <Share2 className="h-4 w-4 mr-2" /> Share Link
+                    </Button>
+                    <Button 
+                      onClick={exportToCsv} 
+                      variant="outline" 
+                      size="sm"
+                      className="rounded-xl border-2 font-bold h-11 shrink-0"
+                    >
+                      <Download className="h-4 w-4 mr-2" /> Export CSV
+                    </Button>
+                  </div>
                 </div>
                 <div className="overflow-auto max-h-[600px]">
                   <table className="w-full text-left border-collapse">

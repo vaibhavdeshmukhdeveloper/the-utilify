@@ -6,10 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Calculator, RefreshCw, Info } from "lucide-react";
+import { Calculator, RefreshCw, Info, Share2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MathFormula } from "@/components/MathFormula";
 import { triggerConfetti } from "@/lib/confetti";
+import { copyShareUrl } from "@/lib/share-utils";
 
 export default function BmiCalculatorClient() {
   const [unitSystem, setUnitSystem] = useState("metric");
@@ -21,6 +22,32 @@ export default function BmiCalculatorClient() {
   const [result, setResult] = useState<{ bmi: string; category: string; color: string } | null>(null);
 
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Parse deep link parameters on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const unit = params.get("unit") || params.get("system");
+        const w = params.get("weight") || params.get("w");
+        const h = params.get("height") || params.get("h");
+        const lbs = params.get("weightLbs") || params.get("lbs");
+        const ft = params.get("heightFt") || params.get("ft");
+        const inch = params.get("heightIn") || params.get("in");
+
+        if (unit && (unit === "metric" || unit === "us")) {
+          setUnitSystem(unit);
+        }
+        if (w && !isNaN(Number(w))) setWeight(w);
+        if (h && !isNaN(Number(h))) setHeight(h);
+        if (lbs && !isNaN(Number(lbs))) setWeightLbs(lbs);
+        if (ft && !isNaN(Number(ft))) setHeightFt(ft);
+        if (inch && !isNaN(Number(inch))) setHeightIn(inch);
+      }
+    } catch (e) {
+      console.error("Error parsing BMI params", e);
+    }
+  }, []);
 
   // Run calculation reactively whenever inputs change
   useEffect(() => {
@@ -343,9 +370,26 @@ export default function BmiCalculatorClient() {
                   </div>
                 </div>
 
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6">
                   Based on your input, your BMI indicates that you are in the <strong>{result.category}</strong> range.
                 </p>
+
+                <Button
+                  type="button"
+                  onClick={() => copyShareUrl({
+                    unit: unitSystem,
+                    weight: unitSystem === "metric" ? weight : undefined,
+                    height: unitSystem === "metric" ? height : undefined,
+                    weightLbs: unitSystem === "us" ? weightLbs : undefined,
+                    heightFt: unitSystem === "us" ? heightFt : undefined,
+                    heightIn: unitSystem === "us" ? heightIn : undefined,
+                  }, "BMI Calculation")}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-xl border-2 font-bold h-11 text-primary border-primary/30 hover:bg-primary/5 mx-auto"
+                >
+                  <Share2 className="h-4 w-4 mr-2" /> Share Result
+                </Button>
               </Card>
             </div>
           )}
