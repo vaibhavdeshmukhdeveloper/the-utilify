@@ -280,12 +280,24 @@ export function Footer() {
                 Utilify vs iLovePDF
               </Link>
               <span>•</span>
+              <Link href="/vs/smallpdf" className="hover:text-primary transition-colors">
+                Utilify vs Smallpdf
+              </Link>
+              <span>•</span>
               <Link href="/vs/removebg" className="hover:text-primary transition-colors">
                 Utilify vs Remove.bg
               </Link>
               <span>•</span>
               <Link href="/vs/tinypng" className="hover:text-primary transition-colors">
                 Utilify vs TinyPNG
+              </Link>
+              <span>•</span>
+              <Link href="/vs/ezgif" className="hover:text-primary transition-colors">
+                Utilify vs Ezgif
+              </Link>
+              <span>•</span>
+              <Link href="/vs/iloveimg" className="hover:text-primary transition-colors">
+                Utilify vs iLoveIMG
               </Link>
             </div>
           </div>

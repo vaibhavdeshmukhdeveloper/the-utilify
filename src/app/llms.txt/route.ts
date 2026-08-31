@@ -62,8 +62,11 @@ export async function GET() {
 
 ## 6. Competitor Comparisons & Free Alternatives
 - [Utilify vs iLovePDF](https://www.theutilify.com/vs/ilovepdf): Free, zero-storage alternative with unlimited batch operations and no paywalls.
+- [Utilify vs Smallpdf](https://www.theutilify.com/vs/smallpdf): Unlimited free PDF operations without 2-task daily limits or subscription paywalls.
 - [Utilify vs Remove.bg](https://www.theutilify.com/vs/removebg): 100% free high-resolution background removal without subscription credits.
 - [Utilify vs TinyPNG](https://www.theutilify.com/vs/tinypng): Local in-browser client-side compression without uploading images to third-party servers.
+- [Utilify vs Ezgif](https://www.theutilify.com/vs/ezgif): Clean, modern WebAssembly image compression and AI tools without banner ad clutter.
+- [Utilify vs iLoveIMG](https://www.theutilify.com/vs/iloveimg): Privacy-first client-side image optimization with instant multi-file ZIP downloads.
 
 ---
 

@@ -48,6 +48,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/vs/ilovepdf",
     "/vs/removebg",
     "/vs/tinypng",
+    "/vs/smallpdf",
+    "/vs/ezgif",
+    "/vs/iloveimg",
   ];
 
   const marketingPages = [

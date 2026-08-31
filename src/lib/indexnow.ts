@@ -98,6 +98,12 @@ export async function submitAllPlatformUrls(): Promise<IndexNowResponse> {
     "/date-calculator",
     "/age-calculator",
     "/unit-converter",
+    "/compress-png",
+    "/compress-jpeg",
+    "/make-signature-transparent",
+    "/white-background-product-photos",
+    "/fire-calculator",
+    "/px-to-rem",
   ];
 
   const categoryHubs = [
@@ -111,6 +117,9 @@ export async function submitAllPlatformUrls(): Promise<IndexNowResponse> {
     "/vs/ilovepdf",
     "/vs/removebg",
     "/vs/tinypng",
+    "/vs/smallpdf",
+    "/vs/ezgif",
+    "/vs/iloveimg",
   ];
 
   const marketingPages = [
