@@ -379,13 +379,37 @@ class RateRequest(BaseModel):
     tool: str
     rating: int
 
+RATINGS_FILE = os.path.join(os.path.dirname(__file__), "ratings_db.json")
+if not os.path.exists(RATINGS_FILE):
+    # Fallback to temp directory if root is read-only
+    RATINGS_FILE = os.path.join(tempfile.gettempdir(), "utilify_ratings_db.json")
+
 ratings_db = {}
+
+def load_ratings():
+    global ratings_db
+    try:
+        if os.path.exists(RATINGS_FILE):
+            with open(RATINGS_FILE, "r", encoding="utf-8") as f:
+                ratings_db = json.load(f)
+    except Exception as e:
+        print(f"Failed to load ratings from {RATINGS_FILE}: {e}")
+
+def save_ratings():
+    try:
+        with open(RATINGS_FILE, "w", encoding="utf-8") as f:
+            json.dump(ratings_db, f, indent=2)
+    except Exception as e:
+        print(f"Failed to save ratings to {RATINGS_FILE}: {e}")
+
+load_ratings()
 
 @app.get("/api/ratings")
 async def get_ratings(tool: str = None):
     """
     Returns authentic community ratings for a specific tool or all tools.
     """
+    load_ratings()
     if tool:
         normalized = tool.strip("/").split("?")[0]
         data = ratings_db.get(normalized, {"sum": 0, "count": 0})
@@ -407,17 +431,19 @@ async def get_ratings(tool: str = None):
 @app.post("/api/rate")
 async def submit_rating(req: RateRequest):
     """
-    Submits a genuine user rating (1-5 stars) for a tool.
+    Submits a genuine user rating (1-5 stars) for a tool and persists it to database.
     """
     if req.rating < 1 or req.rating > 5:
         raise HTTPException(status_code=400, detail="Rating must be between 1 and 5.")
     
+    load_ratings()
     normalized = req.tool.strip("/").split("?")[0]
     if normalized not in ratings_db:
         ratings_db[normalized] = {"sum": 0, "count": 0}
     
     ratings_db[normalized]["sum"] += req.rating
     ratings_db[normalized]["count"] += 1
+    save_ratings()
     
     data = ratings_db[normalized]
     val = round(data["sum"] / data["count"], 1)

@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import os from "os";
 
 export interface ToolRatingData {
   sum: number;
   count: number;
-  ratings: { [star: number]: number };
+  ratings?: { [star: number]: number };
 }
 
-// In-memory cache for ultra-fast zero-latency responses
+// In-memory cache for ultra-fast fallback
 const ratingsStore: Record<string, ToolRatingData> = {};
 
-// Fallback file location in /tmp or data directory
-const DATA_FILE = path.join(process.cwd(), ".next", "ratings-data.json");
+// Ephemeral /tmp storage file for serverless environments
+const DATA_FILE = path.join(os.tmpdir(), "utilify_ratings_cache.json");
 
-function loadRatingsFromFile() {
+function loadLocalRatings() {
   try {
     if (fs.existsSync(DATA_FILE)) {
       const raw = fs.readFileSync(DATA_FILE, "utf-8");
@@ -22,45 +23,66 @@ function loadRatingsFromFile() {
       Object.assign(ratingsStore, data);
     }
   } catch {
-    // Ignore file load errors in ephemeral environments
+    // Ignore in read-only / restricted environments
   }
 }
 
-function saveRatingsToFile() {
+function saveLocalRatings() {
   try {
-    const dir = path.dirname(DATA_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
     fs.writeFileSync(DATA_FILE, JSON.stringify(ratingsStore, null, 2), "utf-8");
   } catch {
-    // Ignore file write errors in read-only / ephemeral environments
+    // Ignore write errors
   }
 }
 
-// Load existing ratings on cold start
-loadRatingsFromFile();
+loadLocalRatings();
+
+function getBackendUrl(): string {
+  let url = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || "http://localhost:8000";
+  return url.replace(/\/+$/, "");
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const tool = searchParams.get("tool")?.replace(/^\//, "").split("?")[0];
+  const backendUrl = getBackendUrl();
 
+  // Try fetching from Google Cloud Run backend first
+  try {
+    const backendRes = await fetch(`${backendUrl}/api/ratings${tool ? `?tool=${encodeURIComponent(tool)}` : ""}`, {
+      method: "GET",
+      cache: "no-store",
+      headers: { "Accept": "application/json" },
+    });
+
+    if (backendRes.ok) {
+      const data = await backendRes.json();
+      return NextResponse.json(data, {
+        headers: {
+          "Cache-Control": "public, s-maxage=5, stale-while-revalidate=30",
+        },
+      });
+    }
+  } catch {
+    // Backend unreachable or local dev mode fallback
+  }
+
+  // Fallback to local memory / temp file
+  loadLocalRatings();
   if (tool) {
-    const data = ratingsStore[tool] || { sum: 0, count: 0, ratings: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } };
+    const data = ratingsStore[tool] || { sum: 0, count: 0 };
     const ratingValue = data.count > 0 ? parseFloat((data.sum / data.count).toFixed(1)) : 0;
     return NextResponse.json({
       tool,
       ratingValue,
       reviewCount: data.count,
-      ratings: data.ratings,
     }, {
       headers: {
-        "Cache-Control": "public, s-maxage=10, stale-while-revalidate=59",
+        "Cache-Control": "public, s-maxage=5, stale-while-revalidate=30",
       },
     });
   }
 
-  // Return all ratings summarized
   const all: Record<string, { ratingValue: number; reviewCount: number }> = {};
   for (const [key, data] of Object.entries(ratingsStore)) {
     all[key] = {
@@ -71,7 +93,7 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(all, {
     headers: {
-      "Cache-Control": "public, s-maxage=10, stale-while-revalidate=59",
+      "Cache-Control": "public, s-maxage=5, stale-while-revalidate=30",
     },
   });
 }
@@ -91,21 +113,40 @@ export async function POST(request: NextRequest) {
     }
 
     const normalizedTool = tool.replace(/^\//, "").split("?")[0];
+    const backendUrl = getBackendUrl();
 
-    if (!ratingsStore[normalizedTool]) {
-      ratingsStore[normalizedTool] = {
-        sum: 0,
-        count: 0,
-        ratings: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
-      };
+    // 1. Submit to FastAPI Cloud Run backend for permanent persistence
+    try {
+      const backendRes = await fetch(`${backendUrl}/api/rate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tool: normalizedTool, rating: star }),
+      });
+
+      if (backendRes.ok) {
+        const data = await backendRes.json();
+        // Also update local cache
+        ratingsStore[normalizedTool] = {
+          sum: (ratingsStore[normalizedTool]?.sum || 0) + star,
+          count: (ratingsStore[normalizedTool]?.count || 0) + 1,
+        };
+        saveLocalRatings();
+
+        return NextResponse.json(data);
+      }
+    } catch {
+      // Backend unreachable fallback
     }
 
-    // Accumulate genuine vote
+    // 2. Local fallback update
+    loadLocalRatings();
+    if (!ratingsStore[normalizedTool]) {
+      ratingsStore[normalizedTool] = { sum: 0, count: 0 };
+    }
+
     ratingsStore[normalizedTool].sum += star;
     ratingsStore[normalizedTool].count += 1;
-    ratingsStore[normalizedTool].ratings[star] = (ratingsStore[normalizedTool].ratings[star] || 0) + 1;
-
-    saveRatingsToFile();
+    saveLocalRatings();
 
     const data = ratingsStore[normalizedTool];
     const ratingValue = parseFloat((data.sum / data.count).toFixed(1));
@@ -115,10 +156,10 @@ export async function POST(request: NextRequest) {
       tool: normalizedTool,
       ratingValue,
       reviewCount: data.count,
-      ratings: data.ratings,
     });
-  } catch (error) {
-    console.error("Error saving rating:", error);
-    return NextResponse.json({ error: "Failed to submit rating" }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({
+      error: error?.message || "Failed to process rating",
+    }, { status: 500 });
   }
 }
