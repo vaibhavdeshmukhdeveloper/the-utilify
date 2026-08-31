@@ -107,10 +107,20 @@ export function ToolLayout({
     const postSlug = post.slug.toLowerCase();
     const tool = currentSlug.toLowerCase();
     if (tool.includes("background") && postSlug.includes("background")) return true;
-    if (tool.includes("image") && (postSlug.includes("image") || postSlug.includes("compression"))) return true;
+    if (tool.includes("image") && (postSlug.includes("image") || postSlug.includes("compression") || postSlug.includes("png") || postSlug.includes("jpg"))) return true;
+    if (tool.includes("palette") && (postSlug.includes("palette") || postSlug.includes("color") || postSlug.includes("contrast"))) return true;
+    if (tool.includes("markdown") && postSlug.includes("markdown")) return true;
     if (tool.includes("pdf") && postSlug.includes("pdf")) return true;
-    if ((tool.includes("sip") || tool.includes("investment")) && (postSlug.includes("investing") || postSlug.includes("compound"))) return true;
-    if ((tool.includes("json") || tool.includes("diff") || tool.includes("base64")) && (postSlug.includes("json") || postSlug.includes("developer"))) return true;
+    if ((tool.includes("sip") || tool.includes("investment")) && (postSlug.includes("investing") || postSlug.includes("compound") || postSlug.includes("sip") || postSlug.includes("72"))) return true;
+    if (tool.includes("bmi") && (postSlug.includes("bmi") || postSlug.includes("bmr") || postSlug.includes("health") || postSlug.includes("metabolic"))) return true;
+    if ((tool.includes("date") || tool.includes("age")) && (postSlug.includes("date") || postSlug.includes("age") || postSlug.includes("calendar") || postSlug.includes("time"))) return true;
+    if (tool.includes("qr") && postSlug.includes("qr")) return true;
+    if (tool.includes("password") && (postSlug.includes("password") || postSlug.includes("entropy") || postSlug.includes("security"))) return true;
+    if (tool.includes("json") && (postSlug.includes("json") || postSlug.includes("payload"))) return true;
+    if (tool.includes("diff") && (postSlug.includes("diff") || postSlug.includes("audit"))) return true;
+    if (tool.includes("base64") && postSlug.includes("base64")) return true;
+    if ((tool.includes("word") || tool.includes("text") || tool.includes("lorem")) && (postSlug.includes("word") || postSlug.includes("text") || postSlug.includes("lorem") || postSlug.includes("case") || postSlug.includes("typography"))) return true;
+    if (tool.includes("unit") && (postSlug.includes("unit") || postSlug.includes("conversion") || postSlug.includes("rem") || postSlug.includes("px"))) return true;
     return false;
   }).slice(0, 3);
 
