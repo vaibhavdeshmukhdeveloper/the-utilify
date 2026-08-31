@@ -88,6 +88,7 @@ export const metadata: Metadata = {
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "J4toVdS11NHqtlWUwoDiHulzd2YyK-mYS7HxQzuOurA",
+    yandex: process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION || "31ab4f299bc6b423",
     other: {
       "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || "",
     },
