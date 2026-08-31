@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "3210",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Combines initial principal with recurring periodic additions",
       "Custom compounding intervals (annually, semi-annually, quarterly, monthly)",

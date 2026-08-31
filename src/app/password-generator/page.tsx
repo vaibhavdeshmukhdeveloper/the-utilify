@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "3950",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Cryptographically secure pseudo-random number generator (crypto.getRandomValues)",
       "Customizable character sets (uppercase, lowercase, numbers, symbols)",

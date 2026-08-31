@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "3480",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Real-time word, character (with and without spaces), sentence, and paragraph counts",
       "Estimated reading time and speaking time calculators",

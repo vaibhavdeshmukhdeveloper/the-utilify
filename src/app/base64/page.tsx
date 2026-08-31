@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "1720",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Bidirectional text encoding and decoding (UTF-8 supported)",
       "File-to-Base64 and Base64-to-File converter",

@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "1980",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Side-by-side split view and unified inline view",
       "Character-level and line-level difference highlighting",

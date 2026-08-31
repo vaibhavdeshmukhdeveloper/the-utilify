@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "2180",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Custom page range extraction (e.g. 1-3, 5, 8-10)",
       "Single-page and multi-page range splitting",

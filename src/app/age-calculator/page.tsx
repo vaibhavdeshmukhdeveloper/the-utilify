@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "2780",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Exact age breakdown in years, months, weeks, days, hours, minutes, and seconds",
       "Live ticking countdown to next upcoming birthday",

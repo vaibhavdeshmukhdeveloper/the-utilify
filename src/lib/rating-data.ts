@@ -1,33 +1,55 @@
 export interface ToolRatingInfo {
   ratingValue: number;
   reviewCount: number;
+  ratings?: { [star: number]: number };
 }
 
-export const TOOL_RATINGS: Record<string, ToolRatingInfo> = {
-  "background-remover": { ratingValue: 4.9, reviewCount: 3420 },
-  "image-compressor": { ratingValue: 4.9, reviewCount: 2890 },
-  "pdf-to-image": { ratingValue: 4.8, reviewCount: 1940 },
-  "split-pdf": { ratingValue: 4.9, reviewCount: 2180 },
-  "merge-pdf": { ratingValue: 4.9, reviewCount: 3120 },
-  "markdown-to-pdf": { ratingValue: 4.9, reviewCount: 1780 },
-  "color-palette": { ratingValue: 4.8, reviewCount: 1830 },
-  "sip-calculator": { ratingValue: 4.9, reviewCount: 4150 },
-  "investment-calculator": { ratingValue: 4.9, reviewCount: 3210 },
-  "bmi-calculator": { ratingValue: 4.8, reviewCount: 2640 },
-  "date-calculator": { ratingValue: 4.8, reviewCount: 1920 },
-  "age-calculator": { ratingValue: 4.9, reviewCount: 2780 },
-  "json-formatter": { ratingValue: 4.9, reviewCount: 3840 },
-  "password-generator": { ratingValue: 4.9, reviewCount: 3950 },
-  "qr-generator": { ratingValue: 4.8, reviewCount: 2910 },
-  "word-counter": { ratingValue: 4.9, reviewCount: 3480 },
-  "text-converter": { ratingValue: 4.8, reviewCount: 1890 },
-  "base64": { ratingValue: 4.8, reviewCount: 1720 },
-  "diff-checker": { ratingValue: 4.8, reviewCount: 1980 },
-  "lorem-ipsum": { ratingValue: 4.8, reviewCount: 1640 },
-  "unit-converter": { ratingValue: 4.9, reviewCount: 3620 },
-};
-
-export function getToolRating(slug: string): ToolRatingInfo {
+// Client helper to fetch live genuine ratings
+export async function fetchLiveRating(slug: string): Promise<ToolRatingInfo> {
   const normalizedSlug = slug.replace(/^\//, "").split("?")[0];
-  return TOOL_RATINGS[normalizedSlug] || { ratingValue: 4.9, reviewCount: 2500 };
+  try {
+    const res = await fetch(`/api/ratings?tool=${normalizedSlug}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        ratingValue: data.ratingValue || 0,
+        reviewCount: data.reviewCount || 0,
+        ratings: data.ratings,
+      };
+    }
+  } catch (e) {
+    console.error("Failed to fetch live rating:", e);
+  }
+  return { ratingValue: 0, reviewCount: 0 };
+}
+
+// Client helper to submit a genuine rating
+export async function submitLiveRating(slug: string, rating: number): Promise<ToolRatingInfo | null> {
+  const normalizedSlug = slug.replace(/^\//, "").split("?")[0];
+  try {
+    const res = await fetch("/api/ratings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        tool: normalizedSlug,
+        rating,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        ratingValue: data.ratingValue,
+        reviewCount: data.reviewCount,
+        ratings: data.ratings,
+      };
+    }
+  } catch (e) {
+    console.error("Failed to submit rating:", e);
+  }
+  return null;
 }

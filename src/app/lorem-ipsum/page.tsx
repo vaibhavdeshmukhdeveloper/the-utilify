@@ -36,13 +36,6 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "1640",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Custom count for paragraphs, sentences, words, and list items",
       "HTML tag wrapping toggle (<p>, <li>)",

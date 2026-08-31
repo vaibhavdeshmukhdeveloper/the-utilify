@@ -375,7 +375,61 @@ async def html_to_pdf(request: HtmlRequest):
         print(f"HTML to PDF crash: {e}")
         raise HTTPException(status_code=500, detail=f"HTML to PDF conversion failed: {str(e)}")
 
+class RateRequest(BaseModel):
+    tool: str
+    rating: int
+
+ratings_db = {}
+
+@app.get("/api/ratings")
+async def get_ratings(tool: str = None):
+    """
+    Returns authentic community ratings for a specific tool or all tools.
+    """
+    if tool:
+        normalized = tool.strip("/").split("?")[0]
+        data = ratings_db.get(normalized, {"sum": 0, "count": 0})
+        val = round(data["sum"] / data["count"], 1) if data["count"] > 0 else 0.0
+        return {
+            "tool": normalized,
+            "ratingValue": val,
+            "reviewCount": data["count"]
+        }
+    
+    summary = {}
+    for k, v in ratings_db.items():
+        summary[k] = {
+            "ratingValue": round(v["sum"] / v["count"], 1) if v["count"] > 0 else 0.0,
+            "reviewCount": v["count"]
+        }
+    return summary
+
+@app.post("/api/rate")
+async def submit_rating(req: RateRequest):
+    """
+    Submits a genuine user rating (1-5 stars) for a tool.
+    """
+    if req.rating < 1 or req.rating > 5:
+        raise HTTPException(status_code=400, detail="Rating must be between 1 and 5.")
+    
+    normalized = req.tool.strip("/").split("?")[0]
+    if normalized not in ratings_db:
+        ratings_db[normalized] = {"sum": 0, "count": 0}
+    
+    ratings_db[normalized]["sum"] += req.rating
+    ratings_db[normalized]["count"] += 1
+    
+    data = ratings_db[normalized]
+    val = round(data["sum"] / data["count"], 1)
+    return {
+        "success": True,
+        "tool": normalized,
+        "ratingValue": val,
+        "reviewCount": data["count"]
+    }
+
 if __name__ == "__main__":
     import uvicorn
     # Start on port 8000 matching frontend NEXT_PUBLIC_API_URL
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
