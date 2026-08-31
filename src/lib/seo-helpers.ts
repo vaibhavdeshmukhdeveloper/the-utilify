@@ -1,3 +1,5 @@
+import { getToolRating } from "./rating-data";
+
 export interface ToolSchemaParams {
   name: string;
   description: string;
@@ -12,9 +14,13 @@ export function getSoftwareAppSchema({
   description,
   applicationCategory = "UtilityApplication",
   slug,
-  ratingValue = "4.9",
-  reviewCount = "2450",
+  ratingValue,
+  reviewCount,
 }: ToolSchemaParams) {
+  const defaultRating = getToolRating(slug);
+  const finalRatingValue = ratingValue || defaultRating.ratingValue.toString();
+  const finalReviewCount = reviewCount || defaultRating.reviewCount.toString();
+
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -30,15 +36,16 @@ export function getSoftwareAppSchema({
     },
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": ratingValue,
-      "reviewCount": reviewCount,
+      "ratingValue": finalRatingValue,
+      "reviewCount": finalReviewCount,
       "bestRating": "5",
       "worstRating": "1",
     },
     "author": {
       "@type": "Organization",
-      "name": "Utilify",
-      "url": "https://www.theutilify.com",
+      "name": "The Utilify Editorial Team",
+      "url": "https://www.theutilify.com/about",
     },
   };
 }
+

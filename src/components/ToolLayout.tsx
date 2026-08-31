@@ -13,6 +13,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, ArrowRight, Sparkles, Clock, Calendar } from "lucide-react";
 import { EmbedModal } from "./EmbedModal";
+import { RatingWidget } from "./RatingWidget";
 
 interface ToolLayoutProps {
   children: React.ReactNode;
@@ -222,6 +223,7 @@ export function ToolLayout({
             <Card className="w-full p-6 md:p-10 lg:p-14 border bg-card/60 backdrop-blur-md min-h-[480px] flex flex-col items-center justify-center shadow-xl shadow-primary/5 rounded-[2rem] text-center">
               {children}
             </Card>
+            <RatingWidget toolSlug={currentSlug} toolTitle={title} />
             <ToolWorkflowChaining />
             <CrossPromo />
             <AdBanner />
