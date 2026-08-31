@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "node scripts/ping-search-engines.mjs",
     "start": "next start",
     "lint": "eslint",
-    "indexnow": "node scripts/ping-indexnow.mjs"
+    "ping": "node scripts/ping-search-engines.mjs",
+    "indexnow": "node scripts/ping-search-engines.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0-alpha.0",
