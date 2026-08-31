@@ -177,6 +177,7 @@ export default function SipCalculatorClient() {
     <ToolLayout
       title="SIP Calculator"
       description="Calculate the potential growth of your monthly savings with a Systematic Investment Plan (SIP)."
+      summaryDefinition="A Systematic Investment Plan (SIP) calculator models the future value of recurring monthly mutual fund investments compounding over time. It calculates total invested capital, estimated wealth gain, and future maturity corpus based on expected annual return rates and investment duration."
       howToUse={[
         { step: "Monthly Amount", description: "How much you plan to save every month." },
         { step: "Investment Term", description: "The number of years you plan to stay invested." },

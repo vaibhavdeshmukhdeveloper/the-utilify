@@ -540,6 +540,7 @@ export default function JsonFormatterClient() {
     <ToolLayout
       title="JSON Formatter"
       description="Pretty-print, validate, and minify your JSON data instantly. 100% private and secure."
+      summaryDefinition="A JSON formatter and validator pretty-prints nested JSON strings with custom indentation (2/4 spaces), validates RFC 8259 syntax with line-by-line error diagnostics, and minifies payloads 100% locally in your browser."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}

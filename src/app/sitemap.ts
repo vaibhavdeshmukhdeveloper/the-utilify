@@ -52,6 +52,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/privacy",
     "/terms",
+    "/llms.txt",
+    "/llms-full.txt",
   ];
 
   const marketingEntries: MetadataRoute.Sitemap = marketingPages.map((path) => ({

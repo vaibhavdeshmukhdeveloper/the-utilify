@@ -129,6 +129,7 @@ export default function SplitPdfClient() {
     <ToolLayout
       title="Split PDF"
       description="Extract specific pages or split every page into individual PDF files instantly."
+      summaryDefinition="A PDF splitter extracts specific page numbers, custom comma-separated ranges (e.g. 1-3, 5, 8-10), or separates all pages into individual documents. It runs in transient RAM with zero server disk logging or data retention."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}

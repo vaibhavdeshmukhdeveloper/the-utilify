@@ -244,6 +244,7 @@ export default function InvestmentCalculatorClient() {
     <ToolLayout
       title="Investment Calculator"
       description="Analyze compound returns on initial capital combined with monthly savings."
+      summaryDefinition="An investment growth calculator determines the total future value of an initial lump-sum principal compounded alongside ongoing monthly contributions across customizable compounding frequencies (monthly, quarterly, or annually)."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}

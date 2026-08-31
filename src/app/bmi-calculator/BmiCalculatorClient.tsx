@@ -221,6 +221,7 @@ export default function BmiCalculatorClient() {
     <ToolLayout
       title="BMI Calculator"
       description="Quickly calculate your Body Mass Index (BMI) to understand your health status using Metric or US units."
+      summaryDefinition="A Body Mass Index (BMI) calculator estimates body fatness based on an individual's weight and height. It classifies body composition into standardized World Health Organization (WHO) weight categories using Metric (kg/cm) or Imperial (lbs/ft/in) formulas."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}

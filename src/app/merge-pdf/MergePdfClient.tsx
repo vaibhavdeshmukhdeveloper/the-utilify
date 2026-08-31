@@ -146,6 +146,7 @@ export default function MergePdfClient() {
     <ToolLayout
       title="Merge PDF"
       description="Combine multiple PDF documents into a single, professional file. Queue files, reorder them, and merge in seconds."
+      summaryDefinition="A PDF merger combines multiple individual PDF documents, scans, invoices, and receipts into a single sequential master PDF. It supports interactive drag-and-drop reordering and RAM-only processing with zero data retention."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}

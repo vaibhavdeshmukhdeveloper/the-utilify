@@ -113,6 +113,12 @@ export default function RootLayout({
           title="The Utilify Blog RSS Feed"
           href="https://www.theutilify.com/feed.xml"
         />
+        <link
+          rel="alternate"
+          type="text/plain"
+          title="LLMs Context"
+          href="https://www.theutilify.com/llms.txt"
+        />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6366007730203648"

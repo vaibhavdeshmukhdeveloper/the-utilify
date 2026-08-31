@@ -293,6 +293,7 @@ export default function ImageCompressorClient() {
     <ToolLayout
       title="Image Compressor"
       description="Compress PNG, JPEG, and WebP images in batch with zero quality loss. 100% client-side privacy with 1-click ZIP export."
+      summaryDefinition="An image compressor reduces the file size of WebP, JPEG, and PNG images through lossy and lossless algorithms without visible quality degradation. It runs 100% locally in the browser with zero server uploads and batch ZIP export."
       howToUse={howToUse}
       faqs={faqs}
       relatedTools={relatedTools}

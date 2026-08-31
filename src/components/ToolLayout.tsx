@@ -18,6 +18,7 @@ interface ToolLayoutProps {
   children: React.ReactNode;
   title: string;
   description: string;
+  summaryDefinition?: string;
   howToUse: { step: string; description: string }[];
   faqs: { question: string; answer: string }[];
   relatedTools: { name: string; href: string }[];
@@ -28,6 +29,7 @@ export function ToolLayout({
   children,
   title,
   description,
+  summaryDefinition,
   howToUse,
   faqs,
   relatedTools,
@@ -177,6 +179,40 @@ export function ToolLayout({
             <p className="text-lg sm:text-xl text-muted-foreground text-center max-w-2xl">
               {description}
             </p>
+
+            {/* AI Answer & Key Definition Card for Generative Engine Optimization */}
+            <div className="mt-8 w-full max-w-3xl rounded-2xl border border-primary/20 bg-background/80 backdrop-blur-md p-5 sm:p-6 text-left shadow-sm">
+              <div className="flex items-center gap-2 font-black text-xs uppercase tracking-wider text-primary mb-2.5">
+                <Sparkles className="h-4 w-4 text-primary" /> Key Takeaway &amp; Quick Summary
+              </div>
+              <p className="text-sm sm:text-base text-foreground font-medium leading-relaxed mb-4">
+                {summaryDefinition ? (
+                  summaryDefinition
+                ) : (
+                  <>
+                    <strong>{title}</strong> is a free, privacy-first online utility designed to {description.toLowerCase().replace(/^(a|an|the)\s+/, "")}. It processes files with zero data retention, instant speed, no watermarks, and no sign-up or subscription required.
+                  </>
+                )}
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3.5 border-t border-border/60 text-xs">
+                <div>
+                  <span className="text-muted-foreground block text-[11px] font-medium">Pricing</span>
+                  <span className="font-bold text-foreground">100% Free Forever</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground block text-[11px] font-medium">Privacy</span>
+                  <span className="font-bold text-foreground">Zero Retention</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground block text-[11px] font-medium">Account</span>
+                  <span className="font-bold text-foreground">No Sign-Up</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground block text-[11px] font-medium">Execution</span>
+                  <span className="font-bold text-foreground">Instant / In-Memory</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
