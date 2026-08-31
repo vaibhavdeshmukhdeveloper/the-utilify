@@ -1,41 +1,55 @@
 ---
 name: theutilify-dev
-description: Developer runbooks and architectural guide for The Utilify web application (Next.js 16 App Router, FastAPI backend, Schema.org SEO, AdSense compliance, OpenGraph generator, category pillar hubs, competitor comparisons, embeddable widgets, and deployment).
+description: Developer runbooks and architectural guide for The Utilify web application (Next.js 16 App Router, FastAPI backend, Schema.org SEO, AdSense compliance, OpenGraph generator, category pillar hubs, competitor comparisons, programmatic long-tail pages, IndexNow search engine indexing, embeddable widgets, and deployment).
 ---
 
 # The Utilify Developer & Engineering Runbooks
 
-This skill provides step-by-step procedures for building, maintaining, and scaling tools, category pillar hubs, competitor comparison pages, blog articles, and backend microservices on **The Utilify** (`https://www.theutilify.com`).
+This skill provides step-by-step procedures for building, maintaining, and scaling tools, programmatic landing pages, category pillar hubs, competitor comparison pages, blog articles, and backend microservices on **The Utilify** (`https://www.theutilify.com`).
 
 ---
 
 ## Architecture Quick Reference
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4.
-- **Client Execution:** Client-side formats, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), KaTeX formula cards (`katex`), and batch image compression (`jszip` + Canvas API).
+- **Client Execution:** Client-side formats, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), KaTeX formula cards (`katex`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
 - **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social sharing cards.
-- **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for blog publications.
+- **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 111+ blog publications.
 - **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks and modal snippet generator (`EmbedModal.tsx`).
+- **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 157+ URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow`) and XML sitemap pings upon build/deploy.
 - **Interactive UI Stack:** Global Command Palette (`Ctrl+K` / `Cmd+K`), Tool Workflow Chaining (`ToolWorkflowChaining.tsx`), Before/After Comparison Slider (`BeforeAfterSlider.tsx`), and Homepage Micro-Playground (`HeroPlayground.tsx`).
 - **Backend:** FastAPI (Python 3.11) with PyMuPDF (`fitz`), Playwright Chromium Headless, and ONNX runtime (`rembg`).
 - **Deployments:** Auto-deployed to Vercel (frontend) and Google Cloud Run (backend) upon push to `main`.
 
 ---
 
-## Platform Catalog (21 Tools Across 4 Categories)
+## Platform Catalog (27 Tools & Programmatic Pages Across 4 Categories)
 
 | Category | Tools & Slugs |
 | :--- | :--- |
-| **PDF Operations** | `/pdf-to-image`, `/split-pdf`, `/merge-pdf`, `/markdown-to-pdf` |
-| **Image Processing** | `/background-remover`, `/image-compressor`, `/color-palette` |
-| **Calculators & Math** | `/sip-calculator`, `/investment-calculator`, `/bmi-calculator`, `/date-calculator`, `/age-calculator` |
-| **Developer & Text** | `/json-formatter`, `/password-generator`, `/qr-generator`, `/word-counter`, `/text-converter`, `/base64`, `/diff-checker`, `/lorem-ipsum`, `/unit-converter` |
+| **PDF Operations (4)** | `/pdf-to-image`, `/split-pdf`, `/merge-pdf`, `/markdown-to-pdf` |
+| **Image Processing (7)** | `/background-remover`, `/image-compressor`, `/color-palette`, `/compress-png`, `/compress-jpeg`, `/make-signature-transparent`, `/white-background-product-photos` |
+| **Calculators & Math (6)** | `/sip-calculator`, `/investment-calculator`, `/fire-calculator`, `/bmi-calculator`, `/date-calculator`, `/age-calculator` |
+| **Developer & Text (10)** | `/json-formatter`, `/password-generator`, `/qr-generator`, `/word-counter`, `/text-converter`, `/base64`, `/diff-checker`, `/lorem-ipsum`, `/unit-converter`, `/px-to-rem` |
 
 ---
 
-## Runbook 1: Adding a New Utility Tool
+## Competitor Comparisons (6 Pages)
 
-Follow this procedure when creating a new tool for the platform:
+| Route | Competitor Target | Key Search Intent |
+| :--- | :--- | :--- |
+| `/vs/ilovepdf` | iLovePDF | Free privacy-first alternative without daily file limits |
+| `/vs/removebg` | Remove.bg | Free high-resolution cutout downloads without credit subscriptions |
+| `/vs/tinypng` | TinyPNG | Local client-side browser compression with zero cloud uploads |
+| `/vs/smallpdf` | Smallpdf | Unlimited PDF operations without 2-task daily lockouts or $108/yr paywalls |
+| `/vs/ezgif` | Ezgif | Modern, ad-free WebAssembly image optimization with dark mode |
+| `/vs/iloveimg` | iLoveIMG | 100% private in-browser batch processing with 1-click ZIP export |
+
+---
+
+## Runbook 1: Adding a New Utility Tool or Programmatic Page
+
+Follow this procedure when creating a new tool or intent-specific landing page:
 
 ### 1. Create the Route Directory
 Create `src/app/<tool-slug>/`:
@@ -129,8 +143,9 @@ Create `src/app/<tool-slug>/`:
 1. **Sitemap:** Add `"/<tool-slug>"` to `tools` array in `src/app/sitemap.ts`.
 2. **Home Grid:** Add tool entry to `src/components/ToolsGrid.tsx`.
 3. **Footer:** Add link in appropriate category column in `src/components/Footer.tsx`.
-4. **Command Palette:** If search keyword additions are needed, verify matching in `src/components/CommandPalette.tsx`.
-5. **Embed Engine:** If client-side embeddable, add slug to `EMBEDDABLE_TOOLS` array in `src/app/embed/[tool]/page.tsx`.
+4. **Search Ping Engine:** Verify inclusion in `src/lib/indexnow.ts` and `scripts/ping-search-engines.mjs`.
+5. **Command Palette:** If search keyword additions are needed, verify matching in `src/components/CommandPalette.tsx`.
+6. **Embed Engine:** If client-side embeddable, add slug to `EMBEDDABLE_TOOLS` array in `src/app/embed/[tool]/page.tsx`.
 
 ---
 
@@ -177,30 +192,40 @@ When targeting competitor comparison keywords (e.g. "The Utilify vs Competitor")
 2. Use `ComparisonLayout.tsx`:
    ```tsx
    import { Metadata } from "next";
-   import { ComparisonLayout } from "@/components/ComparisonLayout";
+   import { ComparisonLayout, ComparisonRow, ComparisonFaq } from "@/components/ComparisonLayout";
 
    export const metadata: Metadata = {
-     title: "Utilify vs Competitor - Why Utilify is Better | Free Alternative",
+     title: "Utilify vs Competitor - Free Alternative | Utilify",
      description: "Compare Utilify and Competitor. 100% free, unlimited, zero data retention.",
      alternates: { canonical: "/vs/<competitor-slug>" },
    };
+
+   const tableRows: ComparisonRow[] = [
+     { feature: "Pricing", utilify: "100% Free Forever", competitor: "Subscription Paywalls", highlight: true },
+     { feature: "File Storage", utilify: "Zero Data Retention", competitor: "Cached on Server" },
+   ];
+
+   const faqs: ComparisonFaq[] = [
+     { question: "Why switch to Utilify?", answer: "Zero fees, zero tracking, and instant processing." }
+   ];
 
    export default function VsPage() {
      return (
        <ComparisonLayout
          competitorName="Competitor"
-         title="The Modern, Privacy-First Competitor Alternative"
-         description="Why professionals choose Utilify over Competitor."
-         features={[
-           { feature: "Pricing", utilify: "100% Free Forever", competitor: "Subscription / Credits" },
-           { feature: "Privacy", utilify: "Zero Data Retention", competitor: "Server Storage" },
-         ]}
-         recommendedTools={[...]}
+         competitorSlug="<competitor-slug>"
+         headline="The Modern, Privacy-First Competitor Alternative"
+         subheadline="Why professionals choose Utilify over Competitor."
+         targetToolName="Tool Suite"
+         targetToolHref="/target-tool"
+         targetToolAction="Launch Tool"
+         tableRows={tableRows}
+         faqs={faqs}
        />
      );
    }
    ```
-3. Register `"/vs/<competitor-slug>"` in `comparisonPages` in `src/app/sitemap.ts`.
+3. Register `"/vs/<competitor-slug>"` in `comparisonPages` in `src/app/sitemap.ts` and `src/components/Footer.tsx`.
 
 ---
 
@@ -217,12 +242,25 @@ When publishing long-tail search intent guides:
    - `author`: Always `"The Utilify Editorial Team"`.
    - `readTime`: Estimated reading time (e.g. `"8 min read"`).
    - `category`: `"Productivity" | "Design" | "Finance" | "Development" | "PDF"`.
-   - `content`: 800+ words of markdown structured with `###` headings, comparison tables, step-by-step instructions, and markdown links to related tools (`[Image Compressor](/image-compressor)`).
-   *(Note: The dynamic RSS feed `/feed.xml` automatically picks up all entries).*
+   - `content`: 800+ words of markdown structured with `###` headings, comparison tables, step-by-step instructions, KaTeX equations, and markdown links to related tools (`[Image Compressor](/image-compressor)`).
+   *(Note: The dynamic RSS feed `/feed.xml` and automated IndexNow pings automatically index all new entries).*
 
 ---
 
-## Runbook 5: Adding Backend Microservices (`/backend`)
+## Runbook 5: Search Engine & IndexNow Submission
+
+1. **Automated Submission on Build:**
+   Runs automatically via `npm run build` (`postbuild` hook in `package.json`).
+2. **Manual Submission:**
+   ```bash
+   npm run ping
+   ```
+3. **On-Demand API:**
+   - `GET https://www.theutilify.com/api/indexnow?action=submit-all`
+
+---
+
+## Runbook 6: Adding Backend Microservices (`/backend`)
 
 When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, Playwright):
 
@@ -249,13 +287,13 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
 
 ---
 
-## Runbook 6: Verification & Deployment
+## Runbook 7: Verification & Deployment
 
 1. **Verify Frontend Locally:**
    ```bash
    npm run build
    ```
-   Ensure 0 TypeScript errors and clean static page generation for all routes.
+   Ensure 0 TypeScript errors, clean static page generation for all 72 routes, and successful execution of `postbuild` search engine pinging.
 
 2. **Verify Backend Locally:**
    ```powershell

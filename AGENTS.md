@@ -27,7 +27,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **Icons & UI:** `lucide-react`, Base UI / Radix Primitives (`components.json`), `sonner` for toast notifications.
 - **Micro-Interactions:** `canvas-confetti` (`src/lib/confetti.ts`) for celebratory feedback on copying, calculations, and downloads.
 - **Math Rendering:** `katex` + `src/components/MathFormula.tsx` for LaTeX math formulas in financial and health tools.
-- **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
+- **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), PX to REM converters, and batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
 
 ### Backend (`/backend`)
 - **Runtime:** Python 3.11 + FastAPI + Uvicorn.
@@ -37,7 +37,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 
 ---
 
-## 2. Platform Catalog (21 Production Tools & Hubs)
+## 2. Platform Catalog (27 Production Tools & Programmatic Landing Pages)
 
 ### PDF Tools (4)
 1. **PDF to Image (`/pdf-to-image`):** Converts multi-page PDF documents into high-DPI (150 DPI) PNGs packaged into a ZIP archive in RAM.
@@ -45,77 +45,80 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 3. **Merge PDF (`/merge-pdf`):** Combines multiple uploaded PDF files sequentially into a single unified document.
 4. **Markdown to PDF (`/markdown-to-pdf`):** Compiles GitHub-flavored Markdown with KaTeX equations into a pixel-perfect A4 PDF via headless Chromium.
 
-### Image Tools (3)
+### Image Tools & Programmatic Landing Pages (7)
 5. **AI Background Remover (`/background-remover`):** Removes image backgrounds using instant solid flat background floodfill cutout or AI neural network models, complete with an interactive Before/After comparison slider (`BeforeAfterSlider.tsx`).
 6. **Image Compressor (`/image-compressor`):** Client-side batch compression supporting JPEG, PNG, and WebP with individual and bulk `.zip` download support (`jszip`), plus Node.js Sharp fallback (`/api/image-compressor`).
 7. **Color Palette Generator (`/color-palette`):** Extracts color schemes from uploaded images (Canvas API) and generates harmonic palettes (Monochromatic, Complementary, Triadic, Analogous) exportable to CSS/Tailwind/HEX.
+8. **Compress PNG (`/compress-png`):** Dedicated programmatic landing page targeting PNG compression with 32-bit RGBA alpha transparency preservation.
+9. **Compress JPEG (`/compress-jpeg`):** Dedicated programmatic landing page targeting lossy JPEG compression and Core Web Vitals (LCP) reduction.
+10. **Make Signature Transparent (`/make-signature-transparent`):** Isolates handwritten signature ink strokes from paper photos into transparent PNGs for PDF signing.
+11. **White Background Product Photos (`/white-background-product-photos`):** Replaces messy backdrops with pure `#FFFFFF` Amazon, Shopify, and eBay compliant studio backgrounds.
 
-### Financial & Health Calculators (5)
-8. **SIP Calculator (`/sip-calculator`):** Systematic Investment Plan compound wealth growth calculator with step-up SIP, inflation adjustment, LaTeX formula breakdowns, and interactive Canvas/Chart visualizers (`CalculatorCharts.tsx`).
-9. **Investment Calculator (`/investment-calculator`):** Compound interest growth calculator with configurable compounding frequencies (monthly, quarterly, annually) and LaTeX formula breakdowns.
-10. **BMI Calculator (`/bmi-calculator`):** Body Mass Index and healthy weight calculator (Metric & Imperial) with WHO classification tiers and LaTeX proof breakdowns.
-11. **Date Calculator (`/date-calculator`):** Date arithmetic, interval calculation, business day counts, and duration breakdown.
-12. **Age Calculator (`/age-calculator`):** Exact chronological age calculator (years, months, days, minutes, seconds), next birthday countdown, and astrological zodiac sign.
+### Financial & Health Calculators (6)
+12. **SIP Calculator (`/sip-calculator`):** Systematic Investment Plan compound wealth growth calculator with step-up SIP, inflation adjustment, LaTeX formula breakdowns, and interactive Canvas/Chart visualizers (`CalculatorCharts.tsx`).
+13. **Investment Calculator (`/investment-calculator`):** Compound interest growth calculator with configurable compounding frequencies (monthly, quarterly, annually) and LaTeX formula breakdowns.
+14. **FIRE Calculator (`/fire-calculator`):** Financial Independence Retire Early calculator computing 4% rule targets, Lean FIRE (75%), and Fat FIRE (125%) milestones with inflation adjustments.
+15. **BMI Calculator (`/bmi-calculator`):** Body Mass Index and healthy weight calculator (Metric & Imperial) with WHO classification tiers and LaTeX proof breakdowns.
+16. **Date Calculator (`/date-calculator`):** Date arithmetic, interval calculation, business day counts, and duration breakdown.
+17. **Age Calculator (`/age-calculator`):** Exact chronological age calculator (years, months, days, minutes, seconds), next birthday countdown, and astrological zodiac sign.
 
-### Developer Utilities & Text Tools (9)
-13. **JSON Formatter & Validator (`/json-formatter`):** Real-time JSON validation, tree/raw view toggles, key sorting, indentation formatting (2/4 spaces/tabs), and minification.
-14. **Password Generator (`/password-generator`):** Cryptographically secure (`crypto.getRandomValues`) customizable passwords and passphrases with entropy score and strength analyzer.
-15. **QR Code Generator (`/qr-generator`):** Customizable QR generator for URLs, Wi-Fi credentials, vCards, Email, and plain text with error correction levels (L/M/Q/H), color pickers, and PNG/SVG downloads.
-16. **Word Counter & Text Analyzer (`/word-counter`):** Real-time character, word, sentence, paragraph, reading time, speaking time, and top-keyword frequency analyzer.
-17. **Case & Text Converter (`/text-converter`):** Multi-case string conversion (camelCase, PascalCase, snake_case, kebab-case, UPPERCASE, lowercase, Title Case, Sentence case) and whitespace normalization.
-18. **Base64 Encoder / Decoder (`/base64`):** Text and binary file Base64 encoding/decoding with Data URI previews and UTF-8 compliance.
-19. **Diff & Text Comparison Checker (`/diff-checker`):** Visual side-by-side and unified text comparison with character/word/line level highlighting.
-20. **Lorem Ipsum Generator (`/lorem-ipsum`):** Dummy placeholder text generator with custom paragraph, word, byte, and list counts with optional HTML formatting.
-21. **Unit Converter (`/unit-converter`):** Multi-category unit converter across 9 measurement dimensions (Length, Weight, Temperature, Area, Volume, Speed, Time, Digital Storage, Energy).
+### Developer Utilities & Text Tools (10)
+18. **JSON Formatter & Validator (`/json-formatter`):** Real-time JSON validation, tree/raw view toggles, key sorting, indentation formatting (2/4 spaces/tabs), and minification.
+19. **Password Generator (`/password-generator`):** Cryptographically secure (`crypto.getRandomValues`) customizable passwords and passphrases with entropy score and strength analyzer.
+20. **QR Code Generator (`/qr-generator`):** Customizable QR generator for URLs, Wi-Fi credentials, vCards, Email, and plain text with error correction levels (L/M/Q/H), color pickers, and PNG/SVG downloads.
+21. **Word Counter & Text Analyzer (`/word-counter`):** Real-time character, word, sentence, paragraph, reading time, speaking time, and top-keyword frequency analyzer.
+22. **Case & Text Converter (`/text-converter`):** Multi-case string conversion (camelCase, PascalCase, snake_case, kebab-case, UPPERCASE, lowercase, Title Case, Sentence case) and whitespace normalization.
+23. **Base64 Encoder / Decoder (`/base64`):** Text and binary file Base64 encoding/decoding with Data URI previews and UTF-8 compliance.
+24. **Diff & Text Comparison Checker (`/diff-checker`):** Visual side-by-side and unified text comparison with character/word/line level highlighting.
+25. **Lorem Ipsum Generator (`/lorem-ipsum`):** Dummy placeholder text generator with custom paragraph, word, byte, and list counts with optional HTML formatting.
+26. **Unit Converter (`/unit-converter`):** Multi-category unit converter across 9 measurement dimensions (Length, Weight, Temperature, Area, Volume, Speed, Time, Digital Storage, Energy).
+27. **PX to REM Converter (`/px-to-rem`):** Bidirectional PX ↔ REM/EM/PT converter, CSS `clamp()` fluid typography generator, and Tailwind v4 spacing token cheat sheet.
 
 ---
 
-## 3. SEO, Schema.org, Pillar Pages & Monetization Standards
+## 3. SEO, Schema.org, Pillar Pages & Indexing Automation
 
 ### Category Hub Pillar Pages (`/category/*`)
 - `/category/pdf-tools`: Hub page featuring PDF to Image, Split PDF, Merge PDF, and Markdown to PDF.
-- `/category/image-tools`: Hub page featuring AI Background Remover, Image Compressor, Color Palette Generator.
-- `/category/developer-tools`: Hub page featuring JSON Formatter, Base64, Diff Checker, Password Generator, QR Generator, Text Converter, Lorem Ipsum, Word Counter.
-- `/category/financial-calculators`: Hub page featuring SIP Calculator, Investment Calculator, BMI Calculator, Date Calculator, Age Calculator, Unit Converter.
+- `/category/image-tools`: Hub page featuring AI Background Remover, Image Compressor, Color Palette Generator, and format optimizers.
+- `/category/developer-tools`: Hub page featuring JSON Formatter, Base64, Diff Checker, Password Generator, QR Generator, Text Converter, Lorem Ipsum, Word Counter, PX to REM.
+- `/category/financial-calculators`: Hub page featuring SIP Calculator, Investment Calculator, FIRE Calculator, BMI Calculator, Date Calculator, Age Calculator, Unit Converter.
 - Built using `CategoryHubLayout.tsx` for high topical authority and internal linking.
 
 ### SaaS Alternative Comparison Landing Pages (`/vs/*`)
 - `/vs/ilovepdf`: "The Utilify vs iLovePDF" highlighting privacy, zero file retention, and unlimited free batch operations.
 - `/vs/removebg`: "The Utilify vs Remove.bg" highlighting 100% free high-resolution downloads without subscription credits.
 - `/vs/tinypng`: "The Utilify vs TinyPNG" highlighting local client-side compression and WebP support.
+- `/vs/smallpdf`: "The Utilify vs Smallpdf" highlighting zero 2-task daily limits and no subscription paywalls.
+- `/vs/ezgif`: "The Utilify vs Ezgif" highlighting ad-free, modern WebAssembly image tools.
+- `/vs/iloveimg`: "The Utilify vs iLoveIMG" highlighting zero cloud storage and instant batch ZIP exports.
 - Built using `ComparisonLayout.tsx`.
+
+### Automated Search Engine & IndexNow Submission
+- **Lifecycle Hook (`package.json`):** `"postbuild": "node scripts/ping-search-engines.mjs"` automatically triggers upon successful static builds on Vercel and Google Cloud Run.
+- **IndexNow Protocol:** Submits all 157+ platform URLs to `api.indexnow.org` and `yandex.com/indexnow` with domain verification key `8e4f1a293c7d4b6e8a0f2c4e6a8d0b2f`.
+- **On-Demand Endpoints:** `npm run ping` CLI command and `GET /api/indexnow?action=submit-all`.
 
 ### Dynamic OpenGraph & Meta Engine (`src/app/api/og/route.tsx`)
 - Edge runtime dynamic 1200x630 OG image generator accepting `title`, `description`, `category`, and `badge`.
 - Auto-linked across tool pages, blog articles, category hubs, and root layout.
 
 ### Dynamic RSS 2.0 Feed (`src/app/feed.xml/route.ts`)
-- Automated XML feed generated from `blogPosts` in `src/lib/blog-data.ts`.
+- Automated XML feed generated from 111 in-depth articles in `src/lib/blog-data.ts`.
 
 ### Structured Data (Schema.org JSON-LD)
 - **Tool Pages:** `src/lib/seo-helpers.ts` provides `getSoftwareAppSchema()` with `SoftwareApplication`, `AggregateRating`, and `offers: { price: "0.00" }`.
 - **Tool Layout:** `src/components/ToolLayout.tsx` automatically injects `FAQPage`, `HowTo`, and `BreadcrumbList` JSON-LD schemas.
 - **Blog Pages:** `src/app/blog/[slug]/page.tsx` injects `Article` and `BreadcrumbList` JSON-LD.
-- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all tools, categories, vs pages, and blog posts while allowing AI crawlers (`Googlebot`, `Bingbot`, `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Applebot`, `CCBot`).
-
-### E-E-A-T & Authorship Policy
-- **Author Attribution:** All guides and articles must be authored by `"The Utilify Editorial Team"` with canonical links to `/about`.
-- **YMYL Disclaimers & Formula Proofs:** All financial calculators (`/sip-calculator`, `/investment-calculator`) and health tools (`/bmi-calculator`) must include educational disclaimers and step-by-step LaTeX formula breakdown cards via `MathFormula.tsx`.
-
-### Embeddable Widgets (`/embed/[tool]`)
-- Standalone embed route rendering clean, responsive interactive widgets with canonical *"Powered by The Utilify"* backlinks.
-- Interactive modal (`EmbedModal.tsx`) available on tool pages for one-click iframe snippet copying.
-
-### Ad Units (`src/components/AdBanner.tsx`)
-- Controlled via `process.env.NEXT_PUBLIC_ADS_ENABLED === "true"`.
-- Safely renders `null` when disabled to avoid empty container policy violations during AdSense reviews.
+- **Comparison Pages:** `src/components/ComparisonLayout.tsx` injects `FAQPage` and `BreadcrumbList` JSON-LD.
+- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all 72 routes and 111 blog posts while permitting modern AI crawlers (`Googlebot`, `Bingbot`, `GPTBot`, `ClaudeBot`, `PerplexityBot`, `Applebot`, `CCBot`).
 
 ---
 
 ## 4. Interactive Components & Platform Features
 
 - **Global Command Palette (`CommandPalette.tsx`):** `Ctrl+K` / `Cmd+K` instant search modal across all tools, categories, and blog posts.
-- **Tool Workflow Chaining (`ToolWorkflowChaining.tsx`):** Contextual next-action recommendations displayed after a tool output is produced (e.g. compress image -> remove background).
+- **Tool Workflow Chaining (`ToolWorkflowChaining.tsx`):** Contextual next-action recommendations displayed after a tool output is produced.
 - **Interactive Playground (`HeroPlayground.tsx`):** Live interactive micro-demo tabs on the homepage for instant user engagement.
 - **Before/After Comparison Slider (`BeforeAfterSlider.tsx`):** Interactive split-view comparison slider for image processing tools.
 - **Financial Visualizers (`CalculatorCharts.tsx`):** Interactive canvas/SVG visualizers for wealth projections.
@@ -149,10 +152,8 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
    - `<ToolSlug>Client.tsx`: Client Component wrapping tool UI with `<ToolLayout title="..." description="..." howToUse={...} faqs={...} relatedTools={...} detailedContent={...}>`.
    - Add tool route to `src/app/sitemap.ts`, `src/components/ToolsGrid.tsx`, `src/components/Footer.tsx`, and `src/app/embed/[tool]/page.tsx` (if embeddable).
 
-2. **Styling & Aesthetics:**
-   - Use curated HSL variables (`bg-background`, `text-foreground`, `text-primary`, `bg-card`).
-   - Use rounded borders (`rounded-2xl`, `rounded-3xl`), glassmorphic backdrop filters, and subtle micro-animations.
-   - Use `triggerConfetti()` from `@/lib/confetti` for celebratory feedback upon copy or completion.
+2. **Slider Components Typing Pattern:**
+   - When using Base UI Slider (`src/components/ui/slider.tsx`), `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
 
 3. **Verifying Code:**
    - Always run `npm run build` locally before pushing to verify TypeScript and static generation pass with 0 errors.
