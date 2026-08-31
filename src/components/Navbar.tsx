@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, Sparkles, LayoutGrid, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -9,6 +9,14 @@ import { CommandPalette } from "@/components/CommandPalette";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    const isMacPlatform = /(Mac|iPhone|iPod|iPad)/i.test(
+      navigator.userAgent || navigator.platform || ""
+    );
+    setIsMac(isMacPlatform);
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md transition-all">
@@ -53,7 +61,13 @@ export function Navbar() {
               <Search className="h-4 w-4 text-muted-foreground" />
               <span>Search...</span>
               <kbd className="hidden lg:inline-flex h-5 select-none items-center gap-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                <span>⌘</span>K
+                {isMac ? (
+                  <>
+                    <span className="text-xs">⌘</span>K
+                  </>
+                ) : (
+                  <span>Ctrl+K</span>
+                )}
               </kbd>
             </button>
 
