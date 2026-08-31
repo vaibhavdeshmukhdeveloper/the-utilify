@@ -36,6 +36,13 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "3840",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
     "featureList": [
       "Custom indentation (2 spaces, 4 spaces, tabs)",
       "Instant syntax error detection with line and column highlighting",

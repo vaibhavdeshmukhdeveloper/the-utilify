@@ -8,6 +8,20 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/api/"],
       },
+      {
+        userAgent: [
+          "Googlebot",
+          "Bingbot",
+          "Applebot",
+          "GPTBot",
+          "PerplexityBot",
+          "ClaudeBot",
+          "anthropic-ai",
+          "CCBot",
+        ],
+        allow: "/",
+        disallow: ["/api/"],
+      },
     ],
     sitemap: "https://www.theutilify.com/sitemap.xml",
   };

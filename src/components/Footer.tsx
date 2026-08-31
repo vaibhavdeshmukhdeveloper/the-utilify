@@ -18,6 +18,7 @@ export function Footer() {
   return (
     <footer className="border-t bg-card transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        {/* Main Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 md:gap-10">
           {/* Logo & Pitch */}
           <div className="space-y-4 col-span-1 md:col-span-1">
@@ -56,7 +57,7 @@ export function Footer() {
           {/* Column 2: PDF & Image Tools */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              PDF & Image Tools
+              PDF &amp; Image Tools
             </h4>
             <ul className="space-y-2.5">
               <li>
@@ -95,7 +96,7 @@ export function Footer() {
           {/* Column 3: Developer & Text Tools */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Developer & Text
+              Developer &amp; Text
             </h4>
             <ul className="space-y-2.5">
               <li>
@@ -144,7 +145,7 @@ export function Footer() {
           {/* Column 4: Calculators & Design */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Calculators & Design
+              Calculators &amp; Design
             </h4>
             <ul className="space-y-2.5">
               <li>
@@ -185,7 +186,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 5: Company */}
+          {/* Column 5: Company & Legal */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
               Company
@@ -198,7 +199,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/blog" className={getLinkClass("/blog")}>
-                  Blog
+                  Blog Guides
                 </Link>
               </li>
               <li>
@@ -215,8 +216,53 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Secondary Category & Alternative Links Bar for Deep Internal Linking */}
+        <div className="mt-12 pt-8 border-t grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h5 className="text-xs uppercase font-black tracking-wider text-foreground mb-3">
+              Tool Category Hubs
+            </h5>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+              <Link href="/category/pdf-tools" className="hover:text-primary transition-colors">
+                PDF &amp; Document Tools Hub
+              </Link>
+              <span>•</span>
+              <Link href="/category/image-tools" className="hover:text-primary transition-colors">
+                Image &amp; Media Tools Hub
+              </Link>
+              <span>•</span>
+              <Link href="/category/developer-tools" className="hover:text-primary transition-colors">
+                Developer Utilities Hub
+              </Link>
+              <span>•</span>
+              <Link href="/category/financial-calculators" className="hover:text-primary transition-colors">
+                Financial Calculators Hub
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <h5 className="text-xs uppercase font-black tracking-wider text-foreground mb-3">
+              Free Software Alternatives
+            </h5>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+              <Link href="/vs/ilovepdf" className="hover:text-primary transition-colors">
+                Utilify vs iLovePDF
+              </Link>
+              <span>•</span>
+              <Link href="/vs/removebg" className="hover:text-primary transition-colors">
+                Utilify vs Remove.bg
+              </Link>
+              <span>•</span>
+              <Link href="/vs/tinypng" className="hover:text-primary transition-colors">
+                Utilify vs TinyPNG
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Area */}
-        <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground text-center sm:text-left">
             &copy; {currentYear} Utilify. All rights reserved. Made with <Heart className="inline-block h-3.5 w-3.5 text-red-500 fill-red-500" /> for a simpler web.
           </p>

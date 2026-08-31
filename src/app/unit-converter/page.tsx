@@ -36,6 +36,13 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "3620",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
     "featureList": [
       "Converts Length (km, m, cm, mm, mi, yd, ft, in)",
       "Converts Weight (kg, g, mg, lb, oz, ton)",

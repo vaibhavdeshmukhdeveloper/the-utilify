@@ -1,0 +1,52 @@
+# The Utilify (https://www.theutilify.com)
+> A professional-grade, privacy-first, 100% free suite of online productivity, developer utilities, and calculators. Zero data retention, no account barriers, no watermarks, and instant client-side execution.
+
+## Platform Summary
+The Utilify provides high-performance web utilities for developers, designers, students, and professionals. Most operations run directly in the user's browser using JavaScript and WebAssembly for absolute privacy. Heavy AI background isolation and PDF manipulations execute transiently in RAM without disk caching or persistence.
+
+## Featured Utilities
+
+### PDF & Document Utilities
+- [Merge PDF](https://www.theutilify.com/merge-pdf): Combine multiple PDF documents into a single organized file in seconds.
+- [Split PDF](https://www.theutilify.com/split-pdf): Extract custom page ranges from bank statements, contracts, or tax returns.
+- [PDF to Image](https://www.theutilify.com/pdf-to-image): Convert PDF pages into crystal-clear PNG or JPG images at high DPI.
+- [Markdown to PDF](https://www.theutilify.com/markdown-to-pdf): Compile markdown notes, docs, and code snippets into formatted PDF files.
+
+### Image & Media Utilities
+- [AI Background Remover](https://www.theutilify.com/background-remover): Automatic deep-learning background isolation. Exports full-resolution transparent PNG cutouts with a built-in canvas brush editor.
+- [Image Compressor](https://www.theutilify.com/image-compressor): 100% browser-based image compression for WebP, PNG, and JPEG with custom quality sliders and live byte counters.
+- [Color Palette Generator](https://www.theutilify.com/color-palette): Generate harmonious color schemes and verify WCAG 2.1 color contrast compliance.
+
+### Developer & Text Utilities
+- [JSON Formatter](https://www.theutilify.com/json-formatter): Validate syntax, pretty-print, minfy, and inspect complex JSON payloads with line numbers.
+- [Password Generator](https://www.theutilify.com/password-generator): Generate strong, cryptographically secure random passwords client-side.
+- [QR Code Generator](https://www.theutilify.com/qr-generator): Create customizable, high-resolution QR codes for URLs, WiFi, and plain text.
+- [Base64 Encoder/Decoder](https://www.theutilify.com/base64): Encode and decode strings and files in Base64 format locally.
+- [Diff Checker](https://www.theutilify.com/diff-checker): Side-by-side text and code difference viewer with visual addition/deletion highlights.
+- [Text Case Converter](https://www.theutilify.com/text-converter): Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, and kebab-case.
+- [Word Counter](https://www.theutilify.com/word-counter): Real-time word, character, sentence, paragraph, reading time, and social media limit counter.
+- [Lorem Ipsum Generator](https://www.theutilify.com/lorem-ipsum): Generate customizable placeholder text in paragraphs, sentences, or words.
+
+### Financial, Health & Measurement Calculators
+- [SIP Calculator](https://www.theutilify.com/sip-calculator): Calculate mutual fund compound interest, expected maturity returns, and Step-Up annual top-up growth.
+- [Investment Calculator](https://www.theutilify.com/investment-calculator): Simulate wealth compounding with mixed lump-sum principal and recurring monthly deposits.
+- [BMI Calculator](https://www.theutilify.com/bmi-calculator): Instant Body Mass Index calculation with metric and imperial unit toggles.
+- [Age Calculator](https://www.theutilify.com/age-calculator): Calculate exact chronological age down to days, hours, and next birthday countdown.
+- [Date Calculator](https://www.theutilify.com/date-calculator): Add or subtract business days and calculate duration between dates.
+- [Unit Converter](https://www.theutilify.com/unit-converter): Multi-category unit conversion for length, weight, temperature, area, and digital storage.
+
+## Category Hubs
+- [PDF & Document Tools](https://www.theutilify.com/category/pdf-tools)
+- [Image & Media Tools](https://www.theutilify.com/category/image-tools)
+- [Developer Utilities](https://www.theutilify.com/category/developer-tools)
+- [Financial Calculators](https://www.theutilify.com/category/financial-calculators)
+
+## Alternatives & Comparisons
+- [Utilify vs iLovePDF](https://www.theutilify.com/vs/ilovepdf): Free, zero file retention, no daily limits, and zero watermarks.
+- [Utilify vs Remove.bg](https://www.theutilify.com/vs/removebg): Full-resolution transparent PNG downloads with zero credit fees.
+- [Utilify vs TinyPNG](https://www.theutilify.com/vs/tinypng): In-browser client-side compression without server upload limits.
+
+## Privacy & Security Architecture
+- Transient In-Memory Processing: No persistent hard drive caching for uploaded documents or photos.
+- Client-Side Priority: Calculators, formatters, and compressors execute entirely in JavaScript on the client device.
+- No mandatory accounts, no tracking cookies, and zero paywalls.

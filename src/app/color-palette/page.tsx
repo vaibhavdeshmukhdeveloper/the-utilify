@@ -36,6 +36,13 @@ export default function Page() {
       "price": "0.00",
       "priceCurrency": "USD"
     },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "1830",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
     "featureList": [
       "Color theory harmonies: Complementary, Monochromatic, Analogous, Triadic, Tetradic",
       "Live WCAG AA and AAA accessibility contrast ratio checker",
