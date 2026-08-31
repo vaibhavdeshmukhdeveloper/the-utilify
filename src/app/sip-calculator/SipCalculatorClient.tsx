@@ -211,28 +211,32 @@ export default function SipCalculatorClient() {
       ]}
       faqs={[
         { 
-          question: "What is a Systematic Investment Plan (SIP)?", 
-          answer: "A Systematic Investment Plan (SIP) is a disciplined investment methodology where you allocate a fixed sum of money into mutual funds or index portfolios at regular intervals (usually monthly) rather than in a lump sum." 
+          question: "What is a Systematic Investment Plan (SIP) and how does it work?", 
+          answer: "A Systematic Investment Plan (SIP) is a disciplined investment approach where you invest a fixed sum into mutual funds or ETFs at regular intervals (typically monthly). It harnesses dollar-cost averaging and compounding growth to build wealth over time." 
         },
-        { 
-          question: "How does Rupee/Dollar Cost Averaging benefit me?", 
-          answer: "By investing a flat sum consistently, you buy more portfolio units when market prices are low and fewer units when prices are high. This smooths out purchase costs and reduces timing risks." 
+        {
+          question: "What is the mathematical formula used to calculate SIP returns?",
+          answer: "The future value of an ordinary annuity formula is: M = P × [((1 + i)^n - 1) / i] × (1 + i), where M is the maturity corpus, P is the periodic investment, i is the periodic interest rate (annual rate / 12), and n is the total number of monthly payments."
+        },
+        {
+          question: "What is a Step-Up (Top-Up) SIP and why is it important?",
+          answer: "A Step-Up SIP automatically increases your monthly investment by a fixed percentage (e.g. 5% to 10%) each year as your salary rises. Stepping up your SIP can more than double your final retirement corpus over 15 to 20 years."
+        },
+        {
+          question: "What is the difference between SIP and a Lump Sum investment?",
+          answer: "A Lump Sum involves investing an entire amount at once, making it sensitive to market entry timing. A SIP spreads investments over multiple market cycles, neutralizing volatility through Rupee/Dollar Cost Averaging."
+        },
+        {
+          question: "How does inflation affect my future SIP maturity wealth?",
+          answer: "Inflation erodes purchasing power over time. If your portfolio returns 12% annually and inflation is 5%, your real inflation-adjusted rate of return is approximately 7%. Planning with inflation ensures your corpus matches future living expenses."
         },
         { 
           question: "Does this calculator support different compounding intervals?", 
           answer: "Yes. In the Advanced Settings, you can toggle between Monthly and Yearly compounding frequencies to align with different mutual fund, bank deposit, or stock return schemes." 
         },
         {
-          question: "What does the 'Beginning' vs 'End' timing setting do?",
-          answer: "'Beginning' assumes you make monthly deposits at the start of each month, earning interest on that deposit immediately. 'End' assumes deposits are made at the close of the month, starting compound interest calculation in the subsequent period."
-        },
-        {
-          question: "Are SIP returns guaranteed?",
-          answer: "No. SIP returns depend entirely on market fluctuations and the performance of the underlying mutual fund, ETF, or index portfolio. Projections are estimates based on historical averages."
-        },
-        {
           question: "Is my financial input data kept confidential?",
-          answer: "Absolutely. All math formulas run completely inside your browser using JavaScript. No financial inputs or calculations are sent to servers or recorded on databases."
+          answer: "Absolutely. All calculations run 100% locally inside your browser using client-side JavaScript. No financial inputs or investment plans are ever transmitted to external servers."
         }
       ]}
       relatedTools={[

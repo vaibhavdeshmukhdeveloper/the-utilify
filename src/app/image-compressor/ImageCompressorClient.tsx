@@ -242,25 +242,29 @@ export default function ImageCompressorClient() {
 
   const faqs = [
     {
+      question: "How do I compress an image to under 20KB, 50KB, or 100KB?",
+      answer: "Adjust the quality slider to 50–70% or choose the WebP output format. WebP offers 30% higher compression efficiency than JPEG, allowing high-resolution photos to shrink down to under 50KB without noticeable artifacting."
+    },
+    {
       question: "Will I lose image quality during compression?",
-      answer: "We employ advanced lossy and lossless algorithms. At the default 80% quality level, file size is reduced by up to 80% while remaining visually indistinguishable from the original.",
+      answer: "At the recommended 80% quality level, file size is reduced by up to 80% with perceptually lossless visual clarity, maintaining crisp text and sharp photographic edges."
     },
     {
-      question: "Can I compress multiple images at once?",
-      answer: "Yes! You can upload up to 20 images simultaneously. Our tool compresses each in parallel and lets you download all files in one click as a ZIP archive.",
+      question: "Can I batch compress multiple PNG and JPEG images simultaneously?",
+      answer: "Yes! You can upload and batch compress up to 20 images at once in parallel. When complete, download individual files or click 'Download All as ZIP' for a unified archive."
     },
     {
-      question: "Which image file formats are supported?",
-      answer: "We support JPEG, PNG, and WebP. You can also convert between formats (e.g. PNG to WebP) for even greater file size savings.",
+      question: "How does image compression improve Core Web Vitals and Google SEO?",
+      answer: "Heavy hero images are the primary cause of poor Largest Contentful Paint (LCP) scores. Compressing images under 100KB dramatically speeds up mobile page load times and boosts Google ranking factors."
     },
     {
-      question: "Are my photos uploaded to any remote server?",
-      answer: "Never. All compression runs 100% locally in your browser RAM. Your private pictures never leave your device.",
+      question: "Which formats are supported?",
+      answer: "We support JPEG, PNG, and modern WebP. You can also cross-convert formats (e.g. transparent PNG to compressed WebP) with zero server delay."
     },
     {
-      question: "What is the optimal compression setting for web performance?",
-      answer: "Keeping the slider between 75% and 85% is ideal for Shopify, WordPress, web apps, and email newsletters.",
-    },
+      question: "Are my photos uploaded to any external server?",
+      answer: "Never. All compression runs 100% locally on your computer/phone using the HTML5 Canvas API and WebAssembly. Your photos never leave your device."
+    }
   ];
 
   const relatedTools = [

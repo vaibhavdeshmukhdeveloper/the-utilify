@@ -435,28 +435,32 @@ export default function BackgroundRemoverClient() {
 
   const faqs = [
     {
-      question: "How accurate is the AI?",
-      answer: "Our AI is trained on millions of high-resolution images. It handles complex edges like hair, clothing outlines, and fine textures with professional precision."
+      question: "How do I remove background from image without losing quality?",
+      answer: "Our neural network models operate directly at original image dimensions without forced compression. The AI calculates an alpha channel mask and returns full-resolution 4K/HD transparent PNG files."
+    },
+    {
+      question: "Is this background remover 100% free with no watermarks?",
+      answer: "Yes. Unlike other tools that charge subscription credits or insert watermarks, The Utilify provides 100% free, unlimited, full-resolution background removal with zero watermarks and no mandatory sign-up."
+    },
+    {
+      question: "Can I make a pure white background for Amazon or Shopify products?",
+      answer: "Yes! After the AI strips the background, use the built-in background color selector to choose pure white (#FFFFFF), black, or custom brand HEX colors with one click."
+    },
+    {
+      question: "How can I remove the background from a handwritten signature or logo?",
+      answer: "Upload your scanned signature or logo file. The AI recognizes solid line art and isolates the ink strokes onto a crystal-clear transparent background, perfect for embedding into PDF contracts and documents."
     },
     {
       question: "What is the output format?",
-      answer: "We always output transparent PNG files with a full alpha channel. This ensures you can seamlessly layer your subject onto any custom background."
+      answer: "We output transparent PNG files with a full 32-bit alpha channel. This ensures you can seamlessly layer your cutout onto any custom background, presentation, or graphic design."
     },
     {
-      question: "Are there limits on resolution?",
-      answer: "We support images up to 4K resolution. High-resolution images are processed at their original fidelity without downscaling."
+      question: "Are my private photos and documents safe?",
+      answer: "Yes. All processing occurs transiently in RAM streams without persistent disk storage. Images are immediately released from memory upon response delivery, ensuring 100% privacy."
     },
     {
-      question: "Is my private data uploaded to a third party?",
-      answer: "No. Your image is processed transiently in RAM on our secure cloud server. It is wiped immediately after processing is complete. We do not store or inspect your files."
-    },
-    {
-      question: "Can I remove backgrounds from graphics or logos?",
-      answer: "Yes! Our AI is highly optimized for portraits and products, but it also works very well for solid logo boundaries, vector objects, and artwork icons."
-    },
-    {
-      question: "Is there a limit on how many images I can process?",
-      answer: "No. Utilify provides completely free, unlimited background removal. You can process as many images as you need without signup or subscription limits."
+      question: "How does the built-in eraser and repair brush work?",
+      answer: "If overlapping background items remain, click 'Edit Cutout' to open the interactive canvas brush. You can manually erase unwanted remnants or restore details with adjustable brush sizing."
     }
   ];
 
