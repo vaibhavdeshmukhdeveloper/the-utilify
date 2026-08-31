@@ -123,16 +123,19 @@ sequenceDiagram
 theutilify/
 ├── src/                         # Next.js Frontend Application
 │   ├── app/                     # App Router pages, layouts, and API routes
-│   │   ├── api/                 # Next.js API Routes (Dynamic /api/og generator)
+│   │   ├── api/                 # Next.js API Routes (Dynamic /api/og generator, image-compressor)
+│   │   ├── category/            # SEO Category Pillar Hubs (pdf-tools, image-tools, developer-tools, etc.)
+│   │   ├── vs/                  # Competitor Comparison Pages (ilovepdf, removebg, tinypng)
 │   │   ├── embed/[tool]/        # Standalone embeddable widget route
+│   │   ├── feed.xml/            # Dynamic RSS 2.0 feed generator
 │   │   ├── background-remover/  # AI Background Remover (with Before/After Slider)
 │   │   ├── image-compressor/    # Batch Image Compressor (with ZIP export)
 │   │   ├── pdf-to-image/        # PDF to PNG Image Converter
 │   │   ├── split-pdf/           # PDF Splitter & Page Range Extractor
 │   │   ├── merge-pdf/           # PDF Merger
 │   │   ├── markdown-to-pdf/     # Markdown to PDF Compiler
-│   │   ├── sip-calculator/      # SIP Calculator (with KaTeX formulas)
-│   │   ├── investment-calculator/# Investment Calculator (with KaTeX formulas)
+│   │   ├── sip-calculator/      # SIP Calculator (with KaTeX formulas & charts)
+│   │   ├── investment-calculator/# Investment Calculator (with KaTeX formulas & charts)
 │   │   ├── bmi-calculator/      # BMI Calculator (with KaTeX formulas)
 │   │   ├── json-formatter/      # JSON Prettifier & Validator
 │   │   ├── password-generator/  # Secure Password Generator
@@ -152,6 +155,10 @@ theutilify/
 │   ├── components/              # Reusable React UI Components
 │   │   ├── HeroPlayground.tsx   # Instant above-the-fold utility playground
 │   │   ├── BeforeAfterSlider.tsx# Interactive Before/After drag slider
+│   │   ├── CalculatorCharts.tsx # Interactive charts for financial projections
+│   │   ├── CategoryHubLayout.tsx# Reusable layout for category pillar pages
+│   │   ├── ComparisonLayout.tsx # Reusable layout for competitor comparison pages
+│   │   ├── ToolWorkflowChaining.tsx # Contextual next-action recommendations
 │   │   ├── EmbedModal.tsx       # Embeddable iframe code generator
 │   │   ├── MathFormula.tsx      # KaTeX LaTeX math formula renderer
 │   │   ├── ToolCard.tsx         # Interactive tool card with Pin/Favorite toggle
@@ -163,6 +170,7 @@ theutilify/
 │   └── lib/                     # Custom helper functions & clients
 │       ├── api.ts               # Universal backend upload & file download handler
 │       ├── confetti.ts          # Canvas-confetti celebration triggers
+│       ├── seo-helpers.ts       # Structured data schema generation helpers
 │       └── blog-data.ts         # In-depth SEO guides and article registry
 │
 ├── backend/                     # FastAPI Backend Application
