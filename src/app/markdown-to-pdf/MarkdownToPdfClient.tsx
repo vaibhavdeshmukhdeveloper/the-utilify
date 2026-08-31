@@ -22,18 +22,28 @@ import {
   Zap,
   BookOpen
 } from "lucide-react";
-import { Marked } from "marked";
-import markedKatex from "marked-katex-extension";
 import "katex/dist/katex.min.css";
 import { cn } from "@/lib/utils";
 
-const customMarked = new Marked();
-customMarked.use(
-  markedKatex({
-    throwOnError: false,
-    nonStandard: true,
-  })
-);
+let markedInstance: any = null;
+
+async function getMarkedParser() {
+  if (!markedInstance) {
+    const [{ Marked }, { default: markedKatex }] = await Promise.all([
+      import("marked"),
+      import("marked-katex-extension"),
+    ]);
+    const parser = new Marked();
+    parser.use(
+      markedKatex({
+        throwOnError: false,
+        nonStandard: true,
+      })
+    );
+    markedInstance = parser;
+  }
+  return markedInstance;
+}
 
 const SAMPLE_MARKDOWN = `# Utilify Professional Report
 
@@ -97,15 +107,22 @@ export default function MarkdownToPdfClient() {
 
   // Client-side marked rendering to prevent Next.js SSR hydration mismatches
   useEffect(() => {
+    let isCancelled = false;
     const renderMarkdown = async () => {
       try {
-        const rawHtml = await customMarked.parse(markdown);
-        setHtmlContent(rawHtml);
+        const parser = await getMarkedParser();
+        const rawHtml = await parser.parse(markdown);
+        if (!isCancelled) {
+          setHtmlContent(rawHtml);
+        }
       } catch (err) {
         console.error("Marked parsing error:", err);
       }
     };
     renderMarkdown();
+    return () => {
+      isCancelled = true;
+    };
   }, [markdown]);
 
   const handleUpload = async (files: File[]) => {

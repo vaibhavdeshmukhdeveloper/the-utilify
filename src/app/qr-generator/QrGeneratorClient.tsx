@@ -9,7 +9,6 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Download, Link as LinkIcon, FileText, Wifi, Mail, MessageSquare, Palette, Sliders, RefreshCw, QrCode, Share2 } from "lucide-react";
-import QRCode from "qrcode";
 import { copyShareUrl } from "@/lib/share-utils";
 
 export default function QrGeneratorClient() {
@@ -87,27 +86,36 @@ export default function QrGeneratorClient() {
   };
 
   useEffect(() => {
+    let isCancelled = false;
     if (canvasRef.current) {
-      QRCode.toCanvas(
-        canvasRef.current,
-        getQrData(),
-        {
-          width: 320,
-          margin: margin,
-          color: {
-            dark: fgColor,
-            light: bgColor,
-          },
-          errorCorrectionLevel: errorCorrection,
-        },
-        (err) => {
-          if (err) {
-            console.error(err);
-            toast.error("Failed to render QR Code");
-          }
+      import("qrcode").then((QRCodeModule) => {
+        const QRCode = QRCodeModule.default || QRCodeModule;
+        if (!isCancelled && canvasRef.current) {
+          QRCode.toCanvas(
+            canvasRef.current,
+            getQrData(),
+            {
+              width: 320,
+              margin: margin,
+              color: {
+                dark: fgColor,
+                light: bgColor,
+              },
+              errorCorrectionLevel: errorCorrection,
+            },
+            (err) => {
+              if (err) {
+                console.error(err);
+                toast.error("Failed to render QR Code");
+              }
+            }
+          );
         }
-      );
+      }).catch((e) => console.error("Error loading qrcode library:", e));
     }
+    return () => {
+      isCancelled = true;
+    };
   }, [activeTab, url, text, wifiSsid, wifiPassword, wifiSecurity, emailTo, emailSubject, emailBody, smsPhone, smsMessage, fgColor, bgColor, margin, errorCorrection]);
 
   const downloadQr = () => {

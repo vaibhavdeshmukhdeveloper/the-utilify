@@ -10,10 +10,20 @@ import { PiggyBank, RefreshCw, DollarSign, Calendar, Percent, TrendingUp, ArrowR
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DonutChart, GrowthChart } from "@/components/CalculatorCharts";
+import dynamic from "next/dynamic";
 import { MathFormula } from "@/components/MathFormula";
 import { triggerConfetti } from "@/lib/confetti";
 import { copyShareUrl } from "@/lib/share-utils";
+
+const DonutChart = dynamic(() => import("@/components/CalculatorCharts").then((m) => m.DonutChart), {
+  ssr: false,
+  loading: () => <div className="h-64 w-full flex items-center justify-center bg-muted/20 animate-pulse rounded-2xl" />
+});
+
+const GrowthChart = dynamic(() => import("@/components/CalculatorCharts").then((m) => m.GrowthChart), {
+  ssr: false,
+  loading: () => <div className="h-64 w-full flex items-center justify-center bg-muted/20 animate-pulse rounded-2xl" />
+});
 
 interface YearlyBreakdown {
   year: number;

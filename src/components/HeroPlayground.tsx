@@ -19,7 +19,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
-import QRCode from "qrcode";
 import { triggerConfetti } from "@/lib/confetti";
 import { cn } from "@/lib/utils";
 
@@ -31,23 +30,32 @@ export function HeroPlayground() {
   const qrCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    let isCancelled = false;
     if (activeTab === "qr" && qrCanvasRef.current) {
-      QRCode.toCanvas(
-        qrCanvasRef.current,
-        qrText || "https://www.theutilify.com",
-        {
-          width: 140,
-          margin: 1,
-          color: {
-            dark: "#6366f1",
-            light: "#00000000",
-          },
-        },
-        (err) => {
-          if (err) console.error(err);
+      import("qrcode").then((QRCodeModule) => {
+        const QRCode = QRCodeModule.default || QRCodeModule;
+        if (!isCancelled && qrCanvasRef.current) {
+          QRCode.toCanvas(
+            qrCanvasRef.current,
+            qrText || "https://www.theutilify.com",
+            {
+              width: 140,
+              margin: 1,
+              color: {
+                dark: "#6366f1",
+                light: "#00000000",
+              },
+            },
+            (err) => {
+              if (err) console.error(err);
+            }
+          );
         }
-      );
+      }).catch((e) => console.error("Error loading qrcode:", e));
     }
+    return () => {
+      isCancelled = true;
+    };
   }, [qrText, activeTab]);
 
   const handleDownloadQr = () => {

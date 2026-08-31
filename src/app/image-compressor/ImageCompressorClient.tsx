@@ -26,7 +26,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { triggerConfetti, triggerCelebration } from "@/lib/confetti";
-import JSZip from "jszip";
 import { cn } from "@/lib/utils";
 
 interface CompressedItem {
@@ -194,6 +193,8 @@ export default function ImageCompressorClient() {
 
     setIsZipping(true);
     try {
+      const JSZipModule = await import("jszip");
+      const JSZip = JSZipModule.default || JSZipModule;
       const zip = new JSZip();
       doneItems.forEach((item) => {
         if (item.compressedBlob) {

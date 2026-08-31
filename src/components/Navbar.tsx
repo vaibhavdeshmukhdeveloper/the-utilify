@@ -5,7 +5,11 @@ import { useState, useEffect } from "react";
 import { Menu, X, Sparkles, LayoutGrid, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { CommandPalette } from "@/components/CommandPalette";
+import dynamic from "next/dynamic";
+
+const CommandPalette = dynamic(() => import("@/components/CommandPalette").then((m) => m.CommandPalette), {
+  ssr: false,
+});
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
