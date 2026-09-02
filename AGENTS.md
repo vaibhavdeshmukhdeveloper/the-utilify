@@ -34,6 +34,9 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **AI Background Removal:** `rembg[cpu]` with ONNX runtime models (default `isnet-general-use`, fallback `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) paired with an instant mathematical solid-background floodfill pre-flight detector and strict memory garbage collection.
 - **PDF Manipulation:** PyMuPDF (`fitz`) for fast in-memory page splitting, merging, and 150 DPI page-to-PNG ZIP streaming.
 - **Document Compiling:** Playwright Chromium Headless for styled HTML/Markdown-to-A4-PDF rendering with 1cm print margins.
+- **Persistent Ratings Database:** Google Cloud Firestore (Native Mode, Always Free Tier) via `google-cloud-firestore` with serverless atomic increments (`firestore.Increment`) and local JSON fallback for offline development.
+- **RFC 5987 / RFC 6266 Unicode Downloads:** `format_content_disposition(filename)` providing percent-encoded UTF-8 directives (`filename*=UTF-8''...`) with sanitized ASCII fallbacks to prevent `latin-1` byte header crashes on international filenames.
+
 
 ---
 
@@ -125,10 +128,12 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 
 ---
 
-## 5. Privacy-First Architecture (Zero Data Retention)
+## 5. Privacy-First Architecture & Data Integrity
 
-- **Transient In-Memory Processing:** No database or persistent disk writes. Files uploaded to `/image/*` or `/pdf/*` are processed purely in RAM streams (`io.BytesIO()`) and released immediately upon streaming the HTTP response.
+- **Transient In-Memory Processing (Zero Retention):** Neither the frontend nor the backend databases store user-uploaded images or PDFs. Files sent to Python microservices are processed purely in RAM streams (`io.BytesIO()`) and released immediately upon streaming binary responses.
 - **Zero Account Barriers:** No user tracking, cookies for logins, or mandatory sign-ups.
+- **Authentic Community Feedback Policy:** Tool ratings represent 100% genuine user votes. Zero artificial or seeded baseline reviews are permitted. Ratings are stored permanently in Google Cloud Firestore (`ratings` collection), surviving container restarts and redeployments.
+
 
 ---
 
@@ -155,5 +160,13 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 2. **Slider Components Typing Pattern:**
    - When using Base UI Slider (`src/components/ui/slider.tsx`), `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
 
-3. **Verifying Code:**
+3. **Cloud Run Container Port Binding:**
+   - Always run uvicorn with dynamic port binding in `Dockerfile`: `CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]` to prevent Cloud Run health check timeout crashes.
+
+4. **HTTP Header Filename Encoding (RFC 5987 / RFC 6266):**
+   - Whenever backend endpoints return user-downloadable files, sanitize ASCII filenames and provide `filename*=UTF-8''...` to avoid Starlette `latin-1` codec crashes.
+   - Frontend `@/lib/api.ts` parses `filename*` headers to preserve genuine Unicode characters for client downloads.
+
+5. **Verifying Code:**
    - Always run `npm run build` locally before pushing to verify TypeScript and static generation pass with 0 errors.
+

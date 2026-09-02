@@ -19,6 +19,8 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 - **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 157+ URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow`) and XML sitemap pings upon build/deploy.
 - **Interactive UI Stack:** Global Command Palette (`Ctrl+K` / `Cmd+K`), Tool Workflow Chaining (`ToolWorkflowChaining.tsx`), Before/After Comparison Slider (`BeforeAfterSlider.tsx`), and Homepage Micro-Playground (`HeroPlayground.tsx`).
 - **Backend:** FastAPI (Python 3.11) with PyMuPDF (`fitz`), Playwright Chromium Headless, and ONNX runtime (`rembg`).
+- **Persistent Ratings Database:** Google Cloud Firestore (Native Mode, Always Free Tier) with atomic increments (`firestore.Increment`) for permanent authentic community ratings across serverless container restarts.
+- **RFC 5987 / RFC 6266 Unicode Downloads:** `format_content_disposition()` delivering percent-encoded UTF-8 filename headers to prevent `latin-1` Starlette crashes.
 - **Deployments:** Auto-deployed to Vercel (frontend) and Google Cloud Run (backend) upon push to `main`.
 
 ---
@@ -277,17 +279,69 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
        # ... execute transformation ...
        output_buffer.seek(0)
        
-       return Response(
-           content=output_buffer.getvalue(),
-           media_type="application/octet-stream",
-           headers={"Content-Disposition": 'attachment; filename="result.ext"'}
-       )
-   ```
+        headers=format_content_disposition("result.ext", as_attachment=True)
+    )
+```
 2. In frontend client, call endpoint via `uploadToBackend("/custom-tool/action", [file])` from `@/lib/api`.
 
 ---
 
-## Runbook 7: Verification & Deployment
+## Runbook 7: Community Ratings & Google Cloud Firestore
+
+When maintaining or extending the ratings system:
+
+1. **Architecture & Storage:**
+   - Ratings are stored in Google Cloud Firestore in collection `ratings` with document ID = `<tool-slug>`.
+   - Each document schema:
+     ```json
+     {
+       "sum": 25,
+       "count": 5,
+       "last_updated": "2026-09-02T18:00:00Z"
+     }
+     ```
+   - Cloud Run backend connects via `google-cloud-firestore` with Google Application Default Credentials (ADC).
+   - In local development, falls back automatically to local file cache (`_resolve_ratings_file()`).
+
+2. **Submitting Ratings:**
+   - `POST /api/rate`:
+     ```json
+     { "tool": "background-remover", "rating": 5 }
+     ```
+   - Executes atomic increments (`firestore.Increment(rating)` and `firestore.Increment(1)`).
+
+3. **Fetching Ratings:**
+   - `GET /api/ratings?tool=<tool-slug>` returns `{ "tool": "slug", "ratingValue": 4.8, "reviewCount": 12 }`.
+   - `GET /api/ratings` returns summary dictionary for all tools.
+
+4. **Authenticity Policy:**
+   - Ratings must reflect 100% genuine user votes. Fabricated or pre-seeded baseline reviews are strictly prohibited.
+   - Search engine Schema.org `AggregateRating` is only attached when authentic reviews exist (`reviewCount > 0`).
+
+---
+
+## Runbook 8: Cloud Run Operations & Cost Control
+
+1. **Dynamic Port Binding (`PORT`):**
+   - Cloud Run allocates dynamic ports at container launch.
+   - Container CMD in `Dockerfile` must use:
+     ```dockerfile
+     CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+     ```
+
+2. **Artifact Registry Cost Optimization:**
+   - To eliminate recurring storage costs from ~3 GB Docker images generated on every deploy:
+   - Configure a 2-rule automated Cleanup Policy in Google Cloud Console Artifact Registry (`cloud-run-source-deploy`):
+     - **Rule 1 (Keep Recent):** Keep most recent versions (Keep count: 2).
+     - **Rule 2 (Delete Stale):** Conditional delete (Any tag state, older than 7 days).
+
+3. **Unicode Filename Compliance:**
+   - Always wrap file download headers with `format_content_disposition(filename)` in `backend/main.py`.
+   - Starlette enforces `latin-1` byte headers; raw non-ASCII characters cause server 500 crashes.
+
+---
+
+## Runbook 9: Verification & Deployment
 
 1. **Verify Frontend Locally:**
    ```bash
@@ -311,3 +365,4 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
    ```
    - Vercel automatically builds and deploys the Next.js frontend.
    - Google Cloud automatically builds the Docker container and deploys the FastAPI backend to Cloud Run.
+
