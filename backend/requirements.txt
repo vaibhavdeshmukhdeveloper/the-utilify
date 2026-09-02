@@ -6,3 +6,4 @@ rembg[cpu]
 pillow
 python-dotenv
 playwright
+google-cloud-firestore

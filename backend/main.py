@@ -415,11 +415,39 @@ def _resolve_ratings_file() -> str:
         # Fallback to system temp directory if local filesystem is read-only
         return os.path.join(tempfile.gettempdir(), "utilify_ratings_db.json")
 
+# Initialize Google Cloud Firestore client for permanent ratings storage
+firestore_db = None
+try:
+    from google.cloud import firestore
+    # On Google Cloud Run, firestore.Client() automatically authenticates via ADC
+    firestore_db = firestore.Client()
+    print("Google Cloud Firestore client initialized successfully!")
+except Exception as e:
+    print(f"Firestore client initialization skipped or running locally: {e}")
+    firestore_db = None
+
 RATINGS_FILE = _resolve_ratings_file()
 ratings_db = {}
 
 def load_ratings():
     global ratings_db
+    # 1. Try fetching persistent authentic ratings from Google Cloud Firestore
+    if firestore_db is not None:
+        try:
+            docs = firestore_db.collection("ratings").stream()
+            loaded = {}
+            for doc in docs:
+                data = doc.to_dict() or {}
+                loaded[doc.id] = {
+                    "sum": int(data.get("sum", 0)),
+                    "count": int(data.get("count", 0)),
+                }
+            ratings_db.update(loaded)
+            return
+        except Exception as e:
+            print(f"Failed to fetch ratings from Firestore: {e}")
+
+    # 2. Fallback to local cache file if Firestore is unavailable
     try:
         if os.path.exists(RATINGS_FILE):
             with open(RATINGS_FILE, "r", encoding="utf-8") as f:
@@ -443,9 +471,31 @@ async def get_ratings(tool: str = None):
     """
     Returns authentic community ratings for a specific tool or all tools.
     """
-    load_ratings()
     if tool:
         normalized = tool.strip("/").split("?")[0]
+        # Query Firestore directly for real-time accuracy if available
+        if firestore_db is not None:
+            try:
+                doc = firestore_db.collection("ratings").document(normalized).get()
+                if doc.exists:
+                    data = doc.to_dict() or {}
+                    cnt = int(data.get("count", 0))
+                    val = round(data.get("sum", 0) / cnt, 1) if cnt > 0 else 0.0
+                    return {
+                        "tool": normalized,
+                        "ratingValue": val,
+                        "reviewCount": cnt
+                    }
+                else:
+                    return {
+                        "tool": normalized,
+                        "ratingValue": 0.0,
+                        "reviewCount": 0
+                    }
+            except Exception as e:
+                print(f"Firestore single-tool query error: {e}")
+
+        load_ratings()
         data = ratings_db.get(normalized, {"sum": 0, "count": 0})
         val = round(data["sum"] / data["count"], 1) if data["count"] > 0 else 0.0
         return {
@@ -454,6 +504,7 @@ async def get_ratings(tool: str = None):
             "reviewCount": data["count"]
         }
     
+    load_ratings()
     summary = {}
     for k, v in ratings_db.items():
         summary[k] = {
@@ -465,16 +516,30 @@ async def get_ratings(tool: str = None):
 @app.post("/api/rate")
 async def submit_rating(req: RateRequest):
     """
-    Submits a genuine user rating (1-5 stars) for a tool and persists it to database.
+    Submits a genuine user rating (1-5 stars) for a tool and persists it to Firestore.
     """
     if req.rating < 1 or req.rating > 5:
         raise HTTPException(status_code=400, detail="Rating must be between 1 and 5.")
     
-    load_ratings()
     normalized = req.tool.strip("/").split("?")[0]
+
+    # 1. Permanently record genuine rating in Google Cloud Firestore using atomic increments
+    if firestore_db is not None:
+        try:
+            from google.cloud import firestore
+            doc_ref = firestore_db.collection("ratings").document(normalized)
+            doc_ref.set({
+                "sum": firestore.Increment(req.rating),
+                "count": firestore.Increment(1),
+                "last_updated": firestore.SERVER_TIMESTAMP
+            }, merge=True)
+        except Exception as e:
+            print(f"Failed to persist rating to Firestore: {e}")
+
+    # 2. Update local in-memory fallback cache
+    load_ratings()
     if normalized not in ratings_db:
         ratings_db[normalized] = {"sum": 0, "count": 0}
-    
     ratings_db[normalized]["sum"] += req.rating
     ratings_db[normalized]["count"] += 1
     save_ratings()
