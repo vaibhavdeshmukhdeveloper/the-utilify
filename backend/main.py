@@ -415,59 +415,17 @@ def _resolve_ratings_file() -> str:
         # Fallback to system temp directory if local filesystem is read-only
         return os.path.join(tempfile.gettempdir(), "utilify_ratings_db.json")
 
-BASELINE_RATINGS = {
-    "background-remover": {"sum": 912, "count": 186},
-    "image-compressor": {"sum": 686, "count": 140},
-    "color-palette": {"sum": 426, "count": 87},
-    "pdf-to-image": {"sum": 754, "count": 154},
-    "split-pdf": {"sum": 475, "count": 98},
-    "merge-pdf": {"sum": 624, "count": 128},
-    "markdown-to-pdf": {"sum": 412, "count": 85},
-    "sip-calculator": {"sum": 835, "count": 171},
-    "investment-calculator": {"sum": 598, "count": 122},
-    "fire-calculator": {"sum": 450, "count": 92},
-    "bmi-calculator": {"sum": 539, "count": 110},
-    "date-calculator": {"sum": 382, "count": 78},
-    "age-calculator": {"sum": 465, "count": 95},
-    "unit-converter": {"sum": 416, "count": 85},
-    "px-to-rem": {"sum": 358, "count": 73},
-    "compress-png": {"sum": 441, "count": 90},
-    "compress-jpeg": {"sum": 421, "count": 86},
-    "make-signature-transparent": {"sum": 485, "count": 99},
-    "white-background-product-photos": {"sum": 431, "count": 88},
-    "json-formatter": {"sum": 735, "count": 150},
-    "password-generator": {"sum": 588, "count": 120},
-    "qr-generator": {"sum": 695, "count": 142},
-    "word-counter": {"sum": 514, "count": 105},
-    "text-converter": {"sum": 436, "count": 89},
-    "base64": {"sum": 460, "count": 94},
-    "diff-checker": {"sum": 392, "count": 80},
-    "lorem-ipsum": {"sum": 367, "count": 75},
-}
-
 RATINGS_FILE = _resolve_ratings_file()
-ratings_db = {k: dict(v) for k, v in BASELINE_RATINGS.items()}
+ratings_db = {}
 
 def load_ratings():
     global ratings_db
-    # Always ensure baseline ratings exist
-    for k, v in BASELINE_RATINGS.items():
-        if k not in ratings_db:
-            ratings_db[k] = dict(v)
     try:
         if os.path.exists(RATINGS_FILE):
             with open(RATINGS_FILE, "r", encoding="utf-8") as f:
                 content = f.read().strip()
                 if content:
-                    data = json.loads(content)
-                    for k, v in data.items():
-                        if k in ratings_db:
-                            ratings_db[k] = {
-                                "sum": max(ratings_db[k]["sum"], v.get("sum", 0)),
-                                "count": max(ratings_db[k]["count"], v.get("count", 0)),
-                            }
-                        else:
-                            ratings_db[k] = v
+                    ratings_db = json.loads(content)
     except Exception as e:
         print(f"Failed to load ratings from {RATINGS_FILE}: {e}")
 
