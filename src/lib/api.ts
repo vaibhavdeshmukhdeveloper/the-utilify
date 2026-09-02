@@ -40,8 +40,20 @@ export async function uploadToBackend(endpoint: string, files: File[], extraData
   let filename = "processed_file";
   
   if (contentDisposition) {
-    const match = contentDisposition.match(/filename="(.+)"/);
-    if (match) filename = match[1];
+    const utf8Match = contentDisposition.match(/filename\*=UTF-8''([^;\s]+)/i);
+    if (utf8Match) {
+      try {
+        filename = decodeURIComponent(utf8Match[1]);
+      } catch {
+        // fallback to standard match
+      }
+    }
+    if (filename === "processed_file") {
+      const asciiMatch = contentDisposition.match(/filename="([^"]+)"/);
+      if (asciiMatch) {
+        filename = asciiMatch[1];
+      }
+    }
   }
 
   const url = window.URL.createObjectURL(blob);
