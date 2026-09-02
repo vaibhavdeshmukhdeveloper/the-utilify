@@ -31,7 +31,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 
 ### Backend (`/backend`)
 - **Runtime:** Python 3.11 + FastAPI + Uvicorn.
-- **AI Background Removal:** `rembg[cpu]` with ONNX runtime models (default `isnet-general-use`, fallback `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) paired with an instant mathematical solid-background floodfill pre-flight detector and strict memory garbage collection.
+- **AI Background Removal:** `rembg[cpu]` with ONNX runtime models (default `isnet-general-use`, options `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) with strict single-session memory management and explicit garbage collection.
 - **PDF Manipulation:** PyMuPDF (`fitz`) for fast in-memory page splitting, merging, and 150 DPI page-to-PNG ZIP streaming.
 - **Document Compiling:** Playwright Chromium Headless for styled HTML/Markdown-to-A4-PDF rendering with 1cm print margins.
 - **Persistent Ratings Database:** Google Cloud Firestore (Native Mode, Always Free Tier) via `google-cloud-firestore` with serverless atomic increments (`firestore.Increment`) and local JSON fallback for offline development.
@@ -49,7 +49,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 4. **Markdown to PDF (`/markdown-to-pdf`):** Compiles GitHub-flavored Markdown with KaTeX equations into a pixel-perfect A4 PDF via headless Chromium.
 
 ### Image Tools & Programmatic Landing Pages (7)
-5. **AI Background Remover (`/background-remover`):** Removes image backgrounds using instant solid flat background floodfill cutout or AI neural network models, complete with an interactive Before/After comparison slider (`BeforeAfterSlider.tsx`).
+5. **AI Background Remover (`/background-remover`):** Removes image backgrounds with sub-pixel precision using deep neural network models (`isnet-general-use`, `u2net`, etc.), complete with an interactive Before/After comparison slider (`BeforeAfterSlider.tsx`) and manual touchup eraser.
 6. **Image Compressor (`/image-compressor`):** Client-side batch compression supporting JPEG, PNG, and WebP with individual and bulk `.zip` download support (`jszip`), plus Node.js Sharp fallback (`/api/image-compressor`).
 7. **Color Palette Generator (`/color-palette`):** Extracts color schemes from uploaded images (Canvas API) and generates harmonic palettes (Monochromatic, Complementary, Triadic, Analogous) exportable to CSS/Tailwind/HEX.
 8. **Compress PNG (`/compress-png`):** Dedicated programmatic landing page targeting PNG compression with 32-bit RGBA alpha transparency preservation.

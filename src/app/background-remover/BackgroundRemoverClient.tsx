@@ -34,7 +34,7 @@ export default function BackgroundRemoverClient({
   const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [uploaderKey, setUploaderKey] = useState(0);
-  const [refineEdges, setRefineEdges] = useState(true);
+  const [refineEdges, setRefineEdges] = useState(false);
   const [resolutionMode, setResolutionMode] = useState<"standard" | "original">("standard");
   const [viewMode, setViewMode] = useState<"slider" | "side-by-side">("slider");
   const [modelMode, setModelMode] = useState<"isnet-general-use" | "silueta" | "u2net" | "u2net_human_seg" | "u2net_cloth_seg">(initialModel);
@@ -654,10 +654,10 @@ export default function BackgroundRemoverClient({
               <div className="flex items-center justify-between">
                 <div>
                   <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block mb-0.5">
-                    Edge Optimization
+                    Smooth Mask Contours
                   </label>
                   <span className="text-[10px] text-muted-foreground">
-                    Refine mask borders (e.g. hair details)
+                    Post-process mask borders (best for portraits; keep off for text & graphics)
                   </span>
                 </div>
                 <button

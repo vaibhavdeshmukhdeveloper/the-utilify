@@ -11,7 +11,7 @@ from typing import List
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
-from PIL import Image, ImageDraw, ImageChops
+from PIL import Image
 from pydantic import BaseModel
 
 # Set custom U2NET_HOME directory inside our project to prevent ephemeral runtime downloads
@@ -134,64 +134,6 @@ def parse_ranges(range_str: str, max_pages: int) -> List[int]:
 def health_check():
     return {"status": "healthy", "service": "Utilify Backend Services"}
 
-def clean_solid_background(img: Image.Image, tolerance: int = 20) -> Image.Image:
-    """
-    Detects if the image has a solid flat background by checking if the 4 corners
-    have matching colors. If yes, performs a corner-based flood fill to make the
-    background perfectly transparent, preserving internal matching pixels.
-    """
-    try:
-        img = img.convert("RGBA")
-        w, h = img.size
-        
-        corners = [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1)]
-        c_colors = [img.getpixel(p) for p in corners]
-        
-        def color_dist(c1, c2):
-            return sum((a - b) ** 2 for a, b in zip(c1[:3], c2[:3])) ** 0.5
-            
-        first_color = c_colors[0]
-        is_solid = True
-        for c in c_colors[1:]:
-            if color_dist(first_color, c) > 15:
-                is_solid = False
-                break
-                
-        if not is_solid:
-            return None
-            
-        mask = Image.new("L", (w, h), 255)
-        ref_img = img.convert("RGB")
-        temp_ref = ref_img.copy()
-        
-        fill_color = (0, 255, 0)
-        if color_dist(first_color, (0, 255, 0)) < 50:
-            fill_color = (255, 0, 0)
-            
-        for start_point in corners:
-            ImageDraw.floodfill(
-                temp_ref,
-                xy=start_point,
-                value=fill_color,
-                thresh=tolerance
-            )
-            
-        temp_pixels = temp_ref.load()
-        mask_pixels = mask.load()
-        
-        for y in range(h):
-            for x in range(w):
-                if temp_pixels[x, y] == fill_color:
-                    mask_pixels[x, y] = 0
-                    
-        r, g, b, a = img.split()
-        new_a = ImageChops.darker(a, mask)
-        
-        return Image.merge("RGBA", (r, g, b, new_a))
-    except Exception as e:
-        print(f"Solid background detector error: {e}")
-        return None
-
 @app.post("/image/remove-bg")
 async def remove_background(
     file: UploadFile = File(...),
@@ -199,9 +141,8 @@ async def remove_background(
     model: str = Form("isnet-general-use")
 ):
     """
-    Removes the background from an uploaded image.
-    Uses an instant high-fidelity floodfill cutout if a flat background is detected,
-    otherwise falls back to the high-fidelity AI neural network model.
+    Removes the background from an uploaded image using deep learning neural network models.
+    Supports isnet-general-use (default high-fidelity), silueta, u2net, u2net_human_seg, and u2net_cloth_seg.
     """
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
@@ -209,33 +150,25 @@ async def remove_background(
     try:
         # Read uploaded image bytes
         file_bytes = await file.read()
-        input_image = Image.open(io.BytesIO(file_bytes))
         
         # Keep original format if possible, otherwise save as transparent PNG
         output_buffer = io.BytesIO()
         
-        # Pre-flight check: use fast mathematical flood-fill for flat graphics/vector backgrounds
-        solid_cutout = clean_solid_background(input_image)
-        if solid_cutout is not None:
-            print("Solid flat background detected! Utilizing instant high-fidelity floodfill cutout.")
-            solid_cutout.save(output_buffer, format="PNG")
-        else:
-            # Fallback to AI-based neural network model for photographs/complex backgrounds
-            valid_models = ["isnet-general-use", "silueta", "u2net", "u2net_human_seg", "u2net_cloth_seg"]
-            target_model = model if model in valid_models else "isnet-general-use"
-            
-            print(f"Complex scene detected. Utilizing global AI background removal model ({target_model}, post_process={post_process}).")
-            session = get_rembg_session(target_model)
-            from rembg import remove
-            output_bytes = remove(
-                file_bytes,
-                session=session,
-                alpha_matting=False,
-                post_process_mask=post_process
-            )
-            output_image = Image.open(io.BytesIO(output_bytes))
-            output_image.save(output_buffer, format="PNG")
-            
+        # AI-based neural network model for full fidelity background removal
+        valid_models = ["isnet-general-use", "silueta", "u2net", "u2net_human_seg", "u2net_cloth_seg"]
+        target_model = model if model in valid_models else "isnet-general-use"
+        
+        print(f"Utilizing AI background removal model ({target_model}, post_process={post_process}).")
+        session = get_rembg_session(target_model)
+        from rembg import remove
+        output_bytes = remove(
+            file_bytes,
+            session=session,
+            alpha_matting=False,
+            post_process_mask=post_process
+        )
+        output_image = Image.open(io.BytesIO(output_bytes))
+        output_image.save(output_buffer, format="PNG")
         output_buffer.seek(0)
         
         raw_filename = file.filename or "image.png"

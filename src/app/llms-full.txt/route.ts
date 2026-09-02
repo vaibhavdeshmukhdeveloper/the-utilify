@@ -91,7 +91,7 @@ export async function GET() {
 #### AI Background Remover
 - **URL:** https://www.theutilify.com/background-remover
 - **Embed URL:** https://www.theutilify.com/embed/background-remover
-- **Capabilities:** Deep neural network segmentation (ONNX runtime) paired with instant mathematical floodfill pre-flight detector. Free high-resolution downloads without subscription credits, watermarks, or daily quotas. Interactive Before/After slider and manual brush touchup tool.
+- **Capabilities:** Deep neural network segmentation (ONNX runtime with IS-Net and U2Net models). Free high-resolution downloads without subscription credits, watermarks, or daily quotas. Interactive Before/After slider and manual brush touchup tool.
 
 #### Client-Side Image Compressor
 - **URL:** https://www.theutilify.com/image-compressor

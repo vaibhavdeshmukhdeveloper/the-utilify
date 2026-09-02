@@ -28,7 +28,7 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
 | Endpoint | Method | Engine | Description |
 | :--- | :--- | :--- | :--- |
 | `/health` or `/` | `GET` | FastAPI | Health check verifying backend status |
-| `/image/remove-bg` | `POST` | PIL Floodfill + `rembg[cpu]` ONNX | Removes image background via instant solid floodfill or AI neural network (`isnet-general-use`, `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) |
+| `/image/remove-bg` | `POST` | `rembg[cpu]` ONNX | Removes image background via deep learning neural networks (`isnet-general-use`, `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) |
 | `/pdf/to-image` | `POST` | PyMuPDF (`fitz`) + `zipfile` | Converts PDF pages into 150 DPI (2x) PNGs packed into a `.zip` archive |
 | `/pdf/split` | `POST` | PyMuPDF (`fitz`) | Extracts selected page ranges (e.g. `1-3, 5, 8-10`) into a new PDF |
 | `/pdf/merge` | `POST` | PyMuPDF (`fitz`) | Combines multiple PDF files sequentially into a single PDF |
@@ -40,14 +40,12 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
 
 ## 3. Background Removal Pipeline
 
-1. **Pre-flight Mathematical Solid Background Detector (`clean_solid_background`):**
-   - Samples the 4 corner pixels of the input image.
-   - If all 4 corners have matching colors (within Euclidean color distance threshold), executes an instant corner-based flood fill mask.
-   - Bypasses heavy neural network execution for solid vector graphics, logos, and product shots with flat backdrops (sub-10ms response time).
-2. **AI Neural Network Fallback:**
-   - For complex scenes and photographs, delegates to ONNX runtime session (`rembg.remove()`).
-   - Default model: `isnet-general-use`.
+1. **AI Neural Network Engine (`rembg` with ONNX Runtime):**
+   - Directly executes state-of-the-art salient object and foreground segmentation models.
+   - Default model: `isnet-general-use` (IS-Net), delivering superior sub-pixel boundary detection for complex contours, fine text, transparent gaps/holes, hair strands, and product edges.
    - Pre-loads default model asynchronously at startup during FastAPI lifespan to eliminate cold-start latency.
+   - Optional models supported: `silueta` (ultra-fast mobile), `u2net` (general balanced), `u2net_human_seg` (people/portraits), and `u2net_cloth_seg` (clothing & apparel).
+   - In-memory single-session management with explicit garbage collection (`gc.collect()`) prevents container OOM on Google Cloud Run.
 
 ---
 
