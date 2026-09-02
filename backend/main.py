@@ -1,9 +1,11 @@
 import os
 import io
+import re
 import json
 import tempfile
 import zipfile
 import asyncio
+from urllib.parse import quote
 from contextlib import asynccontextmanager
 from typing import List
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
@@ -77,6 +79,23 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"]
 )
+
+def format_content_disposition(filename: str) -> str:
+    """
+    Safely formats Content-Disposition header conforming to RFC 6266 and RFC 5987.
+    Prevents 'latin-1' codec UnicodeEncodeError crashes when uploaded filenames
+    contain unicode characters, dashes (–, —), accents, or emojis.
+    """
+    clean_name = re.sub(r'[\r\n\t]', '', filename or "file")
+    # Sanitize surrogate pairs or invalid unicode
+    clean_name = clean_name.encode("utf-8", errors="replace").decode("utf-8")
+    # ASCII fallback with non-ASCII characters replaced by '_'
+    ascii_name = re.sub(r'[^\x20-\x7E]', '_', clean_name).replace('"', '').strip()
+    if not ascii_name:
+        ascii_name = "download"
+    # RFC 5987 UTF-8 percent-encoded name for modern browsers
+    encoded_name = quote(clean_name, encoding="utf-8", errors="replace")
+    return f'attachment; filename="{ascii_name}"; filename*=UTF-8\'\'{encoded_name}'
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
     """
@@ -219,14 +238,15 @@ async def remove_background(
             
         output_buffer.seek(0)
         
-        filename = f"no-bg-{file.filename}"
+        raw_filename = file.filename or "image.png"
+        filename = f"no-bg-{raw_filename}"
         if not filename.endswith(".png"):
             filename = filename.rsplit(".", 1)[0] + ".png"
 
         return Response(
             content=output_buffer.getvalue(),
             media_type="image/png",
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+            headers={"Content-Disposition": format_content_disposition(filename)}
         )
     except Exception as e:
         print(f"Background removal crash: {e}")
@@ -292,11 +312,12 @@ async def split_pdf(file: UploadFile = File(...), page_ranges: str = Form(...)):
         dest_doc.save(output_buffer)
         output_buffer.seek(0)
         
-        filename = f"split-{file.filename}"
+        raw_filename = file.filename or "document.pdf"
+        filename = f"split-{raw_filename}"
         return Response(
             content=output_buffer.getvalue(),
             media_type="application/pdf",
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+            headers={"Content-Disposition": format_content_disposition(filename)}
         )
     except HTTPException:
         raise
