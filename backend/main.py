@@ -1,5 +1,7 @@
 import os
 import io
+import json
+import tempfile
 import zipfile
 import asyncio
 from contextlib import asynccontextmanager
@@ -379,11 +381,20 @@ class RateRequest(BaseModel):
     tool: str
     rating: int
 
-RATINGS_FILE = os.path.join(os.path.dirname(__file__), "ratings_db.json")
-if not os.path.exists(RATINGS_FILE):
-    # Fallback to temp directory if root is read-only
-    RATINGS_FILE = os.path.join(tempfile.gettempdir(), "utilify_ratings_db.json")
+def _resolve_ratings_file() -> str:
+    local_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ratings_db.json")
+    if os.path.exists(local_path):
+        return local_path
+    try:
+        # Check if local directory is writable by touching the file
+        with open(local_path, "a", encoding="utf-8") as f:
+            pass
+        return local_path
+    except Exception:
+        # Fallback to system temp directory if local filesystem is read-only
+        return os.path.join(tempfile.gettempdir(), "utilify_ratings_db.json")
 
+RATINGS_FILE = _resolve_ratings_file()
 ratings_db = {}
 
 def load_ratings():
@@ -391,7 +402,9 @@ def load_ratings():
     try:
         if os.path.exists(RATINGS_FILE):
             with open(RATINGS_FILE, "r", encoding="utf-8") as f:
-                ratings_db = json.load(f)
+                content = f.read().strip()
+                if content:
+                    ratings_db = json.loads(content)
     except Exception as e:
         print(f"Failed to load ratings from {RATINGS_FILE}: {e}")
 
@@ -456,6 +469,7 @@ async def submit_rating(req: RateRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    # Start on port 8000 matching frontend NEXT_PUBLIC_API_URL
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Start on port provided by Cloud Run / environment or default to 8000
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
