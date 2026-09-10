@@ -4,6 +4,7 @@ import re
 import json
 import zipfile
 import asyncio
+import tempfile
 from urllib.parse import quote
 from contextlib import asynccontextmanager
 from typing import List

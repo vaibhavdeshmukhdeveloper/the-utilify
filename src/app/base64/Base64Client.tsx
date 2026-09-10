@@ -11,7 +11,19 @@ import { Trash2, ArrowLeftRight, Upload, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CopyButton } from "@/components/CopyButton";
 
-export default function Base64Client() {
+export interface Base64ClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function Base64Client({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: Base64ClientProps = {}) {
   const [isDragOverPlain, setIsDragOverPlain] = useState(false);
   const [isDragOverBase64, setIsDragOverBase64] = useState(false);
   
@@ -135,11 +147,11 @@ export default function Base64Client() {
     }
   };
 
-  // Run initial conversions
-  useState(() => {
+  // Run initial conversions on mount
+  useEffect(() => {
     handleEncode(plainInput);
     handleDecode(base64Input);
-  });
+  }, []);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -225,10 +237,10 @@ export default function Base64Client() {
 
   return (
     <ToolLayout
-      title="Base64 Encoder / Decoder"
-      description="Encode text or files into Base64 format and decode Base64 strings back to their original form securely in-browser."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Base64 Encoder / Decoder"}
+      description={customDescription || "Encode text or files into Base64 format and decode Base64 strings back to their original form securely in-browser."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

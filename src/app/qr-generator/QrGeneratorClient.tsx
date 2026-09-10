@@ -11,7 +11,19 @@ import { toast } from "sonner";
 import { Download, Link as LinkIcon, FileText, Wifi, Mail, MessageSquare, Palette, Sliders, RefreshCw, QrCode, Share2 } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
 
-export default function QrGeneratorClient() {
+export interface QrGeneratorClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function QrGeneratorClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: QrGeneratorClientProps = {}) {
   const [activeTab, setActiveTab] = useState("url");
   
   // Input states
@@ -66,6 +78,8 @@ export default function QrGeneratorClient() {
     }
   }, []);
 
+  const escapeWifi = (s: string) => s.replace(/([\\;,":])/g, "\\$1");
+
   // Generate the formatted QR code data string
   const getQrData = () => {
     switch (activeTab) {
@@ -74,8 +88,8 @@ export default function QrGeneratorClient() {
       case "text":
         return text || " ";
       case "wifi":
-        // Format: WIFI:S:SSID;T:WPA;P:PASSWORD;;
-        return `WIFI:S:${wifiSsid};T:${wifiSecurity};P:${wifiPassword};;`;
+        // Format: WIFI:S:SSID;T:WPA;P:PASSWORD;; (with special characters escaped)
+        return `WIFI:S:${escapeWifi(wifiSsid)};T:${wifiSecurity};P:${escapeWifi(wifiPassword)};;`;
       case "email":
         return `mailto:${emailTo}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       case "sms":
@@ -190,10 +204,10 @@ export default function QrGeneratorClient() {
 
   return (
     <ToolLayout
-      title="QR Code Generator"
-      description="Create beautiful, customizable QR codes instantly for Wi-Fi, links, email contacts, and more."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "QR Code Generator"}
+      description={customDescription || "Create beautiful, customizable QR codes instantly for Wi-Fi, links, email contacts, and more."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

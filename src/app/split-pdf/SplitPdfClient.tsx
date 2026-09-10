@@ -12,7 +12,19 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function SplitPdfClient() {
+export interface SplitPdfClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function SplitPdfClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: SplitPdfClientProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [pages, setPages] = useState("1-2");
@@ -127,11 +139,11 @@ export default function SplitPdfClient() {
 
   return (
     <ToolLayout
-      title="Split PDF"
-      description="Extract specific pages or split every page into individual PDF files instantly."
+      title={customTitle || "Split PDF"}
+      description={customDescription || "Extract specific pages or split every page into individual PDF files instantly."}
       summaryDefinition="A PDF splitter extracts specific page numbers, custom comma-separated ranges (e.g. 1-3, 5, 8-10), or separates all pages into individual documents. It runs in transient RAM with zero server disk logging or data retention."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

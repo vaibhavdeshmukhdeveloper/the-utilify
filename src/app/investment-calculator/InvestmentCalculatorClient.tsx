@@ -32,7 +32,19 @@ interface YearlyBreakdown {
   balance: number;
 }
 
-export default function InvestmentCalculatorClient() {
+export interface InvestmentCalculatorClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function InvestmentCalculatorClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: InvestmentCalculatorClientProps = {}) {
   const [initialAmount, setInitialAmount] = useState("20,000");
   const [monthlyContribution, setMonthlyContribution] = useState("1,000");
   const [years, setYears] = useState("10");
@@ -205,7 +217,7 @@ export default function InvestmentCalculatorClient() {
       breakdown.push({
         year,
         principal: totalInvested,
-        interest: Math.max(0, currentBalance - totalInvested),
+        interest: currentBalance - totalInvested,
         balance: currentBalance,
       });
     }
@@ -213,7 +225,7 @@ export default function InvestmentCalculatorClient() {
     setResult({
       total: currentBalance.toLocaleString('en-US', { maximumFractionDigits: 0 }),
       invested: totalInvested.toLocaleString('en-US', { maximumFractionDigits: 0 }),
-      returns: Math.max(0, currentBalance - totalInvested).toLocaleString('en-US', { maximumFractionDigits: 0 }),
+      returns: (currentBalance - totalInvested).toLocaleString('en-US', { maximumFractionDigits: 0 }),
       breakdown,
     });
   }, [initialAmount, monthlyContribution, years, interestRate, compoundFrequency, contributionTiming]);
@@ -321,11 +333,11 @@ export default function InvestmentCalculatorClient() {
 
   return (
     <ToolLayout
-      title="Investment Calculator"
-      description="Analyze compound returns on initial capital combined with monthly savings."
+      title={customTitle || "Investment Calculator"}
+      description={customDescription || "Analyze compound returns on initial capital combined with monthly savings."}
       summaryDefinition="An investment growth calculator determines the total future value of an initial lump-sum principal compounded alongside ongoing monthly contributions across customizable compounding frequencies (monthly, quarterly, or annually)."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

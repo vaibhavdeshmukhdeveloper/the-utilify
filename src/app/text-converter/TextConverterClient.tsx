@@ -9,7 +9,19 @@ import { toast } from "sonner";
 import { Trash2, Clipboard, Type, Sparkles } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
 
-export default function TextConverterClient() {
+export interface TextConverterClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function TextConverterClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: TextConverterClientProps = {}) {
   const [text, setText] = useState("Type or paste your text here to convert it...");
 
   // Calculations
@@ -107,6 +119,7 @@ export default function TextConverterClient() {
   const toSnakeCase = () => {
     const res = text
       .trim()
+      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
       .replace(/[^a-zA-Z0-9\s-_]/g, "")
       .replace(/[\s-_]+/g, "_")
       .toLowerCase();
@@ -117,6 +130,7 @@ export default function TextConverterClient() {
   const toKebabCase = () => {
     const res = text
       .trim()
+      .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
       .replace(/[^a-zA-Z0-9\s-_]/g, "")
       .replace(/[\s-_]+/g, "-")
       .toLowerCase();
@@ -188,10 +202,10 @@ export default function TextConverterClient() {
 
   return (
     <ToolLayout
-      title="Text Case Converter"
-      description="Convert text formatting in real-time and analyze word, character, and line statistics."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Text Case Converter"}
+      description={customDescription || "Convert text formatting in real-time and analyze word, character, and line statistics."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

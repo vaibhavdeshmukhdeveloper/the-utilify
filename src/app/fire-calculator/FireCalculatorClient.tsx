@@ -16,7 +16,19 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-export default function FireCalculatorClient() {
+export interface FireCalculatorClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function FireCalculatorClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: FireCalculatorClientProps = {}) {
   const [annualExpenses, setAnnualExpenses] = useState<number>(48000);
   const [currentNetWorth, setCurrentNetWorth] = useState<number>(100000);
   const [monthlySavings, setMonthlySavings] = useState<number>(2000);
@@ -56,6 +68,7 @@ export default function FireCalculatorClient() {
     const currentProgress = fireNumber > 0 ? Math.min(100, Math.round((currentNetWorth / fireNumber) * 100)) : 0;
     const annualPassiveIncome = Math.round(fireNumber * swrDecimal);
     const targetDate = new Date();
+    targetDate.setDate(1);
     targetDate.setMonth(targetDate.getMonth() + months);
     const targetDateFormatted = months >= maxMonths 
       ? "100+ years away" 
@@ -125,11 +138,11 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
 
   return (
     <ToolLayout
-      title="FIRE Calculator"
-      description="Calculate your Financial Independence Retire Early (FIRE) number, annual spending targets, and milestone years using the 4% safe withdrawal rule."
+      title={customTitle || "FIRE Calculator"}
+      description={customDescription || "Calculate your Financial Independence Retire Early (FIRE) number, annual spending targets, and milestone years using the 4% safe withdrawal rule."}
       summaryDefinition="A FIRE calculator computes the total investment corpus required to achieve Financial Independence and Retire Early. By applying safe withdrawal rates (3.5%–4%) and inflation-adjusted compound growth, it models the exact timeline until passive portfolio withdrawals cover all living expenses."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
     >
       <div className="w-full max-w-5xl mx-auto space-y-8">

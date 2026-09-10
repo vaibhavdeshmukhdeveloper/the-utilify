@@ -54,6 +54,8 @@ export default function DateCalculatorClient({
     months: number;
     days: number;
     totalDays: number;
+    businessDays: number;
+    weekendDays: number;
     totalWeeks: number;
   } | null>(null);
 
@@ -151,11 +153,27 @@ export default function DateCalculatorClient({
       }
     }
 
+    // Calculate Business Days (Mon-Fri) and Weekend Days (Sat-Sun)
+    let businessDays = 0;
+    let weekendDays = 0;
+    const curDate = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    for (let i = 0; i < totalDays; i++) {
+      const dow = curDate.getDay();
+      if (dow === 0 || dow === 6) {
+        weekendDays++;
+      } else {
+        businessDays++;
+      }
+      curDate.setDate(curDate.getDate() + 1);
+    }
+
     setDiffResult({
       years,
       months,
       days,
       totalDays,
+      businessDays,
+      weekendDays,
       totalWeeks,
     });
   }, [startDate, endDate, includeEndDate]);
@@ -330,12 +348,24 @@ export default function DateCalculatorClient({
                 {/* Totals layout */}
                 <div className="grid grid-cols-2 gap-4 h-full">
                   <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
+                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Business Days</span>
+                    <span className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-2">{diffResult.businessDays.toLocaleString()}</span>
+                    <span className="text-[9px] text-muted-foreground mt-0.5">Mon–Fri workdays</span>
+                  </Card>
+                  <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
+                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Weekend Days</span>
+                    <span className="text-3xl font-black text-zinc-500 font-mono mt-2">{diffResult.weekendDays.toLocaleString()}</span>
+                    <span className="text-[9px] text-muted-foreground mt-0.5">Sat &amp; Sun</span>
+                  </Card>
+                  <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
                     <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Total Days</span>
                     <span className="text-3xl font-black text-primary font-mono mt-2">{diffResult.totalDays.toLocaleString()}</span>
+                    <span className="text-[9px] text-muted-foreground mt-0.5">Calendar duration</span>
                   </Card>
                   <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
                     <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Total Weeks</span>
                     <span className="text-3xl font-black text-primary font-mono mt-2">{diffResult.totalWeeks.toLocaleString()}</span>
+                    <span className="text-[9px] text-muted-foreground mt-0.5">Elapsed weeks</span>
                   </Card>
                   <div className="col-span-2 pt-2">
                     <Button

@@ -10,7 +10,19 @@ import { RefreshCw, Shield, Info, List, Share2 } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
 import { copyShareUrl } from "@/lib/share-utils";
 
-export default function PasswordGeneratorClient() {
+export interface PasswordGeneratorClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function PasswordGeneratorClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: PasswordGeneratorClientProps = {}) {
   const [password, setPassword] = useState("");
   const [length, setLength] = useState(16);
   const [includeUpper, setIncludeUpper] = useState(true);
@@ -85,13 +97,16 @@ export default function PasswordGeneratorClient() {
   useEffect(() => {
     if (!password) return;
     
-    let poolSize = 0;
-    if (includeLower) poolSize += 26;
-    if (includeUpper) poolSize += 26;
-    if (includeNumbers) poolSize += 10;
-    if (includeSymbols) poolSize += 30;
-    if (excludeSimilar) poolSize -= 8;
+    let poolCharset = "";
+    if (includeLower) poolCharset += "abcdefghijklmnopqrstuvwxyz";
+    if (includeUpper) poolCharset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if (includeNumbers) poolCharset += "0123456789";
+    if (includeSymbols) poolCharset += "!@#$%^&*()_+-=[]{}|;':\",./<>?";
+    if (excludeSimilar) {
+      poolCharset = poolCharset.replace(/[il1I|o0O]/g, "");
+    }
 
+    const poolSize = poolCharset.length;
     const entropy = length * Math.log2(Math.max(poolSize, 2));
 
     let label = "Very Weak";
@@ -177,10 +192,10 @@ export default function PasswordGeneratorClient() {
 
   return (
     <ToolLayout
-      title="Password Generator"
-      description="Generate cryptographically secure passwords client-side to protect your identities and accounts."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Password Generator"}
+      description={customDescription || "Generate cryptographically secure passwords client-side to protect your identities and accounts."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

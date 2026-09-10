@@ -12,7 +12,19 @@ import { MathFormula } from "@/components/MathFormula";
 import { triggerConfetti } from "@/lib/confetti";
 import { copyShareUrl } from "@/lib/share-utils";
 
-export default function BmiCalculatorClient() {
+export interface BmiCalculatorClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function BmiCalculatorClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: BmiCalculatorClientProps = {}) {
   const [unitSystem, setUnitSystem] = useState("metric");
   const [weight, setWeight] = useState("70");
   const [height, setHeight] = useState("175");
@@ -239,18 +251,18 @@ export default function BmiCalculatorClient() {
       <ul>
         <li><strong>Muscle Density:</strong> Muscle tissue weighs more than fat tissue of the same volume, causing active individuals to register high BMIs.</li>
         <li><strong>Ethnic Variances:</strong> Research shows that healthy weight and fat distribution bounds differ slightly across different genetic groups.</li>
-        <li><strong>Aging:</strong> Oler adults naturally lose muscle mass and carry more body fat than younger individuals at identical BMI scores.</li>
+        <li><strong>Aging:</strong> Older adults naturally lose muscle mass and carry more body fat than younger individuals at identical BMI scores.</li>
       </ul>
     </article>
   );
 
   return (
     <ToolLayout
-      title="BMI Calculator"
-      description="Quickly calculate your Body Mass Index (BMI) to understand your health status using Metric or US units."
+      title={customTitle || "BMI Calculator"}
+      description={customDescription || "Quickly calculate your Body Mass Index (BMI) to understand your health status using Metric or US units."}
       summaryDefinition="A Body Mass Index (BMI) calculator estimates body fatness based on an individual's weight and height. It classifies body composition into standardized World Health Organization (WHO) weight categories using Metric (kg/cm) or Imperial (lbs/ft/in) formulas."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

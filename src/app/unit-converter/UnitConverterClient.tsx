@@ -78,7 +78,19 @@ const unitsConfig: Record<UnitType, { base: string; list: Unit[] }> = {
   },
 };
 
-export default function UnitConverterClient() {
+export interface UnitConverterClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function UnitConverterClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: UnitConverterClientProps = {}) {
   const [category, setCategory] = useState<UnitType>("length");
   const [inputValue, setInputValue] = useState("1");
   const [fromUnit, setFromUnit] = useState("m");
@@ -269,10 +281,10 @@ export default function UnitConverterClient() {
 
   return (
     <ToolLayout
-      title="Unit Converter"
-      description="Convert length, weight, temperature, area, and volume measurements instantly with detailed breakdown analysis."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Unit Converter"}
+      description={customDescription || "Convert length, weight, temperature, area, and volume measurements instantly with detailed breakdown analysis."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

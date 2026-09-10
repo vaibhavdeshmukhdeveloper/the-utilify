@@ -88,7 +88,19 @@ function hexToHslStr(hex: string): string {
   return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
 }
 
-export default function ColorPaletteClient() {
+export interface ColorPaletteClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function ColorPaletteClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: ColorPaletteClientProps = {}) {
   const [colors, setColors] = useState<{ hex: string; locked: boolean }[]>([
     { hex: "#6366F1", locked: false },
     { hex: "#8B5CF6", locked: false },
@@ -302,10 +314,10 @@ export default function ColorPaletteClient() {
 
   return (
     <ToolLayout
-      title="Color Palette Generator"
-      description="Create beautiful color schemes, verify WCAG readability compliance, and export CSS code."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Color Palette Generator"}
+      description={customDescription || "Create beautiful color schemes, verify WCAG readability compliance, and export CSS code."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

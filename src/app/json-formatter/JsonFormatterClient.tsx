@@ -15,8 +15,16 @@ import {
   Minus, 
   AlertCircle,
   ChevronRight,
-  ChevronDown
+  ChevronDown,
+  ArrowDownAZ
 } from "lucide-react";
+
+export interface JsonFormatterClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
 
 // Recursive Collapsible Tree View Component
 function JsonTreeNode({ 
@@ -245,7 +253,27 @@ const SAMPLE_JSON = `{
   "developerContact": null
 }`;
 
-export default function JsonFormatterClient() {
+const sortObjectKeys = (obj: any): any => {
+  if (obj === null || typeof obj !== "object") {
+    return obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(sortObjectKeys);
+  }
+  return Object.keys(obj)
+    .sort()
+    .reduce((result: Record<string, any>, key: string) => {
+      result[key] = sortObjectKeys(obj[key]);
+      return result;
+    }, {});
+};
+
+export default function JsonFormatterClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: JsonFormatterClientProps = {}) {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [activeTab, setActiveTab] = useState<"pretty" | "tree" | "minified">("pretty");
@@ -422,7 +450,22 @@ export default function JsonFormatterClient() {
     toast.success("Downloaded JSON file!");
   };
 
-
+  const handleSortKeys = () => {
+    if (!parsedJson) {
+      toast.error("Please enter valid JSON before sorting keys");
+      return;
+    }
+    try {
+      const sorted = sortObjectKeys(parsedJson);
+      setParsedJson(sorted);
+      const formatted = activeTab === "minified" ? JSON.stringify(sorted) : JSON.stringify(sorted, null, 2);
+      setOutput(formatted);
+      setInput(formatted);
+      toast.success("JSON keys sorted alphabetically!");
+    } catch {
+      toast.error("Failed to sort JSON keys");
+    }
+  };
 
   const clearAll = () => {
     setInput("");
@@ -535,11 +578,11 @@ export default function JsonFormatterClient() {
 
   return (
     <ToolLayout
-      title="JSON Formatter"
-      description="Pretty-print, validate, and minify your JSON data instantly. 100% private and secure."
+      title={customTitle || "JSON Formatter"}
+      description={customDescription || "Pretty-print, validate, and minify your JSON data instantly. 100% private and secure."}
       summaryDefinition="A JSON formatter and validator pretty-prints nested JSON strings with custom indentation (2/4 spaces), validates RFC 8259 syntax with line-by-line error diagnostics, and minifies payloads 100% locally in your browser."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
@@ -603,6 +646,16 @@ export default function JsonFormatterClient() {
                   className="h-8 text-xs gap-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-indigo-600 dark:text-indigo-400"
                 >
                   <Sparkles className="h-3.5 w-3.5" /> Load Sample
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleSortKeys} 
+                  disabled={!parsedJson}
+                  className="h-8 text-xs gap-1 hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                  title="Sort object keys alphabetically"
+                >
+                  <ArrowDownAZ className="h-3.5 w-3.5" /> Sort Keys
                 </Button>
                 <Button 
                   variant="ghost" 

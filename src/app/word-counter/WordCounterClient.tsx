@@ -38,7 +38,19 @@ const SAMPLE_TEXT = `Utilify is a professional-grade suite of free online produc
 
 Whether you are optimizing article readability, checking word limits for academic essays, or crafting social media captions for Twitter and LinkedIn, Utilify provides instant calculations with zero subscription fees.`;
 
-export default function WordCounterClient() {
+export interface WordCounterClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function WordCounterClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: WordCounterClientProps = {}) {
   const [text, setText] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -235,10 +247,10 @@ Est. Pages: ${estimatedPages}`;
 
   return (
     <ToolLayout
-      title="Word Counter & Text Analyzer"
-      description="Calculate words, characters, reading time, keyword density, and social media limits in real-time."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Word Counter & Text Analyzer"}
+      description={customDescription || "Calculate words, characters, reading time, keyword density, and social media limits in real-time."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

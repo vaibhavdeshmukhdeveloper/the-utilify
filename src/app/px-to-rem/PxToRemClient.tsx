@@ -17,7 +17,19 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-export default function PxToRemClient() {
+export interface PxToRemClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function PxToRemClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: PxToRemClientProps = {}) {
   const [baseSize, setBaseSize] = useState<number>(16);
   const [pixelInput, setPixelInput] = useState<string>("24");
   const [remInput, setRemInput] = useState<string>("1.5");
@@ -119,11 +131,11 @@ export default function PxToRemClient() {
 
   return (
     <ToolLayout
-      title="PX to REM Converter"
-      description="Convert pixel (px) values to relative root em (rem) units instantly for accessible responsive web design, Figma design tokens, and Tailwind CSS."
+      title={customTitle || "PX to REM Converter"}
+      description={customDescription || "Convert pixel (px) values to relative root em (rem) units instantly for accessible responsive web design, Figma design tokens, and Tailwind CSS."}
       summaryDefinition="A PX to REM converter calculates the relative REM value of pixel dimensions based on the root HTML font size (default 16px). It includes bidirectional conversions, fluid CSS clamp() scaling, and Tailwind token cheat sheets."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
     >
       <div className="w-full max-w-5xl mx-auto space-y-8">
@@ -340,7 +352,8 @@ export default function PxToRemClient() {
               </thead>
               <tbody className="divide-y font-mono">
                 {tokenTable.map((row) => {
-                  const remVal = `${(row.px / baseSize).toFixed(row.px % baseSize === 0 ? 1 : 3)}rem`;
+                  const safeBase = baseSize > 0 ? baseSize : 16;
+                  const remVal = `${(row.px / safeBase).toFixed(row.px % safeBase === 0 ? 1 : 3)}rem`;
                   return (
                     <tr key={row.px} className="hover:bg-muted/40 transition-colors">
                       <td className="py-3 font-bold text-foreground">{row.px}px</td>

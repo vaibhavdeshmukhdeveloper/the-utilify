@@ -14,7 +14,19 @@ interface QueuedFile {
   id: string;
 }
 
-export default function MergePdfClient() {
+export interface MergePdfClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function MergePdfClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: MergePdfClientProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [queuedFiles, setQueuedFiles] = useState<QueuedFile[]>([]);
@@ -144,11 +156,11 @@ export default function MergePdfClient() {
 
   return (
     <ToolLayout
-      title="Merge PDF"
-      description="Combine multiple PDF documents into a single, professional file. Queue files, reorder them, and merge in seconds."
+      title={customTitle || "Merge PDF"}
+      description={customDescription || "Combine multiple PDF documents into a single, professional file. Queue files, reorder them, and merge in seconds."}
       summaryDefinition="A PDF merger combines multiple individual PDF documents, scans, invoices, and receipts into a single sequential master PDF. It supports interactive drag-and-drop reordering and RAM-only processing with zero data retention."
-      howToUse={howToUse}
-      faqs={faqs}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

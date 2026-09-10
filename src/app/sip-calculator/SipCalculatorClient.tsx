@@ -32,7 +32,19 @@ interface YearlyBreakdown {
   balance: number;
 }
 
-export default function SipCalculatorClient() {
+export interface SipCalculatorClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function SipCalculatorClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: SipCalculatorClientProps = {}) {
   const [monthlyInvestment, setMonthlyInvestment] = useState("40,000");
   const [years, setYears] = useState("8");
   const [returnRate, setReturnRate] = useState("10");
@@ -211,15 +223,15 @@ export default function SipCalculatorClient() {
 
   return (
     <ToolLayout
-      title="SIP Calculator"
-      description="Calculate the potential growth of your monthly savings with a Systematic Investment Plan (SIP)."
+      title={customTitle || "SIP Calculator"}
+      description={customDescription || "Calculate the potential growth of your monthly savings with a Systematic Investment Plan (SIP)."}
       summaryDefinition="A Systematic Investment Plan (SIP) calculator models the future value of recurring monthly mutual fund investments compounding over time. It calculates total invested capital, estimated wealth gain, and future maturity corpus based on expected annual return rates and investment duration."
-      howToUse={[
+      howToUse={customHowToUse || [
         { step: "Monthly Amount", description: "How much you plan to save every month." },
         { step: "Investment Term", description: "The number of years you plan to stay invested." },
         { step: "Return Rate", description: "Expected annual percentage yield from your investment." }
       ]}
-      faqs={[
+      faqs={customFaqs || [
         { 
           question: "What is a Systematic Investment Plan (SIP) and how does it work?", 
           answer: "A Systematic Investment Plan (SIP) is a disciplined investment approach where you invest a fixed sum into mutual funds or ETFs at regular intervals (typically monthly). It harnesses dollar-cost averaging and compounding growth to build wealth over time." 

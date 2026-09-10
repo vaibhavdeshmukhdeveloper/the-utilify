@@ -23,7 +23,19 @@ function formatLocalDate(d: Date = new Date()): string {
   return `${y}-${m}-${day}`;
 }
 
-export default function AgeCalculatorClient() {
+export interface AgeCalculatorClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function AgeCalculatorClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: AgeCalculatorClientProps = {}) {
   const [dob, setDob] = useState("1995-01-01");
   const [targetDate, setTargetDate] = useState(() => formatLocalDate(new Date()));
   const [result, setResult] = useState<{
@@ -105,31 +117,44 @@ export default function AgeCalculatorClient() {
       totalMonths -= 1;
     }
 
-    // Next Birthday calculation
-    let nextBdayYear = comparisonDate.getFullYear();
-    let nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
-    if (nextBday < comparisonDate) {
-      nextBdayYear += 1;
-      nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
-    }
-    const bdayDiffMs = nextBday.getTime() - comparisonDate.getTime();
-    const bdayTotalSec = Math.max(0, Math.floor(bdayDiffMs / 1000));
+    // Check if birthday is today
+    const isBirthdayToday =
+      comparisonDate.getMonth() === dobDate.getMonth() &&
+      comparisonDate.getDate() === dobDate.getDate();
 
-    const bdaySec = bdayTotalSec % 60;
-    const bdayMin = Math.floor(bdayTotalSec / 60) % 60;
-    const bdayHrs = Math.floor(bdayTotalSec / 3600) % 24;
-    
-    // Estimate months and remaining days for next birthday
-    let bdayMonths = nextBday.getMonth() - comparisonDate.getMonth();
-    let bdayDays = nextBday.getDate() - comparisonDate.getDate();
+    let bdayMonths = 0;
+    let bdayDays = 0;
+    let bdayHrs = 0;
+    let bdayMin = 0;
+    let bdaySec = 0;
 
-    if (bdayDays < 0) {
-      bdayMonths -= 1;
-      const prev = new Date(nextBday.getFullYear(), nextBday.getMonth(), 0);
-      bdayDays += prev.getDate();
-    }
-    if (bdayMonths < 0) {
-      bdayMonths += 12;
+    if (!isBirthdayToday) {
+      // Next Birthday calculation
+      let nextBdayYear = comparisonDate.getFullYear();
+      let nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
+      if (nextBday.getTime() <= comparisonDate.getTime()) {
+        nextBdayYear += 1;
+        nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
+      }
+      const bdayDiffMs = nextBday.getTime() - comparisonDate.getTime();
+      const bdayTotalSec = Math.max(0, Math.floor(bdayDiffMs / 1000));
+
+      bdaySec = bdayTotalSec % 60;
+      bdayMin = Math.floor(bdayTotalSec / 60) % 60;
+      bdayHrs = Math.floor(bdayTotalSec / 3600) % 24;
+
+      // Estimate months and remaining days for next birthday
+      bdayMonths = nextBday.getMonth() - comparisonDate.getMonth();
+      bdayDays = nextBday.getDate() - comparisonDate.getDate();
+
+      if (bdayDays < 0) {
+        bdayMonths -= 1;
+        const prev = new Date(nextBday.getFullYear(), nextBday.getMonth(), 0);
+        bdayDays += prev.getDate();
+      }
+      if (bdayMonths < 0) {
+        bdayMonths += 12;
+      }
     }
 
     setResult({
@@ -226,10 +251,10 @@ export default function AgeCalculatorClient() {
 
   return (
     <ToolLayout
-      title="Age Calculator"
-      description="Find your exact age in years, months, weeks, and days. Track your next birthday countdown in real-time."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Age Calculator"}
+      description={customDescription || "Find your exact age in years, months, weeks, and days. Track your next birthday countdown in real-time."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
