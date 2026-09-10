@@ -10,8 +10,22 @@ import { toast } from "sonner";
 import { Calendar, Plus, Minus, Info, ArrowRight, Share2 } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
 
-export default function DateCalculatorClient() {
-  const [activeTab, setActiveTab] = useState("diff");
+export interface DateCalculatorClientProps {
+  initialTab?: "diff" | "math";
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function DateCalculatorClient({
+  initialTab = "diff",
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: DateCalculatorClientProps = {}) {
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   // Tab 1: Diff states
   const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
@@ -208,10 +222,10 @@ export default function DateCalculatorClient() {
 
   return (
     <ToolLayout
-      title="Date Calculator"
-      description="Calculate duration between dates or project new dates by adding or subtracting time units."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "Date Calculator"}
+      description={customDescription || "Calculate duration between dates or project new dates by adding or subtracting time units."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

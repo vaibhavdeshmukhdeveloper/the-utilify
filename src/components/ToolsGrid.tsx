@@ -225,6 +225,27 @@ const allTools = [
     href: "/white-background-product-photos",
     icon: Palette,
     category: "Image"
+  },
+  {
+    title: "PDF to JPG",
+    description: "Convert PDF documents into high-resolution JPG images with instant bulk ZIP download.",
+    href: "/pdf-to-jpg",
+    icon: FileText,
+    category: "PDF"
+  },
+  {
+    title: "Compress WebP",
+    description: "Optimize and shrink WebP images for fast page loads and Core Web Vitals.",
+    href: "/compress-webp",
+    icon: ImageIcon,
+    category: "Image"
+  },
+  {
+    title: "Business Days Calculator",
+    description: "Calculate exact working days between two dates excluding weekends and holidays.",
+    href: "/business-days-calculator",
+    icon: Calendar,
+    category: "Utility"
   }
 ];
 

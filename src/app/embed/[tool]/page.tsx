@@ -18,7 +18,7 @@ const LoremIpsumClient = dynamic(() => import("@/app/lorem-ipsum/LoremIpsumClien
 const DateCalculatorClient = dynamic(() => import("@/app/date-calculator/DateCalculatorClient"));
 const AgeCalculatorClient = dynamic(() => import("@/app/age-calculator/AgeCalculatorClient"));
 
-const EMBEDDABLE_TOOLS: Record<string, { title: string; component: React.ComponentType }> = {
+const EMBEDDABLE_TOOLS: Record<string, { title: string; component: React.ComponentType<any> }> = {
   "sip-calculator": { title: "SIP Calculator", component: SipCalculatorClient },
   "investment-calculator": { title: "Investment Calculator", component: InvestmentCalculatorClient },
   "bmi-calculator": { title: "BMI Calculator", component: BmiCalculatorClient },

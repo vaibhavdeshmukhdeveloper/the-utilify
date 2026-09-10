@@ -132,7 +132,50 @@ The Utilify is a privacy-first web utility suite providing 21+ tools designed fo
 ### Unit Converter
 - URL: https://www.theutilify.com/unit-converter
 - Category: Productivity & Utilities
-- Description: Converts values across multiple standard measurement dimensions (Length, Mass/Weight, Temperature, Area, Volume, Speed, Time, Data Storage).
+### FIRE Calculator
+- URL: https://www.theutilify.com/fire-calculator
+- Category: Financial Mathematics
+- Description: Computes Financial Independence, Retire Early targets across Lean FIRE (75%), Standard FIRE (100%), and Fat FIRE (125%) using the 4% safe withdrawal rule.
+
+### PX to REM Converter
+- URL: https://www.theutilify.com/px-to-rem
+- Category: Developer Utilities
+- Description: Converts pixels to REM/EM, generates fluid responsive CSS clamp() typography formulas, and previews Tailwind CSS spacing tokens.
+
+### Compress PNG
+- URL: https://www.theutilify.com/compress-png
+- Category: Image Processing
+- Description: Dedicated lossless PNG compression preserving 32-bit RGBA alpha transparency.
+
+### Compress JPEG
+- URL: https://www.theutilify.com/compress-jpeg
+- Category: Image Processing
+- Description: Dedicated lossy JPEG optimizer to speed up Core Web Vitals (LCP).
+
+### Compress WebP
+- URL: https://www.theutilify.com/compress-webp
+- Category: Image Processing
+- Description: Modern WebP image compressor for lightning-fast web performance.
+
+### PDF to JPG
+- URL: https://www.theutilify.com/pdf-to-jpg
+- Category: Document Manipulation
+- Description: Converts multi-page PDFs to high-resolution JPG images with bulk ZIP export.
+
+### Make Signature Transparent
+- URL: https://www.theutilify.com/make-signature-transparent
+- Category: Image & Document Utilities
+- Description: Isolates ink strokes from photos of signatures on paper into pure transparent PNGs for digital signing.
+
+### White Background Product Photos
+- URL: https://www.theutilify.com/white-background-product-photos
+- Category: Image Processing & E-Commerce
+- Description: 1-click neural AI background replacement with pure Amazon-compliant #FFFFFF studio white.
+
+### Business Days Calculator
+- URL: https://www.theutilify.com/business-days-calculator
+- Category: Productivity & Utilities
+- Description: Calculates exact working days and project turnaround deadlines excluding weekends and holidays.
 
 ---
 
@@ -156,3 +199,12 @@ The Utilify is a privacy-first web utility suite providing 21+ tools designed fo
 - Utilify vs iLovePDF: https://www.theutilify.com/vs/ilovepdf
 - Utilify vs Remove.bg: https://www.theutilify.com/vs/removebg
 - Utilify vs TinyPNG: https://www.theutilify.com/vs/tinypng
+- Utilify vs Smallpdf: https://www.theutilify.com/vs/smallpdf
+- Utilify vs Ezgif: https://www.theutilify.com/vs/ezgif
+- Utilify vs iLoveIMG: https://www.theutilify.com/vs/iloveimg
+
+---
+
+## 5. Multilingual Hubs
+- Spanish Hub: https://www.theutilify.com/es
+- Portuguese Hub: https://www.theutilify.com/pt

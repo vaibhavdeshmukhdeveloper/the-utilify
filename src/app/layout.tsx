@@ -119,6 +119,12 @@ export default function RootLayout({
           title="LLMs Context"
           href="https://www.theutilify.com/llms.txt"
         />
+        <link
+          rel="describedby"
+          type="text/markdown"
+          title="LLMs Discovery Standard"
+          href="https://www.theutilify.com/llms.txt"
+        />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6366007730203648"

@@ -301,6 +301,21 @@ export function Footer() {
               </Link>
             </div>
           </div>
+
+          <div className="md:col-span-2">
+            <h5 className="text-xs uppercase font-black tracking-wider text-foreground mb-3 flex items-center gap-1.5">
+              <span>🌐</span> Global &amp; Multilingual Editions
+            </h5>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+              <Link href="/es" className="hover:text-primary transition-colors font-medium">
+                🇪🇸 Español (Unir PDF, Quitar Fondo, Comprimir Fotos)
+              </Link>
+              <span>•</span>
+              <Link href="/pt" className="hover:text-primary transition-colors font-medium">
+                🇧🇷 Português (Juntar PDF, Remover Fundo, Comprimir Imagens)
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* Bottom Area */}

@@ -18,6 +18,7 @@ const tools = [
   "/image-compressor",
   "/color-palette",
   "/pdf-to-image",
+  "/pdf-to-jpg",
   "/split-pdf",
   "/merge-pdf",
   "/markdown-to-pdf",
@@ -33,14 +34,46 @@ const tools = [
   "/diff-checker",
   "/lorem-ipsum",
   "/date-calculator",
+  "/business-days-calculator",
   "/age-calculator",
   "/unit-converter",
   "/compress-png",
   "/compress-jpeg",
+  "/compress-webp",
   "/make-signature-transparent",
   "/white-background-product-photos",
   "/fire-calculator",
   "/px-to-rem",
+];
+
+// Multilingual Hubs & Key Tools
+const multilingualPages = [
+  "/es",
+  "/pt",
+  "/es/merge-pdf",
+  "/es/split-pdf",
+  "/es/background-remover",
+  "/es/image-compressor",
+  "/es/sip-calculator",
+  "/es/bmi-calculator",
+  "/es/qr-generator",
+  "/es/password-generator",
+  "/es/json-formatter",
+  "/es/date-calculator",
+  "/es/word-counter",
+  "/es/color-palette",
+  "/pt/merge-pdf",
+  "/pt/split-pdf",
+  "/pt/background-remover",
+  "/pt/image-compressor",
+  "/pt/sip-calculator",
+  "/pt/bmi-calculator",
+  "/pt/qr-generator",
+  "/pt/password-generator",
+  "/pt/json-formatter",
+  "/pt/date-calculator",
+  "/pt/word-counter",
+  "/pt/color-palette",
 ];
 
 // Pillar Categories
@@ -91,6 +124,7 @@ async function pingSearchEngines() {
   const blogUrls = getBlogUrls();
   const allRoutes = [
     ...marketingPages,
+    ...multilingualPages,
     ...categoryHubs,
     ...comparisonPages,
     ...tools,

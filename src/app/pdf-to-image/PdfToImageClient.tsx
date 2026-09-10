@@ -9,7 +9,19 @@ import { Card } from "@/components/ui/card";
 import { FileImage, Download, Layers, CheckCircle2, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function PdfToImageClient() {
+export interface PdfToImageClientProps {
+  customTitle?: string;
+  customDescription?: string;
+  customHowToUse?: { step: string; description: string }[];
+  customFaqs?: { question: string; answer: string }[];
+}
+
+export default function PdfToImageClient({
+  customTitle,
+  customDescription,
+  customHowToUse,
+  customFaqs,
+}: PdfToImageClientProps = {}) {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string; pages?: number } | null>(null);
   const [fileInfo, setFileInfo] = useState<{ name: string; size: string } | null>(null);
@@ -111,10 +123,10 @@ export default function PdfToImageClient() {
 
   return (
     <ToolLayout
-      title="PDF to Image"
-      description="Convert every page of your PDF into high-quality PNG images instantly. Perfect for presentations and social media."
-      howToUse={howToUse}
-      faqs={faqs}
+      title={customTitle || "PDF to Image"}
+      description={customDescription || "Convert every page of your PDF into high-quality PNG images instantly. Perfect for presentations and social media."}
+      howToUse={customHowToUse || howToUse}
+      faqs={customFaqs || faqs}
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >

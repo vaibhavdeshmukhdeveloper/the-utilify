@@ -10,12 +10,18 @@ The Utilify provides high-performance web utilities for developers, designers, s
 - [Merge PDF](https://www.theutilify.com/merge-pdf): Combine multiple PDF documents into a single organized file in seconds.
 - [Split PDF](https://www.theutilify.com/split-pdf): Extract custom page ranges from bank statements, contracts, or tax returns.
 - [PDF to Image](https://www.theutilify.com/pdf-to-image): Convert PDF pages into crystal-clear PNG or JPG images at high DPI.
+- [PDF to JPG](https://www.theutilify.com/pdf-to-jpg): Dedicated high-resolution PDF to JPEG converter with bulk ZIP export.
 - [Markdown to PDF](https://www.theutilify.com/markdown-to-pdf): Compile markdown notes, docs, and code snippets into formatted PDF files.
 
 ### Image & Media Utilities
 - [AI Background Remover](https://www.theutilify.com/background-remover): Automatic deep-learning background isolation. Exports full-resolution transparent PNG cutouts with a built-in canvas brush editor.
 - [Image Compressor](https://www.theutilify.com/image-compressor): 100% browser-based image compression for WebP, PNG, and JPEG with custom quality sliders and live byte counters.
+- [Compress PNG](https://www.theutilify.com/compress-png): Dedicated lossless PNG compression preserving 32-bit RGBA alpha transparency.
+- [Compress JPEG](https://www.theutilify.com/compress-jpeg): Dedicated lossy JPEG optimizer to boost Core Web Vitals (LCP) and page load speed.
+- [Compress WebP](https://www.theutilify.com/compress-webp): Modern WebP image compressor for lightning-fast web performance.
 - [Color Palette Generator](https://www.theutilify.com/color-palette): Generate harmonious color schemes and verify WCAG 2.1 color contrast compliance.
+- [Make Signature Transparent](https://www.theutilify.com/make-signature-transparent): Isolate ink strokes from paper photos into pure transparent PNGs for digital signing.
+- [White Background Product Photos](https://www.theutilify.com/white-background-product-photos): 1-click replacement of product photo backdrops with pure Amazon-compliant #FFFFFF studio white.
 
 ### Developer & Text Utilities
 - [JSON Formatter](https://www.theutilify.com/json-formatter): Validate syntax, pretty-print, minfy, and inspect complex JSON payloads with line numbers.
@@ -26,14 +32,21 @@ The Utilify provides high-performance web utilities for developers, designers, s
 - [Text Case Converter](https://www.theutilify.com/text-converter): Convert text between UPPERCASE, lowercase, Title Case, camelCase, snake_case, and kebab-case.
 - [Word Counter](https://www.theutilify.com/word-counter): Real-time word, character, sentence, paragraph, reading time, and social media limit counter.
 - [Lorem Ipsum Generator](https://www.theutilify.com/lorem-ipsum): Generate customizable placeholder text in paragraphs, sentences, or words.
+- [PX to REM Converter](https://www.theutilify.com/px-to-rem): Bidirectional PX to REM/EM conversion, CSS clamp() fluid typography generator, and Tailwind spacing tokens.
 
 ### Financial, Health & Measurement Calculators
 - [SIP Calculator](https://www.theutilify.com/sip-calculator): Calculate mutual fund compound interest, expected maturity returns, and Step-Up annual top-up growth.
+- [FIRE Calculator](https://www.theutilify.com/fire-calculator): Compute your Financial Independence, Retire Early targets across Lean, Standard, and Fat FIRE using the 4% rule.
 - [Investment Calculator](https://www.theutilify.com/investment-calculator): Simulate wealth compounding with mixed lump-sum principal and recurring monthly deposits.
 - [BMI Calculator](https://www.theutilify.com/bmi-calculator): Instant Body Mass Index calculation with metric and imperial unit toggles.
 - [Age Calculator](https://www.theutilify.com/age-calculator): Calculate exact chronological age down to days, hours, and next birthday countdown.
 - [Date Calculator](https://www.theutilify.com/date-calculator): Add or subtract business days and calculate duration between dates.
+- [Business Days Calculator](https://www.theutilify.com/business-days-calculator): Dedicated business days and workday interval calculator excluding weekends.
 - [Unit Converter](https://www.theutilify.com/unit-converter): Multi-category unit conversion for length, weight, temperature, area, and digital storage.
+
+## Multilingual Support
+- [Spanish Hub](https://www.theutilify.com/es): Herramientas en línea gratuitas y privadas en español (Unir PDF, Quitar Fondo, Comprimir Imágenes, Calculadoras).
+- [Portuguese Hub](https://www.theutilify.com/pt): Ferramentas online gratuitas e privadas em português (Juntar PDF, Remover Fundo, Comprimir Imagens, Calculadoras).
 
 ## Category Hubs
 - [PDF & Document Tools](https://www.theutilify.com/category/pdf-tools)
@@ -45,6 +58,9 @@ The Utilify provides high-performance web utilities for developers, designers, s
 - [Utilify vs iLovePDF](https://www.theutilify.com/vs/ilovepdf): Free, zero file retention, no daily limits, and zero watermarks.
 - [Utilify vs Remove.bg](https://www.theutilify.com/vs/removebg): Full-resolution transparent PNG downloads with zero credit fees.
 - [Utilify vs TinyPNG](https://www.theutilify.com/vs/tinypng): In-browser client-side compression without server upload limits.
+- [Utilify vs Smallpdf](https://www.theutilify.com/vs/smallpdf): Unlimited PDF operations with zero daily lockouts or subscription paywalls.
+- [Utilify vs Ezgif](https://www.theutilify.com/vs/ezgif): Modern, ad-free WebAssembly image optimization with dark mode.
+- [Utilify vs iLoveIMG](https://www.theutilify.com/vs/iloveimg): 100% private in-browser batch processing with 1-click ZIP export.
 
 ## Privacy & Security Architecture
 - Transient In-Memory Processing: No persistent hard drive caching for uploaded documents or photos.

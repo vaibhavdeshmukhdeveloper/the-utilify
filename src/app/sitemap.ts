@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/blog-data";
+import { SUPPORTED_LANGUAGES, toolTranslations } from "@/lib/i18n/translations";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.theutilify.com";
@@ -12,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/image-compressor",
     "/color-palette",
     "/pdf-to-image",
+    "/pdf-to-jpg",
     "/split-pdf",
     "/merge-pdf",
     "/markdown-to-pdf",
@@ -27,14 +29,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/diff-checker",
     "/lorem-ipsum",
     "/date-calculator",
+    "/business-days-calculator",
     "/age-calculator",
     "/unit-converter",
     "/compress-png",
     "/compress-jpeg",
+    "/compress-webp",
     "/make-signature-transparent",
     "/white-background-product-photos",
     "/fire-calculator",
     "/px-to-rem",
+  ];
+
+  const multilingualHubs = [
+    "/es",
+    "/pt",
   ];
 
   const categoryHubs = [
@@ -93,6 +102,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.95,
   }));
 
+  const multilingualHubEntries: MetadataRoute.Sitemap = multilingualHubs.map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: staticReleaseDate,
+    changeFrequency: "weekly",
+    priority: 0.9,
+  }));
+
+  const localizedToolEntries: MetadataRoute.Sitemap = [];
+  for (const lang of SUPPORTED_LANGUAGES) {
+    const toolsInLang = Object.keys(toolTranslations[lang]);
+    for (const tool of toolsInLang) {
+      localizedToolEntries.push({
+        url: `${baseUrl}/${lang}/${tool}`,
+        lastModified: staticReleaseDate,
+        changeFrequency: "weekly",
+        priority: 0.85,
+      });
+    }
+  }
+
   const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),
@@ -104,7 +133,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...marketingEntries,
     ...categoryEntries,
     ...comparisonEntries,
+    ...multilingualHubEntries,
     ...toolEntries,
+    ...localizedToolEntries,
     ...blogEntries,
   ];
 }
