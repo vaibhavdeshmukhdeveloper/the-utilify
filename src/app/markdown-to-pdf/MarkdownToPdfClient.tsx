@@ -7,8 +7,6 @@ import { toast } from "sonner";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
-  FileText, 
-  Type, 
   Sparkles, 
   Download, 
   Trash2, 
@@ -16,7 +14,6 @@ import {
   Columns, 
   Eye, 
   Edit3, 
-  Settings,
   CheckCircle2,
   RefreshCw,
   Zap,

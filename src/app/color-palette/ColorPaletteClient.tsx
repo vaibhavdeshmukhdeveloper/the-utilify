@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { CopyButton } from "@/components/CopyButton";
-import { Copy, Lock, Unlock, RefreshCw, Sparkles, Code, Check } from "lucide-react";
+import { Lock, Unlock, RefreshCw, Sparkles, Code } from "lucide-react";
 
 // Convert HSL to Hex
 function hslToHex(h: number, s: number, l: number): string {
@@ -238,8 +238,6 @@ export default function ColorPaletteClient() {
   // WCAG Ratio computations
   const contrastRatio = getContrastRatio(textContrastColor, bgContrastColor);
   const wcagNormalAA = contrastRatio >= 4.5;
-  const wcagNormalAAA = contrastRatio >= 7.0;
-  const wcagLargeAA = contrastRatio >= 3.0;
   const wcagLargeAAA = contrastRatio >= 4.5;
 
   const exportAsCSS = () => {

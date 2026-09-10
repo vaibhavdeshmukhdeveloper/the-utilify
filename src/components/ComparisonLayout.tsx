@@ -5,8 +5,7 @@ import Link from "next/link";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { JsonLd } from "./JsonLd";
-import { ArrowRight, Check, X, Sparkles, ShieldCheck, Zap, Lock, BookOpen } from "lucide-react";
-import { blogPosts } from "@/lib/blog-data";
+import { ArrowRight, Check, X, Sparkles, ShieldCheck, Zap, Lock } from "lucide-react";
 
 export interface ComparisonRow {
   feature: string;

@@ -10,8 +10,6 @@ import { Card } from "@/components/ui/card";
 import { 
   Image as ImageIcon, 
   Download, 
-  Sparkles, 
-  CheckCircle2, 
   AlertCircle, 
   ArrowRight, 
   Loader2, 
@@ -20,8 +18,7 @@ import {
   Settings, 
   Archive, 
   Layers,
-  Trash2,
-  Eye
+  Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";

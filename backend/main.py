@@ -2,7 +2,6 @@ import os
 import io
 import re
 import json
-import tempfile
 import zipfile
 import asyncio
 from urllib.parse import quote
@@ -10,7 +9,7 @@ from contextlib import asynccontextmanager
 from typing import List
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response, StreamingResponse
+from fastapi.responses import Response
 from PIL import Image
 from pydantic import BaseModel
 

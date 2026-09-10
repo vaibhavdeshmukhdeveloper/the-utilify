@@ -7,7 +7,7 @@ import { uploadToBackend } from "@/lib/api";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Scissors, Download, FileText, CheckCircle2, AlertCircle, ArrowRight, Loader2, Info, Layers } from "lucide-react";
+import { Scissors, Download, FileText, CheckCircle2, ArrowRight, Loader2, Info, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

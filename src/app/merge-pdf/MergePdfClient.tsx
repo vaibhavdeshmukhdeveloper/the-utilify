@@ -6,7 +6,7 @@ import { FileUploader } from "@/components/FileUploader";
 import { uploadToBackend } from "@/lib/api";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
-import { Layers, Download, FileText, CheckCircle2, AlertCircle, ArrowRight, Loader2, Plus, X, ArrowUp, ArrowDown, FilePlus } from "lucide-react";
+import { Layers, Download, CheckCircle2, ArrowRight, Loader2, Plus, X, ArrowUp, ArrowDown, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface QueuedFile {

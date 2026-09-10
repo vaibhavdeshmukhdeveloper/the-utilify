@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { BlogPost } from "@/lib/blog-data";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-import { ArrowRight, Calendar, Clock, Search, X, Sparkles, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { ArrowRight, Calendar, Clock, Search, X, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 

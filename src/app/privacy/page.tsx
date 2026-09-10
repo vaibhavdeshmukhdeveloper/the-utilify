@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Shield, EyeOff, Lock, FileKey } from "lucide-react";
+import { EyeOff, Lock, FileKey } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

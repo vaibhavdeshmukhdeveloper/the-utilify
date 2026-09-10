@@ -7,9 +7,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CopyButton } from "@/components/CopyButton";
 import { 
-  Copy, 
   Trash2, 
-  Check, 
   Upload, 
   Download, 
   Sparkles, 
@@ -17,8 +15,7 @@ import {
   Minus, 
   AlertCircle,
   ChevronRight,
-  ChevronDown,
-  RefreshCw
+  ChevronDown
 } from "lucide-react";
 
 // Recursive Collapsible Tree View Component

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Star, CheckCircle2, Sparkles, ShieldCheck, ThumbsUp } from "lucide-react";
+import { Star, CheckCircle2, Sparkles, ShieldCheck } from "lucide-react";
 import { fetchLiveRating, submitLiveRating } from "@/lib/rating-data";
 import { triggerConfetti } from "@/lib/confetti";
 import { toast } from "sonner";

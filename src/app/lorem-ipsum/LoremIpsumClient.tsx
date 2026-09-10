@@ -5,8 +5,7 @@ import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { toast } from "sonner";
-import { AlignLeft, LayoutGrid, Info, Sliders } from "lucide-react";
+import { AlignLeft, LayoutGrid, Sliders } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
 
 const LOREM_WORDS = [

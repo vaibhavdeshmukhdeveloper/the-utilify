@@ -216,7 +216,7 @@ export default function DateCalculatorClient() {
       detailedContent={detailedContent}
     >
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-10 text-left">
-        <Tabs defaultValue="diff" className="w-full" onValueChange={setActiveTab}>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 h-14 rounded-2xl p-1 bg-zinc-100 dark:bg-zinc-900">
             <TabsTrigger value="diff" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">Difference Between Dates</TabsTrigger>
             <TabsTrigger value="math" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">Add / Subtract Days</TabsTrigger>

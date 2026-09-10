@@ -5,7 +5,6 @@ import {
   FileJson, 
   FileText, 
   Layers, 
-  Calculator,
   TrendingUp,
   PiggyBank,
   Key,

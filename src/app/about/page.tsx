@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Shield, Zap, Heart, Globe, Lock, Code, Terminal, Cpu, Sparkles, CheckCircle2 } from "lucide-react";
+import { Zap, Heart, Globe, Lock, Terminal, Cpu, Sparkles, CheckCircle2 } from "lucide-react";
 import { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 

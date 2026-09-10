@@ -3,11 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
-import { Copy, Check, RefreshCw, Key, Shield, Info, List, Share2 } from "lucide-react";
+import { RefreshCw, Shield, Info, List, Share2 } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
 import { copyShareUrl } from "@/lib/share-utils";
 

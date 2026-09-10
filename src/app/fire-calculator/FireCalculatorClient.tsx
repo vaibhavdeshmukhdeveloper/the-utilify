@@ -10,19 +10,10 @@ import { MathFormula } from "@/components/MathFormula";
 import { triggerConfetti } from "@/lib/confetti";
 import { 
   Flame, 
-  TrendingUp, 
-  DollarSign, 
-  ShieldCheck, 
   Target, 
-  Calendar, 
-  Sparkles, 
   Copy, 
-  CheckCircle2, 
-  Info,
-  Layers,
-  ArrowRight
+  CheckCircle2
 } from "lucide-react";
-import Link from "next/link";
 import { toast } from "sonner";
 
 export default function FireCalculatorClient() {

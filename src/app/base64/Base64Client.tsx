@@ -7,12 +7,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Copy, Trash2, Clipboard, FileText, ArrowLeftRight, Upload, Info } from "lucide-react";
+import { Trash2, ArrowLeftRight, Upload, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CopyButton } from "@/components/CopyButton";
 
 export default function Base64Client() {
-  const [activeTab, setActiveTab] = useState("encode");
   const [isDragOverPlain, setIsDragOverPlain] = useState(false);
   const [isDragOverBase64, setIsDragOverBase64] = useState(false);
   
@@ -234,7 +233,7 @@ export default function Base64Client() {
       detailedContent={detailedContent}
     >
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 text-left">
-        <Tabs defaultValue="encode" className="w-full" onValueChange={setActiveTab}>
+        <Tabs defaultValue="encode" className="w-full">
           <TabsList className="grid w-full grid-cols-3 h-12 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-900">
             <TabsTrigger value="encode" className="text-sm font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm">Encode Text</TabsTrigger>
             <TabsTrigger value="decode" className="text-sm font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm">Decode Text</TabsTrigger>

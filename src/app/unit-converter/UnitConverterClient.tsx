@@ -5,9 +5,9 @@ import { ToolLayout } from "@/components/ToolLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Ruler, Scale, Thermometer, Box, Layers, ArrowLeftRight, Info, Share2 } from "lucide-react";
+import { Ruler, Scale, Thermometer, Box, Layers, ArrowLeftRight, Share2 } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
 
 type UnitType = "length" | "weight" | "temperature" | "area" | "volume";

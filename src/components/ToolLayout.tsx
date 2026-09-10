@@ -11,7 +11,7 @@ import { JsonLd } from "./JsonLd";
 import { blogPosts } from "@/lib/blog-data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, ArrowRight, Sparkles, Clock, Calendar } from "lucide-react";
+import { BookOpen, ArrowRight, Sparkles } from "lucide-react";
 import dynamic from "next/dynamic";
 import { RatingWidget } from "./RatingWidget";
 

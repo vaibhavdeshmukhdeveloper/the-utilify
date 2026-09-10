@@ -12,10 +12,8 @@ import {
   Copy, 
   CheckCircle2, 
   ArrowRightLeft, 
-  Sparkles, 
   Code, 
-  Layers, 
-  Maximize2 
+  Layers 
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -23,7 +21,6 @@ export default function PxToRemClient() {
   const [baseSize, setBaseSize] = useState<number>(16);
   const [pixelInput, setPixelInput] = useState<string>("24");
   const [remInput, setRemInput] = useState<string>("1.5");
-  const [activeTab, setActiveTab] = useState<"px-to-rem" | "rem-to-px">("px-to-rem");
 
   // Clamp generator state
   const [clampMinPx, setClampMinPx] = useState<number>(18);
