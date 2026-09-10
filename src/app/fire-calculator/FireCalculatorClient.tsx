@@ -34,7 +34,8 @@ export default function FireCalculatorClient() {
     const baristaFireNumber = Math.round(fireNumber * 0.5);
 
     // Real CAGR (adjusted for inflation)
-    const realReturnRate = Math.max(0.001, (1 + expectedReturn / 100) / (1 + expectedInflation / 100) - 1);
+    const inflationFactor = Math.max(0.01, 1 + (expectedInflation || 0) / 100);
+    const realReturnRate = Math.max(0.001, (1 + (expectedReturn || 0) / 100) / inflationFactor - 1);
     const monthlyRealRate = realReturnRate / 12;
 
     // Simulation of compounding growth to target
@@ -51,12 +52,14 @@ export default function FireCalculatorClient() {
       }
     }
 
-    const yearsToFire = (months / 12).toFixed(1);
+    const yearsToFire = months >= maxMonths ? "100+" : (months / 12).toFixed(1);
     const currentProgress = fireNumber > 0 ? Math.min(100, Math.round((currentNetWorth / fireNumber) * 100)) : 0;
     const annualPassiveIncome = Math.round(fireNumber * swrDecimal);
     const targetDate = new Date();
     targetDate.setMonth(targetDate.getMonth() + months);
-    const targetDateFormatted = targetDate.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+    const targetDateFormatted = months >= maxMonths 
+      ? "100+ years away" 
+      : targetDate.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 
     return {
       fireNumber,

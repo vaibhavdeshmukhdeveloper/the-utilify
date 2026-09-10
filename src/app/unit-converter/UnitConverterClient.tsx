@@ -165,10 +165,17 @@ export default function UnitConverterClient() {
       }
     }
 
+    const formatNumber = (num: number): string => {
+      if (num === 0) return "0";
+      if (num % 1 === 0) return num.toString();
+      if (Math.abs(num) < 0.000001 || Math.abs(num) >= 1e10) {
+        return Number(num.toPrecision(6)).toString();
+      }
+      return parseFloat(num.toFixed(6)).toString();
+    };
+
     // Format output cleanly
-    setResultValue(
-      result % 1 === 0 ? result.toString() : parseFloat(result.toFixed(6)).toString()
-    );
+    setResultValue(formatNumber(result));
 
     // Calculate full breakdown conversions for the input
     const breakdown = config.list.map((unit) => {
@@ -198,7 +205,7 @@ export default function UnitConverterClient() {
 
       return {
         label: unit.label,
-        value: unitRes % 1 === 0 ? unitRes.toString() : parseFloat(unitRes.toFixed(6)).toString(),
+        value: formatNumber(unitRes),
       };
     });
 

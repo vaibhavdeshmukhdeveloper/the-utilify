@@ -124,6 +124,13 @@ export async function submitAllPlatformUrls(): Promise<IndexNowResponse> {
     "/es/date-calculator",
     "/es/word-counter",
     "/es/color-palette",
+    "/es/pdf-to-image",
+    "/es/investment-calculator",
+    "/es/fire-calculator",
+    "/es/age-calculator",
+    "/es/unit-converter",
+    "/es/px-to-rem",
+    "/es/base64",
     "/pt/merge-pdf",
     "/pt/split-pdf",
     "/pt/background-remover",
@@ -136,6 +143,13 @@ export async function submitAllPlatformUrls(): Promise<IndexNowResponse> {
     "/pt/date-calculator",
     "/pt/word-counter",
     "/pt/color-palette",
+    "/pt/pdf-to-image",
+    "/pt/investment-calculator",
+    "/pt/fire-calculator",
+    "/pt/age-calculator",
+    "/pt/unit-converter",
+    "/pt/px-to-rem",
+    "/pt/base64",
   ];
 
   const categoryHubs = [

@@ -15,7 +15,13 @@ const BackgroundRemoverClient = dynamic(() => import("@/app/background-remover/B
 const ImageCompressorClient = dynamic(() => import("@/app/image-compressor/ImageCompressorClient"));
 const PdfToImageClient = dynamic(() => import("@/app/pdf-to-image/PdfToImageClient"));
 const SipCalculatorClient = dynamic(() => import("@/app/sip-calculator/SipCalculatorClient"));
+const InvestmentCalculatorClient = dynamic(() => import("@/app/investment-calculator/InvestmentCalculatorClient"));
+const FireCalculatorClient = dynamic(() => import("@/app/fire-calculator/FireCalculatorClient"));
 const BmiCalculatorClient = dynamic(() => import("@/app/bmi-calculator/BmiCalculatorClient"));
+const AgeCalculatorClient = dynamic(() => import("@/app/age-calculator/AgeCalculatorClient"));
+const UnitConverterClient = dynamic(() => import("@/app/unit-converter/UnitConverterClient"));
+const PxToRemClient = dynamic(() => import("@/app/px-to-rem/PxToRemClient"));
+const Base64Client = dynamic(() => import("@/app/base64/Base64Client"));
 const QrGeneratorClient = dynamic(() => import("@/app/qr-generator/QrGeneratorClient"));
 const PasswordGeneratorClient = dynamic(() => import("@/app/password-generator/PasswordGeneratorClient"));
 const JsonFormatterClient = dynamic(() => import("@/app/json-formatter/JsonFormatterClient"));
@@ -30,7 +36,13 @@ const TOOL_COMPONENTS: Record<string, React.ComponentType<any>> = {
   "image-compressor": ImageCompressorClient,
   "pdf-to-image": PdfToImageClient,
   "sip-calculator": SipCalculatorClient,
+  "investment-calculator": InvestmentCalculatorClient,
+  "fire-calculator": FireCalculatorClient,
   "bmi-calculator": BmiCalculatorClient,
+  "age-calculator": AgeCalculatorClient,
+  "unit-converter": UnitConverterClient,
+  "px-to-rem": PxToRemClient,
+  "base64": Base64Client,
   "qr-generator": QrGeneratorClient,
   "password-generator": PasswordGeneratorClient,
   "json-formatter": JsonFormatterClient,

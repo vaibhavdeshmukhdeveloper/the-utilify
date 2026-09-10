@@ -42,14 +42,15 @@ export default function PxToRemClient() {
 
   // Fluid clamp calculation
   const clampCode = useMemo(() => {
+    const effectiveBase = baseSize > 0 ? baseSize : 16;
     if (clampMaxVw <= clampMinVw || clampMaxPx <= clampMinPx) {
-      return `font-size: ${(clampMinPx / baseSize).toFixed(3)}rem;`;
+      return `font-size: ${(clampMinPx / effectiveBase).toFixed(3)}rem;`;
     }
 
-    const minRem = (clampMinPx / baseSize).toFixed(3);
-    const maxRem = (clampMaxPx / baseSize).toFixed(3);
+    const minRem = (clampMinPx / effectiveBase).toFixed(3);
+    const maxRem = (clampMaxPx / effectiveBase).toFixed(3);
     const slope = ((clampMaxPx - clampMinPx) / (clampMaxVw - clampMinVw)) * 100;
-    const yAxisIntersection = (-clampMinVw * ((clampMaxPx - clampMinPx) / (clampMaxVw - clampMinVw)) + clampMinPx) / baseSize;
+    const yAxisIntersection = (-clampMinVw * ((clampMaxPx - clampMinPx) / (clampMaxVw - clampMinVw)) + clampMinPx) / effectiveBase;
 
     return `font-size: clamp(${minRem}rem, ${yAxisIntersection.toFixed(3)}rem + ${slope.toFixed(2)}vw, ${maxRem}rem);`;
   }, [clampMinPx, clampMaxPx, clampMinVw, clampMaxVw, baseSize]);

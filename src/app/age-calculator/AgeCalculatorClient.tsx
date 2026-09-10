@@ -9,9 +9,23 @@ import { toast } from "sonner";
 import { Hourglass, Calendar, Gift, Clock, Info, Share2 } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
 
+function parseLocalDate(dateStr: string): Date | null {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+function formatLocalDate(d: Date = new Date()): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export default function AgeCalculatorClient() {
   const [dob, setDob] = useState("1995-01-01");
-  const [targetDate, setTargetDate] = useState(new Date().toISOString().split("T")[0]);
+  const [targetDate, setTargetDate] = useState(() => formatLocalDate(new Date()));
   const [result, setResult] = useState<{
     years: number;
     months: number;
@@ -45,17 +59,17 @@ export default function AgeCalculatorClient() {
   }, []);
 
   const calculateAge = useCallback(() => {
-    const dobDate = new Date(dob);
-    const endDate = new Date(targetDate);
+    const dobDate = parseLocalDate(dob);
+    const endDate = parseLocalDate(targetDate);
+
+    if (!dobDate || !endDate) {
+      return;
+    }
 
     // If targetDate matches today's date, we use actual current time to enable live ticking
     const now = new Date();
-    const isToday = targetDate === now.toISOString().split("T")[0];
+    const isToday = targetDate === formatLocalDate(now);
     const comparisonDate = isToday ? now : endDate;
-
-    if (isNaN(dobDate.getTime()) || isNaN(comparisonDate.getTime())) {
-      return;
-    }
 
     if (dobDate > comparisonDate) {
       setResult(null);
@@ -79,7 +93,7 @@ export default function AgeCalculatorClient() {
 
     // Cumulative stats
     const diffMs = comparisonDate.getTime() - dobDate.getTime();
-    const totalSeconds = Math.floor(diffMs / 1000);
+    const totalSeconds = Math.max(0, Math.floor(diffMs / 1000));
     const totalMinutes = Math.floor(totalSeconds / 60);
     const totalHours = Math.floor(totalMinutes / 60);
     const totalDays = Math.floor(totalHours / 24);
@@ -92,12 +106,14 @@ export default function AgeCalculatorClient() {
     }
 
     // Next Birthday calculation
-    const nextBday = new Date(comparisonDate.getFullYear(), dobDate.getMonth(), dobDate.getDate());
+    let nextBdayYear = comparisonDate.getFullYear();
+    let nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
     if (nextBday < comparisonDate) {
-      nextBday.setFullYear(comparisonDate.getFullYear() + 1);
+      nextBdayYear += 1;
+      nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
     }
     const bdayDiffMs = nextBday.getTime() - comparisonDate.getTime();
-    const bdayTotalSec = Math.floor(bdayDiffMs / 1000);
+    const bdayTotalSec = Math.max(0, Math.floor(bdayDiffMs / 1000));
 
     const bdaySec = bdayTotalSec % 60;
     const bdayMin = Math.floor(bdayTotalSec / 60) % 60;
@@ -138,7 +154,7 @@ export default function AgeCalculatorClient() {
 
   // Set up live interval or single calculation
   useEffect(() => {
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = formatLocalDate(new Date());
     const isToday = targetDate === todayStr;
     setLiveMode(isToday);
 

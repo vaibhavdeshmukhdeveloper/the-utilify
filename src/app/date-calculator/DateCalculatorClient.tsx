@@ -18,6 +18,20 @@ export interface DateCalculatorClientProps {
   customFaqs?: { question: string; answer: string }[];
 }
 
+function parseLocalDate(dateStr: string): Date | null {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+function formatLocalDate(d: Date = new Date()): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export default function DateCalculatorClient({
   initialTab = "diff",
   customTitle,
@@ -28,8 +42,12 @@ export default function DateCalculatorClient({
   const [activeTab, setActiveTab] = useState(initialTab);
 
   // Tab 1: Diff states
-  const [startDate, setStartDate] = useState(new Date().toISOString().split("T")[0]);
-  const [endDate, setEndDate] = useState(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]);
+  const [startDate, setStartDate] = useState(() => formatLocalDate(new Date()));
+  const [endDate, setEndDate] = useState(() => {
+    const future = new Date();
+    future.setDate(future.getDate() + 10);
+    return formatLocalDate(future);
+  });
   const [includeEndDate, setIncludeEndDate] = useState(false);
   const [diffResult, setDiffResult] = useState<{
     years: number;
@@ -40,7 +58,7 @@ export default function DateCalculatorClient({
   } | null>(null);
 
   // Tab 2: Add/Sub states
-  const [baseDate, setBaseDate] = useState(new Date().toISOString().split("T")[0]);
+  const [baseDate, setBaseDate] = useState(() => formatLocalDate(new Date()));
   const [operation, setOperation] = useState("add");
   const [addYears, setAddYears] = useState("0");
   const [addMonths, setAddMonths] = useState("0");
@@ -83,10 +101,10 @@ export default function DateCalculatorClient({
 
   // Reactive Calculation: Date Difference
   useEffect(() => {
-    const d1 = new Date(startDate);
-    const d2 = new Date(endDate);
+    const d1 = parseLocalDate(startDate);
+    const d2 = parseLocalDate(endDate);
 
-    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+    if (!d1 || !d2) {
       setDiffResult(null);
       return;
     }
@@ -96,12 +114,10 @@ export default function DateCalculatorClient({
     const start = isSwapped ? d2 : d1;
     const end = isSwapped ? d1 : d2;
 
-    // Total days calculation
-    let totalMs = end.getTime() - start.getTime();
-    if (includeEndDate) {
-      totalMs += 24 * 60 * 60 * 1000;
-    }
-    const totalDays = Math.floor(totalMs / (24 * 60 * 60 * 1000));
+    // Total calendar days calculation using UTC timestamps (100% immune to DST changes)
+    const utc1 = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+    const utc2 = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate());
+    const totalDays = Math.round((utc2 - utc1) / (24 * 60 * 60 * 1000)) + (includeEndDate ? 1 : 0);
     const totalWeeks = parseFloat((totalDays / 7).toFixed(1));
 
     // Y-M-D breakdown
@@ -124,6 +140,17 @@ export default function DateCalculatorClient({
       months += 12;
     }
 
+    // Handle edge case where includeEndDate rolls over to a full month
+    const currentMonthDays = new Date(start.getFullYear() + years, start.getMonth() + months + 1, 0).getDate();
+    if (days >= currentMonthDays) {
+      days -= currentMonthDays;
+      months += 1;
+      if (months >= 12) {
+        years += 1;
+        months -= 12;
+      }
+    }
+
     setDiffResult({
       years,
       months,
@@ -135,8 +162,8 @@ export default function DateCalculatorClient({
 
   // Reactive Calculation: Date Math (Add / Subtract)
   useEffect(() => {
-    const d = new Date(baseDate);
-    if (isNaN(d.getTime())) {
+    const d = parseLocalDate(baseDate);
+    if (!d) {
       setMathResult(null);
       return;
     }

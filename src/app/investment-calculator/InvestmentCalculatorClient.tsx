@@ -131,42 +131,81 @@ export default function InvestmentCalculatorClient() {
     let currentBalance = P;
     let totalInvested = P;
 
-    const periodsPerYear = compoundFrequency === "annually" ? 1 : 
-                          compoundFrequency === "monthly" ? 12 : 
-                          compoundFrequency === "daily" ? 365 : 12;
-    
-    const ratePerPeriod = annualRate / periodsPerYear;
-    const monthsPerPeriod = 12 / periodsPerYear;
+    const daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
     for (let year = 1; year <= t; year++) {
-      for (let p = 0; p < periodsPerYear; p++) {
-        const balanceAtStartOfPeriod = currentBalance;
-        let interestForPeriod = balanceAtStartOfPeriod * ratePerPeriod;
-        
-        for (let m = 0; m < monthsPerPeriod; m++) {
+      if (compoundFrequency === "daily") {
+        const dailyRate = annualRate / 365;
+        for (let m = 0; m < 12; m++) {
+          const days = daysPerMonth[m];
           if (contributionTiming === "beginning") {
-            const monthsRemainingInPeriod = monthsPerPeriod - m;
-            const interestOnContribution = PMT * (ratePerPeriod * (monthsRemainingInPeriod / monthsPerPeriod));
-            interestForPeriod += interestOnContribution;
+            currentBalance += PMT;
+            totalInvested += PMT;
+            currentBalance *= Math.pow(1 + dailyRate, days);
+          } else {
+            currentBalance *= Math.pow(1 + dailyRate, days);
+            currentBalance += PMT;
+            totalInvested += PMT;
+          }
+        }
+      } else if (compoundFrequency === "monthly") {
+        const monthlyRate = annualRate / 12;
+        for (let m = 0; m < 12; m++) {
+          if (contributionTiming === "beginning") {
+            currentBalance += PMT;
+            totalInvested += PMT;
+            currentBalance *= (1 + monthlyRate);
+          } else {
+            currentBalance = currentBalance * (1 + monthlyRate) + PMT;
+            totalInvested += PMT;
+          }
+        }
+      } else if (compoundFrequency === "quarterly") {
+        const quarterlyRate = annualRate / 4;
+        for (let q = 0; q < 4; q++) {
+          let interestForQuarter = currentBalance * quarterlyRate;
+          for (let m = 0; m < 3; m++) {
+            if (contributionTiming === "beginning") {
+              const monthsRemaining = 3 - m;
+              interestForQuarter += PMT * quarterlyRate * (monthsRemaining / 3);
+              currentBalance += PMT;
+              totalInvested += PMT;
+            } else {
+              const monthsRemaining = 2 - m;
+              if (monthsRemaining > 0) {
+                interestForQuarter += PMT * quarterlyRate * (monthsRemaining / 3);
+              }
+              currentBalance += PMT;
+              totalInvested += PMT;
+            }
+          }
+          currentBalance += interestForQuarter;
+        }
+      } else {
+        // Annually
+        let interestForYear = currentBalance * annualRate;
+        for (let m = 0; m < 12; m++) {
+          if (contributionTiming === "beginning") {
+            const monthsRemaining = 12 - m;
+            interestForYear += PMT * annualRate * (monthsRemaining / 12);
             currentBalance += PMT;
             totalInvested += PMT;
           } else {
-            const monthsRemainingInPeriod = monthsPerPeriod - m - 1;
-            if (monthsRemainingInPeriod > 0) {
-              const interestOnContribution = PMT * (ratePerPeriod * (monthsRemainingInPeriod / monthsPerPeriod));
-              interestForPeriod += interestOnContribution;
+            const monthsRemaining = 11 - m;
+            if (monthsRemaining > 0) {
+              interestForYear += PMT * annualRate * (monthsRemaining / 12);
             }
             currentBalance += PMT;
             totalInvested += PMT;
           }
         }
-        currentBalance += interestForPeriod;
+        currentBalance += interestForYear;
       }
 
       breakdown.push({
         year,
         principal: totalInvested,
-        interest: currentBalance - totalInvested,
+        interest: Math.max(0, currentBalance - totalInvested),
         balance: currentBalance,
       });
     }
@@ -174,7 +213,7 @@ export default function InvestmentCalculatorClient() {
     setResult({
       total: currentBalance.toLocaleString('en-US', { maximumFractionDigits: 0 }),
       invested: totalInvested.toLocaleString('en-US', { maximumFractionDigits: 0 }),
-      returns: (currentBalance - totalInvested).toLocaleString('en-US', { maximumFractionDigits: 0 }),
+      returns: Math.max(0, currentBalance - totalInvested).toLocaleString('en-US', { maximumFractionDigits: 0 }),
       breakdown,
     });
   }, [initialAmount, monthlyContribution, years, interestRate, compoundFrequency, contributionTiming]);
@@ -361,6 +400,7 @@ export default function InvestmentCalculatorClient() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="annually">Annually</SelectItem>
+                      <SelectItem value="quarterly">Quarterly</SelectItem>
                       <SelectItem value="monthly">Monthly</SelectItem>
                       <SelectItem value="daily">Daily</SelectItem>
                     </SelectContent>
