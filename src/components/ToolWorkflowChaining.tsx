@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Zap, ArrowUpRight } from "lucide-react";
+import { getLanguageFromPathname, getCanonicalToolSlug, getLocalizedPath } from "@/lib/i18n/translations";
 
 interface WorkflowStep {
   badge: string;
@@ -14,9 +15,187 @@ interface WorkflowStep {
 
 export function ToolWorkflowChaining() {
   const pathname = usePathname();
-  const slug = pathname ? pathname.replace(/^\//, "").split("/")[0] : "";
+  const slug = getCanonicalToolSlug(pathname || "");
+  const currentLang = getLanguageFromPathname(pathname);
 
   const getWorkflowStep = (): WorkflowStep | null => {
+    // Spanish Workflows
+    if (currentLang === "es") {
+      switch (slug) {
+        case "background-remover":
+          return {
+            badge: "Paso 2: Optimizar Imagen",
+            title: "¿Deseas comprimir este recorte transparente para páginas web?",
+            description: "Reduce el tamaño PNG hasta un 80% manteniendo la transparencia nítida.",
+            actionText: "Abrir Compresor de Imágenes",
+            targetHref: "/es/image-compressor",
+          };
+        case "image-compressor":
+          return {
+            badge: "Herramienta Complementaria",
+            title: "¿Necesitas quitar el fondo de tus imágenes?",
+            description: "Aísla el sujeto principal en segundos con inteligencia artificial en memoria.",
+            actionText: "Quitar Fondo con IA",
+            targetHref: "/es/background-remover",
+          };
+        case "split-pdf":
+          return {
+            badge: "Paso 2: Convertir Páginas",
+            title: "¿Deseas convertir tus páginas PDF extraídas en imágenes PNG?",
+            description: "Renderiza imágenes vectoriales en alta nitidez a 150 DPI listas para compartir.",
+            actionText: "Convertir PDF a Imágenes",
+            targetHref: "/es/pdf-to-image",
+          };
+        case "merge-pdf":
+          return {
+            badge: "Herramienta Complementaria",
+            title: "¿Necesitas extraer páginas específicas de un documento extenso?",
+            description: "Aísla anexos, firmas y capítulos individuales en segundos.",
+            actionText: "Dividir PDF",
+            targetHref: "/es/split-pdf",
+          };
+        case "pdf-to-image":
+          return {
+            badge: "Paso 2: Optimización",
+            title: "¿Quieres reducir el tamaño de estas imágenes antes de enviarlas?",
+            description: "Comprime imágenes JPG, PNG y WebP localmente con control de calidad.",
+            actionText: "Comprimir Imágenes",
+            targetHref: "/es/image-compressor",
+          };
+        case "sip-calculator":
+          return {
+            badge: "Planificación Financiera",
+            title: "¿Deseas proyectar un capital inicial sumado a aportes mensuales?",
+            description: "Calcula el crecimiento compuesto con múltiples frecuencias de capitalización.",
+            actionText: "Calculadora de Inversiones",
+            targetHref: "/es/investment-calculator",
+          };
+        case "investment-calculator":
+          return {
+            badge: "Planificación Financiera",
+            title: "¿Buscas calcular aportaciones mensuales SIP con Step-Up anual?",
+            description: "Aprovecha el interés compuesto con incrementos automáticos de ahorro.",
+            actionText: "Calculadora SIP",
+            targetHref: "/es/sip-calculator",
+          };
+        case "password-generator":
+          return {
+            badge: "Flujo de Seguridad",
+            title: "¿Quieres compartir contraseñas o enlaces Wi-Fi con código QR?",
+            description: "Genera códigos QR de alta resolución con colores y corrección de error.",
+            actionText: "Generar Código QR",
+            targetHref: "/es/qr-generator",
+          };
+        case "date-calculator":
+          return {
+            badge: "Utilidad de Calendario",
+            title: "¿Quieres calcular tu edad cronológica exacta en años, meses y días?",
+            description: "Conoce tu edad al minuto y la cuenta regresiva para tu próximo cumpleaños.",
+            actionText: "Calculadora de Edad",
+            targetHref: "/es/age-calculator",
+          };
+        case "age-calculator":
+          return {
+            badge: "Utilidad de Calendario",
+            title: "¿Necesitas calcular la diferencia entre dos fechas o sumar días?",
+            description: "Mide intervalos de tiempo con desglose de días y semanas laborales.",
+            actionText: "Calculadora de Fechas",
+            targetHref: "/es/date-calculator",
+          };
+        default:
+          return null;
+      }
+    }
+
+    // Portuguese Workflows
+    if (currentLang === "pt") {
+      switch (slug) {
+        case "background-remover":
+          return {
+            badge: "Passo 2: Otimizar Imagem",
+            title: "Deseja comprimir esta imagem com fundo transparente para web?",
+            description: "Reduza o tamanho do PNG em até 80% sem perder a nitidez das bordas.",
+            actionText: "Abrir Compressor de Imagens",
+            targetHref: "/pt/image-compressor",
+          };
+        case "image-compressor":
+          return {
+            badge: "Ferramenta Complementar",
+            title: "Precisa remover o fundo de fotos ou produtos?",
+            description: "Isole o objeto principal em segundos com inteligência artificial.",
+            actionText: "Remover Fundo com IA",
+            targetHref: "/pt/background-remover",
+          };
+        case "split-pdf":
+          return {
+            badge: "Passo 2: Conversão Visual",
+            title: "Deseja converter as páginas extraídas em imagens PNG?",
+            description: "Gere imagens nítidas a 150 DPI de qualquer página do documento.",
+            actionText: "Converter PDF em Imagens",
+            targetHref: "/pt/pdf-to-image",
+          };
+        case "merge-pdf":
+          return {
+            badge: "Ferramenta Complementar",
+            title: "Precisa extrair páginas específicas de um PDF volumoso?",
+            description: "Isole anexos, contratos e blocos de assinatura rapidamente.",
+            actionText: "Dividir PDF",
+            targetHref: "/pt/split-pdf",
+          };
+        case "pdf-to-image":
+          return {
+            badge: "Passo 2: Otimização",
+            title: "Deseja reduzir o tamanho das imagens geradas antes de enviar?",
+            description: "Comprima JPG, PNG e WebP localmente com ajuste de qualidade.",
+            actionText: "Comprimir Imagens",
+            targetHref: "/pt/image-compressor",
+          };
+        case "sip-calculator":
+          return {
+            badge: "Planejamento Financeiro",
+            title: "Deseja simular um aporte inicial junto com depósitos mensais?",
+            description: "Projete o crescimento com capitalização diária, mensal ou anual.",
+            actionText: "Calculadora de Investimentos",
+            targetHref: "/pt/investment-calculator",
+          };
+        case "investment-calculator":
+          return {
+            badge: "Planejamento Financeiro",
+            title: "Quer calcular investimentos mensais SIP com Step-Up anual?",
+            description: "Potencialize juros compostos com aumentos automáticos anuais.",
+            actionText: "Calculadora SIP",
+            targetHref: "/pt/sip-calculator",
+          };
+        case "password-generator":
+          return {
+            badge: "Fluxo de Segurança",
+            title: "Precisa compartilhar credenciais ou links Wi-Fi via QR Code?",
+            description: "Crie códigos QR em alta resolução com cores personalizadas.",
+            actionText: "Criar Código QR",
+            targetHref: "/pt/qr-generator",
+          };
+        case "date-calculator":
+          return {
+            badge: "Utilidade de Calendário",
+            title: "Deseja calcular sua idade cronológica exata com contagem regressiva?",
+            description: "Descubra sua idade ao minuto e os dias para seu próximo aniversário.",
+            actionText: "Calculadora de Idade",
+            targetHref: "/pt/age-calculator",
+          };
+        case "age-calculator":
+          return {
+            badge: "Utilidade de Calendário",
+            title: "Precisa calcular intervalos ou adicionar dias entre duas datas?",
+            description: "Calcule a duração exata com detalhamento em dias e semanas.",
+            actionText: "Calculadora de Datas",
+            targetHref: "/pt/date-calculator",
+          };
+        default:
+          return null;
+      }
+    }
+
+    // Default English Workflows
     switch (slug) {
       case "background-remover":
         return {
@@ -178,6 +357,8 @@ export function ToolWorkflowChaining() {
   const workflow = getWorkflowStep();
   if (!workflow) return null;
 
+  const targetUrl = getLocalizedPath(workflow.targetHref, currentLang);
+
   return (
     <div className="w-full mt-8 p-6 md:p-8 rounded-[2rem] bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border border-primary/20 text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-sm">
       <div className="space-y-2">
@@ -188,7 +369,7 @@ export function ToolWorkflowChaining() {
         <p className="text-xs text-muted-foreground max-w-xl leading-relaxed">{workflow.description}</p>
       </div>
 
-      <Link href={workflow.targetHref} className="shrink-0 w-full sm:w-auto">
+      <Link href={targetUrl} className="shrink-0 w-full sm:w-auto">
         <button className="w-full sm:w-auto px-5 py-3 rounded-xl bg-primary text-primary-foreground text-xs font-bold shadow-md hover:bg-primary/90 hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
           {workflow.actionText} <ArrowUpRight className="h-4 w-4" />
         </button>

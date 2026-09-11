@@ -35,15 +35,19 @@ interface YearlyBreakdown {
 export interface SipCalculatorClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function SipCalculatorClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: SipCalculatorClientProps = {}) {
   const [monthlyInvestment, setMonthlyInvestment] = useState("40,000");
   const [years, setYears] = useState("8");
@@ -225,7 +229,7 @@ export default function SipCalculatorClient({
     <ToolLayout
       title={customTitle || "SIP Calculator"}
       description={customDescription || "Calculate the potential growth of your monthly savings with a Systematic Investment Plan (SIP)."}
-      summaryDefinition="A Systematic Investment Plan (SIP) calculator models the future value of recurring monthly mutual fund investments compounding over time. It calculates total invested capital, estimated wealth gain, and future maturity corpus based on expected annual return rates and investment duration."
+      summaryDefinition={customSummaryDefinition || "A Systematic Investment Plan (SIP) calculator models the future value of recurring monthly mutual fund investments compounding over time. It calculates total invested capital, estimated wealth gain, and future maturity corpus based on expected annual return rates and investment duration."}
       howToUse={customHowToUse || [
         { step: "Monthly Amount", description: "How much you plan to save every month." },
         { step: "Investment Term", description: "The number of years you plan to stay invested." },

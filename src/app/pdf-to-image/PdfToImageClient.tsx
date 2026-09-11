@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ToolLayout } from "@/components/ToolLayout";
 import { FileUploader } from "@/components/FileUploader";
 import { uploadToBackend } from "@/lib/api";
@@ -8,20 +9,30 @@ import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
 import { FileImage, Download, Layers, CheckCircle2, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getLanguageFromPathname } from "@/lib/i18n/translations";
+import { getUIStrings } from "@/lib/i18n/ui-strings";
 
 export interface PdfToImageClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function PdfToImageClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: PdfToImageClientProps = {}) {
+  const pathname = usePathname();
+  const currentLang = (lang || getLanguageFromPathname(pathname)) as "en" | "es" | "pt";
+  const ui = getUIStrings(currentLang);
+
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string; pages?: number } | null>(null);
   const [fileInfo, setFileInfo] = useState<{ name: string; size: string } | null>(null);
@@ -121,10 +132,43 @@ export default function PdfToImageClient({
     </article>
   );
 
+  const isEs = currentLang === "es";
+  const isPt = currentLang === "pt";
+
+  const t = {
+    convertingTitle: isEs ? "Convirtiendo PDF..." : isPt ? "Convertendo PDF..." : "Converting PDF...",
+    convertingDesc: isEs
+      ? "Estamos extrayendo imágenes de alta calidad de cada página. Suele tardar de 3 a 10 segundos según el tamaño."
+      : isPt
+      ? "Estamos extraindo imagens de alta qualidade de cada página. Geralmente leva de 3 a 10 segundos de acordo com o tamanho."
+      : "We're extracting high-quality images from each page. This usually takes 3-10 seconds depending on size (first run may take slightly longer).",
+    conversionComplete: isEs ? "Conversión Completa" : isPt ? "Conversão Concluída" : "Conversion Complete",
+    readyTitle: isEs ? "¡Tus imágenes están listas!" : isPt ? "Suas imagens estão prontas!" : "Your images are ready!",
+    downloadZip: isEs ? "Descargar todo (ZIP)" : isPt ? "Baixar tudo (ZIP)" : "Download All (ZIP)",
+    convertAnother: isEs ? "Convertir otro" : isPt ? "Converter outro" : "Convert Another",
+    formatLabel: isEs ? "Formato" : isPt ? "Formato" : "Format",
+    formatVal: isEs ? "PNG (Alta resolución)" : isPt ? "PNG (Alta resolução)" : "PNG (High-Res)",
+    statusLabel: isEs ? "Estado" : isPt ? "Status" : "Status",
+    statusVal: isEs ? "Listo para guardar" : isPt ? "Pronto para salvar" : "Ready to Save",
+    emptyTitle: isEs ? "Aún no se ha subido ningún archivo" : isPt ? "Nenhum arquivo enviado ainda" : "No file uploaded yet",
+    emptyDesc: isEs
+      ? "Una vez que subas tu PDF, podrás descargar cada página como una imagen individual."
+      : isPt
+      ? "Assim que enviar seu PDF, você poderá baixar cada página como uma imagem individual."
+      : "Once you upload your PDF, you'll be able to download each page as an individual image.",
+    emptyCta: isEs ? "Selecciona un PDF para comenzar" : isPt ? "Selecione um PDF para começar" : "Select a PDF to begin",
+    errorDesc: isEs
+      ? "Algo salió mal. Verifica el tamaño de tu archivo o asegúrate de que el servidor esté activo."
+      : isPt
+      ? "Algo deu errado. Verifique o tamanho do arquivo ou verifique se o servidor está ativo."
+      : "Something went wrong. Please check your file size or ensure the backend server is online.",
+  };
+
   return (
     <ToolLayout
       title={customTitle || "PDF to Image"}
       description={customDescription || "Convert every page of your PDF into high-quality PNG images instantly. Perfect for presentations and social media."}
+      summaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
@@ -135,11 +179,11 @@ export default function PdfToImageClient({
         <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
           <Card className="p-8 border-2 border-dashed bg-card rounded-[2rem]">
             <FileUploader
-              label="Upload PDF"
+              label={isEs ? "Subir PDF" : isPt ? "Enviar PDF" : "Upload PDF"}
               accept={{ "application/pdf": [".pdf"] }}
               onUpload={handleUpload}
               isLoading={isLoading}
-              hideDownload={true} // We'll show the result in the right column
+              hideDownload={true}
             />
           </Card>
 
@@ -165,9 +209,9 @@ export default function PdfToImageClient({
                 <Loader2 className="h-16 w-16 text-primary animate-spin" />
                 <Layers className="h-8 w-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">Converting PDF...</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">{t.convertingTitle}</h3>
               <p className="text-muted-foreground max-w-xs mx-auto">
-                We&apos;re extracting high-quality images from each page. This usually takes 3-10 seconds depending on size (first run may take slightly longer).
+                {t.convertingDesc}
               </p>
             </Card>
           ) : result ? (
@@ -178,14 +222,14 @@ export default function PdfToImageClient({
                 </div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] mb-4">
-                    <CheckCircle2 className="h-4 w-4" /> Conversion Complete
+                    <CheckCircle2 className="h-4 w-4" /> {t.conversionComplete}
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">Your images are ready!</h2>
+                  <h2 className="text-4xl font-black tracking-tight mb-8">{t.readyTitle}</h2>
 
                   <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-primary-foreground/20">
                     <a href={result.url} download={result.filename} className="flex-1">
                       <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all bg-background text-foreground hover:bg-background/90">
-                        <Download className="mr-2 h-6 w-6" /> Download All (ZIP)
+                        <Download className="mr-2 h-6 w-6" /> {t.downloadZip}
                       </Button>
                     </a>
                     <Button
@@ -193,7 +237,7 @@ export default function PdfToImageClient({
                       onClick={() => { setResult(null); setFileInfo(null); }}
                       className="h-16 px-8 rounded-2xl border-primary-foreground/20 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
                     >
-                      Convert Another
+                      {t.convertAnother}
                     </Button>
                   </div>
                 </div>
@@ -205,8 +249,8 @@ export default function PdfToImageClient({
                     <Layers className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Format</p>
-                    <p className="font-bold text-foreground">PNG (High-Res)</p>
+                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{t.formatLabel}</p>
+                    <p className="font-bold text-foreground">{t.formatVal}</p>
                   </div>
                 </Card>
                 <Card className="p-6 bg-card border rounded-2xl flex items-center gap-4">
@@ -214,8 +258,8 @@ export default function PdfToImageClient({
                     <CheckCircle2 className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Status</p>
-                    <p className="font-bold text-foreground">Ready to Save</p>
+                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{t.statusLabel}</p>
+                    <p className="font-bold text-foreground">{t.statusVal}</p>
                   </div>
                 </Card>
               </div>
@@ -225,12 +269,12 @@ export default function PdfToImageClient({
               <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-6">
                 <FileImage className="h-10 w-10 text-muted-foreground" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">No file uploaded yet</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">{t.emptyTitle}</h3>
               <p className="text-muted-foreground max-w-xs mx-auto">
-                Once you upload your PDF, you&apos;ll be able to download each page as an individual image.
+                {t.emptyDesc}
               </p>
               <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> Select a PDF to begin
+                <ArrowRight className="h-4 w-4" /> {t.emptyCta}
               </div>
             </Card>
           )}
@@ -239,7 +283,7 @@ export default function PdfToImageClient({
           {!isLoading && !result && fileInfo && (
             <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
               <AlertCircle className="h-5 w-5 shrink-0" />
-              <span>Something went wrong. Please check your file size or ensure the backend server is online.</span>
+              <span>{t.errorDesc}</span>
             </div>
           )}
         </div>

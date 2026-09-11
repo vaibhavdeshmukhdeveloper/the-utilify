@@ -8,6 +8,7 @@ export interface ToolTranslation {
   title: string;
   description: string;
   category: string;
+  summaryDefinition?: string;
   features: string[];
   howToUse: { step: string; description: string }[];
   faqs: { question: string; answer: string }[];
@@ -726,4 +727,36 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
 
 export function getToolTranslation(toolSlug: string, lang: Language): ToolTranslation | null {
   return toolTranslations[lang]?.[toolSlug] || null;
+}
+
+export function getLanguageFromPathname(pathname?: string | null): Language | "en" {
+  if (!pathname) return "en";
+  if (pathname.startsWith("/es/") || pathname === "/es") return "es";
+  if (pathname.startsWith("/pt/") || pathname === "/pt") return "pt";
+  return "en";
+}
+
+export function getLocalizedPath(path: string, targetLang: Language | "en"): string {
+  const cleanPath = path.replace(/^\/(es|pt)(\/|$)/, "/");
+  const toolSlug = cleanPath.replace(/^\//, "").split("/")[0].split("?")[0];
+
+  if (targetLang === "en") {
+    return cleanPath || "/";
+  }
+
+  // If tool exists in target language translations, link directly to it
+  if (toolSlug && toolTranslations[targetLang]?.[toolSlug]) {
+    return `/${targetLang}/${toolSlug}`;
+  }
+
+  // Default to language hub
+  return `/${targetLang}`;
+}
+
+export function getCanonicalToolSlug(pathnameOrSlug: string): string {
+  return pathnameOrSlug
+    .replace(/^\//, "")
+    .replace(/^(es|pt)\//, "")
+    .split("?")[0]
+    .split("/")[0];
 }

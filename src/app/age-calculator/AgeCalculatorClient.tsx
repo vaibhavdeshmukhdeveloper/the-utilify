@@ -26,15 +26,19 @@ function formatLocalDate(d: Date = new Date()): string {
 export interface AgeCalculatorClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function AgeCalculatorClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: AgeCalculatorClientProps = {}) {
   const [dob, setDob] = useState("1995-01-01");
   const [targetDate, setTargetDate] = useState(() => formatLocalDate(new Date()));
@@ -253,6 +257,7 @@ export default function AgeCalculatorClient({
     <ToolLayout
       title={customTitle || "Age Calculator"}
       description={customDescription || "Find your exact age in years, months, weeks, and days. Track your next birthday countdown in real-time."}
+      summaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

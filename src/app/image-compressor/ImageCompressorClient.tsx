@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ToolLayout } from "@/components/ToolLayout";
 import { FileUploader } from "@/components/FileUploader";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
@@ -24,6 +25,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { triggerConfetti, triggerCelebration } from "@/lib/confetti";
 import { cn } from "@/lib/utils";
+import { getLanguageFromPathname } from "@/lib/i18n/translations";
+import { getUIStrings } from "@/lib/i18n/ui-strings";
 
 interface CompressedItem {
   id: string;
@@ -45,17 +48,25 @@ export interface ImageCompressorClientProps {
   initialFormat?: "original" | "png" | "jpeg" | "webp";
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function ImageCompressorClient({
   initialFormat = "original",
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: ImageCompressorClientProps = {}) {
+  const pathname = usePathname();
+  const currentLang = (lang || getLanguageFromPathname(pathname)) as "en" | "es" | "pt";
+  const ui = getUIStrings(currentLang);
+
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<CompressedItem[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -305,11 +316,56 @@ export default function ImageCompressorClient({
     </article>
   );
 
+  const isEs = currentLang === "es";
+  const isPt = currentLang === "pt";
+
+  const t = {
+    quality: isEs ? "Calidad" : isPt ? "Qualidade" : "Quality",
+    highCompression: isEs ? "Alta compresión" : isPt ? "Alta compressão" : "High Compression",
+    balanced: isEs ? "Equilibrada" : isPt ? "Equilibrada" : "Balanced",
+    highQuality: isEs ? "Alta calidad" : isPt ? "Alta qualidade" : "High Quality",
+    outputFormat: isEs ? "Formato de salida" : isPt ? "Formato de saída" : "Output Format",
+    batchNotice: isEs
+      ? "Admite procesamiento por lotes de hasta 20 archivos (25MB cada uno). Procesado en la RAM de tu dispositivo."
+      : isPt
+      ? "Suporta processamento em lote de até 20 arquivos (25MB cada). Processado na RAM do seu dispositivo."
+      : "Supports batch processing up to 20 files (25MB each). Processed entirely in RAM on your device.",
+    sizeReduction: isEs ? "Reducción de tamaño" : isPt ? "Redução de tamanho" : "Size Reduction",
+    upTo85: isEs ? "Hasta 85%" : isPt ? "Até 85%" : "Up to 85%",
+    batchQueue: isEs ? "Cola de archivos" : isPt ? "Fila de arquivos" : "Batch Queue",
+    zipExport: isEs ? "Exportación ZIP" : isPt ? "Exportação ZIP" : "ZIP Export",
+    compressingTitle: isEs ? "Comprimiendo imágenes..." : isPt ? "Comprimindo imagens..." : "Compressing Images...",
+    compressingDesc: isEs
+      ? "Optimizando píxeles y convirtiendo búferes de imagen con WebAssembly local."
+      : isPt
+      ? "Otimizando pixels e convertendo buffers de imagem com WebAssembly local."
+      : "Optimizing pixel payload and converting image buffers with local WebAssembly.",
+    batchComplete: isEs ? "Lote completado" : isPt ? "Lote concluído" : "Batch Complete",
+    imagesCompressed: isEs ? "Imágenes comprimidas" : isPt ? "Imagens comprimidas" : "Images Compressed",
+    savedTotal: isEs ? "Ahorro total de" : isPt ? "Economia total de" : "Saved",
+    reduction: isEs ? "de reducción" : isPt ? "de redução" : "reduction",
+    clearAll: isEs ? "Borrar todo" : isPt ? "Limpar tudo" : "Clear All",
+    downloadZip: isEs ? "Descargar todo (ZIP)" : isPt ? "Baixar tudo (ZIP)" : "Download All (ZIP)",
+    interactiveComparison: isEs ? "COMPARACIÓN INTERACTIVA" : isPt ? "COMPARAÇÃO INTERATIVA" : "INTERACTIVE COMPARISON",
+    smaller: isEs ? "Más pequeño" : isPt ? "Menor" : "Smaller",
+    original: isEs ? "Original" : isPt ? "Original" : "Original",
+    compressed: isEs ? "Comprimido" : isPt ? "Comprimido" : "Compressed",
+    queueItems: isEs ? "Archivos en cola" : isPt ? "Itens na fila" : "Queue Items",
+    download: isEs ? "Descargar" : isPt ? "Baixar" : "Download",
+    emptyTitle: isEs ? "Compresión de imágenes de alta velocidad" : isPt ? "Compressão de imagens em alta velocidade" : "High-Speed Image Compression",
+    emptyDesc: isEs
+      ? "Sube una o varias fotos para reducir el tamaño al instante manteniendo una calidad nítida."
+      : isPt
+      ? "Envie uma ou mais fotos para reduzir o tamanho instantaneamente mantendo a qualidade nítida."
+      : "Upload one or multiple photos to instantly shrink file sizes while retaining crystal-clear quality.",
+    emptyCta: isEs ? "Sube imágenes para comenzar" : isPt ? "Envie imagens para começar" : "Upload images to begin",
+  };
+
   return (
     <ToolLayout
       title={customTitle || "Image Compressor"}
       description={customDescription || "Compress PNG, JPEG, and WebP images in batch with zero quality loss. 100% client-side privacy with 1-click ZIP export."}
-      summaryDefinition="An image compressor reduces the file size of WebP, JPEG, and PNG images through lossy and lossless algorithms without visible quality degradation. It runs 100% locally in the browser with zero server uploads and batch ZIP export."
+      summaryDefinition={customSummaryDefinition || "An image compressor reduces the file size of WebP, JPEG, and PNG images through lossy and lossless algorithms without visible quality degradation. It runs 100% locally in the browser with zero server uploads and batch ZIP export."}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
@@ -323,10 +379,10 @@ export default function ImageCompressorClient({
               <div className="flex justify-between items-center">
                 <label className="text-sm font-bold flex items-center gap-2 text-foreground">
                   <Settings className="w-4 h-4 text-primary" />
-                  Quality: {quality[0]}%
+                  {t.quality}: {quality[0]}%
                 </label>
                 <span className="text-xs font-semibold text-muted-foreground bg-muted px-2.5 py-0.5 rounded-full">
-                  {quality[0] < 50 ? "High Compression" : quality[0] < 80 ? "Balanced" : "High Quality"}
+                  {quality[0] < 50 ? t.highCompression : quality[0] < 80 ? t.balanced : t.highQuality}
                 </span>
               </div>
               <Slider
@@ -342,7 +398,7 @@ export default function ImageCompressorClient({
             <div className="space-y-3">
               <label className="text-sm font-bold flex items-center gap-2 text-foreground">
                 <ImageIcon className="w-4 h-4 text-primary" />
-                Output Format
+                {t.outputFormat}
               </label>
               <Tabs value={format} onValueChange={(val) => setFormat(val as any)} className="w-full">
                 <TabsList className="grid grid-cols-4 w-full h-10 rounded-xl">
@@ -355,7 +411,7 @@ export default function ImageCompressorClient({
             </div>
 
             <FileUploader
-              label="Drop single or multiple images"
+              label={isEs ? "Arrastra una o varias imágenes aquí" : isPt ? "Arraste uma ou mais imagens aqui" : "Drop single or multiple images"}
               accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
               multiple={true}
               maxFiles={20}
@@ -367,7 +423,7 @@ export default function ImageCompressorClient({
             <div className="p-4 bg-muted/40 rounded-2xl border flex items-start gap-3 text-xs text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
               <p className="leading-relaxed">
-                Supports batch processing up to <strong>20 files (25MB each)</strong>. Processed entirely in RAM on your device.
+                {t.batchNotice}
               </p>
             </div>
           </Card>
@@ -379,8 +435,8 @@ export default function ImageCompressorClient({
                 <Minimize2 className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-medium">Size Reduction</p>
-                <p className="text-sm font-bold text-foreground">Up to 85%</p>
+                <p className="text-xs text-muted-foreground font-medium">{t.sizeReduction}</p>
+                <p className="text-sm font-bold text-foreground">{t.upTo85}</p>
               </div>
             </Card>
             <Card className="p-4 bg-card/60 border rounded-2xl flex items-center gap-3">
@@ -388,8 +444,8 @@ export default function ImageCompressorClient({
                 <Layers className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-medium">Batch Queue</p>
-                <p className="text-sm font-bold text-foreground">ZIP Export</p>
+                <p className="text-xs text-muted-foreground font-medium">{t.batchQueue}</p>
+                <p className="text-sm font-bold text-foreground">{t.zipExport}</p>
               </div>
             </Card>
           </div>
@@ -402,9 +458,9 @@ export default function ImageCompressorClient({
               <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary animate-pulse">
                 <Loader2 className="h-10 w-10 animate-spin" />
               </div>
-              <h3 className="text-2xl font-black mb-2 text-foreground">Compressing Images...</h3>
+              <h3 className="text-2xl font-black mb-2 text-foreground">{t.compressingTitle}</h3>
               <p className="text-sm text-muted-foreground max-w-sm">
-                Optimizing pixel payload and converting image buffers with local WebAssembly.
+                {t.compressingDesc}
               </p>
             </Card>
           ) : items.length > 0 ? (
@@ -413,13 +469,13 @@ export default function ImageCompressorClient({
               <Card className="p-6 bg-card border rounded-3xl flex flex-wrap items-center justify-between gap-4 shadow-sm">
                 <div>
                   <span className="text-xs font-black uppercase tracking-wider text-green-500 flex items-center gap-1.5 mb-1">
-                    <Zap className="h-3.5 w-3.5" /> Batch Complete
+                    <Zap className="h-3.5 w-3.5" /> {t.batchComplete}
                   </span>
                   <h3 className="text-xl font-black text-foreground">
-                    {items.filter((i) => i.status === "done").length} Images Compressed
+                    {items.filter((i) => i.status === "done").length} {t.imagesCompressed}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Saved {((totalOriginalSize - totalCompressedSize) / (1024 * 1024)).toFixed(2)} MB total ({overallSavingsPercent}% reduction)
+                    {t.savedTotal} {((totalOriginalSize - totalCompressedSize) / (1024 * 1024)).toFixed(2)} MB total ({overallSavingsPercent}% {t.reduction})
                   </p>
                 </div>
 
@@ -430,7 +486,7 @@ export default function ImageCompressorClient({
                     onClick={handleClear}
                     className="rounded-xl text-xs gap-1"
                   >
-                    <Trash2 className="h-3.5 w-3.5" /> Clear All
+                    <Trash2 className="h-3.5 w-3.5" /> {t.clearAll}
                   </Button>
                   <Button
                     onClick={handleDownloadAllZip}
@@ -439,7 +495,7 @@ export default function ImageCompressorClient({
                     className="rounded-xl font-bold text-xs gap-1.5 shadow-md"
                   >
                     {isZipping ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Archive className="h-3.5 w-3.5" />}
-                    Download All (ZIP)
+                    {t.downloadZip}
                   </Button>
                 </div>
               </Card>
@@ -448,14 +504,14 @@ export default function ImageCompressorClient({
               {selectedItem && selectedItem.compressedUrl && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold text-muted-foreground px-1">
-                    <span>INTERACTIVE COMPARISON: {selectedItem.name}</span>
-                    <span className="text-green-500 font-bold">-{selectedItem.savingsPercent}% Smaller</span>
+                    <span>{t.interactiveComparison}: {selectedItem.name}</span>
+                    <span className="text-green-500 font-bold">-{selectedItem.savingsPercent}% {t.smaller}</span>
                   </div>
                   <BeforeAfterSlider
                     beforeImage={selectedItem.originalUrl}
                     afterImage={selectedItem.compressedUrl}
-                    beforeLabel={`Original (${selectedItem.originalSizeFormatted})`}
-                    afterLabel={`Compressed (${selectedItem.compressedSizeFormatted})`}
+                    beforeLabel={`${t.original} (${selectedItem.originalSizeFormatted})`}
+                    afterLabel={`${t.compressed} (${selectedItem.compressedSizeFormatted})`}
                     alt={selectedItem.name}
                   />
                 </div>
@@ -464,7 +520,7 @@ export default function ImageCompressorClient({
               {/* Batch Queue List */}
               <div className="space-y-3">
                 <h4 className="text-xs font-black uppercase tracking-wider text-muted-foreground px-1">
-                  Queue Items ({items.length})
+                  {t.queueItems} ({items.length})
                 </h4>
                 <div className="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
                   {items.map((item) => (
@@ -508,7 +564,7 @@ export default function ImageCompressorClient({
                             }}
                           >
                             <Button size="sm" variant="outline" className="rounded-xl h-9 px-3 text-xs font-bold gap-1.5">
-                              <Download className="h-3.5 w-3.5" /> Download
+                              <Download className="h-3.5 w-3.5" /> {t.download}
                             </Button>
                           </a>
                         )}
@@ -523,12 +579,12 @@ export default function ImageCompressorClient({
               <div className="w-20 h-20 rounded-3xl bg-muted/60 flex items-center justify-center mb-6">
                 <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
               </div>
-              <h3 className="text-2xl font-black mb-2 text-foreground">High-Speed Image Compression</h3>
+              <h3 className="text-2xl font-black mb-2 text-foreground">{t.emptyTitle}</h3>
               <p className="text-sm text-muted-foreground max-w-md leading-relaxed mb-6">
-                Upload one or multiple photos to instantly shrink file sizes while retaining crystal-clear quality.
+                {t.emptyDesc}
               </p>
               <div className="inline-flex items-center gap-2 text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-full">
-                <ArrowRight className="h-3.5 w-3.5" /> Upload images to begin
+                <ArrowRight className="h-3.5 w-3.5" /> {t.emptyCta}
               </div>
             </Card>
           )}

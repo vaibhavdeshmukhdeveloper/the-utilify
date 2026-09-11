@@ -20,15 +20,19 @@ import { toast } from "sonner";
 export interface PxToRemClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function PxToRemClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: PxToRemClientProps = {}) {
   const [baseSize, setBaseSize] = useState<number>(16);
   const [pixelInput, setPixelInput] = useState<string>("24");
@@ -133,7 +137,7 @@ export default function PxToRemClient({
     <ToolLayout
       title={customTitle || "PX to REM Converter"}
       description={customDescription || "Convert pixel (px) values to relative root em (rem) units instantly for accessible responsive web design, Figma design tokens, and Tailwind CSS."}
-      summaryDefinition="A PX to REM converter calculates the relative REM value of pixel dimensions based on the root HTML font size (default 16px). It includes bidirectional conversions, fluid CSS clamp() scaling, and Tailwind token cheat sheets."
+      summaryDefinition={customSummaryDefinition || "A PX to REM converter calculates the relative REM value of pixel dimensions based on the root HTML font size (default 16px). It includes bidirectional conversions, fluid CSS clamp() scaling, and Tailwind token cheat sheets."}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

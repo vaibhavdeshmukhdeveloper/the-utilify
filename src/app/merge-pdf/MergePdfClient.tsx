@@ -9,6 +9,9 @@ import { Card } from "@/components/ui/card";
 import { Layers, Download, CheckCircle2, ArrowRight, Loader2, Plus, X, ArrowUp, ArrowDown, FilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import { usePathname } from "next/navigation";
+import { getLanguageFromPathname } from "@/lib/i18n/translations";
+
 interface QueuedFile {
   file: File;
   id: string;
@@ -17,16 +20,22 @@ interface QueuedFile {
 export interface MergePdfClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function MergePdfClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: MergePdfClientProps = {}) {
+  const pathname = usePathname();
+  const currentLang = (lang as any) || getLanguageFromPathname(pathname);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [queuedFiles, setQueuedFiles] = useState<QueuedFile[]>([]);
@@ -154,11 +163,37 @@ export default function MergePdfClient({
     </article>
   );
 
+  const text = {
+    uploaderLabel: queuedFiles.length > 0
+      ? (currentLang === "es" ? "Añadir más PDFs" : currentLang === "pt" ? "Adicionar mais PDFs" : "Add More PDFs")
+      : (currentLang === "es" ? "Seleccionar PDFs para Unir" : currentLang === "pt" ? "Selecionar PDFs para Juntar" : "Select PDFs to Merge"),
+    queueTitle: currentLang === "es" ? `Cola para Unir (${queuedFiles.length})` : currentLang === "pt" ? `Fila para Juntar (${queuedFiles.length})` : `Merge Queue (${queuedFiles.length})`,
+    mergingTitle: currentLang === "es" ? "Uniendo Documentos..." : currentLang === "pt" ? "Juntando Documentos..." : "Merging Documents...",
+    mergingDesc: currentLang === "es" ? `Combinando ${queuedFiles.length} archivos en tu nuevo PDF.` : currentLang === "pt" ? `Combinando ${queuedFiles.length} arquivos no seu novo PDF.` : `Combining ${queuedFiles.length} files into your new PDF.`,
+    successBadge: currentLang === "es" ? "Unión Exitosa" : currentLang === "pt" ? "Sucesso" : "Merge Success",
+    successTitle: currentLang === "es" ? "¡Tu PDF combinado está listo!" : currentLang === "pt" ? "Seu PDF combinado está pronto!" : "Your combined PDF is ready!",
+    downloadBtn: currentLang === "es" ? "Descargar PDF Unido" : currentLang === "pt" ? "Baixar PDF Juntado" : "Download Merged PDF",
+    clearBtn: currentLang === "es" ? "Limpiar Todo" : currentLang === "pt" ? "Limpar Tudo" : "Clear All",
+    backBtn: currentLang === "es" ? "Volver a la Cola" : currentLang === "pt" ? "Voltar para a Fila" : "Back to Queue",
+    readyBadge: currentLang === "es" ? "Listo para Unir" : currentLang === "pt" ? "Pronto para Juntar" : "Ready to Merge",
+    readyTitle: currentLang === "es" ? `Combinar ${queuedFiles.length} Documentos` : currentLang === "pt" ? `Combinar ${queuedFiles.length} Documentos` : `Combine ${queuedFiles.length} Documents`,
+    mergeBtn: currentLang === "es" ? "Unir Todos los Archivos" : currentLang === "pt" ? "Juntar Todos os Arquivos" : "Merge All Files",
+    minFilesNotice: currentLang === "es" ? "Añade al menos un archivo más para unir." : currentLang === "pt" ? "Adicione pelo menos mais um arquivo para juntar." : "Add at least one more file to enable merging.",
+    queueModeLabel: currentLang === "es" ? "Modo de Cola" : currentLang === "pt" ? "Modo de Fila" : "Queue Mode",
+    queueModeVal: currentLang === "es" ? "Cargas Sucesivas" : currentLang === "pt" ? "Envios Adicionais" : "Additive Uploads",
+    orderingLabel: currentLang === "es" ? "Orden" : currentLang === "pt" ? "Ordem" : "Ordering",
+    orderingVal: currentLang === "es" ? "Personalizable" : currentLang === "pt" ? "Personalizável" : "Fully Customizable",
+    emptyTitle: currentLang === "es" ? "Crea tu Cola de PDFs" : currentLang === "pt" ? "Monte sua Fila de PDFs" : "Build Your PDF Queue",
+    emptyDesc: currentLang === "es" ? "Añade varios archivos PDF. Puedes reordenarlos o eliminarlos antes de unirlos en un solo documento." : currentLang === "pt" ? "Adicione múltiplos arquivos PDF. Você pode reordená-los ou removê-los antes de juntá-los em um único documento." : "Add multiple PDF files from any folder. You can reorder them or remove files before merging them into one.",
+    emptyAction: currentLang === "es" ? "Selecciona archivos para comenzar" : currentLang === "pt" ? "Selecione arquivos para começar" : "Select files to get started",
+  };
+
   return (
     <ToolLayout
       title={customTitle || "Merge PDF"}
       description={customDescription || "Combine multiple PDF documents into a single, professional file. Queue files, reorder them, and merge in seconds."}
       summaryDefinition="A PDF merger combines multiple individual PDF documents, scans, invoices, and receipts into a single sequential master PDF. It supports interactive drag-and-drop reordering and RAM-only processing with zero data retention."
+      customSummaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
@@ -169,7 +204,8 @@ export default function MergePdfClient({
         <div className="lg:col-span-6 space-y-6">
           <Card className="p-6 border-2 border-dashed bg-card rounded-[2rem]">
             <FileUploader
-              label={queuedFiles.length > 0 ? "Add More PDFs" : "Select PDFs to Merge"}
+              label={text.uploaderLabel}
+              lang={currentLang}
               accept={{ "application/pdf": [".pdf"] }}
               multiple={true}
               maxFiles={20}
@@ -183,7 +219,7 @@ export default function MergePdfClient({
           {queuedFiles.length > 0 && (
             <div className="space-y-4 animate-in fade-in slide-in-from-left-4">
                <div className="flex items-center justify-between px-2">
-                 <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Merge Queue ({queuedFiles.length})</p>
+                 <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.queueTitle}</p>
                  <Layers className="h-4 w-4 text-muted-foreground" />
                </div>
                <div className="space-y-3 max-h-[500px] overflow-auto pr-2 pb-4">
@@ -240,9 +276,9 @@ export default function MergePdfClient({
                 <Loader2 className="h-16 w-16 text-primary animate-spin" />
                 <Plus className="h-8 w-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">Merging Documents...</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2">{text.mergingTitle}</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm">
-                Combining {queuedFiles.length} files into your new PDF.
+                {text.mergingDesc}
               </p>
             </Card>
           ) : result ? (
@@ -253,14 +289,14 @@ export default function MergePdfClient({
                 </div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
-                    <CheckCircle2 className="h-4 w-4" /> Merge Success
+                    <CheckCircle2 className="h-4 w-4" /> {text.successBadge}
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">Your combined PDF is ready!</h2>
+                  <h2 className="text-4xl font-black tracking-tight mb-8">{text.successTitle}</h2>
                   
                   <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
                     <a href={result.url} download={result.filename} className="flex-1">
                       <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                        <Download className="mr-2 h-6 w-6" /> Download Merged PDF
+                        <Download className="mr-2 h-6 w-6" /> {text.downloadBtn}
                       </Button>
                     </a>
                     <Button 
@@ -268,7 +304,7 @@ export default function MergePdfClient({
                       onClick={() => {setResult(null); setQueuedFiles([]);}} 
                       className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                     >
-                      Clear All
+                      {text.clearBtn}
                     </Button>
                   </div>
                 </div>
@@ -279,7 +315,7 @@ export default function MergePdfClient({
                 onClick={() => setResult(null)} 
                 className="w-full h-12 text-sm font-bold border-2 border-dashed rounded-xl"
               >
-                Back to Queue
+                {text.backBtn}
               </Button>
             </div>
           ) : queuedFiles.length > 0 ? (
@@ -289,20 +325,20 @@ export default function MergePdfClient({
                   <Plus className="h-32 w-32" />
                 </div>
                 <div className="relative z-10">
-                  <p className="text-xs font-black uppercase tracking-[0.3em] opacity-70 mb-4">Ready to Merge</p>
-                  <h2 className="text-3xl font-black tracking-tight mb-8">Combine {queuedFiles.length} Documents</h2>
+                  <p className="text-xs font-black uppercase tracking-[0.3em] opacity-70 mb-4">{text.readyBadge}</p>
+                  <h2 className="text-3xl font-black tracking-tight mb-8">{text.readyTitle}</h2>
                   
                   <Button 
                     onClick={processMerge} 
                     disabled={queuedFiles.length < 2}
                     className="w-full h-20 text-xl font-black bg-white text-primary hover:bg-zinc-100 rounded-2xl shadow-lg transition-all"
                   >
-                    <Layers className="mr-2 h-6 w-6" /> Merge All Files
+                    <Layers className="mr-2 h-6 w-6" /> {text.mergeBtn}
                   </Button>
                   
                   {queuedFiles.length < 2 && (
                     <p className="text-xs font-medium text-center mt-4 opacity-80">
-                      Add at least one more file to enable merging.
+                      {text.minFilesNotice}
                     </p>
                   )}
                 </div>
@@ -314,8 +350,8 @@ export default function MergePdfClient({
                     <FilePlus className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Queue Mode</p>
-                    <p className="font-bold">Additive Uploads</p>
+                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.queueModeLabel}</p>
+                    <p className="font-bold">{text.queueModeVal}</p>
                   </div>
                 </Card>
                 <Card className="p-6 bg-card border-none rounded-2xl flex items-center gap-4">
@@ -323,8 +359,8 @@ export default function MergePdfClient({
                     <ArrowDown className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Ordering</p>
-                    <p className="font-bold">Fully Customizable</p>
+                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.orderingLabel}</p>
+                    <p className="font-bold">{text.orderingVal}</p>
                   </div>
                 </Card>
               </div>
@@ -334,12 +370,12 @@ export default function MergePdfClient({
               <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
                 <Plus className="h-10 w-10 text-muted-foreground/40" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">Build Your PDF Queue</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2">{text.emptyTitle}</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
-                Add multiple PDF files from any folder. You can reorder them or remove files before merging them into one.
+                {text.emptyDesc}
               </p>
               <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> Select files to get started
+                <ArrowRight className="h-4 w-4" /> {text.emptyAction}
               </div>
             </Card>
           )}

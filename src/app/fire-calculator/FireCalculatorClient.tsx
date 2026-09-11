@@ -19,15 +19,19 @@ import { toast } from "sonner";
 export interface FireCalculatorClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function FireCalculatorClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: FireCalculatorClientProps = {}) {
   const [annualExpenses, setAnnualExpenses] = useState<number>(48000);
   const [currentNetWorth, setCurrentNetWorth] = useState<number>(100000);
@@ -140,7 +144,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
     <ToolLayout
       title={customTitle || "FIRE Calculator"}
       description={customDescription || "Calculate your Financial Independence Retire Early (FIRE) number, annual spending targets, and milestone years using the 4% safe withdrawal rule."}
-      summaryDefinition="A FIRE calculator computes the total investment corpus required to achieve Financial Independence and Retire Early. By applying safe withdrawal rates (3.5%–4%) and inflation-adjusted compound growth, it models the exact timeline until passive portfolio withdrawals cover all living expenses."
+      summaryDefinition={customSummaryDefinition || "A FIRE calculator computes the total investment corpus required to achieve Financial Independence and Retire Early. By applying safe withdrawal rates (3.5%–4%) and inflation-adjusted compound growth, it models the exact timeline until passive portfolio withdrawals cover all living expenses."}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

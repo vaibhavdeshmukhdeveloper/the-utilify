@@ -22,8 +22,10 @@ import {
 export interface JsonFormatterClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 // Recursive Collapsible Tree View Component
@@ -271,8 +273,10 @@ const sortObjectKeys = (obj: any): any => {
 export default function JsonFormatterClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: JsonFormatterClientProps = {}) {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -580,7 +584,7 @@ export default function JsonFormatterClient({
     <ToolLayout
       title={customTitle || "JSON Formatter"}
       description={customDescription || "Pretty-print, validate, and minify your JSON data instantly. 100% private and secure."}
-      summaryDefinition="A JSON formatter and validator pretty-prints nested JSON strings with custom indentation (2/4 spaces), validates RFC 8259 syntax with line-by-line error diagnostics, and minifies payloads 100% locally in your browser."
+      summaryDefinition={customSummaryDefinition || "A JSON formatter and validator pretty-prints nested JSON strings with custom indentation (2/4 spaces), validates RFC 8259 syntax with line-by-line error diagnostics, and minifies payloads 100% locally in your browser."}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

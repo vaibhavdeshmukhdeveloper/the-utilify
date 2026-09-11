@@ -12,13 +12,18 @@ import { cn } from "@/lib/utils";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { triggerCelebration, triggerConfetti } from "@/lib/confetti";
 
+import { usePathname } from "next/navigation";
+import { getLanguageFromPathname } from "@/lib/i18n/translations";
+
 export interface BackgroundRemoverClientProps {
   initialBgMode?: "transparent" | "white" | "black" | "blue" | "sunset" | "neon";
   initialModel?: "isnet-general-use" | "silueta" | "u2net" | "u2net_human_seg" | "u2net_cloth_seg";
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function BackgroundRemoverClient({
@@ -26,9 +31,13 @@ export default function BackgroundRemoverClient({
   initialModel = "isnet-general-use",
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: BackgroundRemoverClientProps = {}) {
+  const pathname = usePathname();
+  const currentLang = (lang as any) || getLanguageFromPathname(pathname);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [originalFile, setOriginalFile] = useState<{ name: string; size: string } | null>(null);
@@ -518,6 +527,7 @@ export default function BackgroundRemoverClient({
       title={customTitle || "Background Remover"}
       description={customDescription || "Remove image backgrounds automatically in seconds. Powered by professional-grade AI for pixel-perfect results."}
       summaryDefinition="An AI background remover isolates foreground subjects (portraits, products, signatures, and graphics) and removes unwanted backdrops. It generates full-resolution transparent PNG cutouts without watermarks, subscription paywalls, or credit limits."
+      customSummaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
@@ -529,7 +539,8 @@ export default function BackgroundRemoverClient({
           <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem]">
             <FileUploader
               key={uploaderKey}
-              label="Upload Image"
+              label={currentLang === "es" ? "Subir Imagen" : currentLang === "pt" ? "Enviar Imagem" : "Upload Image"}
+              lang={currentLang}
               accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
               onUpload={handleUpload}
               isLoading={isLoading}
@@ -540,7 +551,9 @@ export default function BackgroundRemoverClient({
           <Card className="p-6 border-2 bg-card rounded-[2rem] space-y-6">
             <div className="flex items-center gap-3 border-b pb-4">
               <Settings className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-black tracking-tight m-0">AI Processing Settings</h3>
+              <h3 className="text-lg font-black tracking-tight m-0">
+                {currentLang === "es" ? "Configuración de IA" : currentLang === "pt" ? "Configurações de IA" : "AI Processing Settings"}
+              </h3>
             </div>
             
             {/* Resolution selection */}

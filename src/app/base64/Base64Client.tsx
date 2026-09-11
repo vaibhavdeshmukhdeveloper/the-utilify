@@ -14,15 +14,19 @@ import { CopyButton } from "@/components/CopyButton";
 export interface Base64ClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function Base64Client({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: Base64ClientProps = {}) {
   const [isDragOverPlain, setIsDragOverPlain] = useState(false);
   const [isDragOverBase64, setIsDragOverBase64] = useState(false);
@@ -239,6 +243,7 @@ export default function Base64Client({
     <ToolLayout
       title={customTitle || "Base64 Encoder / Decoder"}
       description={customDescription || "Encode text or files into Base64 format and decode Base64 strings back to their original form securely in-browser."}
+      summaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

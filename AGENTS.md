@@ -26,7 +26,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **Theme:** `next-themes` (Dark/Light mode with glassmorphic navigation and animated theme toggles).
 - **Icons & UI:** `lucide-react`, Base UI / Radix Primitives (`components.json`), `sonner` for toast notifications.
 - **Micro-Interactions:** `canvas-confetti` (`src/lib/confetti.ts`) for celebratory feedback on copying, calculations, and downloads.
-- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` for LaTeX math formulas in financial and health tools.
+- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash normalization) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character filtering.
 - **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), PX to REM converters, and batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
 
 ### Backend (`/backend`)
@@ -175,6 +175,13 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
    - In fluid typography `clamp()`, guard against `baseSize <= 0` and equal viewport boundaries (`clampMaxVw <= clampMinVw`).
    - In retirement calculations, clamp inflation denominators (`Math.max(0.01, 1 + inflation/100)`) and cap time horizons $\ge 100$ years as `"100+ Yrs"`.
 
+5. **Template Literal LaTeX Escaping Standards & Control Character Safety:**
+   - In JavaScript/TypeScript template literals (e.g. `src/lib/blog-data.ts`), **ALWAYS** escape LaTeX command backslashes with double backslashes: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
+   - **Critical JS Parser Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, corrupting KaTeX parsing.
+   - In `src/app/blog/[slug]/page.tsx`, `sanitizeMath()` defensively filters non-printable ASCII control characters (`\x00`–`\x1F` except `\n`, `\r`) before passing strings to `katex.renderToString()`.
+   - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
+   - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
+
 ---
 
 ## 7. Interactive Components & Platform Features
@@ -228,3 +235,8 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 
 5. **Verifying Code:**
    - Always run `npm run build` locally before pushing to verify TypeScript and static generation pass with 0 errors.
+
+6. **Blog Guide Quality & Integrity (`src/lib/blog-data.ts`):**
+   - Ensure zero boilerplate leakage: never paste foreign UI widgets (e.g., image-compression HTML or file dropzones) into financial or developer articles.
+   - Ensure all mathematical equations use double backslashes (`\\frac{...}{...}`) in template strings.
+   - Always run `npx tsc --noEmit` and `npm run build` locally before pushing.

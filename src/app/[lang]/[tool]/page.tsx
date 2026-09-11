@@ -148,8 +148,10 @@ export default async function LocalizedToolPage({ params }: PageProps) {
     <>
       <JsonLd data={schema} />
       <Component
+        lang={lang}
         customTitle={translation.name}
         customDescription={translation.description}
+        customSummaryDefinition={translation.summaryDefinition}
         customHowToUse={translation.howToUse}
         customFaqs={translation.faqs}
       />

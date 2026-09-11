@@ -1,18 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, Heart } from "lucide-react";
+import { Sparkles, Heart, Globe } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { getLanguageFromPathname, toolTranslations } from "@/lib/i18n/translations";
+import { getUIStrings } from "@/lib/i18n/ui-strings";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
   const pathname = usePathname();
+  const currentLang = getLanguageFromPathname(pathname);
+  const t = getUIStrings(currentLang);
+
+  const homeHref = currentLang === "en" ? "/" : `/${currentLang}`;
 
   const getLinkClass = (href: string) => {
     const isActive = pathname === href;
     return isActive
       ? "text-sm text-primary font-bold hover:underline transition-colors"
       : "text-sm text-muted-foreground hover:text-primary transition-colors";
+  };
+
+  // Helper to resolve localized tool href and name if available
+  const resolveTool = (slug: string, defaultName: string) => {
+    if (currentLang !== "en" && toolTranslations[currentLang]?.[slug]) {
+      return {
+        href: `/${currentLang}/${slug}`,
+        name: toolTranslations[currentLang][slug].name,
+      };
+    }
+    return {
+      href: `/${slug}`,
+      name: defaultName,
+    };
   };
 
   return (
@@ -22,7 +43,7 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 md:gap-10">
           {/* Logo & Pitch */}
           <div className="space-y-4 col-span-1 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 group">
+            <Link href={homeHref} className="flex items-center gap-2 group">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-violet-600 flex items-center justify-center text-white shadow-md shadow-primary/10">
                 <Sparkles className="h-4.5 w-4.5" />
               </div>
@@ -31,11 +52,11 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Fast, elegant, and 100% secure online utilities designed to simplify your digital life. No signups, no fees - just instant results.
+              {t.footer.pitch}
             </p>
             <div className="pt-2 space-y-1.5">
               <span className="text-[10px] uppercase font-black tracking-wider text-muted-foreground block">
-                More Apps by Developer
+                {t.footer.developerApps}
               </span>
               <a
                 href="https://play.google.com/store/apps/developer?id=Vaibhav+Deshmukh"
@@ -47,8 +68,8 @@ export function Footer() {
                   <path d="M5 3.25c-.28 0-.53.15-.66.39L12.56 12l-8.22 8.36c.13.24.38.39.66.39.12 0 .23-.03.34-.09l13.11-7.53c.69-.4 1.05-1.07 1.05-1.63 0-.56-.36-1.23-1.05-1.63L5.34 3.34c-.11-.06-.22-.09-.34-.09z"/>
                 </svg>
                 <div className="flex flex-col text-left">
-                  <span className="text-[8px] uppercase font-bold tracking-widest text-zinc-400 dark:text-zinc-500 leading-none mb-0.5">Get it on</span>
-                  <span className="text-xs font-black leading-none">Google Play</span>
+                  <span className="text-[8px] uppercase font-bold tracking-widest text-zinc-400 dark:text-zinc-500 leading-none mb-0.5">{t.crossPromo.getItOn}</span>
+                  <span className="text-xs font-black leading-none">{t.crossPromo.googlePlay}</span>
                 </div>
               </a>
             </div>
@@ -57,200 +78,136 @@ export function Footer() {
           {/* Column 2: PDF & Image Tools */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              PDF &amp; Image Tools
+              {t.footer.colPdfImage}
             </h4>
             <ul className="space-y-2.5">
-              <li>
-                <Link href="/background-remover" className={getLinkClass("/background-remover")}>
-                  AI Background Remover
-                </Link>
-              </li>
-              <li>
-                <Link href="/image-compressor" className={getLinkClass("/image-compressor")}>
-                  Image Compressor
-                </Link>
-              </li>
-              <li>
-                <Link href="/compress-png" className={getLinkClass("/compress-png")}>
-                  Compress PNG
-                </Link>
-              </li>
-              <li>
-                <Link href="/compress-jpeg" className={getLinkClass("/compress-jpeg")}>
-                  Compress JPEG
-                </Link>
-              </li>
-              <li>
-                <Link href="/make-signature-transparent" className={getLinkClass("/make-signature-transparent")}>
-                  Transparent Signature
-                </Link>
-              </li>
-              <li>
-                <Link href="/white-background-product-photos" className={getLinkClass("/white-background-product-photos")}>
-                  White Background Photos
-                </Link>
-              </li>
-              <li>
-                <Link href="/pdf-to-image" className={getLinkClass("/pdf-to-image")}>
-                  PDF to Image
-                </Link>
-              </li>
-              <li>
-                <Link href="/split-pdf" className={getLinkClass("/split-pdf")}>
-                  Split PDF
-                </Link>
-              </li>
-              <li>
-                <Link href="/merge-pdf" className={getLinkClass("/merge-pdf")}>
-                  Merge PDF
-                </Link>
-              </li>
-              <li>
-                <Link href="/markdown-to-pdf" className={getLinkClass("/markdown-to-pdf")}>
-                  Markdown to PDF
-                </Link>
-              </li>
+              {[
+                { slug: "background-remover", defaultName: "AI Background Remover" },
+                { slug: "image-compressor", defaultName: "Image Compressor" },
+                { slug: "compress-png", defaultName: "Compress PNG" },
+                { slug: "compress-jpeg", defaultName: "Compress JPEG" },
+                { slug: "make-signature-transparent", defaultName: "Transparent Signature" },
+                { slug: "white-background-product-photos", defaultName: "White Background Photos" },
+                { slug: "pdf-to-image", defaultName: "PDF to Image" },
+                { slug: "split-pdf", defaultName: "Split PDF" },
+                { slug: "merge-pdf", defaultName: "Merge PDF" },
+                { slug: "markdown-to-pdf", defaultName: "Markdown to PDF" },
+              ].map(({ slug, defaultName }) => {
+                const item = resolveTool(slug, defaultName);
+                return (
+                  <li key={slug}>
+                    <Link href={item.href} className={getLinkClass(item.href)}>
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
           {/* Column 3: Developer & Text Tools */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Developer &amp; Text
+              {t.footer.colDevText}
             </h4>
             <ul className="space-y-2.5">
-              <li>
-                <Link href="/px-to-rem" className={getLinkClass("/px-to-rem")}>
-                  PX to REM Converter
-                </Link>
-              </li>
-              <li>
-                <Link href="/json-formatter" className={getLinkClass("/json-formatter")}>
-                  JSON Formatter
-                </Link>
-              </li>
-              <li>
-                <Link href="/password-generator" className={getLinkClass("/password-generator")}>
-                  Password Generator
-                </Link>
-              </li>
-              <li>
-                <Link href="/qr-generator" className={getLinkClass("/qr-generator")}>
-                  QR Code Generator
-                </Link>
-              </li>
-              <li>
-                <Link href="/base64" className={getLinkClass("/base64")}>
-                  Base64 Encoder/Decoder
-                </Link>
-              </li>
-              <li>
-                <Link href="/text-converter" className={getLinkClass("/text-converter")}>
-                  Text Case Converter
-                </Link>
-              </li>
-              <li>
-                <Link href="/word-counter" className={getLinkClass("/word-counter")}>
-                  Word Counter
-                </Link>
-              </li>
-              <li>
-                <Link href="/diff-checker" className={getLinkClass("/diff-checker")}>
-                  Diff Checker
-                </Link>
-              </li>
-              <li>
-                <Link href="/lorem-ipsum" className={getLinkClass("/lorem-ipsum")}>
-                  Lorem Ipsum Generator
-                </Link>
-              </li>
+              {[
+                { slug: "json-formatter", defaultName: "JSON Formatter" },
+                { slug: "password-generator", defaultName: "Password Generator" },
+                { slug: "qr-generator", defaultName: "QR Code Generator" },
+                { slug: "word-counter", defaultName: "Word Counter" },
+                { slug: "text-converter", defaultName: "Case Converter" },
+                { slug: "diff-checker", defaultName: "Diff Checker" },
+                { slug: "base64", defaultName: "Base64 Converter" },
+                { slug: "lorem-ipsum", defaultName: "Lorem Ipsum Generator" },
+                { slug: "px-to-rem", defaultName: "PX to REM Converter" },
+              ].map(({ slug, defaultName }) => {
+                const item = resolveTool(slug, defaultName);
+                return (
+                  <li key={slug}>
+                    <Link href={item.href} className={getLinkClass(item.href)}>
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
-          {/* Column 4: Calculators & Design */}
+          {/* Column 4: Financial & Health Calculators */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Calculators &amp; Design
+              {t.footer.colCalculators}
             </h4>
             <ul className="space-y-2.5">
-              <li>
-                <Link href="/fire-calculator" className={getLinkClass("/fire-calculator")}>
-                  FIRE Calculator (4% Rule)
-                </Link>
-              </li>
-              <li>
-                <Link href="/sip-calculator" className={getLinkClass("/sip-calculator")}>
-                  SIP Calculator
-                </Link>
-              </li>
-              <li>
-                <Link href="/investment-calculator" className={getLinkClass("/investment-calculator")}>
-                  Investment Calculator
-                </Link>
-              </li>
-              <li>
-                <Link href="/bmi-calculator" className={getLinkClass("/bmi-calculator")}>
-                  BMI Calculator
-                </Link>
-              </li>
-              <li>
-                <Link href="/age-calculator" className={getLinkClass("/age-calculator")}>
-                  Age Calculator
-                </Link>
-              </li>
-              <li>
-                <Link href="/date-calculator" className={getLinkClass("/date-calculator")}>
-                  Date Calculator
-                </Link>
-              </li>
-              <li>
-                <Link href="/unit-converter" className={getLinkClass("/unit-converter")}>
-                  Unit Converter
-                </Link>
-              </li>
-              <li>
-                <Link href="/color-palette" className={getLinkClass("/color-palette")}>
-                  Color Palette Generator
-                </Link>
-              </li>
+              {[
+                { slug: "sip-calculator", defaultName: "SIP Calculator" },
+                { slug: "investment-calculator", defaultName: "Investment Calculator" },
+                { slug: "fire-calculator", defaultName: "FIRE Calculator" },
+                { slug: "bmi-calculator", defaultName: "BMI Calculator" },
+                { slug: "age-calculator", defaultName: "Age Calculator" },
+                { slug: "date-calculator", defaultName: "Date Calculator" },
+                { slug: "business-days-calculator", defaultName: "Business Days Calculator" },
+                { slug: "unit-converter", defaultName: "Unit Converter" },
+                { slug: "color-palette", defaultName: "Color Palette Generator" },
+              ].map(({ slug, defaultName }) => {
+                const item = resolveTool(slug, defaultName);
+                return (
+                  <li key={slug}>
+                    <Link href={item.href} className={getLinkClass(item.href)}>
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
           {/* Column 5: Company & Legal */}
           <div>
             <h4 className="text-sm font-bold text-foreground tracking-wider uppercase mb-4">
-              Company
+              {t.footer.colCompany}
             </h4>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/about" className={getLinkClass("/about")}>
-                  About Us
+                  {t.nav.about}
                 </Link>
               </li>
               <li>
                 <Link href="/blog" className={getLinkClass("/blog")}>
-                  Blog Guides
+                  {t.nav.blog}
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className={getLinkClass("/contact")}>
-                  Contact
+                  {t.nav.contact}
                 </Link>
               </li>
               <li>
                 <Link href="/faq" className={getLinkClass("/faq")}>
-                  FAQ Help
+                  {t.toolLayout.faqTitle}
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className={getLinkClass("/privacy")}>
+                  {t.footer.privacyPolicy}
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className={getLinkClass("/terms")}>
+                  {t.footer.termsOfService}
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Secondary Category & Alternative Links Bar for Deep Internal Linking */}
+        {/* Category Pillar Hubs & SaaS Comparisons */}
         <div className="mt-12 pt-8 border-t grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h5 className="text-xs uppercase font-black tracking-wider text-foreground mb-3">
-              Tool Category Hubs
+              {t.footer.categoryHubs}
             </h5>
             <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <Link href="/category/pdf-tools" className="hover:text-primary transition-colors">
@@ -273,7 +230,7 @@ export function Footer() {
 
           <div>
             <h5 className="text-xs uppercase font-black tracking-wider text-foreground mb-3">
-              Free Software Alternatives
+              {t.footer.softwareAlternatives}
             </h5>
             <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <Link href="/vs/ilovepdf" className="hover:text-primary transition-colors">
@@ -303,17 +260,24 @@ export function Footer() {
           </div>
 
           <div className="md:col-span-2">
-            <h5 className="text-xs uppercase font-black tracking-wider text-foreground mb-3 flex items-center gap-1.5">
-              <span>🌐</span> Global &amp; Multilingual Editions
-            </h5>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
-              <Link href="/es" className="hover:text-primary transition-colors font-medium">
-                🇪🇸 Español (Unir PDF, Quitar Fondo, Comprimir Fotos)
-              </Link>
-              <span>•</span>
-              <Link href="/pt" className="hover:text-primary transition-colors font-medium">
-                🇧🇷 Português (Juntar PDF, Remover Fundo, Comprimir Imagens)
-              </Link>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h5 className="text-xs uppercase font-black tracking-wider text-foreground mb-3 flex items-center gap-1.5">
+                  <Globe className="h-3.5 w-3.5 text-primary" /> {t.footer.multilingualEditions}
+                </h5>
+                <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+                  <Link href="/es" className="hover:text-primary transition-colors font-medium">
+                    🇪🇸 Español (Unir PDF, Quitar Fondo, Comprimir Fotos)
+                  </Link>
+                  <span>•</span>
+                  <Link href="/pt" className="hover:text-primary transition-colors font-medium">
+                    🇧🇷 Português (Juntar PDF, Remover Fundo, Comprimir Imagens)
+                  </Link>
+                </div>
+              </div>
+              <div className="pt-2 sm:pt-0">
+                <LanguageSwitcher variant="pills" />
+              </div>
             </div>
           </div>
         </div>
@@ -321,14 +285,14 @@ export function Footer() {
         {/* Bottom Area */}
         <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground text-center sm:text-left">
-            &copy; {currentYear} Utilify. All rights reserved. Made with <Heart className="inline-block h-3.5 w-3.5 text-red-500 fill-red-500" /> for a simpler web.
+            &copy; {currentYear} Utilify. {t.footer.allRightsReserved} Made with <Heart className="inline-block h-3.5 w-3.5 text-red-500 fill-red-500" /> {t.footer.madeWithLove}
           </p>
           <div className="flex items-center gap-6 text-xs text-muted-foreground">
             <Link href="/privacy" className="hover:text-primary transition-colors">
-              Privacy Policy
+              {t.footer.privacyPolicy}
             </Link>
             <Link href="/terms" className="hover:text-primary transition-colors">
-              Terms of Service
+              {t.footer.termsOfService}
             </Link>
             <a href="/llms.txt" className="hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">
               LLMs (llms.txt)

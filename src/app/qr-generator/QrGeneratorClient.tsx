@@ -14,15 +14,19 @@ import { copyShareUrl } from "@/lib/share-utils";
 export interface QrGeneratorClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function QrGeneratorClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: QrGeneratorClientProps = {}) {
   const [activeTab, setActiveTab] = useState("url");
   
@@ -206,6 +210,7 @@ export default function QrGeneratorClient({
     <ToolLayout
       title={customTitle || "QR Code Generator"}
       description={customDescription || "Create beautiful, customizable QR codes instantly for Wi-Fi, links, email contacts, and more."}
+      summaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

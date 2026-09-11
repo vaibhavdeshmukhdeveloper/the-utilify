@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Upload, X, FileText, CheckCircle2, Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { getLanguageFromPathname } from "@/lib/i18n/translations";
+import { getUIStrings } from "@/lib/i18n/ui-strings";
 
 interface FileUploaderProps {
   accept: Record<string, string[]>;
@@ -18,6 +21,7 @@ interface FileUploaderProps {
   downloadFilename?: string;
   autoUpload?: boolean;
   hideDownload?: boolean;
+  lang?: string;
 }
 
 export function FileUploader({
@@ -31,7 +35,12 @@ export function FileUploader({
   downloadFilename,
   autoUpload = false,
   hideDownload = false,
+  lang,
 }: FileUploaderProps) {
+  const pathname = usePathname();
+  const currentLang = (lang as any) || getLanguageFromPathname(pathname);
+  const t = getUIStrings(currentLang);
+
   const [files, setFiles] = useState<File[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -64,7 +73,7 @@ export function FileUploader({
       }
 
       if (pastedFiles.length > 0) {
-        toast.success("Pasted image from clipboard");
+        toast.success(t.fileUploader.pasteSuccess);
         if (autoUpload) {
           onUpload(pastedFiles);
         } else {
@@ -77,7 +86,7 @@ export function FileUploader({
     return () => {
       window.removeEventListener("paste", handlePaste);
     };
-  }, [acceptsImages, autoUpload, onUpload]);
+  }, [acceptsImages, autoUpload, onUpload, t.fileUploader.pasteSuccess]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -92,7 +101,7 @@ export function FileUploader({
 
   const handleUpload = async () => {
     if (files.length === 0) {
-      toast.error("Please select a file first");
+      toast.error(t.fileUploader.selectFileError);
       return;
     }
     await onUpload(files);
@@ -105,16 +114,16 @@ export function FileUploader({
           <CheckCircle2 className="h-10 w-10" />
         </div>
         <div className="text-center">
-          <h3 className="text-2xl font-bold mb-1">Processing Complete!</h3>
-          <p className="text-muted-foreground">Your file is ready for download.</p>
+          <h3 className="text-2xl font-bold mb-1">{t.fileUploader.processingComplete}</h3>
+          <p className="text-muted-foreground">{t.fileUploader.readyForDownload}</p>
         </div>
         <a href={downloadUrl} download={downloadFilename} className="w-full">
           <Button size="lg" className="w-full h-14 text-lg font-bold">
-            <Download className="mr-2 h-5 w-5" /> Download Result
+            <Download className="mr-2 h-5 w-5" /> {t.fileUploader.downloadResult}
           </Button>
         </a>
         <Button variant="ghost" onClick={() => window.location.reload()}>
-          Convert another file
+          {t.fileUploader.convertAnother}
         </Button>
       </div>
     );
@@ -136,10 +145,10 @@ export function FileUploader({
         </div>
         <h3 className="text-xl font-bold mb-2">{label}</h3>
         <p className="text-muted-foreground text-sm max-w-xs">
-          Drag & drop your files here, click to browse
+          {t.fileUploader.dragAndDrop}
           {acceptsImages && (
             <>
-              , or paste with{" "}
+              {t.fileUploader.pasteWith}{" "}
               <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 border font-mono text-xs text-foreground font-black">Ctrl + V</kbd>
             </>
           )}
@@ -152,7 +161,7 @@ export function FileUploader({
             <div key={index} className="flex items-center justify-between p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border">
               <div className="flex items-center gap-3">
                 <FileText className="h-5 w-5 text-primary" />
-                <div className="flex flex-col">
+                <div className="flex flex-col text-left">
                   <span className="text-sm font-medium truncate max-w-[200px]">{file.name}</span>
                   <span className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</span>
                 </div>
@@ -171,10 +180,10 @@ export function FileUploader({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Processing...
+                {t.fileUploader.processing}
               </>
             ) : (
-              "Start Processing"
+              t.fileUploader.startProcessing
             )}
           </Button>
         </div>

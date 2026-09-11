@@ -13,15 +13,19 @@ import { copyShareUrl } from "@/lib/share-utils";
 export interface PasswordGeneratorClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function PasswordGeneratorClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: PasswordGeneratorClientProps = {}) {
   const [password, setPassword] = useState("");
   const [length, setLength] = useState(16);
@@ -194,6 +198,7 @@ export default function PasswordGeneratorClient({
     <ToolLayout
       title={customTitle || "Password Generator"}
       description={customDescription || "Generate cryptographically secure passwords client-side to protect your identities and accounts."}
+      summaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

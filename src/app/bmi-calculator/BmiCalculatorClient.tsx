@@ -15,15 +15,19 @@ import { copyShareUrl } from "@/lib/share-utils";
 export interface BmiCalculatorClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function BmiCalculatorClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: BmiCalculatorClientProps = {}) {
   const [unitSystem, setUnitSystem] = useState("metric");
   const [weight, setWeight] = useState("70");
@@ -260,7 +264,7 @@ export default function BmiCalculatorClient({
     <ToolLayout
       title={customTitle || "BMI Calculator"}
       description={customDescription || "Quickly calculate your Body Mass Index (BMI) to understand your health status using Metric or US units."}
-      summaryDefinition="A Body Mass Index (BMI) calculator estimates body fatness based on an individual's weight and height. It classifies body composition into standardized World Health Organization (WHO) weight categories using Metric (kg/cm) or Imperial (lbs/ft/in) formulas."
+      summaryDefinition={customSummaryDefinition || "A Body Mass Index (BMI) calculator estimates body fatness based on an individual's weight and height. It classifies body composition into standardized World Health Organization (WHO) weight categories using Metric (kg/cm) or Imperial (lbs/ft/in) formulas."}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

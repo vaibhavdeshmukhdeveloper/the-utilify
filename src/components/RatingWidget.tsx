@@ -6,22 +6,22 @@ import { fetchLiveRating, submitLiveRating } from "@/lib/rating-data";
 import { triggerConfetti } from "@/lib/confetti";
 import { toast } from "sonner";
 import { JsonLd } from "./JsonLd";
+import { usePathname } from "next/navigation";
+import { getLanguageFromPathname, getCanonicalToolSlug } from "@/lib/i18n/translations";
+import { getUIStrings } from "@/lib/i18n/ui-strings";
 
 interface RatingWidgetProps {
   toolSlug: string;
   toolTitle: string;
 }
 
-const RATING_LABELS: Record<number, string> = {
-  1: "1 - Could be better",
-  2: "2 - Needs improvement",
-  3: "3 - Good utility",
-  4: "4 - Very helpful!",
-  5: "5 - Outstanding! ⭐",
-};
-
 export function RatingWidget({ toolSlug, toolTitle }: RatingWidgetProps) {
-  const normalizedSlug = toolSlug.replace(/^\//, "").split("?")[0];
+  const pathname = usePathname();
+  const currentLang = getLanguageFromPathname(pathname);
+  const t = getUIStrings(currentLang);
+
+  // Normalize slug to canonical tool ID without language prefix (e.g. "merge-pdf")
+  const normalizedSlug = getCanonicalToolSlug(toolSlug);
   const storageKey = `utilify_user_rating_${normalizedSlug}`;
 
   const [userRating, setUserRating] = useState<number | null>(null);
@@ -99,33 +99,75 @@ export function RatingWidget({ toolSlug, toolTitle }: RatingWidgetProps) {
         // Fallback optimistic update
         setRatingStats((prev) => {
           const newCount = prev.reviewCount + 1;
-          const newValue = parseFloat((((prev.ratingValue * prev.reviewCount) + stars) / newCount).toFixed(1));
+          const newValue = prev.reviewCount > 0
+            ? Number(((prev.ratingValue * prev.reviewCount + stars) / newCount).toFixed(1))
+            : stars;
           return { ratingValue: newValue, reviewCount: newCount };
         });
       }
 
       triggerConfetti();
-      toast.success(`Thank you for rating ${toolTitle} ${stars} stars!`);
+      toast.success(t.ratingWidget.thankYou);
     } catch (e) {
-      console.error("Error submitting rating", e);
-      toast.error("Could not save rating. Please try again.");
+      console.error("Failed to submit rating", e);
+      toast.error(currentLang === "es" ? "Error al registrar calificación" : currentLang === "pt" ? "Erro ao registrar avaliação" : "Failed to record your rating");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const activeStarCount = hoveredRating !== null 
-    ? hoveredRating 
-    : (userRating !== null 
-        ? userRating 
-        : (ratingStats.ratingValue > 0 ? Math.round(ratingStats.ratingValue) : 0));
+  const activeStarCount = hoveredRating !== null ? hoveredRating : (userRating || 0);
 
-  // Dynamic Schema.org AggregateRating ONLY when genuine positive reviews exist
-  const dynamicRatingSchema = ratingStats.reviewCount > 0 && ratingStats.ratingValue > 0 ? {
+  // Microcopy helpers based on language
+  const feedbackHeading = currentLang === "es"
+    ? `¿Cómo calificarías a ${toolTitle}?`
+    : currentLang === "pt"
+    ? `Como você avalia o ${toolTitle}?`
+    : `How would you rate ${toolTitle}?`;
+
+  const userFeedbackBadge = currentLang === "es"
+    ? "Opiniones de Usuarios"
+    : currentLang === "pt"
+    ? "Opiniões de Usuários"
+    : "User Feedback";
+
+  const verifiedBadge = currentLang === "es" || currentLang === "pt" ? "Verificado" : "Verified";
+
+  const noRatingsYet = currentLang === "es"
+    ? "Sin calificaciones aún — ¡sé el primero en evaluar!"
+    : currentLang === "pt"
+    ? "Sem avaliações ainda — seja o primeiro a avaliar!"
+    : "No ratings yet — be the first to rate your experience!";
+
+  const clickStarPrompt = currentLang === "es"
+    ? "Haz clic en una estrella para calificar"
+    : currentLang === "pt"
+    ? "Clique em uma estrela para avaliar"
+    : "Click a star to submit your review";
+
+  const youRatedText = (rating: number) => {
+    if (currentLang === "es") return `Calificaste esto con ${rating}/5 estrellas`;
+    if (currentLang === "pt") return `Você avaliou com ${rating}/5 estrelas`;
+    return `You rated this ${rating}/5 stars`;
+  };
+
+  const footerTrust = currentLang === "es"
+    ? "Comentarios reales de la comunidad • 100% votos auténticos"
+    : currentLang === "pt"
+    ? "Feedback real da comunidade • 100% avaliações autênticas"
+    : "Real community feedback • 100% authentic ratings";
+
+  const footerNoSignup = currentLang === "es"
+    ? "Sin necesidad de registro"
+    : currentLang === "pt"
+    ? "Sem cadastro necessário"
+    : "Zero sign-up required";
+
+  // Dynamic Schema.org AggregateRating injection
+  const dynamicRatingSchema = ratingStats.reviewCount > 0 ? {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": toolTitle,
-    "url": `https://www.theutilify.com/${normalizedSlug}`,
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": ratingStats.ratingValue.toFixed(1),
@@ -144,16 +186,16 @@ export function RatingWidget({ toolSlug, toolTitle }: RatingWidgetProps) {
           <div className="text-left space-y-1">
             <div className="flex items-center gap-2">
               <span className="text-xs font-black uppercase tracking-wider text-primary flex items-center gap-1">
-                <Sparkles className="h-3.5 w-3.5 text-amber-500" /> User Feedback
+                <Sparkles className="h-3.5 w-3.5 text-amber-500" /> {userFeedbackBadge}
               </span>
               {ratingStats.reviewCount > 0 && (
                 <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                  Verified
+                  {verifiedBadge}
                 </span>
               )}
             </div>
             <h3 className="text-base sm:text-lg font-bold text-foreground">
-              How would you rate <span className="text-primary">{toolTitle}</span>?
+              {feedbackHeading}
             </h3>
             
             {ratingStats.reviewCount > 0 ? (
@@ -173,12 +215,12 @@ export function RatingWidget({ toolSlug, toolTitle }: RatingWidgetProps) {
                 </div>
                 <span>•</span>
                 <span className="font-medium">
-                  <strong className="text-foreground">{ratingStats.reviewCount}</strong> {ratingStats.reviewCount === 1 ? "user rating" : "user ratings"}
+                  <strong className="text-foreground">{ratingStats.reviewCount}</strong> {t.ratingWidget.ratingsCount}
                 </span>
               </div>
             ) : (
               <p className="text-xs text-muted-foreground">
-                No ratings yet — be the first to rate your experience!
+                {noRatingsYet}
               </p>
             )}
           </div>
@@ -212,15 +254,15 @@ export function RatingWidget({ toolSlug, toolTitle }: RatingWidgetProps) {
             <div className="h-5 flex items-center justify-center sm:justify-end text-xs font-semibold">
               {hoveredRating !== null ? (
                 <span className="text-amber-500 font-bold animate-in fade-in duration-150">
-                  {RATING_LABELS[hoveredRating]}
+                  {t.ratingWidget.labels[hoveredRating]}
                 </span>
               ) : hasRated && userRating !== null ? (
                 <span className="text-emerald-500 font-bold flex items-center gap-1 animate-in fade-in duration-150">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> You rated this {userRating}/5 stars
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> {youRatedText(userRating)}
                 </span>
               ) : (
                 <span className="text-muted-foreground text-[11px]">
-                  Click a star to submit your review
+                  {clickStarPrompt}
                 </span>
               )}
             </div>
@@ -231,10 +273,10 @@ export function RatingWidget({ toolSlug, toolTitle }: RatingWidgetProps) {
         <div className="mt-4 pt-3.5 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-            <span>Real community feedback • 100% authentic ratings</span>
+            <span>{footerTrust}</span>
           </div>
           <span className="text-[10px] text-muted-foreground">
-            Zero sign-up required
+            {footerNoSignup}
           </span>
         </div>
       </div>

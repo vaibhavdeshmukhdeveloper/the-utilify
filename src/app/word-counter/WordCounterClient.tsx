@@ -41,15 +41,19 @@ Whether you are optimizing article readability, checking word limits for academi
 export interface WordCounterClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function WordCounterClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: WordCounterClientProps = {}) {
   const [text, setText] = useState<string>("");
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -249,6 +253,7 @@ Est. Pages: ${estimatedPages}`;
     <ToolLayout
       title={customTitle || "Word Counter & Text Analyzer"}
       description={customDescription || "Calculate words, characters, reading time, keyword density, and social media limits in real-time."}
+      summaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

@@ -14,8 +14,10 @@ export interface DateCalculatorClientProps {
   initialTab?: "diff" | "math";
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 function parseLocalDate(dateStr: string): Date | null {
@@ -36,8 +38,10 @@ export default function DateCalculatorClient({
   initialTab = "diff",
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: DateCalculatorClientProps = {}) {
   const [activeTab, setActiveTab] = useState(initialTab);
 
@@ -269,6 +273,7 @@ export default function DateCalculatorClient({
     <ToolLayout
       title={customTitle || "Date Calculator"}
       description={customDescription || "Calculate duration between dates or project new dates by adding or subtracting time units."}
+      summaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}

@@ -12,19 +12,28 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { usePathname } from "next/navigation";
+import { getLanguageFromPathname } from "@/lib/i18n/translations";
+
 export interface SplitPdfClientProps {
   customTitle?: string;
   customDescription?: string;
+  customSummaryDefinition?: string;
   customHowToUse?: { step: string; description: string }[];
   customFaqs?: { question: string; answer: string }[];
+  lang?: string;
 }
 
 export default function SplitPdfClient({
   customTitle,
   customDescription,
+  customSummaryDefinition,
   customHowToUse,
   customFaqs,
+  lang,
 }: SplitPdfClientProps = {}) {
+  const pathname = usePathname();
+  const currentLang = (lang as any) || getLanguageFromPathname(pathname);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
   const [pages, setPages] = useState("1-2");
@@ -137,11 +146,57 @@ export default function SplitPdfClient({
     </article>
   );
 
+  const text = {
+    modeLabel: currentLang === "es" ? "Seleccionar Modo de División" : currentLang === "pt" ? "Selecionar Modo de Divisão" : "Select Split Mode",
+    rangeTrigger: currentLang === "es" ? "Extraer Rangos" : currentLang === "pt" ? "Extrair Intervalos" : "Extract Ranges",
+    allTrigger: currentLang === "es" ? "Dividir Todas las Páginas" : currentLang === "pt" ? "Dividir Todas as Páginas" : "Split All Pages",
+    pagesLabel: currentLang === "es" ? "Páginas o Rangos" : currentLang === "pt" ? "Páginas ou Intervalos" : "Page Ranges",
+    rangeHelper: currentLang === "es" ? "Crea un único PDF con las páginas seleccionadas." : currentLang === "pt" ? "Cria um único PDF com as páginas selecionadas." : "Creates one PDF with selected pages.",
+    allHelper: currentLang === "es" ? "Esto creará archivos PDF individuales para cada página y los empaquetará en un ZIP." : currentLang === "pt" ? "Isto criará arquivos PDF individuais para cada página reunidos em um ZIP." : "This will create individual PDF files for every page and bundle them into a ZIP.",
+    uploaderLabel: currentLang === "es"
+      ? (splitMode === "all" ? "Subir para Dividir Todas las Páginas" : "Subir para Extraer Rangos")
+      : currentLang === "pt"
+      ? (splitMode === "all" ? "Enviar para Dividir Todas as Páginas" : "Enviar para Extrair Intervalos")
+      : `Upload to ${splitMode === "all" ? "Split Every Page" : "Extract Ranges"}`,
+    loadingTitle: currentLang === "es"
+      ? (splitMode === "all" ? "Dividiendo Todas las Páginas..." : "Extrayendo Rangos...")
+      : currentLang === "pt"
+      ? (splitMode === "all" ? "Dividindo Todas as Páginas..." : "Extraindo Intervalos...")
+      : (splitMode === "all" ? "Splitting Every Page..." : "Extracting Ranges..."),
+    loadingDesc: currentLang === "es"
+      ? (splitMode === "all" ? "Generando archivos separados para cada página. Por favor espera." : `Extrayendo páginas ${pages} en un nuevo documento.`)
+      : currentLang === "pt"
+      ? (splitMode === "all" ? "Gerando arquivos separados para cada página. Aguarde um instante." : `Extraindo páginas ${pages} para um novo documento.`)
+      : (splitMode === "all" ? "We're generating separate files for each page. Please wait." : `We're extracting pages ${pages} into a new document.`),
+    successBadge: currentLang === "es" ? "Éxito" : currentLang === "pt" ? "Sucesso" : "Success",
+    successTitle: currentLang === "es"
+      ? (splitMode === "all" ? "¡Archivo ZIP Listo!" : "¡Tu PDF Dividido está Listo!")
+      : currentLang === "pt"
+      ? (splitMode === "all" ? "Arquivo ZIP Pronto!" : "Seu PDF Dividido está Pronto!")
+      : (splitMode === "all" ? "ZIP Archive is Ready!" : "Your Split PDF is Ready!"),
+    downloadBtn: currentLang === "es"
+      ? (splitMode === "all" ? "Descargar Archivo ZIP" : "Descargar PDF Dividido")
+      : currentLang === "pt"
+      ? (splitMode === "all" ? "Baixar Arquivo ZIP" : "Baixar PDF Dividido")
+      : `Download ${splitMode === "all" ? "ZIP Archive" : "Split PDF"}`,
+    restartBtn: currentLang === "es" ? "Reiniciar" : currentLang === "pt" ? "Recomeçar" : "Start Over",
+    modeAppliedLabel: currentLang === "es" ? "Modo Aplicado" : currentLang === "pt" ? "Modo Aplicado" : "Mode Applied",
+    modeAppliedVal: currentLang === "es"
+      ? (splitMode === "all" ? "Dividido en Páginas Individuales" : `Páginas Extraídas: ${pages}`)
+      : currentLang === "pt"
+      ? (splitMode === "all" ? "Dividido em Páginas Individuais" : `Páginas Extraídas: ${pages}`)
+      : (splitMode === "all" ? "Split into Individual Pages" : `Extracted Pages: ${pages}`),
+    emptyTitle: currentLang === "es" ? "¿Cómo deseas dividir?" : currentLang === "pt" ? "Como deseja dividir?" : "How should we split?",
+    emptyDesc: currentLang === "es" ? "Elige entre extraer rangos específicos o dividir cada página en su propio archivo." : currentLang === "pt" ? "Escolha entre extrair intervalos específicos ou dividir cada página em seu próprio arquivo." : "Choose between extracting specific ranges or splitting every page into its own file.",
+    emptyAction: currentLang === "es" ? "Selecciona un modo a la izquierda" : currentLang === "pt" ? "Selecione um modo à esquerda" : "Select a mode on the left",
+  };
+
   return (
     <ToolLayout
       title={customTitle || "Split PDF"}
       description={customDescription || "Extract specific pages or split every page into individual PDF files instantly."}
       summaryDefinition="A PDF splitter extracts specific page numbers, custom comma-separated ranges (e.g. 1-3, 5, 8-10), or separates all pages into individual documents. It runs in transient RAM with zero server disk logging or data retention."
+      customSummaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
@@ -153,17 +208,17 @@ export default function SplitPdfClient({
           <Card className="p-8 space-y-8 border-2 shadow-sm rounded-[2rem]">
             <div className="space-y-4">
               <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                <Scissors className="h-4 w-4" /> Select Split Mode
+                <Scissors className="h-4 w-4" /> {text.modeLabel}
               </Label>
               <Tabs defaultValue="range" onValueChange={setSplitMode} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 h-12 rounded-xl">
-                  <TabsTrigger value="range" className="text-xs font-bold rounded-lg">Extract Ranges</TabsTrigger>
-                  <TabsTrigger value="all" className="text-xs font-bold rounded-lg">Split All Pages</TabsTrigger>
+                  <TabsTrigger value="range" className="text-xs font-bold rounded-lg">{text.rangeTrigger}</TabsTrigger>
+                  <TabsTrigger value="all" className="text-xs font-bold rounded-lg">{text.allTrigger}</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="range" className="pt-6 space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-bold">Page Ranges</Label>
+                    <Label className="text-sm font-bold">{text.pagesLabel}</Label>
                     <Input 
                       placeholder="e.g. 1, 3, 5-10" 
                       value={pages} 
@@ -171,7 +226,7 @@ export default function SplitPdfClient({
                       className="h-14 text-lg font-bold rounded-2xl border-2 focus:border-primary transition-all"
                     />
                     <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-2">
-                      <Info className="h-3 w-3" /> Creates <strong>one</strong> PDF with selected pages.
+                      <Info className="h-3 w-3" /> {text.rangeHelper}
                     </p>
                   </div>
                 </TabsContent>
@@ -180,7 +235,7 @@ export default function SplitPdfClient({
                    <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl flex items-start gap-3">
                       <Layers className="h-5 w-5 text-primary mt-0.5" />
                       <p className="text-xs text-primary/80 font-medium leading-relaxed">
-                        This will create <strong>individual PDF files</strong> for every page and bundle them into a ZIP.
+                        {text.allHelper}
                       </p>
                    </div>
                 </TabsContent>
@@ -189,7 +244,8 @@ export default function SplitPdfClient({
 
             <div className="pt-6 border-t">
               <FileUploader
-                label={`Upload to ${splitMode === "all" ? "Split Every Page" : "Extract Ranges"}`}
+                label={text.uploaderLabel}
+                lang={currentLang}
                 accept={{ "application/pdf": [".pdf"] }}
                 onUpload={handleUpload}
                 isLoading={isLoading}
@@ -221,12 +277,10 @@ export default function SplitPdfClient({
                 <Scissors className="h-8 w-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
               <h3 className="text-2xl font-black tracking-tight mb-2">
-                {splitMode === "all" ? "Splitting Every Page..." : "Extracting Ranges..."}
+                {text.loadingTitle}
               </h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm">
-                {splitMode === "all" 
-                  ? "We're generating separate files for each page. Please wait."
-                  : `We're extracting pages ${pages} into a new document.`}
+                {text.loadingDesc}
               </p>
             </Card>
           ) : result ? (
@@ -237,16 +291,16 @@ export default function SplitPdfClient({
                 </div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
-                    <CheckCircle2 className="h-4 w-4" /> Success
+                    <CheckCircle2 className="h-4 w-4" /> {text.successBadge}
                   </div>
                   <h2 className="text-4xl font-black tracking-tight mb-8">
-                    {splitMode === "all" ? "ZIP Archive is Ready!" : "Your Split PDF is Ready!"}
+                    {text.successTitle}
                   </h2>
                   
                   <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
                     <a href={result.url} download={result.filename} className="flex-1">
                       <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                        <Download className="mr-2 h-6 w-6" /> Download {splitMode === "all" ? "ZIP Archive" : "Split PDF"}
+                        <Download className="mr-2 h-6 w-6" /> {text.downloadBtn}
                       </Button>
                     </a>
                     <Button 
@@ -254,7 +308,7 @@ export default function SplitPdfClient({
                       onClick={() => {setResult(null); setFileInfo(null);}} 
                       className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                     >
-                      Start Over
+                      {text.restartBtn}
                     </Button>
                   </div>
                 </div>
@@ -265,8 +319,8 @@ export default function SplitPdfClient({
                   {splitMode === "all" ? <Layers className="h-5 w-5" /> : <Scissors className="h-5 w-5" />}
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Mode Applied</p>
-                  <p className="font-bold">{splitMode === "all" ? "Split into Individual Pages" : `Extracted Pages: ${pages}`}</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.modeAppliedLabel}</p>
+                  <p className="font-bold">{text.modeAppliedVal}</p>
                 </div>
               </Card>
             </div>
@@ -275,12 +329,12 @@ export default function SplitPdfClient({
               <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
                 <Scissors className="h-10 w-10 text-muted-foreground/40" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">How should we split?</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2">{text.emptyTitle}</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm">
-                Choose between extracting specific ranges or splitting every page into its own file.
+                {text.emptyDesc}
               </p>
               <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> Select a mode on the left
+                <ArrowRight className="h-4 w-4" /> {text.emptyAction}
               </div>
             </Card>
           )}
