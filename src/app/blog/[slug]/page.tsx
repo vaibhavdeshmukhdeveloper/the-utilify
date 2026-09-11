@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { Calendar, Clock, ArrowLeft, Users, ShieldCheck, ArrowRight, Sparkles, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
-import { marked } from "marked";
+import { Marked } from "marked";
+import katex from "katex";
 import { ReadingProgressBar } from "@/components/ReadingProgressBar";
 import { TableOfContents } from "@/components/TableOfContents";
 import { BlogShareBar } from "@/components/BlogShareBar";
@@ -64,23 +65,104 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   // Extract headings and inject scroll-margin IDs into headings for Table of Contents & Google SERP sitelinks
   const headings: { id: string; text: string }[] = [];
-  const renderer = new marked.Renderer();
+  const blogMarked = new Marked({
+    renderer: {
+      heading({ text, depth }: { text: string; depth: number }) {
+        const cleanText = text.replace(/<[^>]*>/g, "").trim();
+        const anchorId = cleanText
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-");
 
-  renderer.heading = ({ text, depth }: { text: string; depth: number }) => {
-    const cleanText = text.replace(/<[^>]*>/g, "").trim();
-    const anchorId = cleanText
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/\s+/g, "-");
+        if (depth === 2 || depth === 3) {
+          headings.push({ id: anchorId, text: cleanText });
+        }
 
-    if (depth === 2 || depth === 3) {
-      headings.push({ id: anchorId, text: cleanText });
-    }
+        return `<h${depth} id="${anchorId}" class="scroll-mt-24">${text}</h${depth}>`;
+      },
+    },
+  });
 
-    return `<h${depth} id="${anchorId}" class="scroll-mt-24">${text}</h${depth}>`;
-  };
+  blogMarked.use({
+    extensions: [
+      {
+        name: "blockMath",
+        level: "block",
+        tokenizer(src: string) {
+          const match = src.match(/^\$\$([\s\S]+?)\$\$(?:\n|$)/);
+          if (match) {
+            return {
+              type: "blockMath",
+              raw: match[0],
+              text: match[1].trim(),
+            };
+          }
+        },
+        renderer(token: any) {
+          try {
+            return `<div class="katex-display my-6 overflow-x-auto text-center py-2">${katex.renderToString(token.text || "", { displayMode: true, throwOnError: false })}</div>\n`;
+          } catch {
+            return `<div class="my-4 p-2 bg-muted rounded">${token.text}</div>`;
+          }
+        },
+      },
+      {
+        name: "inlineMathParen",
+        level: "inline",
+        start(src: string) {
+          return src.indexOf("\\(");
+        },
+        tokenizer(src: string) {
+          const match = src.match(/^\\\(([\s\S]+?)\\\)/);
+          if (match) {
+            return {
+              type: "inlineMathParen",
+              raw: match[0],
+              text: match[1].trim(),
+            };
+          }
+        },
+        renderer(token: any) {
+          try {
+            return katex.renderToString(token.text || "", { displayMode: false, throwOnError: false });
+          } catch {
+            return token.text;
+          }
+        },
+      },
+      {
+        name: "inlineMathDollar",
+        level: "inline",
+        start(src: string) {
+          return src.indexOf("$");
+        },
+        tokenizer(src: string) {
+          const match = src.match(/^\$([^\s\$](?:[^$\n]*?[^\s\$])?)\$(?!\d)/);
+          if (match) {
+            const text = match[1].trim();
+            // Prevent matching plain currencies like $500, $1,000, $50M, etc.
+            if (/^\d+(?:,\d{3})*(?:\.\d+)?(?:\s*(?:million|billion|k|M|B|USD|per|\/))?$/i.test(text)) {
+              return;
+            }
+            return {
+              type: "inlineMathDollar",
+              raw: match[0],
+              text: text,
+            };
+          }
+        },
+        renderer(token: any) {
+          try {
+            return katex.renderToString(token.text || "", { displayMode: false, throwOnError: false });
+          } catch {
+            return token.text;
+          }
+        },
+      },
+    ],
+  });
 
-  const htmlContent = await marked.parse(post.content.trim(), { renderer });
+  const htmlContent = await blogMarked.parse(post.content.trim());
   const publishedDate = new Date(post.date).toISOString();
 
   // Find related articles (same category or related topics)
