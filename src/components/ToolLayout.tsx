@@ -323,7 +323,7 @@ export function ToolLayout({
         </section>
 
         {/* Contextual Hub-and-Spoke In-Depth Guides */}
-        {displayGuides.length > 0 && (
+        {currentLang === "en" && displayGuides.length > 0 && (
           <section className="py-16 bg-muted/5 border-b">
             <div className="container max-w-5xl mx-auto px-4">
               <div className="text-center mb-10">

@@ -522,6 +522,133 @@ export default function BackgroundRemoverClient({
     </article>
   );
 
+  const isEs = currentLang === "es";
+  const isPt = currentLang === "pt";
+
+  const t = {
+    settingsTitle: isEs ? "Configuración de IA" : isPt ? "Configurações de IA" : "AI Processing Settings",
+    targetRes: isEs ? "Resolución Objetivo" : isPt ? "Resolução Alvo" : "Target Resolution",
+    standardResTitle: "Standard (2K)",
+    standardResDesc: isEs ? "Subida y proceso rápido" : isPt ? "Envio e processo rápido" : "Faster upload & run",
+    originalResTitle: isEs ? "Tamaño Original" : isPt ? "Tamanho Original" : "Original Size",
+    originalResDesc: isEs ? "Máxima resolución" : isPt ? "Resolução máxima" : "Full resolution",
+    modelTitle: isEs ? "Modelo de Segmentación IA" : isPt ? "Modelo de Segmentação IA" : "AI Segmentation Model",
+    models: [
+      {
+        id: "isnet-general-use" as const,
+        name: isEs ? "Ultra Detalle (Alta Fidelidad)" : isPt ? "Ultra Detalhes (Alta Fidelidade)" : "Ultra Detail (High Fidelity)",
+        desc: isEs
+          ? "Recomendado. La mejor calidad general. Excelente en detalles complejos, cabello y transparencias."
+          : isPt
+          ? "Recomendado. Melhor qualidade geral. Excelente em detalhes complexos, cabelos e transparências."
+          : "Recommended. Best overall quality. Excels at complex details, hair, and transparent gaps/holes.",
+        badge: isEs ? "Mejor Calidad" : isPt ? "Melhor Qualidade" : "Best Quality",
+        badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
+      },
+      {
+        id: "u2net" as const,
+        name: isEs ? "Equilibrado (General)" : isPt ? "Equilibrado (Geral)" : "Balanced (General)",
+        desc: isEs
+          ? "Buen equilibrio entre velocidad y detalle. Ideal para productos y objetos."
+          : isPt
+          ? "Bom equilíbrio entre velocidade e detalhes. Ideal para produtos e objetos."
+          : "Good balance of speed and detail. Best for standard products and isolated objects.",
+        badge: isEs ? "Estándar" : isPt ? "Padrão" : "Standard",
+        badgeColor: "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20",
+      },
+      {
+        id: "u2net_human_seg" as const,
+        name: isEs ? "Retratos (Personas)" : isPt ? "Retratos (Pessoas)" : "Portraits (Human)",
+        desc: isEs
+          ? "Optimizado específicamente para siluetas humanas."
+          : isPt
+          ? "Otimizado especificamente para silhuetas humanas."
+          : "Optimized specifically for human silhouette detection.",
+        badge: isEs ? "Personas" : isPt ? "Pessoas" : "People",
+        badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+      },
+      {
+        id: "u2net_cloth_seg" as const,
+        name: isEs ? "Ropa y Moda" : isPt ? "Roupas e Moda" : "Clothing / Apparel",
+        desc: isEs
+          ? "Ajustado para prendas de vestir, comercio electrónico y capas de ropa."
+          : isPt
+          ? "Ajustado para roupas, e-commerce e camadas de vestuário."
+          : "Specifically tuned for apparel, fashion retail, and clothing layers.",
+        badge: isEs ? "Comercio" : isPt ? "E-Commerce" : "E-Commerce",
+        badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+      },
+      {
+        id: "silueta" as const,
+        name: isEs ? "Ecológico / Rápido" : isPt ? "Ecológico / Rápido" : "Eco / Fast",
+        desc: isEs
+          ? "Modelo ultraligero. Procesamiento muy veloz."
+          : isPt
+          ? "Modelo ultraleve. Processamento muito rápido."
+          : "Extremely lightweight model. Fast processing on lower resolution images.",
+        badge: isEs ? "Más Rápido" : isPt ? "Mais Rápido" : "Fastest",
+        badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+      },
+    ],
+    smoothContours: isEs ? "Suavizar contornos de máscara" : isPt ? "Suavizar contornos da máscara" : "Smooth Mask Contours",
+    smoothContoursDesc: isEs
+      ? "Postprocesa los bordes (ideal para retratos; desactivar para texto y logos)"
+      : isPt
+      ? "Pós-processa as bordas (ideal para retratos; desative para texto e logos)"
+      : "Post-process mask borders (best for portraits; keep off for text & graphics)",
+    aiPowered: isEs ? "Potenciado con IA" : isPt ? "Potencializado por IA" : "AI Powered",
+    fullResolution: isEs ? "Alta Resolución" : isPt ? "Alta Resolução" : "Full Resolution",
+    removingBg: isEs ? "Eliminando fondo..." : isPt ? "Removendo fundo..." : "Removing Background...",
+    removingBgDesc: isEs
+      ? "Nuestra red neuronal de IA está aislando el sujeto de tu imagen. Suele tardar de 4 a 10 segundos según el tamaño."
+      : isPt
+      ? "Nossa rede neural de IA está isolando o assunto da sua imagem. Geralmente leva de 4 a 10 segundos."
+      : "Our AI neural network is isolating the subject from your image. This usually takes 4-10 seconds depending on size (first request may take slightly longer as the model initializes).",
+    previewMode: isEs ? "Modo de Vista Previa" : isPt ? "Modo de Visualização" : "Preview Mode",
+    interactiveSlider: isEs ? "Control Deslizante" : isPt ? "Controle Deslizante" : "Interactive Slider",
+    sideBySide: isEs ? "Lado a Lado" : isPt ? "Lado a Lado" : "Side by Side",
+    originalImageLabel: isEs ? "Imagen Original" : isPt ? "Imagem Original" : "Original Image",
+    cutoutAiLabel: isEs ? "Recorte (IA)" : isPt ? "Recorte (IA)" : "Cutout (AI)",
+    originalBadge: isEs ? "Original" : isPt ? "Original" : "Original",
+    bgRemovedBadge: isEs ? "Fondo Eliminado" : isPt ? "Fundo Removido" : "Background Removed",
+    aiTransformationReady: isEs ? "Transformación de IA Lista" : isPt ? "Transformação de IA Pronta" : "AI Transformation Ready",
+    pixelPerfectTransparency: isEs ? "Transparencia con precisión de píxel." : isPt ? "Transparência com precisão de pixel." : "Pixel-perfect transparency.",
+    quickBackdropPresets: isEs ? "Fondos Rápidos Predefinidos" : isPt ? "Planos de Fundo Predefinidos" : "Quick Backdrop Presets",
+    gridTitle: isEs ? "Malla Transparente" : isPt ? "Grade Transparente" : "Transparent Grid",
+    whiteTitle: isEs ? "Fondo Blanco" : isPt ? "Fundo Branco" : "White backdrop",
+    blackTitle: isEs ? "Fondo Negro" : isPt ? "Fundo Preto" : "Black backdrop",
+    blueTitle: isEs ? "Gradiente Azul" : isPt ? "Gradiente Azul" : "Blue Gradient",
+    sunsetTitle: isEs ? "Gradiente Atardecer" : isPt ? "Gradiente Pôr do Sol" : "Sunset Gradient",
+    neonTitle: isEs ? "Gradiente Neón" : isPt ? "Gradiente Neon" : "Neon Gradient",
+    softShadow: isEs ? "Sombra Suave" : isPt ? "Sombra Suave" : "Soft Shadow",
+    leftoverElementsTitle: isEs ? "¿Quedaron elementos de fondo no deseados?" : isPt ? "Sobraram elementos indesejados no fundo?" : "Leftover background elements?",
+    leftoverElementsDesc: isEs
+      ? "Si hay objetos directamente detrás de ti que se superpongan con tu silueta, los modelos de IA pueden interpretarlos como primer plano. Puedes eliminarlos en segundos haciendo clic en Retocar Recorte a continuación."
+      : isPt
+      ? "Se objetos diretamente atrás de você se sobrepuserem à sua silhueta, os modelos de IA podem interpretá-los como primeiro plano. Você pode removê-los em segundos clicando em Retocar Recorte abaixo."
+      : "If objects directly behind you (like the hanging t-shirt) overlap with your silhouette, AI models interpret them as part of the foreground. You can easily remove them in seconds by clicking the Edit Cutout tool below and brushing over them.",
+    downloadResult: isEs ? "Descargar Resultado" : isPt ? "Baixar Resultado" : "Download Result",
+    editCutout: isEs ? "Retocar Recorte" : isPt ? "Retocar Recorte" : "Edit Cutout",
+    processAnother: isEs ? "Procesar otra foto" : isPt ? "Processar outra foto" : "Process Another",
+    readyForMagic: isEs ? "¿Listo para la magia de la IA?" : isPt ? "Pronto para a mágica da IA?" : "Ready for AI Magic?",
+    readyForMagicDesc: isEs
+      ? "Una vez que subas una foto, nuestra IA eliminará el fondo al instante y obtendrás un PNG transparente en alta resolución."
+      : isPt
+      ? "Assim que enviar uma foto, nossa IA removerá o fundo instantaneamente e você terá um PNG transparente em alta resolução."
+      : "Once you upload a photo, our AI will instantly strip the background and give you a high-res transparent PNG.",
+    selectPhotoToBegin: isEs ? "Selecciona una foto para comenzar" : isPt ? "Selecione uma foto para começar" : "Select a photo to begin",
+    errorDesc: isEs
+      ? "Algo salió mal. Por favor verifica el tamaño de tu imagen o asegúrate de que el servidor esté activo."
+      : isPt
+      ? "Algo deu errado. Por favor verifique o tamanho da sua imagem ou certifique-se de que o servidor esteja ativo."
+      : "Something went wrong. Please check your image size or ensure the backend server is online.",
+    eraserTitle: isEs ? "Editor de Retoque Manual" : isPt ? "Editor de Retoque Manual" : "Manual Eraser Editor",
+    eraserSubtitle: isEs ? "Arrastra el cursor para borrar elementos restantes del fondo" : isPt ? "Arraste o cursor para apagar elementos restantes do fundo" : "Drag to erase remaining background elements",
+    brushSize: isEs ? "Tamaño del Pincel" : isPt ? "Tamanho do Pincel" : "Brush Size",
+    cancel: isEs ? "Cancelar" : isPt ? "Cancelar" : "Cancel",
+    saveAndApply: isEs ? "Guardar Cambios" : isPt ? "Salvar Alterações" : "Save Changes",
+  };
+
   return (
     <ToolLayout
       title={customTitle || "Background Remover"}
@@ -552,14 +679,14 @@ export default function BackgroundRemoverClient({
             <div className="flex items-center gap-3 border-b pb-4">
               <Settings className="w-5 h-5 text-primary" />
               <h3 className="text-lg font-black tracking-tight m-0">
-                {currentLang === "es" ? "Configuración de IA" : currentLang === "pt" ? "Configurações de IA" : "AI Processing Settings"}
+                {t.settingsTitle}
               </h3>
             </div>
             
             {/* Resolution selection */}
             <div className="space-y-3">
               <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block">
-                Target Resolution
+                {t.targetRes}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <button
@@ -571,8 +698,8 @@ export default function BackgroundRemoverClient({
                       : "border-transparent bg-muted/50 hover:bg-muted text-muted-foreground"
                   }`}
                 >
-                  <span className="font-extrabold text-sm">Standard (2K)</span>
-                  <span className="text-[10px] opacity-80">Faster upload & run</span>
+                  <span className="font-extrabold text-sm">{t.standardResTitle}</span>
+                  <span className="text-[10px] opacity-80">{t.standardResDesc}</span>
                 </button>
                 <button
                   type="button"
@@ -583,8 +710,8 @@ export default function BackgroundRemoverClient({
                       : "border-transparent bg-muted/50 hover:bg-muted text-muted-foreground"
                   }`}
                 >
-                  <span className="font-extrabold text-sm">Original Size</span>
-                  <span className="text-[10px] opacity-80">Full resolution</span>
+                  <span className="font-extrabold text-sm">{t.originalResTitle}</span>
+                  <span className="text-[10px] opacity-80">{t.originalResDesc}</span>
                 </button>
               </div>
             </div>
@@ -592,46 +719,10 @@ export default function BackgroundRemoverClient({
             {/* Subject Mode Selection */}
             <div className="space-y-3 pt-2 border-t">
               <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block">
-                AI Segmentation Model
+                {t.modelTitle}
               </label>
               <div className="space-y-2">
-                {[
-                  {
-                    id: "isnet-general-use" as const,
-                    name: "Ultra Detail (High Fidelity)",
-                    desc: "Recommended. Best overall quality. Excels at complex details, hair, and transparent gaps/holes.",
-                    badge: "Best Quality",
-                    badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-                  },
-                  {
-                    id: "u2net" as const,
-                    name: "Balanced (General)",
-                    desc: "Good balance of speed and detail. Best for standard products and isolated objects.",
-                    badge: "Standard",
-                    badgeColor: "bg-zinc-500/10 text-zinc-600 dark:text-zinc-400 border-zinc-500/20"
-                  },
-                  {
-                    id: "u2net_human_seg" as const,
-                    name: "Portraits (Human)",
-                    desc: "Optimized specifically for human silhouette detection.",
-                    badge: "People",
-                    badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
-                  },
-                  {
-                    id: "u2net_cloth_seg" as const,
-                    name: "Clothing / Apparel",
-                    desc: "Specifically tuned for apparel, fashion retail, and clothing layers.",
-                    badge: "E-Commerce",
-                    badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20"
-                  },
-                  {
-                    id: "silueta" as const,
-                    name: "Eco / Fast",
-                    desc: "Extremely lightweight model. Fast processing on lower resolution images.",
-                    badge: "Fastest",
-                    badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-                  }
-                ].map((item) => (
+                {t.models.map((item) => (
                   <button
                     key={item.id}
                     type="button"
@@ -667,10 +758,10 @@ export default function BackgroundRemoverClient({
               <div className="flex items-center justify-between">
                 <div>
                   <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block mb-0.5">
-                    Smooth Mask Contours
+                    {t.smoothContours}
                   </label>
                   <span className="text-[10px] text-muted-foreground">
-                    Post-process mask borders (best for portraits; keep off for text & graphics)
+                    {t.smoothContoursDesc}
                   </span>
                 </div>
                 <button
@@ -714,11 +805,11 @@ export default function BackgroundRemoverClient({
           <div className="grid grid-cols-2 gap-4">
             <Card className="p-4 bg-muted border-none rounded-2xl flex items-center gap-3">
               <Sparkles className="h-4 w-4 text-amber-500" />
-              <span className="text-xs font-bold text-foreground">AI Powered</span>
+              <span className="text-xs font-bold text-foreground">{t.aiPowered}</span>
             </Card>
             <Card className="p-4 bg-muted border-none rounded-2xl flex items-center gap-3">
               <Maximize2 className="h-4 w-4 text-blue-500" />
-              <span className="text-xs font-bold text-foreground">Full Resolution</span>
+              <span className="text-xs font-bold text-foreground">{t.fullResolution}</span>
             </Card>
           </div>
         </div>
@@ -738,9 +829,9 @@ export default function BackgroundRemoverClient({
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent animate-pulse" />
                 <Loader2 className="h-12 w-12 text-primary animate-spin relative z-10" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">Removing Background...</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2">{t.removingBg}</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
-                Our AI neural network is isolating the subject from your image. This usually takes 4-10 seconds depending on size (first request may take slightly longer as the model initializes).
+                {t.removingBgDesc}
               </p>
             </Card>
           ) : result ? (
@@ -748,7 +839,7 @@ export default function BackgroundRemoverClient({
               {/* View Mode Switcher */}
               <div className="flex items-center justify-between px-2">
                 <span className="text-xs font-black uppercase tracking-wider text-muted-foreground">
-                  Preview Mode
+                  {t.previewMode}
                 </span>
                 <div className="flex items-center gap-1.5 p-1 bg-muted rounded-xl">
                   <button
@@ -759,7 +850,7 @@ export default function BackgroundRemoverClient({
                       viewMode === "slider" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    Interactive Slider
+                    {t.interactiveSlider}
                   </button>
                   <button
                     type="button"
@@ -769,7 +860,7 @@ export default function BackgroundRemoverClient({
                       viewMode === "side-by-side" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    Side by Side
+                    {t.sideBySide}
                   </button>
                 </div>
               </div>
@@ -778,8 +869,8 @@ export default function BackgroundRemoverClient({
                 <BeforeAfterSlider
                   beforeImage={originalUrl}
                   afterImage={result.url}
-                  beforeLabel="Original Image"
-                  afterLabel="Cutout (AI)"
+                  beforeLabel={t.originalImageLabel}
+                  afterLabel={t.cutoutAiLabel}
                   alt={originalFile?.name || "Removed Background"}
                 />
               ) : (
@@ -787,7 +878,7 @@ export default function BackgroundRemoverClient({
                   {/* Original Preview */}
                   <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
                     <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-zinc-950/80 text-zinc-50 text-[10px] font-black uppercase tracking-wider shadow-sm">
-                      Original
+                      {t.originalBadge}
                     </div>
                     <div className="p-4 min-h-[350px] flex items-center justify-center">
                       {originalUrl && (
@@ -803,7 +894,7 @@ export default function BackgroundRemoverClient({
                   {/* Background Removed */}
                   <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
                     <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider shadow-sm">
-                      Background Removed
+                      {t.bgRemovedBadge}
                     </div>
                     {/* Transparency Grid Pattern or custom background color */}
                     <div
@@ -849,14 +940,14 @@ export default function BackgroundRemoverClient({
                 </div>
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
-                    <Zap className="h-4 w-4" /> AI Transformation Ready
+                    <Zap className="h-4 w-4" /> {t.aiTransformationReady}
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">Pixel-perfect transparency.</h2>
+                  <h2 className="text-4xl font-black tracking-tight mb-8">{t.pixelPerfectTransparency}</h2>
 
                   {/* Backdrop Quick Editor panel */}
                   <div className="space-y-4 mb-8 pb-8 border-b border-zinc-800 animate-in fade-in duration-300">
                     <label className="text-xs font-black uppercase tracking-wider text-zinc-400 block">
-                      Quick Backdrop Presets
+                      {t.quickBackdropPresets}
                     </label>
                     <div className="flex flex-wrap items-center gap-3">
                       <button
@@ -866,7 +957,7 @@ export default function BackgroundRemoverClient({
                           "w-10 h-10 rounded-full border-2 transition-all relative overflow-hidden active:scale-95",
                           bgPreviewMode === "transparent" ? "border-primary scale-110" : "border-zinc-700"
                         )}
-                        title="Transparent Grid"
+                        title={t.gridTitle}
                       >
                         <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center text-[9px] text-zinc-400 font-black">Grid</div>
                       </button>
@@ -877,7 +968,7 @@ export default function BackgroundRemoverClient({
                           "w-10 h-10 rounded-full border-2 bg-white transition-all active:scale-95",
                           bgPreviewMode === "white" ? "border-primary scale-110" : "border-zinc-700"
                         )}
-                        title="White backdrop"
+                        title={t.whiteTitle}
                       />
                       <button
                         type="button"
@@ -886,7 +977,7 @@ export default function BackgroundRemoverClient({
                           "w-10 h-10 rounded-full border-2 bg-black transition-all active:scale-95",
                           bgPreviewMode === "black" ? "border-primary scale-110" : "border-zinc-700"
                         )}
-                        title="Black backdrop"
+                        title={t.blackTitle}
                       />
                       <button
                         type="button"
@@ -896,7 +987,7 @@ export default function BackgroundRemoverClient({
                           bgPreviewMode === "blue" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         style={{ backgroundImage: "linear-gradient(135deg, #60a5fa, #2563eb)" }}
-                        title="Blue Gradient"
+                        title={t.blueTitle}
                       />
                       <button
                         type="button"
@@ -906,7 +997,7 @@ export default function BackgroundRemoverClient({
                           bgPreviewMode === "sunset" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         style={{ backgroundImage: "linear-gradient(135deg, #fb923c, #db2777)" }}
-                        title="Sunset Gradient"
+                        title={t.sunsetTitle}
                       />
                       <button
                         type="button"
@@ -916,7 +1007,7 @@ export default function BackgroundRemoverClient({
                           bgPreviewMode === "neon" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         style={{ backgroundImage: "linear-gradient(135deg, #34d399, #059669)" }}
-                        title="Neon Gradient"
+                        title={t.neonTitle}
                       />
 
                       <button
@@ -927,7 +1018,7 @@ export default function BackgroundRemoverClient({
                           applyShadow ? "bg-primary border-primary text-primary-foreground" : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
                         )}
                       >
-                        Soft Shadow
+                        {t.softShadow}
                       </button>
                     </div>
                   </div>
@@ -936,9 +1027,9 @@ export default function BackgroundRemoverClient({
                   <div className="mb-8 p-5 rounded-[1.5rem] bg-zinc-900 border border-zinc-800/80 flex items-start gap-4 animate-in fade-in duration-500">
                     <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5 animate-pulse" />
                     <div className="text-left space-y-1">
-                      <p className="text-xs font-black text-zinc-200">Leftover background elements?</p>
+                      <p className="text-xs font-black text-zinc-200">{t.leftoverElementsTitle}</p>
                       <p className="text-[11px] text-zinc-400 leading-relaxed">
-                        If objects directly behind you (like the hanging t-shirt) overlap with your silhouette, AI models interpret them as part of the foreground. You can easily remove them in seconds by clicking the <strong className="text-primary font-black">Edit Cutout</strong> tool below and brushing over them.
+                        {t.leftoverElementsDesc}
                       </p>
                     </div>
                   </div>
@@ -948,21 +1039,21 @@ export default function BackgroundRemoverClient({
                       onClick={handleBakeAndDownload} 
                       className="flex-1 h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all"
                     >
-                      <Download className="mr-2 h-6 w-6" /> Download Result
+                      <Download className="mr-2 h-6 w-6" /> {t.downloadResult}
                     </Button>
                     <Button
                       type="button"
                       onClick={() => setIsEditing(true)}
                       className="h-16 px-6 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-bold transition-all border border-zinc-700 flex items-center justify-center gap-2"
                     >
-                      <Eraser className="h-5 w-5 text-primary animate-pulse" /> Edit Cutout
+                      <Eraser className="h-5 w-5 text-primary animate-pulse" /> {t.editCutout}
                     </Button>
                     <Button
                       variant="outline"
                       onClick={handleReset}
                       className="h-16 px-8 rounded-2xl border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-900 hover:text-white font-bold transition-all duration-300"
                     >
-                      Process Another
+                      {t.processAnother}
                     </Button>
                   </div>
                 </div>
@@ -973,12 +1064,12 @@ export default function BackgroundRemoverClient({
               <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
                 <ImageIcon className="h-12 w-12 text-muted-foreground" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">Ready for AI Magic?</h3>
+              <h3 className="text-2xl font-black tracking-tight mb-2">{t.readyForMagic}</h3>
               <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
-                Once you upload a photo, our AI will instantly strip the background and give you a high-res transparent PNG.
+                {t.readyForMagicDesc}
               </p>
               <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> Select a photo to begin
+                <ArrowRight className="h-4 w-4" /> {t.selectPhotoToBegin}
               </div>
             </Card>
           )}
@@ -986,7 +1077,7 @@ export default function BackgroundRemoverClient({
           {!isLoading && !result && originalFile && (
             <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
               <AlertCircle className="h-5 w-5 shrink-0" />
-              <span>Something went wrong. Please check your image size or ensure the backend server is online.</span>
+              <span>{t.errorDesc}</span>
             </div>
           )}
         </div>
@@ -997,12 +1088,12 @@ export default function BackgroundRemoverClient({
           {/* Header */}
           <div className="flex items-center justify-between px-8 py-4 border-b border-zinc-800 bg-zinc-900/50">
             <div>
-              <h3 className="text-xl font-black text-zinc-100 m-0">Manual Eraser Editor</h3>
-              <p className="text-xs text-zinc-400">Drag to erase remaining background elements</p>
+              <h3 className="text-xl font-black text-zinc-100 m-0">{t.eraserTitle}</h3>
+              <p className="text-xs text-zinc-400">{t.eraserSubtitle}</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3 bg-zinc-900 px-4 py-2 rounded-xl border border-zinc-800">
-                <label className="text-xs font-black uppercase text-zinc-400">Brush Size</label>
+                <label className="text-xs font-black uppercase text-zinc-400">{t.brushSize}</label>
                 <input
                   type="range"
                   min="5"
@@ -1018,13 +1109,13 @@ export default function BackgroundRemoverClient({
                 onClick={() => setIsEditing(false)}
                 className="h-10 px-6 border-zinc-800 bg-transparent text-zinc-300 hover:bg-zinc-900 hover:text-white rounded-xl font-bold"
               >
-                Cancel
+                {t.cancel}
               </Button>
               <Button
                 onClick={handleSave}
                 className="h-10 px-6 rounded-xl font-black bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
               >
-                Save Changes
+                {t.saveAndApply}
               </Button>
             </div>
           </div>

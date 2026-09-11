@@ -47,7 +47,7 @@ export function CrossPromo() {
         };
       }
       return {
-        name: "Suite de Utilidades para Android",
+        name: "Suite de Utilidades",
         description: "Descubre nuestra suite completa de aplicaciones de productividad seguras y offline para Android.",
         url: "https://play.google.com/store/apps/developer?id=Vaibhav+Deshmukh",
         features: [
@@ -85,7 +85,7 @@ export function CrossPromo() {
         };
       }
       return {
-        name: "Suite de Utilitários para Android",
+        name: "Suite de Utilitários",
         description: "Conheça nossa linha completa de ferramentas seguras e offline de produtividade para Android.",
         url: "https://play.google.com/store/apps/developer?id=Vaibhav+Deshmukh",
         features: [

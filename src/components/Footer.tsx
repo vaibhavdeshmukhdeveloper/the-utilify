@@ -22,6 +22,34 @@ export function Footer() {
       : "text-sm text-muted-foreground hover:text-primary transition-colors";
   };
 
+  // Additional localized names for programmatic and long-tail tools not having a separate route
+  const localizedFallbackNames: Record<string, Record<string, string>> = {
+    es: {
+      "compress-png": "Comprimir PNG",
+      "compress-jpeg": "Comprimir JPEG",
+      "compress-webp": "Comprimir WebP",
+      "make-signature-transparent": "Firma Transparente",
+      "white-background-product-photos": "Fotos con Fondo Blanco",
+      "markdown-to-pdf": "Markdown a PDF",
+      "text-converter": "Conversor de Mayúsculas/Minúsculas",
+      "diff-checker": "Comparador de Texto",
+      "lorem-ipsum": "Generador Lorem Ipsum",
+      "business-days-calculator": "Calculadora de Días Laborables",
+    },
+    pt: {
+      "compress-png": "Comprimir PNG",
+      "compress-jpeg": "Comprimir JPEG",
+      "compress-webp": "Comprimir WebP",
+      "make-signature-transparent": "Assinatura Transparente",
+      "white-background-product-photos": "Fotos com Fundo Branco",
+      "markdown-to-pdf": "Markdown para PDF",
+      "text-converter": "Conversor de Maiúsculas/Minúsculas",
+      "diff-checker": "Comparador de Texto",
+      "lorem-ipsum": "Gerador Lorem Ipsum",
+      "business-days-calculator": "Calculadora de Dias Úteis",
+    },
+  };
+
   // Helper to resolve localized tool href and name if available
   const resolveTool = (slug: string, defaultName: string) => {
     if (currentLang !== "en" && toolTranslations[currentLang]?.[slug]) {
@@ -30,9 +58,13 @@ export function Footer() {
         name: toolTranslations[currentLang][slug].name,
       };
     }
+    const fallbackName =
+      currentLang !== "en" && localizedFallbackNames[currentLang]?.[slug]
+        ? localizedFallbackNames[currentLang][slug]
+        : defaultName;
     return {
       href: `/${slug}`,
-      name: defaultName,
+      name: fallbackName,
     };
   };
 
@@ -211,19 +243,19 @@ export function Footer() {
             </h5>
             <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
               <Link href="/category/pdf-tools" className="hover:text-primary transition-colors">
-                PDF &amp; Document Tools Hub
+                {currentLang === "es" ? "Centro de Herramientas PDF" : currentLang === "pt" ? "Central de Ferramentas PDF" : "PDF & Document Tools Hub"}
               </Link>
               <span>•</span>
               <Link href="/category/image-tools" className="hover:text-primary transition-colors">
-                Image &amp; Media Tools Hub
+                {currentLang === "es" ? "Centro de Herramientas de Imagen" : currentLang === "pt" ? "Central de Ferramentas de Imagem" : "Image & Media Tools Hub"}
               </Link>
               <span>•</span>
               <Link href="/category/developer-tools" className="hover:text-primary transition-colors">
-                Developer Utilities Hub
+                {currentLang === "es" ? "Centro para Desarrolladores" : currentLang === "pt" ? "Central para Desenvolvedores" : "Developer Utilities Hub"}
               </Link>
               <span>•</span>
               <Link href="/category/financial-calculators" className="hover:text-primary transition-colors">
-                Financial Calculators Hub
+                {currentLang === "es" ? "Centro de Calculadoras Financieras" : currentLang === "pt" ? "Central de Calculadoras Financeiras" : "Financial Calculators Hub"}
               </Link>
             </div>
           </div>
