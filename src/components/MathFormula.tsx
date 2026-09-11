@@ -13,10 +13,11 @@ interface MathFormulaProps {
 let katexInstance: any = null;
 
 export function MathFormula({ formula, displayMode = true, className }: MathFormulaProps) {
+  const sanitizedFormula = (formula || "").replace(/\\\\([a-zA-Z]+)/g, "\\$1");
   const [renderedHtml, setRenderedHtml] = useState<string | null>(() => {
     if (katexInstance) {
       try {
-        return katexInstance.renderToString(formula, {
+        return katexInstance.renderToString(sanitizedFormula, {
           displayMode,
           throwOnError: false,
         });
@@ -35,27 +36,27 @@ export function MathFormula({ formula, displayMode = true, className }: MathForm
         katexInstance = module.default || module;
         if (!isCancelled && katexInstance) {
           try {
-            const html = katexInstance.renderToString(formula, {
+            const html = katexInstance.renderToString(sanitizedFormula, {
               displayMode,
               throwOnError: false,
             });
             setRenderedHtml(html);
           } catch {
-            setRenderedHtml(formula);
+            setRenderedHtml(sanitizedFormula);
           }
         }
       }).catch(() => {
-        if (!isCancelled) setRenderedHtml(formula);
+        if (!isCancelled) setRenderedHtml(sanitizedFormula);
       });
     } else {
       try {
-        const html = katexInstance.renderToString(formula, {
+        const html = katexInstance.renderToString(sanitizedFormula, {
           displayMode,
           throwOnError: false,
         });
         setRenderedHtml(html);
       } catch {
-        setRenderedHtml(formula);
+        setRenderedHtml(sanitizedFormula);
       }
     }
 

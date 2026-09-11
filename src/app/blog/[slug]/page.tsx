@@ -83,6 +83,12 @@ export default async function BlogPostPage({ params }: PageProps) {
     },
   });
 
+  function sanitizeMath(text: string): string {
+    return (text || "")
+      .replace(/\x0c/g, "\\f")
+      .replace(/\t(?=ext|imes)/g, "\\t");
+  }
+
   blogMarked.use({
     extensions: [
       {
@@ -100,7 +106,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         },
         renderer(token: any) {
           try {
-            return `<div class="katex-display my-6 overflow-x-auto text-center py-2">${katex.renderToString(token.text || "", { displayMode: true, throwOnError: false })}</div>\n`;
+            const cleanText = sanitizeMath(token.text);
+            return `<div class="katex-display my-6 overflow-x-auto text-center py-2">${katex.renderToString(cleanText, { displayMode: true, throwOnError: false })}</div>\n`;
           } catch {
             return `<div class="my-4 p-2 bg-muted rounded">${token.text}</div>`;
           }
@@ -124,7 +131,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         },
         renderer(token: any) {
           try {
-            return katex.renderToString(token.text || "", { displayMode: false, throwOnError: false });
+            const cleanText = sanitizeMath(token.text);
+            return katex.renderToString(cleanText, { displayMode: false, throwOnError: false });
           } catch {
             return token.text;
           }
@@ -153,7 +161,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         },
         renderer(token: any) {
           try {
-            return katex.renderToString(token.text || "", { displayMode: false, throwOnError: false });
+            const cleanText = sanitizeMath(token.text);
+            return katex.renderToString(cleanText, { displayMode: false, throwOnError: false });
           } catch {
             return token.text;
           }

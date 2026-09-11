@@ -391,7 +391,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-5 rounded-2xl bg-muted/40 border space-y-3">
               <h4 className="font-bold text-sm text-foreground">1. The Standard FIRE Target Equation</h4>
-              <MathFormula formula="\\text{FIRE Number} = \\frac{\\text{Annual Expenses}}{\\text{SWR}} = \\text{Annual Expenses} \\times 25" />
+              <MathFormula formula="\text{FIRE Number} = \frac{\text{Annual Expenses}}{\text{SWR}} = \text{Annual Expenses} \times 25" />
               <p className="text-xs text-muted-foreground">
                 With a 4% Safe Withdrawal Rate (SWR), your target corpus is exactly 25 times your annual living expenses.
               </p>
@@ -399,7 +399,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
 
             <div className="p-5 rounded-2xl bg-muted/40 border space-y-3">
               <h4 className="font-bold text-sm text-foreground">2. Fisher Equation (Real Compound Growth)</h4>
-              <MathFormula formula="r_{\\text{real}} = \\frac{1 + r_{\\text{nominal}}}{1 + i_{\\text{inflation}}} - 1" />
+              <MathFormula formula="r_{\text{real}} = \frac{1 + r_{\text{nominal}}}{1 + i_{\text{inflation}}} - 1" />
               <p className="text-xs text-muted-foreground">
                 Accurately discounts nominal investment gains against consumer price inflation to maintain purchasing power.
               </p>
