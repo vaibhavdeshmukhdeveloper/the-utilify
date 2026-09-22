@@ -55,6 +55,61 @@ const imageTools: CategoryToolItem[] = [
       "Copy HEX, RGB, HSL, or CSS variables",
     ],
   },
+  {
+    title: "Compress PNG",
+    description: "Shrink transparent PNG images with lossless compression while preserving 32-bit alpha transparency.",
+    href: "/compress-png",
+    badge: "Lossless",
+    features: [
+      "Preserves alpha channel transparency",
+      "100% in-browser client-side execution",
+      "Up to 80% file size reduction",
+    ],
+  },
+  {
+    title: "Compress JPEG",
+    description: "Reduce JPG/JPEG photo file sizes by up to 85% without perceptible visual quality loss.",
+    href: "/compress-jpeg",
+    badge: "Core Web Vitals",
+    features: [
+      "Lossy compression tuned for LCP reduction",
+      "Instant real-time byte savings display",
+      "Zero server uploads - 100% private",
+    ],
+  },
+  {
+    title: "Compress WebP",
+    description: "Optimize and compress modern next-generation WebP images for peak web loading speed.",
+    href: "/compress-webp",
+    badge: "Next-Gen",
+    features: [
+      "Maximum bandwidth savings",
+      "Batch image processing support",
+      "Client-side Canvas API encoding",
+    ],
+  },
+  {
+    title: "Make Signature Transparent",
+    description: "Isolate handwritten signature ink strokes from paper photos into transparent PNGs for PDF signing.",
+    href: "/make-signature-transparent",
+    badge: "Document Signing",
+    features: [
+      "Cleans shadows, paper creases, and lighting",
+      "High-contrast alpha isolation",
+      "In-memory processing with instant download",
+    ],
+  },
+  {
+    title: "White Background Photos",
+    description: "Replace messy real-world backdrops with pure #FFFFFF studio backgrounds for Amazon and Shopify.",
+    href: "/white-background-product-photos",
+    badge: "E-Commerce",
+    features: [
+      "Meets Amazon & Shopify marketplace standards",
+      "Clean edge detection around products",
+      "Zero watermarks and high-resolution export",
+    ],
+  },
 ];
 
 const imageFaqs: CategoryFaqItem[] = [

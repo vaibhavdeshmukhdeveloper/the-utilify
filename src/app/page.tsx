@@ -86,17 +86,39 @@ export default function Home() {
               Say goodbye to premium subscriptions, cluttered interfaces, and fishy file conversions. Utilify gives you premium utility tools for completely free.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-700">
+            <div className="flex flex-wrap items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-5 duration-700 mb-8">
               <a href="#tools">
                 <Button size="lg" className="h-14 px-8 rounded-2xl text-base font-bold shadow-lg hover:shadow-xl transition-all">
-                  Launch Free Tools <ArrowRight className="ml-2 h-5 w-5" />
+                  Explore 30 Free Tools <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
               <Link href="/about">
                 <Button variant="outline" size="lg" className="h-14 px-8 rounded-2xl text-base font-bold border-zinc-200 dark:border-zinc-800">
-                  Learn Our Mission
+                  How We Protect Privacy
                 </Button>
               </Link>
+            </div>
+
+            {/* High-Intent Task-First Quick Launch Pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto mb-12">
+              <span className="text-xs font-bold text-muted-foreground mr-1 uppercase tracking-wider">Quick Actions:</span>
+              {[
+                { label: "✂️ Split PDF", href: "/split-pdf" },
+                { label: "🗜️ Compress Image", href: "/image-compressor" },
+                { label: "🪄 Remove Background", href: "/background-remover" },
+                { label: "📈 SIP Calculator", href: "/sip-calculator" },
+                { label: "💼 Investment Planner", href: "/investment-calculator" },
+                { label: "🔑 Password Gen", href: "/password-generator" },
+                { label: "📝 JSON Formatter", href: "/json-formatter" },
+              ].map((pill) => (
+                <Link
+                  key={pill.href}
+                  href={pill.href}
+                  className="px-3 py-1.5 rounded-xl border border-border/70 bg-card/60 hover:bg-primary/10 hover:border-primary/30 text-xs font-bold text-foreground transition-all shadow-xs"
+                >
+                  {pill.label}
+                </Link>
+              ))}
             </div>
 
             {/* Instant Quick-Utility Playground */}
@@ -108,21 +130,25 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="flex gap-4 p-6 rounded-3xl hover:bg-muted/50 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                   <Lock className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-1 text-foreground">Privacy Protected</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">Everything runs client-side or on transient, secure servers. We never store or view your files.</p>
+                  <h3 className="font-bold text-lg mb-1 text-foreground">100% Client-Side Privacy</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Calculators, formatters, and generators run directly in your browser. Passwords, JSON, and financial inputs never touch any server.
+                  </p>
                 </div>
               </div>
               <div className="flex gap-4 p-6 rounded-3xl hover:bg-muted/50 transition-colors duration-300">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                   <Zap className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-1 text-foreground">Lightning Fast</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">Supercharged with Next.js and optimized backend code to process image and PDF conversions in milliseconds.</p>
+                  <h3 className="font-bold text-lg mb-1 text-foreground">Transient RAM Processing</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    PDF operations and AI background removal execute purely in temporary memory streams. Files are auto-purged immediately—zero disk storage.
+                  </p>
                 </div>
               </div>
               <div className="flex gap-4 p-6 rounded-3xl hover:bg-muted/50 transition-colors duration-300">
@@ -130,8 +156,10 @@ export default function Home() {
                   <Shield className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-1 text-foreground">AdSense Approved</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">Built from the ground up for superior usability, clean layouts, and rich content - perfect for daily productive work.</p>
+                  <h3 className="font-bold text-lg mb-1 text-foreground">100% Free Forever</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    No subscriptions, no hidden watermarks, no mandatory account sign-ups, and no 2-task daily limits. Truly unlimited utilities.
+                  </p>
                 </div>
               </div>
             </div>

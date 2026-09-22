@@ -99,6 +99,28 @@ const devTools: CategoryToolItem[] = [
       "Instant copy to clipboard",
     ],
   },
+  {
+    title: "Word Counter & Text Analyzer",
+    description: "Real-time character, word, sentence, and paragraph counter with reading time and social media limit analysis.",
+    href: "/word-counter",
+    badge: "Productivity",
+    features: [
+      "Live character and word counts",
+      "Reading & speaking speed metrics",
+      "Keyword density frequency analysis",
+    ],
+  },
+  {
+    title: "PX to REM Converter",
+    description: "Convert pixel measurements to REM, EM, and PT, plus generate fluid responsive CSS clamp() typography.",
+    href: "/px-to-rem",
+    badge: "CSS Architecture",
+    features: [
+      "Bidirectional PX to REM/EM conversion",
+      "CSS clamp() fluid typography generator",
+      "Tailwind CSS v4 spacing token cheat sheet",
+    ],
+  },
 ];
 
 const devFaqs: CategoryFaqItem[] = [

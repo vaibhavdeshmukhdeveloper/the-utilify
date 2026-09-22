@@ -23,6 +23,7 @@ import {
   GitCompare,
   AlignLeft,
   Activity,
+  Flame,
   Image as ImageIcon
 } from "lucide-react";
 
@@ -174,6 +175,69 @@ const toolsList = [
     href: "/unit-converter",
     icon: Ruler,
     category: "Utility"
+  },
+  {
+    title: "FIRE Calculator",
+    description: "Calculate your Financial Independence number and retirement timeline using the 4% rule.",
+    href: "/fire-calculator",
+    icon: Flame,
+    category: "Finance"
+  },
+  {
+    title: "PX to REM Converter",
+    description: "Convert pixel values to REM/EM and generate responsive CSS clamp() typography.",
+    href: "/px-to-rem",
+    icon: Type,
+    category: "Developer"
+  },
+  {
+    title: "Compress PNG",
+    description: "Shrink transparent PNG images with lossless compression.",
+    href: "/compress-png",
+    icon: ImageIcon,
+    category: "Image"
+  },
+  {
+    title: "Compress JPEG",
+    description: "Reduce JPG photo file sizes by up to 85% without quality loss.",
+    href: "/compress-jpeg",
+    icon: ImageIcon,
+    category: "Image"
+  },
+  {
+    title: "Make Signature Transparent",
+    description: "Extract ink signatures from paper photos for PDF and document signing.",
+    href: "/make-signature-transparent",
+    icon: Layers,
+    category: "Image"
+  },
+  {
+    title: "White Background Photos",
+    description: "Convert product photos to pure studio-white (#FFFFFF) for Amazon and Shopify.",
+    href: "/white-background-product-photos",
+    icon: Palette,
+    category: "Image"
+  },
+  {
+    title: "PDF to JPG",
+    description: "Convert PDF documents into high-resolution JPG images with instant bulk ZIP download.",
+    href: "/pdf-to-jpg",
+    icon: FileText,
+    category: "PDF"
+  },
+  {
+    title: "Compress WebP",
+    description: "Optimize and shrink WebP images for fast page loads and Core Web Vitals.",
+    href: "/compress-webp",
+    icon: ImageIcon,
+    category: "Image"
+  },
+  {
+    title: "Business Days Calculator",
+    description: "Calculate exact working days between two dates excluding weekends and holidays.",
+    href: "/business-days-calculator",
+    icon: Calendar,
+    category: "Utility"
   }
 ];
 
@@ -188,13 +252,10 @@ export function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Keyboard shortcut listener to open command palette
+  // Keyboard shortcut listener to open command palette (strictly Ctrl+K or Cmd+K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        (e.key === "k" && (e.metaKey || e.ctrlKey)) ||
-        (e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA")
-      ) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setIsOpen((prev) => !prev);
       }

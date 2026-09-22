@@ -52,6 +52,17 @@ export function ToolLayout({
   const currentSlug = pathname ? pathname.replace(/^\//, "") : "";
   const canonicalSlug = getCanonicalToolSlug(currentSlug);
 
+  const isBackendTool = [
+    "background-remover",
+    "pdf-to-image",
+    "pdf-to-jpg",
+    "split-pdf",
+    "merge-pdf",
+    "markdown-to-pdf",
+    "make-signature-transparent",
+    "white-background-product-photos",
+  ].includes(canonicalSlug);
+
   // Automatically record visited tool in localStorage for Recently Used tray
   React.useEffect(() => {
     if (!pathname || pathname === "/" || pathname === "/es" || pathname === "/pt") return;
@@ -241,7 +252,12 @@ export function ToolLayout({
                 </div>
                 <div>
                   <span className="text-muted-foreground block text-[11px] font-medium">{t.toolLayout.privacyLabel}</span>
-                  <span className="font-bold text-foreground">{t.toolLayout.privacyValue}</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 inline-block" />
+                    {isBackendTool 
+                      ? (currentLang === "es" ? "0s Retención (RAM)" : currentLang === "pt" ? "0s Retenção (RAM)" : "0s Retention (RAM)")
+                      : (currentLang === "es" ? "Cero Cargas (100% Local)" : currentLang === "pt" ? "Zero Uploads (100% Local)" : "Zero Network Uploads")}
+                  </span>
                 </div>
                 <div>
                   <span className="text-muted-foreground block text-[11px] font-medium">{t.toolLayout.accountLabel}</span>
@@ -249,7 +265,11 @@ export function ToolLayout({
                 </div>
                 <div>
                   <span className="text-muted-foreground block text-[11px] font-medium">{t.toolLayout.executionLabel}</span>
-                  <span className="font-bold text-foreground">{t.toolLayout.executionValue}</span>
+                  <span className="font-bold text-foreground">
+                    {isBackendTool
+                      ? (currentLang === "es" ? "RAM en Memoria" : currentLang === "pt" ? "RAM em Memória" : "In-Memory Stream")
+                      : (currentLang === "es" ? "100% En Navegador" : currentLang === "pt" ? "100% No Navegador" : "100% In-Browser")}
+                  </span>
                 </div>
               </div>
             </div>

@@ -66,6 +66,17 @@ const pdfTools: CategoryToolItem[] = [
       "Print-optimized page margins and fonts",
     ],
   },
+  {
+    title: "PDF to JPG",
+    description: "Convert multi-page PDF documents into crystal-clear JPG images with instant bulk ZIP archive download.",
+    href: "/pdf-to-jpg",
+    badge: "Fast Sharing",
+    features: [
+      "High-resolution 150 DPI page rendering",
+      "Single-click bulk ZIP export",
+      "100% in-memory streaming - zero file retention",
+    ],
+  },
 ];
 
 const pdfFaqs: CategoryFaqItem[] = [

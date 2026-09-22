@@ -14,6 +14,9 @@ interface ToolCardProps {
   popular?: boolean;
   isPinned?: boolean;
   onTogglePin?: (e: React.MouseEvent, href: string) => void;
+  privacyMode?: "browser" | "ram";
+  inputFormat?: string;
+  outputFormat?: string;
 }
 
 export function ToolCard({
@@ -25,6 +28,8 @@ export function ToolCard({
   popular,
   isPinned = false,
   onTogglePin,
+  privacyMode = "browser",
+  inputFormat,
 }: ToolCardProps) {
   return (
     <Link href={href} className="block h-full group select-none">
@@ -70,6 +75,24 @@ export function ToolCard({
             {description}
           </CardDescription>
         </CardHeader>
+
+        {/* Card Technical Proof & Metadata Footer */}
+        <div className="px-6 pb-5 pt-0 mt-auto flex items-center justify-between text-[11px] font-semibold border-t border-zinc-100 dark:border-zinc-800/80 pt-3.5">
+          <div className="flex items-center gap-1.5">
+            <span className={cn(
+              "w-2 h-2 rounded-full shrink-0",
+              privacyMode === "ram" ? "bg-blue-500 animate-pulse" : "bg-emerald-500"
+            )} />
+            <span className={privacyMode === "ram" ? "text-blue-600 dark:text-blue-400 font-medium text-[11px]" : "text-emerald-600 dark:text-emerald-400 font-medium text-[11px]"}>
+              {privacyMode === "ram" ? "RAM Stream (0s Ret.)" : "100% In-Browser"}
+            </span>
+          </div>
+          {inputFormat && (
+            <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-700/60 truncate max-w-[120px]">
+              {inputFormat}
+            </span>
+          )}
+        </div>
 
         {/* Hover Highlight Bar */}
         <div className="h-1 w-full bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

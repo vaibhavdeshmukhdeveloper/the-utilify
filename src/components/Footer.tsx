@@ -121,9 +121,11 @@ export function Footer() {
                 { slug: "make-signature-transparent", defaultName: "Transparent Signature" },
                 { slug: "white-background-product-photos", defaultName: "White Background Photos" },
                 { slug: "pdf-to-image", defaultName: "PDF to Image" },
+                { slug: "pdf-to-jpg", defaultName: "PDF to JPG" },
                 { slug: "split-pdf", defaultName: "Split PDF" },
                 { slug: "merge-pdf", defaultName: "Merge PDF" },
                 { slug: "markdown-to-pdf", defaultName: "Markdown to PDF" },
+                { slug: "compress-webp", defaultName: "Compress WebP" },
               ].map(({ slug, defaultName }) => {
                 const item = resolveTool(slug, defaultName);
                 return (

@@ -89,14 +89,25 @@ const calcTools: CategoryToolItem[] = [
     ],
   },
   {
-    title: "Word Counter",
-    description: "Count words, characters, sentences, paragraphs, and reading time in real-time with social media limit trackers.",
-    href: "/word-counter",
-    badge: "Text",
+    title: "FIRE Calculator",
+    description: "Calculate your Financial Independence Retire Early (FIRE) number, Lean/Standard/Fat milestones, and retirement timeline via the 4% rule.",
+    href: "/fire-calculator",
+    badge: "Retirement",
     features: [
-      "Character counts (with/without spaces)",
-      "Reading and speaking time estimation",
-      "Live social media character limits",
+      "Calculates 4% rule corpus targets",
+      "Lean FIRE (75%) and Fat FIRE (125%) tiers",
+      "Fisher equation inflation-adjusted real returns",
+    ],
+  },
+  {
+    title: "Business Days Calculator",
+    description: "Calculate exact working days between dates, excluding weekends and holidays, for project management and sprint delivery.",
+    href: "/business-days-calculator",
+    badge: "Working Days",
+    features: [
+      "Exact working days vs weekend breakdown",
+      "Dynamic date additions and subtractions",
+      "Zero server latency - 100% private",
     ],
   },
 ];

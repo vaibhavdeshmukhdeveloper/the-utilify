@@ -30,28 +30,43 @@ import { Button } from "@/components/ui/button";
 import { triggerConfetti } from "@/lib/confetti";
 import { toast } from "sonner";
 
-const allTools = [
+const allTools: {
+  title: string;
+  description: string;
+  href: string;
+  icon: any;
+  category: string;
+  popular?: boolean;
+  privacyMode: "browser" | "ram";
+  inputFormat: string;
+}[] = [
   {
     title: "AI Background Remover",
     description: "Remove image backgrounds automatically using professional-grade AI.",
     href: "/background-remover",
     icon: Layers,
     category: "Image",
-    popular: true
+    popular: true,
+    privacyMode: "ram",
+    inputFormat: "PNG, JPG, WebP"
   },
   {
     title: "Image Compressor",
     description: "Reduce image file size with zero quality loss.",
     href: "/image-compressor",
     icon: ImageIcon,
-    category: "Image"
+    category: "Image",
+    privacyMode: "browser",
+    inputFormat: "PNG, JPG, WebP"
   },
   {
     title: "Color Palette Generator",
     description: "Generate random or custom palettes and test contrast against WCAG standards.",
     href: "/color-palette",
     icon: Palette,
-    category: "Image"
+    category: "Image",
+    privacyMode: "browser",
+    inputFormat: "Image / Colors"
   },
   {
     title: "PDF to Image",
@@ -59,56 +74,73 @@ const allTools = [
     href: "/pdf-to-image",
     icon: FileText,
     category: "PDF",
-    popular: true
+    popular: true,
+    privacyMode: "ram",
+    inputFormat: "PDF Files"
   },
   {
     title: "Split PDF",
     description: "Separate one page or a whole range for easy conversion.",
     href: "/split-pdf",
     icon: Layers,
-    category: "PDF"
+    category: "PDF",
+    privacyMode: "ram",
+    inputFormat: "PDF Files"
   },
   {
     title: "Merge PDF",
     description: "Combine multiple PDF files into a single document.",
     href: "/merge-pdf",
     icon: FileText,
-    category: "PDF"
+    category: "PDF",
+    privacyMode: "ram",
+    inputFormat: "Multiple PDFs"
   },
   {
     title: "Markdown to PDF",
     description: "Convert Markdown text or files into clean PDF documents.",
     href: "/markdown-to-pdf",
     icon: FileText,
-    category: "PDF"
+    category: "PDF",
+    privacyMode: "ram",
+    inputFormat: "Markdown / KaTeX"
   },
   {
     title: "SIP Calculator",
     description: "Estimate the future value of your monthly investments.",
     href: "/sip-calculator",
     icon: PiggyBank,
-    category: "Finance"
+    category: "Finance",
+    privacyMode: "browser",
+    inputFormat: "Financial Math"
   },
   {
     title: "Investment Calculator",
-    description: "Project your future wealth with compound interest.",
+    description: "Project your future wealth with compound interest across 5 calculation targets.",
     href: "/investment-calculator",
     icon: TrendingUp,
-    category: "Finance"
+    category: "Finance",
+    popular: true,
+    privacyMode: "browser",
+    inputFormat: "5 Targets"
   },
   {
     title: "BMI Calculator",
     description: "Calculate your Body Mass Index (BMI) instantly.",
     href: "/bmi-calculator",
     icon: Activity,
-    category: "Health"
+    category: "Health",
+    privacyMode: "browser",
+    inputFormat: "Metric / US Units"
   },
   {
     title: "JSON Formatter",
     description: "Pretty-print, validate and minify JSON data instantly.",
     href: "/json-formatter",
     icon: FileJson,
-    category: "Developer"
+    category: "Developer",
+    privacyMode: "browser",
+    inputFormat: "JSON String"
   },
   {
     title: "Password Generator",
@@ -116,14 +148,18 @@ const allTools = [
     href: "/password-generator",
     icon: Key,
     category: "Developer",
-    popular: true
+    popular: true,
+    privacyMode: "browser",
+    inputFormat: "CSPRNG Rules"
   },
   {
     title: "QR Code Generator",
     description: "Create custom high-quality QR codes for links and text.",
     href: "/qr-generator",
     icon: QrCode,
-    category: "Developer"
+    category: "Developer",
+    privacyMode: "browser",
+    inputFormat: "URL / Wi-Fi / Text"
   },
   {
     title: "Word Counter",
@@ -131,49 +167,63 @@ const allTools = [
     href: "/word-counter",
     icon: FileText,
     category: "Utility",
-    popular: true
+    popular: true,
+    privacyMode: "browser",
+    inputFormat: "Plain Text"
   },
   {
     title: "Text Case Converter",
     description: "Convert texts to UPPER, lower, Title, or sentence case.",
     href: "/text-converter",
     icon: Type,
-    category: "Developer"
+    category: "Developer",
+    privacyMode: "browser",
+    inputFormat: "Text String"
   },
   {
     title: "Base64 Encoder/Decoder",
     description: "Convert plain text or files to Base64 format and vice versa.",
     href: "/base64",
     icon: Binary,
-    category: "Developer"
+    category: "Developer",
+    privacyMode: "browser",
+    inputFormat: "Text / File"
   },
   {
     title: "Diff Checker",
     description: "Compare two chunks of text side-by-side to highlight differences.",
     href: "/diff-checker",
     icon: GitCompare,
-    category: "Developer"
+    category: "Developer",
+    privacyMode: "browser",
+    inputFormat: "Text / Code"
   },
   {
     title: "Lorem Ipsum Generator",
     description: "Generate custom placeholder text in paragraphs or words.",
     href: "/lorem-ipsum",
     icon: AlignLeft,
-    category: "Developer"
+    category: "Developer",
+    privacyMode: "browser",
+    inputFormat: "Paragraphs"
   },
   {
     title: "Date Calculator",
     description: "Calculate duration between dates or add/subtract time.",
     href: "/date-calculator",
     icon: Calendar,
-    category: "Utility"
+    category: "Utility",
+    privacyMode: "browser",
+    inputFormat: "Calendar Dates"
   },
   {
     title: "Age Calculator",
     description: "Check your exact age and countdown your next birthday.",
     href: "/age-calculator",
     icon: Hourglass,
-    category: "Utility"
+    category: "Utility",
+    privacyMode: "browser",
+    inputFormat: "Birthdate"
   },
   {
     title: "Unit Converter",
@@ -181,7 +231,9 @@ const allTools = [
     href: "/unit-converter",
     icon: Ruler,
     category: "Utility",
-    popular: true
+    popular: true,
+    privacyMode: "browser",
+    inputFormat: "5 SI Units"
   },
   {
     title: "FIRE Calculator",
@@ -189,63 +241,81 @@ const allTools = [
     href: "/fire-calculator",
     icon: Flame,
     category: "Finance",
-    popular: true
+    popular: true,
+    privacyMode: "browser",
+    inputFormat: "Retirement Math"
   },
   {
     title: "PX to REM Converter",
     description: "Convert pixel values to REM/EM and generate responsive CSS clamp() typography.",
     href: "/px-to-rem",
     icon: Type,
-    category: "Developer"
+    category: "Developer",
+    privacyMode: "browser",
+    inputFormat: "CSS / PX Units"
   },
   {
     title: "Compress PNG",
     description: "Shrink transparent PNG images with lossless compression.",
     href: "/compress-png",
     icon: ImageIcon,
-    category: "Image"
+    category: "Image",
+    privacyMode: "browser",
+    inputFormat: "PNG Images"
   },
   {
     title: "Compress JPEG",
     description: "Reduce JPG photo file sizes by up to 85% without quality loss.",
     href: "/compress-jpeg",
     icon: ImageIcon,
-    category: "Image"
+    category: "Image",
+    privacyMode: "browser",
+    inputFormat: "JPEG / JPG"
   },
   {
     title: "Make Signature Transparent",
     description: "Extract ink signatures from paper photos for PDF and document signing.",
     href: "/make-signature-transparent",
     icon: Layers,
-    category: "Image"
+    category: "Image",
+    privacyMode: "ram",
+    inputFormat: "Signature Photo"
   },
   {
     title: "White Background Photos",
     description: "Convert product photos to pure studio-white (#FFFFFF) for Amazon and Shopify.",
     href: "/white-background-product-photos",
     icon: Palette,
-    category: "Image"
+    category: "Image",
+    privacyMode: "ram",
+    inputFormat: "Product Photos"
   },
   {
     title: "PDF to JPG",
     description: "Convert PDF documents into high-resolution JPG images with instant bulk ZIP download.",
     href: "/pdf-to-jpg",
     icon: FileText,
-    category: "PDF"
+    category: "PDF",
+    privacyMode: "ram",
+    inputFormat: "PDF Files"
   },
   {
     title: "Compress WebP",
     description: "Optimize and shrink WebP images for fast page loads and Core Web Vitals.",
     href: "/compress-webp",
     icon: ImageIcon,
-    category: "Image"
+    category: "Image",
+    privacyMode: "browser",
+    inputFormat: "WebP Images"
   },
   {
     title: "Business Days Calculator",
     description: "Calculate exact working days between two dates excluding weekends and holidays.",
     href: "/business-days-calculator",
     icon: Calendar,
-    category: "Utility"
+    category: "Utility",
+    privacyMode: "browser",
+    inputFormat: "Workdays / Dates"
   }
 ];
 
@@ -361,7 +431,7 @@ export function ToolsGrid() {
               ref={searchInputRef}
               type="text"
               className="flex-grow bg-transparent border-none outline-none text-foreground font-bold placeholder:text-muted-foreground placeholder:font-semibold text-base"
-              placeholder="Search utility tools... (Press '/' to focus)"
+              placeholder="Search 30 utility tools... (Press '/' to focus)"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -373,7 +443,7 @@ export function ToolsGrid() {
                 <X className="h-4 w-4" />
               </button>
             )}
-            <kbd className="hidden sm:inline-flex h-6 select-none items-center gap-0.5 rounded border border-border bg-muted/50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+            <kbd className="hidden sm:inline-flex h-6 select-none items-center gap-0.5 rounded border border-border bg-muted/50 px-2 font-mono text-[10px] font-semibold text-muted-foreground">
               /
             </kbd>
           </div>
