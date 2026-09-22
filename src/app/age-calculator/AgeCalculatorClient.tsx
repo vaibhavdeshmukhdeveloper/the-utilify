@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Hourglass, Calendar, Gift, Clock, Info, Share2 } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
+import { getUIStrings, Locale } from "@/lib/i18n/ui-strings";
 
 function parseLocalDate(dateStr: string): Date | null {
   if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
@@ -40,6 +41,7 @@ export default function AgeCalculatorClient({
   customFaqs,
   lang,
 }: AgeCalculatorClientProps = {}) {
+  const t = getUIStrings((lang as Locale) || "en");
   const [dob, setDob] = useState("1995-01-01");
   const [targetDate, setTargetDate] = useState(() => formatLocalDate(new Date()));
   const [result, setResult] = useState<{
@@ -294,13 +296,13 @@ export default function AgeCalculatorClient({
               {/* Exact Age Card */}
               <Card className="md:col-span-6 p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center flex flex-col justify-center space-y-3 shadow-sm">
                 <div className="text-sm text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
-                  <Hourglass className="h-4 w-4 text-primary" /> Exact Age
+                  <Hourglass className="h-4 w-4 text-primary" /> {t.ageCalculator.exactAge}
                 </div>
                 <div className="text-4xl sm:text-5xl font-black text-primary tracking-tight">
-                  {result.years} <span className="text-xl text-muted-foreground font-normal">years</span>
+                  {result.years} <span className="text-xl text-muted-foreground font-normal">{t.ageCalculator.years}</span>
                 </div>
                 <div className="text-lg font-bold text-muted-foreground">
-                  {result.months} months, {result.days} days
+                  {result.months} {t.ageCalculator.months}, {result.days} {t.ageCalculator.days}
                 </div>
                 {liveMode && (
                   <span className="text-[10px] text-emerald-500 font-black tracking-widest uppercase flex items-center justify-center gap-1.5 mt-2">
@@ -312,7 +314,7 @@ export default function AgeCalculatorClient({
               {/* Next Birthday Card */}
               <Card className="md:col-span-6 p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center flex flex-col justify-center space-y-4 shadow-sm">
                 <div className="text-sm text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
-                  <Gift className="h-4 w-4 text-primary" /> Next Birthday Countdown
+                  <Gift className="h-4 w-4 text-primary" /> {t.ageCalculator.nextBirthday}
                 </div>
                 <div className="flex justify-center items-center gap-4">
                   <div className="text-center">
@@ -342,8 +344,8 @@ export default function AgeCalculatorClient({
                 </div>
                 <p className="text-xs text-muted-foreground leading-normal font-medium">
                   {result.nextBirthday.months === 0 && result.nextBirthday.days === 0
-                    ? "🎉 Happy Birthday! today is the day!"
-                    : `Your birthday is in ${result.nextBirthday.months} months and ${result.nextBirthday.days} days.`}
+                    ? t.ageCalculator.happyBirthday
+                    : t.ageCalculator.birthdayIn(result.nextBirthday.months, result.nextBirthday.days)}
                 </p>
               </Card>
             </div>
@@ -351,7 +353,7 @@ export default function AgeCalculatorClient({
             {/* Cumulative stats */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Lived Cumulative Milestones</h3>
+                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{t.ageCalculator.milestones}</h3>
                 <Button
                   type="button"
                   onClick={() => copyShareUrl({

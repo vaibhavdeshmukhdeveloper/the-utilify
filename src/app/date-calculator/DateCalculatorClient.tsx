@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Calendar, Plus, Minus, Info, ArrowRight, Share2 } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
+import { getUIStrings, Locale } from "@/lib/i18n/ui-strings";
 
 export interface DateCalculatorClientProps {
   initialTab?: "diff" | "math";
@@ -43,7 +44,10 @@ export default function DateCalculatorClient({
   customFaqs,
   lang,
 }: DateCalculatorClientProps = {}) {
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const t = getUIStrings((lang as Locale) || "en");
+  const dateLocale = lang === "es" ? "es-ES" : lang === "pt" ? "pt-BR" : "en-US";
+
+  const [activeTab, setActiveTab] = useState<string>(initialTab);
 
   // Tab 1: Diff states
   const [startDate, setStartDate] = useState(() => formatLocalDate(new Date()));
@@ -202,10 +206,10 @@ export default function DateCalculatorClient({
     d.setDate(d.getDate() + dys * multiplier);
 
     setMathResult({
-      formattedDate: d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
-      dayOfWeek: d.toLocaleDateString("en-US", { weekday: "long" }),
+      formattedDate: d.toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" }),
+      dayOfWeek: d.toLocaleDateString(dateLocale, { weekday: "long" }),
     });
-  }, [baseDate, operation, addYears, addMonths, addDays]);
+  }, [baseDate, operation, addYears, addMonths, addDays, dateLocale]);
 
   const calculateDiff = (e: React.FormEvent) => {
     e.preventDefault();
@@ -335,17 +339,17 @@ export default function DateCalculatorClient({
                   <div className="flex justify-center items-center gap-6">
                     <div className="text-center">
                       <div className="text-5xl font-black text-primary font-mono">{diffResult.years}</div>
-                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Years</div>
+                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">{t.dateCalculator.years}</div>
                     </div>
                     <div className="text-2xl font-bold text-zinc-300">/</div>
                     <div className="text-center">
                       <div className="text-5xl font-black text-primary font-mono">{diffResult.months}</div>
-                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Months</div>
+                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">{t.dateCalculator.months}</div>
                     </div>
                     <div className="text-2xl font-bold text-zinc-300">/</div>
                     <div className="text-center">
                       <div className="text-5xl font-black text-primary font-mono">{diffResult.days}</div>
-                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Days</div>
+                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">{t.dateCalculator.days}</div>
                     </div>
                   </div>
                 </Card>
@@ -353,24 +357,24 @@ export default function DateCalculatorClient({
                 {/* Totals layout */}
                 <div className="grid grid-cols-2 gap-4 h-full">
                   <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Business Days</span>
+                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.businessDays}</span>
                     <span className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-2">{diffResult.businessDays.toLocaleString()}</span>
-                    <span className="text-[9px] text-muted-foreground mt-0.5">Mon–Fri workdays</span>
+                    <span className="text-[9px] text-muted-foreground mt-0.5">Mon–Fri</span>
                   </Card>
                   <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Weekend Days</span>
+                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weekendDays}</span>
                     <span className="text-3xl font-black text-zinc-500 font-mono mt-2">{diffResult.weekendDays.toLocaleString()}</span>
                     <span className="text-[9px] text-muted-foreground mt-0.5">Sat &amp; Sun</span>
                   </Card>
                   <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Total Days</span>
+                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.totalDays}</span>
                     <span className="text-3xl font-black text-primary font-mono mt-2">{diffResult.totalDays.toLocaleString()}</span>
-                    <span className="text-[9px] text-muted-foreground mt-0.5">Calendar duration</span>
+                    <span className="text-[9px] text-muted-foreground mt-0.5">Calendar</span>
                   </Card>
                   <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Total Weeks</span>
+                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weeks}</span>
                     <span className="text-3xl font-black text-primary font-mono mt-2">{diffResult.totalWeeks.toLocaleString()}</span>
-                    <span className="text-[9px] text-muted-foreground mt-0.5">Elapsed weeks</span>
+                    <span className="text-[9px] text-muted-foreground mt-0.5">Weeks</span>
                   </Card>
                   <div className="col-span-2 pt-2">
                     <Button
@@ -474,7 +478,7 @@ export default function DateCalculatorClient({
             {mathResult && (
               <div ref={mathResultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-xl mx-auto scroll-mt-24">
                 <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
-                  <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Calculated Date</div>
+                  <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">{t.dateCalculator.projectedDate}</div>
                   <div className="text-3xl font-black text-primary tracking-tight">{mathResult.formattedDate}</div>
                   <div className="text-lg font-bold text-muted-foreground flex items-center justify-center gap-1.5 mb-4">
                     <ArrowRight className="h-4 w-4 text-primary" /> {mathResult.dayOfWeek}

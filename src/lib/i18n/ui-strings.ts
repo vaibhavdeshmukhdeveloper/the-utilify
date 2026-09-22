@@ -75,6 +75,39 @@ export interface UIStrings {
     allRightsReserved: string;
     madeWithLove: string;
   };
+  bmiCalculator: {
+    title: string;
+    calculateButton: string;
+    categories: {
+      underweight: string;
+      normal: string;
+      overweight: string;
+      obese1: string;
+      obese2: string;
+      obese3: string;
+    };
+    healthyRange: string;
+  };
+  dateCalculator: {
+    years: string;
+    months: string;
+    weeks: string;
+    days: string;
+    businessDays: string;
+    weekendDays: string;
+    totalDays: string;
+    projectedDate: string;
+  };
+  ageCalculator: {
+    exactAge: string;
+    years: string;
+    months: string;
+    days: string;
+    nextBirthday: string;
+    happyBirthday: string;
+    birthdayIn: (m: number, d: number) => string;
+    milestones: string;
+  };
 }
 
 export const uiStrings: Record<Locale, UIStrings> = {
@@ -158,6 +191,39 @@ export const uiStrings: Record<Locale, UIStrings> = {
       allRightsReserved: "All rights reserved.",
       madeWithLove: "for a simpler web.",
     },
+    bmiCalculator: {
+      title: "Your Body Mass Index (BMI)",
+      calculateButton: "Calculate BMI",
+      categories: {
+        underweight: "Underweight",
+        normal: "Normal weight",
+        overweight: "Overweight",
+        obese1: "Obese Class I",
+        obese2: "Obese Class II",
+        obese3: "Obese Class III",
+      },
+      healthyRange: "Healthy BMI Range: 18.5 – 24.9",
+    },
+    dateCalculator: {
+      years: "Years",
+      months: "Months",
+      weeks: "Weeks",
+      days: "Days",
+      businessDays: "Business Days",
+      weekendDays: "Weekend Days",
+      totalDays: "Total Days",
+      projectedDate: "Projected Date",
+    },
+    ageCalculator: {
+      exactAge: "Exact Age",
+      years: "years",
+      months: "months",
+      days: "days",
+      nextBirthday: "Next Birthday Countdown",
+      happyBirthday: "🎉 Happy Birthday! today is the day!",
+      birthdayIn: (m: number, d: number) => `Your birthday is in ${m} months and ${d} days.`,
+      milestones: "Lived Cumulative Milestones",
+    },
   },
   es: {
     nav: {
@@ -239,6 +305,39 @@ export const uiStrings: Record<Locale, UIStrings> = {
       allRightsReserved: "Todos los derechos reservados.",
       madeWithLove: "por una web más simple.",
     },
+    bmiCalculator: {
+      title: "Tu Índice de Masa Corporal (IMC)",
+      calculateButton: "Calcular IMC",
+      categories: {
+        underweight: "Bajo peso",
+        normal: "Peso normal",
+        overweight: "Sobrepeso",
+        obese1: "Obesidad Clase I",
+        obese2: "Obesidad Clase II",
+        obese3: "Obesidad Clase III",
+      },
+      healthyRange: "Rango de IMC saludable: 18.5 – 24.9",
+    },
+    dateCalculator: {
+      years: "Años",
+      months: "Meses",
+      weeks: "Semanas",
+      days: "Días",
+      businessDays: "Días laborables",
+      weekendDays: "Días de fin de semana",
+      totalDays: "Días totales",
+      projectedDate: "Fecha proyectada",
+    },
+    ageCalculator: {
+      exactAge: "Edad Exacta",
+      years: "años",
+      months: "meses",
+      days: "días",
+      nextBirthday: "Cuenta Regresiva para el Próximo Cumpleaños",
+      happyBirthday: "🎉 ¡Feliz Cumpleaños! ¡Hoy es el día!",
+      birthdayIn: (m: number, d: number) => `Tu cumpleaños es en ${m} meses y ${d} días.`,
+      milestones: "Hitos Acumulados Vividos",
+    },
   },
   pt: {
     nav: {
@@ -319,6 +418,39 @@ export const uiStrings: Record<Locale, UIStrings> = {
       termsOfService: "Termos de Serviço",
       allRightsReserved: "Todos os direitos reservados.",
       madeWithLove: "por uma web mais simples.",
+    },
+    bmiCalculator: {
+      title: "Seu Índice de Massa Corporal (IMC)",
+      calculateButton: "Calcular IMC",
+      categories: {
+        underweight: "Abaixo do peso",
+        normal: "Peso normal",
+        overweight: "Sobrepeso",
+        obese1: "Obesidade Grau I",
+        obese2: "Obesidade Grau II",
+        obese3: "Obesidade Grau III",
+      },
+      healthyRange: "Faixa de IMC saudável: 18.5 – 24.9",
+    },
+    dateCalculator: {
+      years: "Anos",
+      months: "Meses",
+      weeks: "Semanas",
+      days: "Dias",
+      businessDays: "Dias úteis",
+      weekendDays: "Fins de semana",
+      totalDays: "Dias totais",
+      projectedDate: "Data projetada",
+    },
+    ageCalculator: {
+      exactAge: "Idade Exata",
+      years: "anos",
+      months: "meses",
+      days: "dias",
+      nextBirthday: "Contagem Regressiva para o Próximo Aniversário",
+      happyBirthday: "🎉 Feliz Aniversário! Hoje é o dia!",
+      birthdayIn: (m: number, d: number) => `Seu aniversário é em ${m} meses e ${d} dias.`,
+      milestones: "Marcos Cumulativos Vividos",
     },
   },
 };

@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MathFormula } from "@/components/MathFormula";
 import { triggerConfetti } from "@/lib/confetti";
 import { copyShareUrl } from "@/lib/share-utils";
+import { getUIStrings, Locale } from "@/lib/i18n/ui-strings";
 
 export interface BmiCalculatorClientProps {
   customTitle?: string;
@@ -29,6 +30,7 @@ export default function BmiCalculatorClient({
   customFaqs,
   lang,
 }: BmiCalculatorClientProps = {}) {
+  const t = getUIStrings((lang as Locale) || "en");
   const [unitSystem, setUnitSystem] = useState("metric");
   const [weight, setWeight] = useState("70");
   const [height, setHeight] = useState("175");
@@ -96,27 +98,27 @@ export default function BmiCalculatorClient({
     let color = "";
 
     if (bmiValue < 18.5) {
-      category = "Underweight";
+      category = t.bmiCalculator.categories.underweight;
       color = "text-blue-500";
     } else if (bmiValue < 25) {
-      category = "Normal weight";
+      category = t.bmiCalculator.categories.normal;
       color = "text-green-500";
     } else if (bmiValue < 30) {
-      category = "Overweight";
+      category = t.bmiCalculator.categories.overweight;
       color = "text-yellow-500";
     } else if (bmiValue < 35) {
-      category = "Obese Class I";
+      category = t.bmiCalculator.categories.obese1;
       color = "text-orange-500";
     } else if (bmiValue < 40) {
-      category = "Obese Class II";
+      category = t.bmiCalculator.categories.obese2;
       color = "text-red-500";
     } else {
-      category = "Obese Class III";
+      category = t.bmiCalculator.categories.obese3;
       color = "text-red-700";
     }
 
     setResult({ bmi: bmiStr, category, color });
-  }, [unitSystem, weight, height, weightLbs, heightFt, heightIn]);
+  }, [unitSystem, weight, height, weightLbs, heightFt, heightIn, t]);
 
   const calculateBmi = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -174,12 +176,12 @@ export default function BmiCalculatorClient({
   };
 
   const bmiRanges = [
-    { label: "Underweight", range: "< 18.5", color: "bg-blue-500" },
-    { label: "Normal weight", range: "18.5 – 24.9", color: "bg-green-500" },
-    { label: "Overweight", range: "25.0 – 29.9", color: "bg-yellow-500" },
-    { label: "Obese Class I", range: "30.0 – 34.9", color: "bg-orange-500" },
-    { label: "Obese Class II", range: "35.0 – 39.9", color: "bg-red-500" },
-    { label: "Obese Class III", range: "≥ 40.0", color: "bg-red-700" },
+    { label: t.bmiCalculator.categories.underweight, range: "< 18.5", color: "bg-blue-500" },
+    { label: t.bmiCalculator.categories.normal, range: "18.5 – 24.9", color: "bg-green-500" },
+    { label: t.bmiCalculator.categories.overweight, range: "25.0 – 29.9", color: "bg-yellow-500" },
+    { label: t.bmiCalculator.categories.obese1, range: "30.0 – 34.9", color: "bg-orange-500" },
+    { label: t.bmiCalculator.categories.obese2, range: "35.0 – 39.9", color: "bg-red-500" },
+    { label: t.bmiCalculator.categories.obese3, range: "≥ 40.0", color: "bg-red-700" },
   ];
 
   const howToUse = [
@@ -345,7 +347,7 @@ export default function BmiCalculatorClient({
 
               <div className="flex gap-4 pt-4">
                 <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg hover:shadow-xl transition-all rounded-xl">
-                  <Calculator className="mr-2 h-5 w-5" /> Calculate BMI
+                  <Calculator className="mr-2 h-5 w-5" /> {t.bmiCalculator.calculateButton}
                 </Button>
                 <Button type="button" onClick={reset} variant="outline" className="h-14 px-6 rounded-xl border-2 hover:bg-zinc-100">
                   <RefreshCw className="h-5 w-5" />
@@ -357,7 +359,7 @@ export default function BmiCalculatorClient({
           {result && (
             <div ref={resultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
               <Card className="p-8 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
-                <div className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-black mb-4">Your Body Mass Index (BMI)</div>
+                <div className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-black mb-4">{t.bmiCalculator.title}</div>
                 <div className={`text-7xl font-black mb-6 ${result.color} tracking-tighter`}>
                   {result.bmi}
                 </div>

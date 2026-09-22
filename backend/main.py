@@ -213,7 +213,7 @@ async def pdf_to_image(file: UploadFile = File(...)):
         return Response(
             content=zip_buffer.getvalue(),
             media_type="application/zip",
-            headers={"Content-Disposition": 'attachment; filename="images.zip"'}
+            headers={"Content-Disposition": format_content_disposition("images.zip")}
         )
     except Exception as e:
         print(f"PDF to Image crash: {e}")
@@ -285,7 +285,7 @@ async def merge_pdf(files: List[UploadFile] = File(...)):
         return Response(
             content=output_buffer.getvalue(),
             media_type="application/pdf",
-            headers={"Content-Disposition": 'attachment; filename="merged.pdf"'}
+            headers={"Content-Disposition": format_content_disposition("merged.pdf")}
         )
     except Exception as e:
         print(f"Merge PDF crash: {e}")
@@ -325,7 +325,7 @@ async def html_to_pdf(request: HtmlRequest):
         return Response(
             content=pdf_bytes,
             media_type="application/pdf",
-            headers={"Content-Disposition": 'attachment; filename="document.pdf"'}
+            headers={"Content-Disposition": format_content_disposition("document.pdf")}
         )
     except Exception as e:
         print(f"HTML to PDF crash: {e}")
