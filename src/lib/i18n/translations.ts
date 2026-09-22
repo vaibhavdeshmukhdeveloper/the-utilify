@@ -298,10 +298,10 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
     "investment-calculator": {
       slug: "investment-calculator",
       name: "Calculadora de Inversiones",
-      title: "Calculadora de Crecimiento de Inversiones e Interés Compuesto | Utilify",
-      description: "Proyecta el crecimiento de tu capital inicial sumado a aportaciones mensuales recurrentes con interés compuesto diario, mensual, trimestral o anual.",
+      title: "Calculadora de Inversiones Multi-Objetivo e Interés Compuesto | Utilify",
+      description: "Calculadora de inversiones multi-objetivo: calcula monto final, aportes periódicos necesarios, capital inicial, tasa de rendimiento o plazo en años con interés compuesto.",
       category: "Calculadoras",
-      features: ["Capital inicial y aportes periódicos", "Frecuencias diaria, mensual, trimestral y anual", "Desglose año por año en tabla y CSV", "Visualización de riqueza futura"],
+      features: ["5 modos de cálculo: Monto Final, Aporte, Capital Inicial, Tasa y Plazo", "Frecuencias diaria, mensual, trimestral, semestral y anual", "Aportes al inicio o final del mes o año", "Desglose año por año en tabla y CSV"],
       howToUse: [
         { step: "Capital inicial", description: "Ingresa la suma de dinero con la que inicias tu inversión." },
         { step: "Aportes y rentabilidad", description: "Define el aporte mensual, tasa de interés anual y plazo en años." },
@@ -623,10 +623,10 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
     "investment-calculator": {
       slug: "investment-calculator",
       name: "Calculadora de Investimentos",
-      title: "Calculadora de Crescimento de Investimentos e Juros Compostos | Utilify",
-      description: "Projete o crescimento do seu capital inicial somado a aportes mensais recorrentes com juros compostos diários, mensais, trimestrais ou anuais.",
+      title: "Calculadora de Investimentos Multi-Objetivo e Juros Compostos | Utilify",
+      description: "Calculadora de investimentos multi-objetivo: calcule o montante final, aportes periódicos necessários, capital inicial, taxa de retorno ou prazo com juros compostos.",
       category: "Calculadoras",
-      features: ["Capital inicial e aportes recorrentes", "Capitalização diária, mensal, trimestral e anual", "Tabela ano a ano e exportação para CSV", "Simulação de patrimônio futuro"],
+      features: ["5 modos de cálculo: Montante Final, Aporte, Capital Inicial, Taxa e Prazo", "Capitalização diária, mensal, trimestral, semestral e anual", "Aportes no início ou fim do mês ou ano", "Detalhamento ano a ano e exportação para CSV"],
       howToUse: [
         { step: "Patrimônio inicial", description: "Digite o montante com o qual você está começando a investir." },
         { step: "Aportes e rentabilidade", description: "Indique o depósito mensal, a rentabilidade anual estimada e o prazo." },

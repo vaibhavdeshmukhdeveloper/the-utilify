@@ -108,6 +108,60 @@ export interface UIStrings {
     birthdayIn: (m: number, d: number) => string;
     milestones: string;
   };
+  investmentCalculator: {
+    tabs: {
+      endAmount: string;
+      contribution: string;
+      startingAmount: string;
+      returnRate: string;
+      length: string;
+    };
+    labels: {
+      targetAmount: string;
+      startingAmount: string;
+      additionalContribution: string;
+      durationYears: string;
+      returnRate: string;
+      advancedSettings: string;
+      compoundInterval: string;
+      contributionTiming: string;
+      beginning: string;
+      end: string;
+      ofEach: string;
+      month: string;
+      year: string;
+      frequencies: {
+        annually: string;
+        semiannually: string;
+        quarterly: string;
+        monthly: string;
+        daily: string;
+      };
+      projectWealthButton: string;
+      resetButton: string;
+    };
+    results: {
+      totalFutureWealth: string;
+      neededContribution: string;
+      neededStartingAmount: string;
+      neededReturnRate: string;
+      neededLength: string;
+      startingPrincipal: string;
+      totalContributions: string;
+      totalInterest: string;
+      totalLoss: string;
+      targetBalance: string;
+      yearsAndMonths: (y: number, m: number) => string;
+      yearsOnly: (y: number) => string;
+      yearlyBreakdownTitle: string;
+      projectionFor: (y: string) => string;
+      shareLink: string;
+      exportCsv: string;
+      readyToPlanTitle: string;
+      readyToPlanDesc: string;
+      startPrompt: string;
+    };
+  };
 }
 
 export const uiStrings: Record<Locale, UIStrings> = {
@@ -224,6 +278,60 @@ export const uiStrings: Record<Locale, UIStrings> = {
       birthdayIn: (m: number, d: number) => `Your birthday is in ${m} months and ${d} days.`,
       milestones: "Lived Cumulative Milestones",
     },
+    investmentCalculator: {
+      tabs: {
+        endAmount: "End Amount",
+        contribution: "Contribute Amount",
+        startingAmount: "Starting Amount",
+        returnRate: "Return Rate",
+        length: "Invest Length",
+      },
+      labels: {
+        targetAmount: "Your Target (End Amount)",
+        startingAmount: "Starting Amount",
+        additionalContribution: "Additional Contribution",
+        durationYears: "Duration (Years)",
+        returnRate: "Return Rate (%)",
+        advancedSettings: "Advanced Compounding & Timing",
+        compoundInterval: "Compounding Interval",
+        contributionTiming: "Contribute at the",
+        beginning: "beginning",
+        end: "end",
+        ofEach: "of each",
+        month: "month",
+        year: "year",
+        frequencies: {
+          annually: "Annually",
+          semiannually: "Semiannually",
+          quarterly: "Quarterly",
+          monthly: "Monthly",
+          daily: "Daily",
+        },
+        projectWealthButton: "Calculate Projection",
+        resetButton: "Reset",
+      },
+      results: {
+        totalFutureWealth: "Total Future Wealth",
+        neededContribution: "Required Contribution",
+        neededStartingAmount: "Required Starting Capital",
+        neededReturnRate: "Required Annual Return",
+        neededLength: "Required Time Horizon",
+        startingPrincipal: "Starting Capital",
+        totalContributions: "Total Contributions",
+        totalInterest: "Total Interest Earned",
+        totalLoss: "Total Loss",
+        targetBalance: "Target End Balance",
+        yearsAndMonths: (y: number, m: number) => m > 0 ? `${y} Years and ${m} Months` : `${y} Years`,
+        yearsOnly: (y: number) => `${y} Years`,
+        yearlyBreakdownTitle: "Yearly Breakdown",
+        projectionFor: (y: string) => `Growth projection for ${y} years`,
+        shareLink: "Share Link",
+        exportCsv: "Export CSV",
+        readyToPlanTitle: "Ready to plan?",
+        readyToPlanDesc: "Enter your investment parameters and click Calculate Projection to see your wealth trajectory.",
+        startPrompt: "Start by entering an amount",
+      },
+    },
   },
   es: {
     nav: {
@@ -338,6 +446,60 @@ export const uiStrings: Record<Locale, UIStrings> = {
       birthdayIn: (m: number, d: number) => `Tu cumpleaños es en ${m} meses y ${d} días.`,
       milestones: "Hitos Acumulados Vividos",
     },
+    investmentCalculator: {
+      tabs: {
+        endAmount: "Monto Final",
+        contribution: "Aporte Periódico",
+        startingAmount: "Capital Inicial",
+        returnRate: "Tasa de Retorno",
+        length: "Plazo de Inversión",
+      },
+      labels: {
+        targetAmount: "Tu Monto Objetivo (Final)",
+        startingAmount: "Capital Inicial",
+        additionalContribution: "Aporte Adicional",
+        durationYears: "Duración (Años)",
+        returnRate: "Tasa de Retorno (%)",
+        advancedSettings: "Capitalización Avanzada y Tiempos",
+        compoundInterval: "Frecuencia de Capitalización",
+        contributionTiming: "Aportar al",
+        beginning: "inicio",
+        end: "final",
+        ofEach: "de cada",
+        month: "mes",
+        year: "año",
+        frequencies: {
+          annually: "Anual",
+          semiannually: "Semestral",
+          quarterly: "Trimestral",
+          monthly: "Mensual",
+          daily: "Diario",
+        },
+        projectWealthButton: "Calcular Proyección",
+        resetButton: "Restablecer",
+      },
+      results: {
+        totalFutureWealth: "Patrimonio Futuro Total",
+        neededContribution: "Aporte Periódico Necesario",
+        neededStartingAmount: "Capital Inicial Necesario",
+        neededReturnRate: "Tasa de Rendimiento Necesaria",
+        neededLength: "Plazo de Inversión Necesario",
+        startingPrincipal: "Capital Inicial",
+        totalContributions: "Aportes Totales",
+        totalInterest: "Interés Total Generado",
+        totalLoss: "Pérdida Total",
+        targetBalance: "Saldo Final Objetivo",
+        yearsAndMonths: (y: number, m: number) => m > 0 ? `${y} Años y ${m} Meses` : `${y} Años`,
+        yearsOnly: (y: number) => `${y} Años`,
+        yearlyBreakdownTitle: "Desglose Año por Año",
+        projectionFor: (y: string) => `Proyección de crecimiento para ${y} años`,
+        shareLink: "Compartir Enlace",
+        exportCsv: "Exportar CSV",
+        readyToPlanTitle: "¿Listo para planificar?",
+        readyToPlanDesc: "Ingresa los parámetros de tu inversión y haz clic en Calcular Proyección para ver la trayectoria.",
+        startPrompt: "Comienza ingresando un monto",
+      },
+    },
   },
   pt: {
     nav: {
@@ -451,6 +613,60 @@ export const uiStrings: Record<Locale, UIStrings> = {
       happyBirthday: "🎉 Feliz Aniversário! Hoje é o dia!",
       birthdayIn: (m: number, d: number) => `Seu aniversário é em ${m} meses e ${d} dias.`,
       milestones: "Marcos Cumulativos Vividos",
+    },
+    investmentCalculator: {
+      tabs: {
+        endAmount: "Montante Final",
+        contribution: "Contribuição Periódica",
+        startingAmount: "Capital Inicial",
+        returnRate: "Taxa de Retorno",
+        length: "Prazo de Investimento",
+      },
+      labels: {
+        targetAmount: "Seu Montante Alvo (Final)",
+        startingAmount: "Capital Inicial",
+        additionalContribution: "Contribuição Adicional",
+        durationYears: "Duração (Anos)",
+        returnRate: "Taxa de Retorno (%)",
+        advancedSettings: "Capitalização Avançada e Prazos",
+        compoundInterval: "Frequência de Capitalização",
+        contributionTiming: "Contribuir no",
+        beginning: "início",
+        end: "fim",
+        ofEach: "de cada",
+        month: "mês",
+        year: "ano",
+        frequencies: {
+          annually: "Anual",
+          semiannually: "Semestral",
+          quarterly: "Trimestral",
+          monthly: "Mensal",
+          daily: "Diário",
+        },
+        projectWealthButton: "Calcular Projeção",
+        resetButton: "Redefinir",
+      },
+      results: {
+        totalFutureWealth: "Patrimônio Futuro Total",
+        neededContribution: "Contribuição Periódica Necessária",
+        neededStartingAmount: "Capital Inicial Necessário",
+        neededReturnRate: "Taxa de Retorno Necessária",
+        neededLength: "Prazo de Investimento Necessário",
+        startingPrincipal: "Capital Inicial",
+        totalContributions: "Contribuições Totais",
+        totalInterest: "Total de Juros Acumulados",
+        totalLoss: "Perda Total",
+        targetBalance: "Saldo Final Alvo",
+        yearsAndMonths: (y: number, m: number) => m > 0 ? `${y} Anos e ${m} Meses` : `${y} Anos`,
+        yearsOnly: (y: number) => `${y} Anos`,
+        yearlyBreakdownTitle: "Detalhamento Ano a Ano",
+        projectionFor: (y: string) => `Projeção de crescimento para ${y} anos`,
+        shareLink: "Compartilhar Link",
+        exportCsv: "Exportar CSV",
+        readyToPlanTitle: "Pronto para planejar?",
+        readyToPlanDesc: "Insira os parâmetros do seu investimento e clique em Calcular Projeção para ver a evolução.",
+        startPrompt: "Comece inserindo um valor",
+      },
     },
   },
 };
