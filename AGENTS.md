@@ -105,7 +105,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 
 ### AI Crawler Configuration (`src/app/robots.ts`)
 Explicitly welcomes modern AI indexers alongside standard search bots:
-- `Googlebot`, `Bingbot`, `Yandex`
+- `Googlebot`, `Bingbot`, `Yandex`, `SeznamBot`
 - `OAI-SearchBot`, `GPTBot` (OpenAI / ChatGPT Search)
 - `ClaudeBot` (Anthropic)
 - `PerplexityBot` (Perplexity AI)
@@ -220,6 +220,7 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console verification meta token | String token |
 | `NEXT_PUBLIC_YANDEX_SITE_VERIFICATION` | Yandex Webmaster verification meta token | `31ab4f299bc6b423` |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Bing Webmaster Tools verification meta token | String token |
+| `NEXT_PUBLIC_SEZNAM_SITE_VERIFICATION` | Seznam Webmaster verification meta token | `Afze0VQPWz8d0qQD9CcHM15psv794dx0` |
 
 ---
 

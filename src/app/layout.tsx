@@ -91,6 +91,7 @@ export const metadata: Metadata = {
     yandex: process.env.NEXT_PUBLIC_YANDEX_SITE_VERIFICATION || "31ab4f299bc6b423",
     other: {
       "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || "",
+      "seznam-wmt": process.env.NEXT_PUBLIC_SEZNAM_SITE_VERIFICATION || "Afze0VQPWz8d0qQD9CcHM15psv794dx0",
     },
   },
 };
