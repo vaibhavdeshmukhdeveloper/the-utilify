@@ -22,12 +22,14 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 
 ### Frontend (`/src`)
 - **Framework:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript.
-- **Styling:** Tailwind CSS v4 + custom CSS variables in `src/app/globals.css`.
+- **Styling:** Tailwind CSS v4 CSS-first architecture (`@import "tailwindcss";` in `src/app/globals.css`, no `tailwind.config.js`).
 - **Theme:** `next-themes` (Dark/Light mode with glassmorphic navigation and animated theme toggles).
-- **Icons & UI:** `lucide-react`, Base UI / Radix Primitives (`components.json`), `sonner` for toast notifications.
+- **Icons & UI:** `lucide-react`, Base UI / Radix Primitives (`components.json` with style `base-nova`), `sonner` for toast notifications.
 - **Micro-Interactions:** `canvas-confetti` (`src/lib/confetti.ts`) for celebratory feedback on copying, calculations, and downloads.
-- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash normalization) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character filtering.
+- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash normalization) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`).
 - **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), PX to REM converters, and batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
+- **Embed Engine:** `/embed/[tool]` route rendering standalone iframe widgets with canonical backlinks for 15 interactive tools, accompanied by `EmbedModal.tsx` for 1-click embed code copying.
+- **Monetization & Promotion:** Google AdSense (`ca-pub-6366007730203648`, toggled by `NEXT_PUBLIC_ADS_ENABLED`), Google Ads tag (`AW-936767269`), and `CrossPromo.tsx` featuring developer Android apps on Google Play.
 
 ### Backend (`/backend`)
 - **Runtime:** Python 3.11 + FastAPI + Uvicorn.
@@ -87,7 +89,9 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **Spanish Hub (`/es`):** Curated Spanish landing page highlighting core PDF, image, and financial tools.
 - **Portuguese Hub (`/pt`):** Curated Portuguese landing page for Brazilian & Portuguese audiences.
 - **Dynamic Localized Tool Routes (`/[lang]/[tool]`):** Powered by `src/app/[lang]/[tool]/page.tsx` with static site generation (`generateStaticParams` pre-rendering 38 localized routes).
-- **Dictionary Source of Truth (`src/lib/i18n/translations.ts`):** Centralized translation repository with metadata, titles, descriptions, feature lists, step-by-step guides, and localized FAQs for Spanish and Portuguese.
+- **Dual Translation Architecture:**
+  1. **Tool Metadata & SEO (`src/lib/i18n/translations.ts`):** Centralized translation repository with tool names, titles, meta descriptions, feature lists, step-by-step guides, and localized FAQs for Spanish and Portuguese. Also exports `getCanonicalToolSlug(slug)` and `getLanguageFromPathname(pathname)` for language-agnostic tool resolution.
+  2. **UI Strings & Components (`src/lib/i18n/ui-strings.ts`):** Centralized dictionary providing typed, zero-leakage strings (`getUIStrings(lang)`) for navigation, footer, tool layout headers/badges, file uploader labels, rating widget copy, and cross-promotion across English, Spanish, and Portuguese.
 - **Bidirectional `hreflang` Tags:** Automatically injected into `<head>` alternates (`en`, `es`, `pt`, and `x-default`) on both English and localized pages to prevent duplicate content penalties.
 
 ---
@@ -178,7 +182,7 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 5. **Template Literal LaTeX Escaping Standards & Control Character Safety:**
    - In JavaScript/TypeScript template literals (e.g. `src/lib/blog-data.ts`), **ALWAYS** escape LaTeX command backslashes with double backslashes: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical JS Parser Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, corrupting KaTeX parsing.
-   - In `src/app/blog/[slug]/page.tsx`, `sanitizeMath()` defensively filters non-printable ASCII control characters (`\x00`–`\x1F` except `\n`, `\r`) before passing strings to `katex.renderToString()`.
+   - In `src/app/blog/[slug]/page.tsx`, `sanitizeMath()` specifically normalizes control characters created by template literal parsing: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before passing strings to `katex.renderToString()`.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
 
@@ -191,6 +195,11 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 - **Interactive Playground (`HeroPlayground.tsx`):** Live interactive micro-demo tabs on the homepage for instant user engagement.
 - **Before/After Comparison Slider (`BeforeAfterSlider.tsx`):** Interactive split-view comparison slider for image processing tools.
 - **Financial Visualizers (`CalculatorCharts.tsx`):** Interactive canvas/SVG visualizers for wealth projections.
+- **Embed Engine Modal (`EmbedModal.tsx`):** Shareable responsive iframe snippet generator with live preview and dimension toggles.
+- **Language Switcher (`LanguageSwitcher.tsx`):** Dropdown and inline language switcher with smooth route transition across `en`, `es`, and `pt`.
+- **Authentic Community Rating Widget (`RatingWidget.tsx`):** 5-star interactive rating widget backed by Firestore with client-side localStorage state tracking.
+- **Cross-Promotion Banner (`CrossPromo.tsx`):** Developer Google Play Android app showcase with localized copy.
+- **AdSense Slot Wrapper (`AdBanner.tsx`):** Safe, responsive AdSense container gated by the `NEXT_PUBLIC_ADS_ENABLED` flag.
 
 ---
 
@@ -223,20 +232,30 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
    - Add tool route to `src/app/sitemap.ts`, `src/components/ToolsGrid.tsx`, `src/components/Footer.tsx`, and `src/app/embed/[tool]/page.tsx` (if embeddable).
    - If localizing, add translation dictionary in `src/lib/i18n/translations.ts` and add dynamic component in `src/app/[lang]/[tool]/page.tsx`.
 
-2. **Slider Components Typing Pattern:**
+2. **Multilingual UI String Hygiene (Zero English Leakage):**
+   - Never hardcode raw English text inside shared layout components or tool UI wrappers.
+   - Always retrieve strings via `getUIStrings(currentLang)` from `@/lib/i18n/ui-strings`.
+   - When resolving tool links and titles across languages, use `getCanonicalToolSlug(slug)` to ensure language prefixes (`/es/`, `/pt/`) are handled consistently.
+
+3. **Tailwind CSS v4 & Styling Pattern:**
+   - This project uses Tailwind CSS v4 with CSS-first configuration in `src/app/globals.css` (`@import "tailwindcss";`).
+   - Do NOT create or look for `tailwind.config.js`. Define custom utilities, `@theme` overrides, and `@custom-variant` rules directly in `src/app/globals.css`.
+   - Components use `@base-ui/react` primitives and Radix Primitives configured via `components.json` (`style: "base-nova"`).
+
+4. **Slider Components Typing Pattern:**
    - When using Base UI Slider (`src/components/ui/slider.tsx`), `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
 
-3. **Cloud Run Container Port Binding:**
+5. **Cloud Run Container Port Binding:**
    - Always run uvicorn with dynamic port binding in `Dockerfile`: `CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]` to prevent Cloud Run health check timeout crashes.
 
-4. **HTTP Header Filename Encoding (RFC 5987 / RFC 6266):**
+6. **HTTP Header Filename Encoding (RFC 5987 / RFC 6266):**
    - Whenever backend endpoints return user-downloadable files, sanitize ASCII filenames and provide `filename*=UTF-8''...` to avoid Starlette `latin-1` codec crashes.
    - Frontend `@/lib/api.ts` parses `filename*` headers to preserve genuine Unicode characters for client downloads.
 
-5. **Verifying Code:**
+7. **Verifying Code:**
    - Always run `npm run build` locally before pushing to verify TypeScript and static generation pass with 0 errors.
 
-6. **Blog Guide Quality & Integrity (`src/lib/blog-data.ts`):**
+8. **Blog Guide Quality & Integrity (`src/lib/blog-data.ts`):**
    - Ensure zero boilerplate leakage: never paste foreign UI widgets (e.g., image-compression HTML or file dropzones) into financial or developer articles.
    - Ensure all mathematical equations use double backslashes (`\\frac{...}{...}`) in template strings.
    - Always run `npx tsc --noEmit` and `npm run build` locally before pushing.

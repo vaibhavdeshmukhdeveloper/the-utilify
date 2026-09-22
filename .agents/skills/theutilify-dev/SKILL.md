@@ -11,15 +11,16 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 
 ## Architecture Quick Reference
 
-- **Frontend:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4.
-- **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash normalization), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character filtering, PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
+- **Frontend:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 CSS-first architecture (`@import "tailwindcss";` in `src/app/globals.css`, no `tailwind.config.js`). UI primitives configured via `components.json` (`base-nova`, `@base-ui/react`).
+- **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash normalization), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
 - **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social sharing cards.
 - **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 117+ blog publications.
-- **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks and modal snippet generator (`EmbedModal.tsx`).
-- **Multilingual (i18n):** Spanish (`/es`) and Portuguese (`/pt`) category hubs and dynamic localized routes `src/app/[lang]/[tool]/page.tsx` with 38 pre-rendered static routes and bidirectional `hreflang` tags.
-- **Generative Engine Optimization (GEO):** `public/llms.txt` and `public/llms-full.txt` machine-readable manifests, `<link rel="describedby">`, and AI crawler permissions in `src/app/robots.ts` (`OAI-SearchBot`, `Meta-ExternalAgent`, `cohere-ai`, `ClaudeBot`, `GPTBot`, `PerplexityBot`, etc.).
+- **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks for 15 interactive tools, accompanied by modal snippet generator (`EmbedModal.tsx`).
+- **Multilingual (i18n):** Spanish (`/es`) and Portuguese (`/pt`) category hubs and dynamic localized routes `src/app/[lang]/[tool]/page.tsx` with 38 pre-rendered static routes and bidirectional `hreflang` tags. Governed by dual sources of truth: `translations.ts` (SEO & metadata) and `ui-strings.ts` (UI component strings with zero English leakage).
+- **Generative Engine Optimization (GEO):** `public/llms.txt` and `public/llms-full.txt` machine-readable manifests (with App Router route mirrors in `src/app/llms.txt` and `src/app/llms-full.txt`), `<link rel="describedby">`, and AI crawler permissions in `src/app/robots.ts` (`OAI-SearchBot`, `Meta-ExternalAgent`, `cohere-ai`, `ClaudeBot`, `GPTBot`, `PerplexityBot`, `anthropic-ai`, `CCBot`, etc.).
 - **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 206 URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow`) and XML sitemap pings upon build/deploy.
-- **Interactive UI Stack:** Global Command Palette (`Ctrl+K` / `Cmd+K`), Tool Workflow Chaining (`ToolWorkflowChaining.tsx`), Before/After Comparison Slider (`BeforeAfterSlider.tsx`), and Homepage Micro-Playground (`HeroPlayground.tsx`).
+- **Interactive UI Stack:** Global Command Palette (`Ctrl+K` / `Cmd+K`), Tool Workflow Chaining (`ToolWorkflowChaining.tsx`), Before/After Comparison Slider (`BeforeAfterSlider.tsx`), Homepage Micro-Playground (`HeroPlayground.tsx`), Language Switcher (`LanguageSwitcher.tsx`), and Firestore-backed Rating Widget (`RatingWidget.tsx`).
+- **Monetization & Apps:** Google AdSense (`ca-pub-6366007730203648`, toggled by `NEXT_PUBLIC_ADS_ENABLED`), Google Ads tag (`AW-936767269`), and `CrossPromo.tsx` featuring developer Android apps on Google Play.
 - **Backend:** FastAPI (Python 3.11) with PyMuPDF (`fitz`), Playwright Chromium Headless, and ONNX runtime (`rembg`).
 - **Persistent Ratings Database:** Google Cloud Firestore (Native Mode, Always Free Tier) with atomic increments (`firestore.Increment`) for permanent authentic community ratings across serverless container restarts.
 - **RFC 5987 / RFC 6266 Unicode Downloads:** `format_content_disposition()` delivering percent-encoded UTF-8 filename headers to prevent `latin-1` Starlette crashes.
@@ -150,6 +151,7 @@ Create `src/app/<tool-slug>/`:
 4. **Search Ping Engine:** Add to `src/lib/indexnow.ts` and `scripts/ping-search-engines.mjs`.
 5. **Command Palette:** If search keyword additions are needed, verify matching in `src/components/CommandPalette.tsx`.
 6. **Embed Engine:** If client-side embeddable, add slug to `EMBEDDABLE_TOOLS` array in `src/app/embed/[tool]/page.tsx`.
+7. **UI Strings & Canonical Slugs:** If adding custom tool controls or labels, add entries to `src/lib/i18n/ui-strings.ts`. When reading or storing tool state, normalize with `getCanonicalToolSlug(slug)`.
 
 ---
 
@@ -171,7 +173,7 @@ When targeting high-volume specific search intent (e.g. `/pdf-to-jpg`, `/compres
 
 When localizing tools for global audiences (Spanish & Portuguese):
 
-1. **Update Translation Dictionary:**
+1. **Update Tool Translation Dictionary:**
    - Open `src/lib/i18n/translations.ts`.
    - Add tool slug to `toolTranslations.es` and `toolTranslations.pt` with:
      - `name`: Localized short tool name.
@@ -180,13 +182,19 @@ When localizing tools for global audiences (Spanish & Portuguese):
      - `features`: Array of localized highlights.
      - `howToUse`: Array of step objects (`{ step, description }`).
      - `faqs`: Array of localized FAQ objects (`{ question, answer }`).
-2. **Register in Localized Route:**
+2. **Ensure Zero English UI String Leakage:**
+   - Open `src/lib/i18n/ui-strings.ts`.
+   - Verify all shared UI elements (navigation, footer, tool layout headers, file uploader drag-and-drop texts, rating widget labels, cross-promotion banners) are localized for `es` and `pt`.
+   - In components, always bind user-facing strings using `const t = getUIStrings(currentLang);`.
+3. **Register in Localized Route:**
    - Open `src/app/[lang]/[tool]/page.tsx`.
    - Add dynamic import: `const NewToolClient = dynamic(() => import("@/app/new-tool/NewToolClient"));`
    - Map slug in `TOOL_COMPONENTS`: `"new-tool": NewToolClient`.
-3. **Update Pings:**
+4. **Canonical Slug Resolution:**
+   - Use `getCanonicalToolSlug(slug)` and `getLanguageFromPathname(pathname)` whenever resolving tool IDs for ratings, localStorage, or cross-linking to ensure language prefixes (`/es/`, `/pt/`) do not cause fragmented keys.
+5. **Update Pings:**
    - Add `"/es/<tool-slug>"` and `"/pt/<tool-slug>"` to `scripts/ping-search-engines.mjs` and `src/lib/indexnow.ts`.
-4. **Verification:**
+6. **Verification:**
    - Run `npm run build` to confirm static pre-rendering passes for all localized paths.
 
 ---
@@ -226,7 +234,7 @@ When adding new capabilities or tools:
 5. **LaTeX Template Literal Escaping & Control Character Safety:**
    - In JavaScript/TypeScript template literals (`src/lib/blog-data.ts`), **ALWAYS** use double backslashes for LaTeX commands: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, breaking KaTeX parsing.
-   - In `src/app/blog/[slug]/page.tsx`, `sanitizeMath()` filters non-printable ASCII control characters (`\x00`–`\x1F` except `\n`, `\r`) before passing strings to `katex.renderToString()`.
+   - In `src/app/blog/[slug]/page.tsx`, `sanitizeMath()` specifically normalizes control characters created by template literal parsing: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before passing strings to `katex.renderToString()`.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
 
@@ -343,7 +351,22 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
 
 ---
 
-## Runbook 13: Verification & Deployment
+---
+
+## Runbook 13: UI Components, Base UI & Tailwind CSS v4 Conventions
+
+1. **Tailwind CSS v4 CSS-First Architecture:**
+   - No `tailwind.config.js` exists or should be created.
+   - Custom utility classes, theme variables, and `@custom-variant` definitions are written in `src/app/globals.css` with `@import "tailwindcss";`.
+2. **Base UI Primitives:**
+   - Configured in `components.json` with style `base-nova`.
+   - When using Base UI Slider (`src/components/ui/slider.tsx`), `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
+3. **Multilingual Component String Rule:**
+   - Always extract text via `getUIStrings(lang)` from `@/lib/i18n/ui-strings` rather than writing static strings.
+
+---
+
+## Runbook 14: Verification & Deployment
 
 1. **Verify Frontend Locally:**
    ```bash
@@ -355,9 +378,13 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
 2. **Verify Backend Locally:**
    ```powershell
    cd backend
+   python -m venv venv
    .\venv\Scripts\activate
+   pip install -r requirements.txt
+   playwright install chromium
    uvicorn main:app --reload --port 8000
    ```
+   *(Or run `.\run_backend.ps1` from the repository root)*
 
 3. **Deploy:**
    Commit and push to `main` branch:

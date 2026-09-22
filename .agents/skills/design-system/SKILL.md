@@ -50,14 +50,17 @@ Component (component-specific)
 
 ## Quick Start
 
+> **Note:** Scripts for this skill are located in `.agents/skills/design-system/scripts/`. Run from repository root as shown below or cd into `.agents/skills/design-system`.
+> For The Utilify application, design tokens are maintained directly in `src/app/globals.css` using Tailwind CSS v4 CSS-first variables (`:root`, `.dark`, `@theme`).
+
 **Generate tokens:**
 ```bash
-node scripts/generate-tokens.cjs --config tokens.json -o tokens.css
+node .agents/skills/design-system/scripts/generate-tokens.cjs --config tokens.json -o tokens.css
 ```
 
 **Validate usage:**
 ```bash
-node scripts/validate-tokens.cjs --dir src/
+node .agents/skills/design-system/scripts/validate-tokens.cjs --dir src/
 ```
 
 ## References

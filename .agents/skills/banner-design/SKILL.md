@@ -33,7 +33,7 @@ Collect via AskUserQuestion:
 1. **Purpose** — social cover, ad banner, website hero, print, or creative asset?
 2. **Platform/size** — which platform or custom dimensions?
 3. **Content** — headline, subtext, CTA, logo placement?
-4. **Brand** — existing brand guidelines? (check `docs/brand-guidelines.md`)
+4. **Brand** — existing brand guidelines or tokens? (check `src/app/globals.css` or `.agents/skills/brand/`)
 5. **Style preference** — any art direction? (show style options if unsure)
 6. **Quantity** — how many options to generate? (default: 3)
 
@@ -46,39 +46,22 @@ Collect via AskUserQuestion:
    Screenshot 3-5 reference pins for art direction inspiration
    ```
 3. Select 2-3 complementary art direction styles from references:
-   `references/banner-sizes-and-styles.md`
+   `.agents/skills/banner-design/references/banner-sizes-and-styles.md`
 
 ### Step 3: Design & Generate Options
 
 For each art direction option:
 
-1. **Create HTML/CSS banner** using `frontend-design` skill
+1. **Create HTML/CSS banner** using modern CSS / Tailwind
    - Use exact platform dimensions from size reference
    - Apply safe zone rules (critical content in central 70-80%)
    - Max 2 typefaces, single CTA, 4.5:1 contrast ratio
-   - Inject brand context via `inject-brand-context.cjs`
+   - Inject brand context via `.agents/skills/brand/scripts/inject-brand-context.cjs`
 
-2. **Generate visual elements** with `ai-artist` + `ai-multimodal` skills
-
-   **a) Search prompt inspiration** (6000+ examples in ai-artist):
+2. **Generate visual elements** with image generation tools
+   - Use built-in AI image generation or Python scripts using Windows `python`:
    ```bash
-   python3 .claude/skills/ai-artist/scripts/search.py "<banner style keywords>"
-   ```
-
-   **b) Generate with Standard model** (fast, good for backgrounds/patterns):
-   ```bash
-   .claude/skills/.venv/bin/python3 .claude/skills/ai-multimodal/scripts/gemini_batch_process.py \
-     --task generate --model gemini-2.5-flash-image \
-     --prompt "<banner visual prompt>" --aspect-ratio <platform-ratio> \
-     --size 2K --output assets/banners/
-   ```
-
-   **c) Generate with Pro model** (4K, complex illustrations/hero visuals):
-   ```bash
-   .claude/skills/.venv/bin/python3 .claude/skills/ai-multimodal/scripts/gemini_batch_process.py \
-     --task generate --model gemini-3-pro-image-preview \
-     --prompt "<creative banner prompt>" --aspect-ratio <platform-ratio> \
-     --size 4K --output assets/banners/
+   python scripts/generate_visual.py --prompt "<banner visual prompt>" --aspect-ratio <ratio>
    ```
 
    **When to use which model:**

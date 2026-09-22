@@ -54,9 +54,9 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
 1. **Storage Layer:**
    - Ratings are stored in Google Cloud Firestore (Native Mode, Always-Free Tier) in the `ratings` collection with document ID = `tool_slug`.
    - On Google Cloud Run, `firestore.Client()` authenticates seamlessly via Google Application Default Credentials (ADC) without requiring explicit API keys.
-   - In local development or when Firestore is unreachable, falls back to in-memory / local JSON caching (`_resolve_ratings_file()`).
+    - In local development or when Firestore is unreachable, falls back to in-memory / local JSON caching (`_resolve_ratings_file()`), which uses `backend/ratings_db.json` with an automatic fallback to the OS temp directory (`tempfile.gettempdir()`) if the container filesystem is read-only.
 2. **Concurrency Safety:**
-   - `submit_rating` uses atomic increments (`firestore.Increment(rating)` and `firestore.Increment(1)`) with `merge=True` to prevent race conditions during high concurrent traffic.
+   - `submit_rating` uses atomic increments (`firestore.Increment(rating)` and `firestore.Increment(1)`) with `merge=True` and `last_updated: firestore.SERVER_TIMESTAMP` to prevent race conditions during high concurrent traffic.
 3. **Data Integrity Policy:**
    - Only 100% genuine user votes are stored. Fabricated or pre-seeded baseline reviews are strictly prohibited.
 
@@ -100,7 +100,7 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
   playwright install chromium
   uvicorn main:app --reload --port 8000
   ```
-  *(Or execute `.\run_backend.ps1` from the repository root)*
+  *(Or execute `.\run_backend.ps1` from the repository root to start via python directly)*
 
 - **Docker Build & Local Testing:**
   ```bash

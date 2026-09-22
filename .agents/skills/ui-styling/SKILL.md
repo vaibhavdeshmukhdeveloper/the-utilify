@@ -32,18 +32,25 @@ Use when:
 
 ## Core Stack
 
-### Component Layer: shadcn/ui
-- Pre-built accessible components via Radix UI primitives
-- Copy-paste distribution model (components live in your codebase)
+> **The Utilify Configuration:**
+> - **Framework:** Next.js 16 (App Router) + React 19.
+> - **Styling:** Tailwind CSS v4 CSS-first (`@import "tailwindcss";` in `src/app/globals.css`). No `tailwind.config.js` exists or is needed.
+> - **Components:** `components.json` configured with `style: "base-nova"` using `@base-ui/react` primitives and Radix primitives.
+> - **Base UI Slider Pattern:** `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
+> - **Scripts:** Helper scripts for this skill are located in `.agents/skills/ui-styling/scripts/`.
+
+### Component Layer: shadcn/ui & Base UI
+- Pre-built accessible components via Radix and Base UI primitives (`@base-ui/react`)
+- Copy-paste distribution model (components live in `src/components/ui/`)
 - TypeScript-first with full type safety
 - Composable primitives for complex UIs
-- CLI-based installation and management
+- CLI-based installation and management (`components.json`)
 
-### Styling Layer: Tailwind CSS
-- Utility-first CSS framework
+### Styling Layer: Tailwind CSS v4
+- Utility-first CSS framework with native CSS build
 - Build-time processing with zero runtime overhead
 - Mobile-first responsive design
-- Consistent design tokens (colors, spacing, typography)
+- Consistent CSS design tokens (`src/app/globals.css`)
 - Automatic dead code elimination
 
 ### Visual Design Layer: Canvas
@@ -62,7 +69,7 @@ Use when:
 npx shadcn@latest init
 ```
 
-CLI prompts for framework, TypeScript, paths, and theme preferences. This configures both shadcn/ui and Tailwind CSS.
+Configured via `components.json` with Base Nova style and Tailwind v4.
 
 **Add components:**
 ```bash
