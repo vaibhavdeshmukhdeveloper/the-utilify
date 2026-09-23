@@ -49,9 +49,9 @@ export default function SipCalculatorClient({
   customFaqs,
   lang,
 }: SipCalculatorClientProps = {}) {
-  const [monthlyInvestment, setMonthlyInvestment] = useState("40,000");
-  const [years, setYears] = useState("8");
-  const [returnRate, setReturnRate] = useState("10");
+  const [monthlyInvestment, setMonthlyInvestment] = useState("1,000");
+  const [years, setYears] = useState("10");
+  const [returnRate, setReturnRate] = useState("12");
   const [compoundFrequency, setCompoundFrequency] = useState("monthly");
   const [contributionTiming, setContributionTiming] = useState("beginning");
 
@@ -59,6 +59,7 @@ export default function SipCalculatorClient({
     total: string;
     invested: string;
     returns: string;
+    subNote?: string;
     breakdown: YearlyBreakdown[];
   } | null>(null);
 
@@ -132,8 +133,19 @@ export default function SipCalculatorClient({
     const t = parseFloat(parseNumber(years));
     const annualRate = (parseFloat(parseNumber(returnRate)) || 0) / 100;
     
-    if (!t || t <= 0 || t > 100 || !monthlyInvestment) {
+    if (isNaN(t) || t <= 0 || t > 100 || !monthlyInvestment.trim()) {
       setResult(null);
+      return;
+    }
+
+    if (P <= 0) {
+      setResult({
+        total: "0",
+        invested: "0",
+        returns: "0",
+        subNote: "SIP assumes regular positive investments. For drawdown or capital withdrawal, use the Investment Calculator.",
+        breakdown: [],
+      });
       return;
     }
 
@@ -178,10 +190,16 @@ export default function SipCalculatorClient({
       });
     }
 
+    let subNote = undefined;
+    if (annualRate < 0) {
+      subNote = "A negative return rate simulates portfolio capital loss / market downturn.";
+    }
+
     setResult({
       total: currentBalance.toLocaleString('en-US', { maximumFractionDigits: 0 }),
       invested: totalInvested.toLocaleString('en-US', { maximumFractionDigits: 0 }),
       returns: (currentBalance - totalInvested).toLocaleString('en-US', { maximumFractionDigits: 0 }),
+      subNote,
       breakdown,
     });
   }, [monthlyInvestment, years, returnRate, compoundFrequency, contributionTiming]);
@@ -197,10 +215,11 @@ export default function SipCalculatorClient({
   };
 
   const reset = () => {
-    setMonthlyInvestment("");
-    setYears("");
-    setReturnRate("");
-    setResult(null);
+    setMonthlyInvestment("1,000");
+    setYears("10");
+    setReturnRate("12");
+    setCompoundFrequency("monthly");
+    setContributionTiming("beginning");
   };
 
   const exportToCsv = () => {
@@ -322,6 +341,27 @@ export default function SipCalculatorClient({
                   value={monthlyInvestment} 
                   onChange={handleInputChange(setMonthlyInvestment)} 
                 />
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {[
+                    { label: "$500", val: "500" },
+                    { label: "$1,000", val: "1,000" },
+                    { label: "$2,500", val: "2,500" },
+                    { label: "$5,000", val: "5,000" },
+                  ].map((chip) => (
+                    <button
+                      key={chip.val}
+                      type="button"
+                      onClick={() => setMonthlyInvestment(chip.val)}
+                      className={`text-[11px] px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                        monthlyInvestment === chip.val
+                          ? "bg-primary text-primary-foreground border-primary font-bold shadow-xs"
+                          : "bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground border-border/50"
+                      }`}
+                    >
+                      {chip.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-8">
@@ -336,6 +376,27 @@ export default function SipCalculatorClient({
                     value={years} 
                     onChange={handleInputChange(setYears)} 
                   />
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {[
+                      { label: "5 Yrs", val: "5" },
+                      { label: "10 Yrs", val: "10" },
+                      { label: "15 Yrs", val: "15" },
+                      { label: "20 Yrs", val: "20" },
+                    ].map((chip) => (
+                      <button
+                        key={chip.val}
+                        type="button"
+                        onClick={() => setYears(chip.val)}
+                        className={`text-[11px] px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                          years === chip.val
+                            ? "bg-primary text-primary-foreground border-primary font-bold shadow-xs"
+                            : "bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground border-border/50"
+                        }`}
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <div className="space-y-4">
                   <Label className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
@@ -348,6 +409,26 @@ export default function SipCalculatorClient({
                     value={returnRate} 
                     onChange={handleInputChange(setReturnRate)} 
                   />
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {[
+                      { label: "8% Bonds", val: "8" },
+                      { label: "12% Index", val: "12" },
+                      { label: "15% Growth", val: "15" },
+                    ].map((chip) => (
+                      <button
+                        key={chip.val}
+                        type="button"
+                        onClick={() => setReturnRate(chip.val)}
+                        className={`text-[11px] px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                          returnRate === chip.val
+                            ? "bg-primary text-primary-foreground border-primary font-bold shadow-xs"
+                            : "bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground border-border/50"
+                        }`}
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -407,9 +488,14 @@ export default function SipCalculatorClient({
                 </div>
                 <div className="relative z-10">
                   <div className="text-xs font-black uppercase tracking-[0.5em] text-zinc-500 mb-6">Total Estimated Value</div>
-                  <div className="text-6xl md:text-8xl font-black tracking-tighter text-white mb-12">
+                  <div className="text-6xl md:text-8xl font-black tracking-tighter text-white mb-6">
                     {result.total.startsWith("-") ? `-$${result.total.slice(1)}` : `$${result.total}`}
                   </div>
+                  {result.subNote && (
+                    <p className="text-sm text-amber-400 font-medium mb-6">
+                      {result.subNote}
+                    </p>
+                  )}
                   
                   <div className="grid grid-cols-2 gap-16 pt-10 border-t border-zinc-800">
                     <div>
@@ -431,15 +517,18 @@ export default function SipCalculatorClient({
               </Card>
 
               {/* Interactive Visual Charts Stack */}
-              <div className="flex flex-col gap-6 w-full">
-                <DonutChart 
-                  invested={parseFloat(result.invested.replace(/,/g, '')) || 0} 
-                  returns={parseFloat(result.returns.replace(/,/g, '')) || 0} 
-                />
-                <GrowthChart breakdown={result.breakdown} />
-              </div>
+              {result.breakdown.length > 0 && (
+                <div className="flex flex-col gap-6 w-full">
+                  <DonutChart 
+                    invested={parseFloat(result.invested.replace(/,/g, '')) || 0} 
+                    returns={parseFloat(result.returns.replace(/,/g, '')) || 0} 
+                  />
+                  <GrowthChart breakdown={result.breakdown} />
+                </div>
+              )}
 
               {/* Yearly Breakdown Table */}
+              {result.breakdown.length > 0 && (
               <Card className="overflow-hidden border-none shadow-2xl rounded-[2.5rem]">
                 <div className="p-10 bg-zinc-50 dark:bg-zinc-900 border-b flex items-center justify-between">
                   <div>
@@ -502,6 +591,7 @@ export default function SipCalculatorClient({
                   </table>
                 </div>
               </Card>
+              )}
             </div>
           ) : (
             <Card className="h-full min-h-[500px] flex flex-col items-center justify-center p-16 text-center border-dashed border-4 bg-card rounded-[3rem] border-zinc-200 dark:border-zinc-800">

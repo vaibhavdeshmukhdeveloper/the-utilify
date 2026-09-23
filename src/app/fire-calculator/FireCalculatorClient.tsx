@@ -78,6 +78,17 @@ export default function FireCalculatorClient({
       ? "100+ years away" 
       : targetDate.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 
+    let statusMessage = "";
+    if (annualExpenses <= 0) {
+      statusMessage = "Please specify your annual retirement living expenses.";
+    } else if (currentNetWorth >= fireNumber) {
+      statusMessage = "🎉 Congratulations! Your current portfolio already meets or exceeds your FIRE target.";
+    } else if (monthlySavings < 0 && (currentNetWorth * monthlyRealRate + monthlySavings <= 0)) {
+      statusMessage = "⚠️ With ongoing withdrawals / negative savings, your portfolio decreases and cannot reach the target.";
+    } else if (months >= maxMonths) {
+      statusMessage = "Target horizon exceeds 100 years at your current contribution and growth rate.";
+    }
+
     return {
       fireNumber,
       leanFireNumber,
@@ -88,9 +99,19 @@ export default function FireCalculatorClient({
       currentProgress,
       annualPassiveIncome,
       targetDateFormatted,
+      statusMessage,
       realReturnRate: (realReturnRate * 100).toFixed(1)
     };
   }, [annualExpenses, currentNetWorth, monthlySavings, expectedReturn, expectedInflation, swr]);
+
+  const reset = () => {
+    setAnnualExpenses(48000);
+    setCurrentNetWorth(100000);
+    setMonthlySavings(2000);
+    setExpectedReturn(10);
+    setExpectedInflation(3.5);
+    setSwr(4.0);
+  };
 
   const handleCopySummary = () => {
     const text = `🔥 My FIRE Plan (The Utilify)
@@ -162,6 +183,11 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
             <p className="text-sm text-muted-foreground">
               Target portfolio to generate <span className="font-bold text-foreground">${annualExpenses.toLocaleString()}/year</span> in perpetual passive income.
             </p>
+            {calculations.statusMessage && (
+              <p className="text-xs text-amber-500 dark:text-amber-400 font-bold mt-2">
+                {calculations.statusMessage}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
@@ -180,6 +206,43 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
           </div>
         </div>
 
+        {/* Quick Strategy Presets */}
+        <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-muted/30 border rounded-2xl">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-muted-foreground px-2">Presets:</span>
+            {[
+              { label: "Lean FIRE ($36k/yr)", exp: 36000, pmt: 1500 },
+              { label: "Standard FIRE ($60k/yr)", exp: 60000, pmt: 2500 },
+              { label: "Fat FIRE ($120k/yr)", exp: 120000, pmt: 5000 },
+            ].map((preset) => (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => {
+                  setAnnualExpenses(preset.exp);
+                  setMonthlySavings(preset.pmt);
+                }}
+                className={`text-xs px-3 py-1.5 rounded-xl border font-bold transition-all cursor-pointer ${
+                  annualExpenses === preset.exp
+                    ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                    : "bg-card hover:bg-muted text-foreground border-border/60"
+                }`}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={reset}
+            className="text-xs font-bold rounded-xl text-muted-foreground hover:text-foreground"
+          >
+            Reset Defaults
+          </Button>
+        </div>
+
         {/* Main Grid: Inputs vs Tiers */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Inputs */}
@@ -196,10 +259,22 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-sm font-bold">
                   <label className="text-foreground">Annual Living Expenses in Retirement</label>
-                  <span className="text-primary font-mono font-black">${annualExpenses.toLocaleString()}</span>
+                  <div className="relative w-36">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      value={annualExpenses.toLocaleString()}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
+                        setAnnualExpenses(Math.max(0, val));
+                      }}
+                      className="h-9 pl-7 pr-2 font-mono font-black text-right rounded-lg text-sm bg-background border"
+                    />
+                  </div>
                 </div>
                 <Slider
-                  value={[annualExpenses]}
+                  value={[Math.min(250000, Math.max(12000, annualExpenses))]}
                   onValueChange={(val) => setAnnualExpenses(Array.isArray(val) ? val[0] : val)}
                   min={12000}
                   max={250000}
@@ -216,10 +291,22 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-sm font-bold">
                   <label className="text-foreground">Current Investment Portfolio Net Worth</label>
-                  <span className="text-foreground font-mono font-bold">${currentNetWorth.toLocaleString()}</span>
+                  <div className="relative w-36">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      value={currentNetWorth.toLocaleString()}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
+                        setCurrentNetWorth(Math.max(0, val));
+                      }}
+                      className="h-9 pl-7 pr-2 font-mono font-black text-right rounded-lg text-sm bg-background border"
+                    />
+                  </div>
                 </div>
                 <Slider
-                  value={[currentNetWorth]}
+                  value={[Math.min(1000000, Math.max(0, currentNetWorth))]}
                   onValueChange={(val) => setCurrentNetWorth(Array.isArray(val) ? val[0] : val)}
                   min={0}
                   max={1000000}
@@ -236,10 +323,22 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-sm font-bold">
                   <label className="text-foreground">Monthly Investment Contribution</label>
-                  <span className="text-foreground font-mono font-bold">${monthlySavings.toLocaleString()} / mo</span>
+                  <div className="relative w-36">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      value={monthlySavings.toLocaleString()}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
+                        setMonthlySavings(val);
+                      }}
+                      className="h-9 pl-7 pr-2 font-mono font-black text-right rounded-lg text-sm bg-background border"
+                    />
+                  </div>
                 </div>
                 <Slider
-                  value={[monthlySavings]}
+                  value={[Math.min(20000, Math.max(100, monthlySavings))]}
                   onValueChange={(val) => setMonthlySavings(Array.isArray(val) ? val[0] : val)}
                   min={100}
                   max={20000}

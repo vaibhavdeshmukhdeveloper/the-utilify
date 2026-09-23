@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Hourglass, Calendar, Gift, Clock, Info, Share2 } from "lucide-react";
+import { Hourglass, Calendar, Gift, Clock, Info, Share2, RotateCcw, AlertCircle, Sparkles } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
 import { getUIStrings, Locale } from "@/lib/i18n/ui-strings";
 
@@ -44,6 +44,7 @@ export default function AgeCalculatorClient({
   const t = getUIStrings((lang as Locale) || "en");
   const [dob, setDob] = useState("1995-01-01");
   const [targetDate, setTargetDate] = useState(() => formatLocalDate(new Date()));
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [result, setResult] = useState<{
     years: number;
     months: number;
@@ -55,6 +56,7 @@ export default function AgeCalculatorClient({
     totalHours: number;
     totalMinutes: number;
     totalSeconds: number;
+    isLeapDayBaby?: boolean;
   } | null>(null);
 
   const [liveMode, setLiveMode] = useState(true);
@@ -81,6 +83,8 @@ export default function AgeCalculatorClient({
     const endDate = parseLocalDate(targetDate);
 
     if (!dobDate || !endDate) {
+      setValidationError("Please select valid dates for both Date of Birth and Calculation Date.");
+      setResult(null);
       return;
     }
 
@@ -90,9 +94,11 @@ export default function AgeCalculatorClient({
     const comparisonDate = isToday ? now : endDate;
 
     if (dobDate > comparisonDate) {
+      setValidationError("Date of birth cannot be in the future of the target date. Please select a birth date on or before the calculation date.");
       setResult(null);
       return;
     }
+    setValidationError(null);
 
     // Years, Months, Days calculation
     let years = comparisonDate.getFullYear() - dobDate.getFullYear();
@@ -123,10 +129,14 @@ export default function AgeCalculatorClient({
       totalMonths -= 1;
     }
 
+    // Check if user was born on leap day (Feb 29)
+    const isLeapDayDob = dobDate.getMonth() === 1 && dobDate.getDate() === 29;
+    const isLeapYear = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+
     // Check if birthday is today
-    const isBirthdayToday =
-      comparisonDate.getMonth() === dobDate.getMonth() &&
-      comparisonDate.getDate() === dobDate.getDate();
+    const isBirthdayToday = isLeapDayDob && !isLeapYear(comparisonDate.getFullYear())
+      ? comparisonDate.getMonth() === 2 && comparisonDate.getDate() === 1 // March 1st in non-leap year
+      : comparisonDate.getMonth() === dobDate.getMonth() && comparisonDate.getDate() === dobDate.getDate();
 
     let bdayMonths = 0;
     let bdayDays = 0;
@@ -137,10 +147,20 @@ export default function AgeCalculatorClient({
     if (!isBirthdayToday) {
       // Next Birthday calculation
       let nextBdayYear = comparisonDate.getFullYear();
-      let nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
+      let nextBdayMonth = dobDate.getMonth();
+      let nextBdayDate = dobDate.getDate();
+      if (isLeapDayDob && !isLeapYear(nextBdayYear)) {
+        nextBdayMonth = 2; // March
+        nextBdayDate = 1;
+      }
+      let nextBday = new Date(nextBdayYear, nextBdayMonth, nextBdayDate);
       if (nextBday.getTime() <= comparisonDate.getTime()) {
         nextBdayYear += 1;
-        nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
+        if (isLeapDayDob && !isLeapYear(nextBdayYear)) {
+          nextBday = new Date(nextBdayYear, 2, 1);
+        } else {
+          nextBday = new Date(nextBdayYear, dobDate.getMonth(), dobDate.getDate());
+        }
       }
       const bdayDiffMs = nextBday.getTime() - comparisonDate.getTime();
       const bdayTotalSec = Math.max(0, Math.floor(bdayDiffMs / 1000));
@@ -180,8 +200,34 @@ export default function AgeCalculatorClient({
       totalHours,
       totalMinutes,
       totalSeconds,
+      isLeapDayBaby: isLeapDayDob,
     });
   }, [dob, targetDate]);
+
+  const handleReset = () => {
+    setDob("1995-01-01");
+    setTargetDate(formatLocalDate(new Date()));
+    setValidationError(null);
+    toast.info("Reset to default birth date (Jan 1, 1995)");
+  };
+
+  const setDobForAge = (targetYears: number) => {
+    const now = new Date();
+    const targetBirthYear = now.getFullYear() - targetYears;
+    setDob(`${targetBirthYear}-01-01`);
+  };
+
+  const setTargetToEndOfYear = () => {
+    const base = parseLocalDate(targetDate) || new Date();
+    const end = new Date(base.getFullYear(), 11, 31);
+    setTargetDate(formatLocalDate(end));
+  };
+
+  const setTargetYearOffset = (offsetYears: number) => {
+    const base = parseLocalDate(targetDate) || new Date();
+    const target = new Date(base.getFullYear() + offsetYears, base.getMonth(), base.getDate());
+    setTargetDate(formatLocalDate(target));
+  };
 
   // Set up live interval or single calculation
   useEffect(() => {
@@ -267,30 +313,113 @@ export default function AgeCalculatorClient({
     >
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-10 text-left">
         {/* Controls form */}
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-          <div className="space-y-3">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Date of Birth</label>
-            <Input
-              type="date"
-              className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-            />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div className="space-y-3">
+              <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Date of Birth</label>
+              <Input
+                type="date"
+                className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
+              <div className="flex flex-wrap gap-1.5 pt-1 items-center">
+                <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Milestones:</span>
+                {[
+                  { label: "18 Yrs", years: 18 },
+                  { label: "25 Yrs", years: 25 },
+                  { label: "30 Yrs", years: 30 },
+                  { label: "40 Yrs", years: 40 },
+                  { label: "50 Yrs", years: 50 },
+                  { label: "65 Yrs", years: 65 },
+                ].map((m) => (
+                  <button
+                    key={m.label}
+                    type="button"
+                    onClick={() => setDobForAge(m.years)}
+                    className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Clock className="h-4 w-4" /> Calculate Age at Date</label>
+                <button
+                  type="button"
+                  onClick={() => setTargetDate(formatLocalDate(new Date()))}
+                  className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                >
+                  Today
+                </button>
+              </div>
+              <Input
+                type="date"
+                className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
+                value={targetDate}
+                onChange={(e) => setTargetDate(e.target.value)}
+              />
+              <div className="flex flex-wrap gap-1.5 pt-1 items-center">
+                <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Target:</span>
+                <button
+                  type="button"
+                  onClick={setTargetToEndOfYear}
+                  className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                >
+                  End of Year
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTargetYearOffset(5)}
+                  className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                >
+                  +5 Yrs
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTargetYearOffset(10)}
+                  className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                >
+                  +10 Yrs
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-3">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Clock className="h-4 w-4" /> Calculate Age at Date</label>
-            <Input
-              type="date"
-              className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-              value={targetDate}
-              onChange={(e) => setTargetDate(e.target.value)}
-            />
+          <div className="flex gap-3">
+            <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg rounded-xl">
+              Calculate Age
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleReset}
+              className="h-14 px-5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+              title="Reset to default dates"
+            >
+              <RotateCcw className="h-4 w-4 mr-2" /> Reset
+            </Button>
           </div>
         </form>
 
+        {validationError && (
+          <div className="p-5 bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 rounded-2xl flex items-center gap-3 animate-in fade-in">
+            <AlertCircle className="h-5 w-5 shrink-0 text-amber-500" />
+            <p className="text-sm font-semibold">{validationError}</p>
+          </div>
+        )}
+
         {result && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
+            {result.isLeapDayBaby && (
+              <div className="p-3 bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 rounded-xl text-xs flex items-center gap-2">
+                <Sparkles className="h-4 w-4 shrink-0 text-purple-500" />
+                <span>Born on Leap Day (Feb 29): In non-leap common years, your official anniversary is observed on March 1st.</span>
+              </div>
+            )}
             {/* Main outputs */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
               {/* Exact Age Card */}

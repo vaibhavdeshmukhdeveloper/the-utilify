@@ -37,7 +37,13 @@ export default function BmiCalculatorClient({
   const [weightLbs, setWeightLbs] = useState("154");
   const [heightFt, setHeightFt] = useState("5");
   const [heightIn, setHeightIn] = useState("9");
-  const [result, setResult] = useState<{ bmi: string; category: string; color: string } | null>(null);
+  const [result, setResult] = useState<{ 
+    bmi: string; 
+    category: string; 
+    color: string; 
+    healthyWeightRange?: string;
+    validationMessage?: string;
+  } | null>(null);
 
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -70,27 +76,61 @@ export default function BmiCalculatorClient({
   // Run calculation reactively whenever inputs change
   useEffect(() => {
     let bmiValue = 0;
+    let healthyWeightRange = "";
 
     if (unitSystem === "metric") {
       const w = parseFloat(weight);
-      const h = parseFloat(height) / 100;
-      if (!w || !h || w <= 0 || h <= 0) {
+      const hCm = parseFloat(height);
+      const h = hCm / 100;
+      
+      if (!weight.trim() || !height.trim()) {
         setResult(null);
         return;
       }
+
+      if (isNaN(w) || isNaN(hCm) || w <= 0 || hCm <= 0) {
+        setResult({
+          bmi: "--",
+          category: "Invalid Input",
+          color: "text-amber-500",
+          validationMessage: "Please enter positive numbers greater than zero for weight and height.",
+        });
+        return;
+      }
+      
       bmiValue = w / (h * h);
+      const minKg = 18.5 * (h * h);
+      const maxKg = 24.9 * (h * h);
+      const minLbs = minKg * 2.20462;
+      const maxLbs = maxKg * 2.20462;
+      healthyWeightRange = `${minKg.toFixed(1)} kg – ${maxKg.toFixed(1)} kg (${minLbs.toFixed(1)} – ${maxLbs.toFixed(1)} lbs)`;
     } else {
       const lbs = parseFloat(weightLbs);
       const ft = parseFloat(heightFt) || 0;
       const inch = parseFloat(heightIn) || 0;
       const totalInches = ft * 12 + inch;
       
-      if (!lbs || !totalInches || lbs <= 0 || totalInches <= 0) {
+      if (!weightLbs.trim() || (!heightFt.trim() && !heightIn.trim())) {
         setResult(null);
+        return;
+      }
+
+      if (isNaN(lbs) || isNaN(totalInches) || lbs <= 0 || totalInches <= 0) {
+        setResult({
+          bmi: "--",
+          category: "Invalid Input",
+          color: "text-amber-500",
+          validationMessage: "Please enter positive numbers greater than zero for weight and height.",
+        });
         return;
       }
       // BMI formula (US): 703 * (weight / height^2)
       bmiValue = 703 * (lbs / (totalInches * totalInches));
+      const minLbs = (18.5 * (totalInches * totalInches)) / 703;
+      const maxLbs = (24.9 * (totalInches * totalInches)) / 703;
+      const minKg = minLbs * 0.453592;
+      const maxKg = maxLbs * 0.453592;
+      healthyWeightRange = `${minLbs.toFixed(1)} lbs – ${maxLbs.toFixed(1)} lbs (${minKg.toFixed(1)} – ${maxKg.toFixed(1)} kg)`;
     }
 
     const bmiStr = bmiValue.toFixed(1);
@@ -117,7 +157,7 @@ export default function BmiCalculatorClient({
       color = "text-red-700";
     }
 
-    setResult({ bmi: bmiStr, category, color });
+    setResult({ bmi: bmiStr, category, color, healthyWeightRange });
   }, [unitSystem, weight, height, weightLbs, heightFt, heightIn, t]);
 
   const calculateBmi = (e?: React.FormEvent) => {
@@ -167,12 +207,14 @@ export default function BmiCalculatorClient({
   };
 
   const reset = () => {
-    setWeight("");
-    setHeight("");
-    setWeightLbs("");
-    setHeightFt("");
-    setHeightIn("");
-    setResult(null);
+    if (unitSystem === "metric") {
+      setWeight("70");
+      setHeight("175");
+    } else {
+      setWeightLbs("154");
+      setHeightFt("5");
+      setHeightIn("9");
+    }
   };
 
   const bmiRanges = [
@@ -363,34 +405,51 @@ export default function BmiCalculatorClient({
                 <div className={`text-7xl font-black mb-6 ${result.color} tracking-tighter`}>
                   {result.bmi}
                 </div>
-                <div className={`text-xl font-black ${result.color} bg-white dark:bg-zinc-800 inline-flex items-center px-6 py-2 rounded-2xl shadow-sm border mb-8`}>
+                <div className={`text-xl font-black ${result.color} bg-white dark:bg-zinc-800 inline-flex items-center px-6 py-2 rounded-2xl shadow-sm border mb-6`}>
                   {result.category}
                 </div>
 
-                {/* Visual Gauge Scale */}
-                <div className="w-full max-w-md mx-auto mb-8 px-2">
-                  <div className="relative h-3 rounded-full bg-gradient-to-r from-sky-400 via-green-400 via-yellow-400 to-red-400 overflow-visible mb-3">
-                    {/* Floating gauge pointer */}
-                    <div 
-                      className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-white border-4 border-primary shadow-md flex items-center justify-center transition-all duration-700"
-                      style={{ 
-                        left: `${Math.max(5, Math.min(95, ((Number(result.bmi) - 15) / 25) * 100))}%` 
-                      }}
-                    >
-                      <div className="w-2 h-2 rounded-full bg-primary" />
+                {result.validationMessage ? (
+                  <p className="text-sm text-amber-600 dark:text-amber-400 font-bold mb-6">
+                    {result.validationMessage}
+                  </p>
+                ) : (
+                  <>
+                    {/* Visual Gauge Scale */}
+                    <div className="w-full max-w-md mx-auto mb-8 px-2">
+                      <div className="relative h-3 rounded-full bg-gradient-to-r from-sky-400 via-green-400 via-yellow-400 to-red-400 overflow-visible mb-3">
+                        {/* Floating gauge pointer */}
+                        <div 
+                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-white border-4 border-primary shadow-md flex items-center justify-center transition-all duration-700"
+                          style={{ 
+                            left: `${Math.max(5, Math.min(95, ((Number(result.bmi) - 15) / 25) * 100))}%` 
+                          }}
+                        >
+                          <div className="w-2 h-2 rounded-full bg-primary" />
+                        </div>
+                      </div>
+                      <div className="flex justify-between text-[10px] text-muted-foreground font-black uppercase tracking-wider px-1">
+                        <span>15 (Under)</span>
+                        <span>18.5 (Normal)</span>
+                        <span>25 (Over)</span>
+                        <span>30+ (Obese)</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex justify-between text-[10px] text-muted-foreground font-black uppercase tracking-wider px-1">
-                    <span>15 (Under)</span>
-                    <span>18.5 (Normal)</span>
-                    <span>25 (Over)</span>
-                    <span>30+ (Obese)</span>
-                  </div>
-                </div>
 
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                  Based on your input, your BMI indicates that you are in the <strong>{result.category}</strong> range.
-                </p>
+                    {result.healthyWeightRange && (
+                      <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl max-w-md mx-auto mb-6 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
+                        <span className="font-black uppercase tracking-wider block text-[11px] mb-1 text-emerald-600 dark:text-emerald-400">
+                          {t.bmiCalculator.healthyRange}
+                        </span>
+                        <span className="font-bold text-sm text-foreground">{result.healthyWeightRange}</span>
+                      </div>
+                    )}
+
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                      Based on your input, your BMI indicates that you are in the <strong>{result.category}</strong> range.
+                    </p>
+                  </>
+                )}
 
                 <Button
                   type="button"

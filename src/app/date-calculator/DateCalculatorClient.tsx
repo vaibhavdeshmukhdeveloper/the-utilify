@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Calendar, Plus, Minus, Info, ArrowRight, Share2 } from "lucide-react";
+import { Calendar, Plus, Minus, Info, ArrowRight, Share2, RotateCcw } from "lucide-react";
 import { copyShareUrl } from "@/lib/share-utils";
 import { getUIStrings, Locale } from "@/lib/i18n/ui-strings";
 
@@ -33,6 +33,20 @@ function formatLocalDate(d: Date = new Date()): string {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
+}
+
+/**
+ * Calendar-month addition with month-end day clamping.
+ * Prevents Jan 31 + 1 month rolling over to March 2/3 in JavaScript Date.
+ */
+function addCalendarMonths(date: Date, months: number): Date {
+  const totalMonths = date.getFullYear() * 12 + date.getMonth() + months;
+  const targetYear = Math.floor(totalMonths / 12);
+  const targetMonth = ((totalMonths % 12) + 12) % 12;
+  const originalDay = date.getDate();
+  const maxDaysInTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+  const clampedDay = Math.min(originalDay, maxDaysInTargetMonth);
+  return new Date(targetYear, targetMonth, clampedDay);
 }
 
 export default function DateCalculatorClient({
@@ -188,7 +202,7 @@ export default function DateCalculatorClient({
 
   // Reactive Calculation: Date Math (Add / Subtract)
   useEffect(() => {
-    const d = parseLocalDate(baseDate);
+    let d = parseLocalDate(baseDate);
     if (!d) {
       setMathResult(null);
       return;
@@ -200,9 +214,9 @@ export default function DateCalculatorClient({
 
     const multiplier = operation === "add" ? 1 : -1;
 
-    // Apply adjustments using native setters
-    d.setFullYear(d.getFullYear() + yrs * multiplier);
-    d.setMonth(d.getMonth() + mths * multiplier);
+    // Apply adjustments: first months and years with month-end calendar clamping
+    d = addCalendarMonths(d, (yrs * 12 + mths) * multiplier);
+    // Then apply exact day offsets
     d.setDate(d.getDate() + dys * multiplier);
 
     setMathResult({
@@ -210,6 +224,45 @@ export default function DateCalculatorClient({
       dayOfWeek: d.toLocaleDateString(dateLocale, { weekday: "long" }),
     });
   }, [baseDate, operation, addYears, addMonths, addDays, dateLocale]);
+
+  const handleResetDiff = () => {
+    const today = new Date();
+    setStartDate(formatLocalDate(today));
+    const future = new Date(today);
+    future.setDate(future.getDate() + 10);
+    setEndDate(formatLocalDate(future));
+    setIncludeEndDate(false);
+    toast.info("Reset to default 10-day interval");
+  };
+
+  const setEndDateOffset = (days: number) => {
+    const base = parseLocalDate(startDate) || new Date();
+    const target = new Date(base);
+    target.setDate(target.getDate() + days);
+    setEndDate(formatLocalDate(target));
+  };
+
+  const setEndToYearEnd = () => {
+    const base = parseLocalDate(startDate) || new Date();
+    const endOfYear = new Date(base.getFullYear(), 11, 31);
+    setEndDate(formatLocalDate(endOfYear));
+  };
+
+  const handleResetMath = () => {
+    setBaseDate(formatLocalDate(new Date()));
+    setOperation("add");
+    setAddYears("0");
+    setAddMonths("0");
+    setAddDays("30");
+    toast.info("Reset to default 30-day projection");
+  };
+
+  const applyMathPreset = (op: "add" | "subtract", y: number, m: number, d: number) => {
+    setOperation(op);
+    setAddYears(y.toString());
+    setAddMonths(m.toString());
+    setAddDays(d.toString());
+  };
 
   const calculateDiff = (e: React.FormEvent) => {
     e.preventDefault();
@@ -292,43 +345,109 @@ export default function DateCalculatorClient({
 
           {/* Difference Tab */}
           <TabsContent value="diff" className="mt-8 m-0 space-y-8">
-            <form onSubmit={calculateDiff} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Start Date</label>
-                <Input
-                  type="date"
-                  className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
+            <form onSubmit={calculateDiff} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Start Date</label>
+                    <button
+                      type="button"
+                      onClick={() => setStartDate(formatLocalDate(new Date()))}
+                      className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                    >
+                      Today
+                    </button>
+                  </div>
+                  <Input
+                    type="date"
+                    className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> End Date</label>
+                    <button
+                      type="button"
+                      onClick={() => setEndDate(formatLocalDate(new Date()))}
+                      className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                    >
+                      Today
+                    </button>
+                  </div>
+                  <Input
+                    type="date"
+                    className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                  <div className="flex flex-wrap gap-1.5 pt-1 items-center">
+                    <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Quick Add:</span>
+                    {[
+                      { label: "+7D", days: 7 },
+                      { label: "+30D", days: 30 },
+                      { label: "+90D", days: 90 },
+                      { label: "+180D", days: 180 },
+                      { label: "+1Y", days: 365 },
+                    ].map((p) => (
+                      <button
+                        key={p.label}
+                        type="button"
+                        onClick={() => setEndDateOffset(p.days)}
+                        className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={setEndToYearEnd}
+                      className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                    >
+                      Dec 31
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> End Date</label>
-                <Input
-                  type="date"
-                  className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
+              <div className="flex items-center justify-between p-1 flex-wrap gap-4">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="includeEndDate"
+                    checked={includeEndDate}
+                    onChange={(e) => setIncludeEndDate(e.target.checked)}
+                    className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary accent-primary cursor-pointer"
+                  />
+                  <label htmlFor="includeEndDate" className="text-sm font-bold text-muted-foreground cursor-pointer select-none">
+                    Include end date in calculation (adds 1 day)
+                  </label>
+                </div>
               </div>
 
-              <div className="md:col-span-2 flex items-center gap-3 p-2">
-                <input
-                  type="checkbox"
-                  id="includeEndDate"
-                  checked={includeEndDate}
-                  onChange={(e) => setIncludeEndDate(e.target.checked)}
-                  className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary accent-primary"
-                />
-                <label htmlFor="includeEndDate" className="text-sm font-bold text-muted-foreground cursor-pointer select-none">
-                  Include end date in calculation (adds 1 day)
-                </label>
-              </div>
+              {startDate && endDate && startDate > endDate && (
+                <div className="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-300 rounded-xl text-xs flex items-center gap-2">
+                  <Info className="h-4 w-4 shrink-0" />
+                  <span>Start date is after End date — calculating absolute elapsed interval between both dates.</span>
+                </div>
+              )}
 
-              <Button type="submit" className="md:col-span-2 h-14 text-lg font-black shadow-lg rounded-xl">
-                Calculate Difference
-              </Button>
+              <div className="flex gap-3">
+                <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg rounded-xl">
+                  Calculate Difference
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetDiff}
+                  className="h-14 px-5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                  title="Reset to default dates"
+                >
+                  <RotateCcw className="h-4 w-4 mr-2" /> Reset
+                </Button>
+              </div>
             </form>
 
             {diffResult && (
@@ -401,7 +520,16 @@ export default function DateCalculatorClient({
             <form onSubmit={calculateMath} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                 <div className="space-y-3">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Base Date</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Base Date</label>
+                    <button
+                      type="button"
+                      onClick={() => setBaseDate(formatLocalDate(new Date()))}
+                      className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                    >
+                      Today
+                    </button>
+                  </div>
                   <Input
                     type="date"
                     className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
@@ -417,7 +545,7 @@ export default function DateCalculatorClient({
                       type="button"
                       variant={operation === "add" ? "default" : "ghost"}
                       onClick={() => setOperation("add")}
-                      className="flex-1 rounded-lg h-12 font-bold"
+                      className="flex-1 rounded-lg h-12 font-bold cursor-pointer"
                     >
                       <Plus className="h-4 w-4 mr-1.5" /> Add
                     </Button>
@@ -425,7 +553,7 @@ export default function DateCalculatorClient({
                       type="button"
                       variant={operation === "subtract" ? "default" : "ghost"}
                       onClick={() => setOperation("subtract")}
-                      className="flex-1 rounded-lg h-12 font-bold"
+                      className="flex-1 rounded-lg h-12 font-bold cursor-pointer"
                     >
                       <Minus className="h-4 w-4 mr-1.5" /> Subtract
                     </Button>
@@ -434,45 +562,81 @@ export default function DateCalculatorClient({
               </div>
 
               {/* Adjustments row */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground uppercase">Years</label>
-                  <Input
-                    type="number"
-                    min="0"
-                    placeholder="0"
-                    className="h-12 text-center font-bold font-mono rounded-xl border-2"
-                    value={addYears}
-                    onChange={(e) => setAddYears(e.target.value)}
-                  />
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-muted-foreground uppercase">Years</label>
+                    <Input
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      className="h-12 text-center font-bold font-mono rounded-xl border-2"
+                      value={addYears}
+                      onChange={(e) => setAddYears(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-muted-foreground uppercase">Months</label>
+                    <Input
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      className="h-12 text-center font-bold font-mono rounded-xl border-2"
+                      value={addMonths}
+                      onChange={(e) => setAddMonths(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-muted-foreground uppercase">Days</label>
+                    <Input
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      className="h-12 text-center font-bold font-mono rounded-xl border-2"
+                      value={addDays}
+                      onChange={(e) => setAddDays(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground uppercase">Months</label>
-                  <Input
-                    type="number"
-                    min="0"
-                    placeholder="0"
-                    className="h-12 text-center font-bold font-mono rounded-xl border-2"
-                    value={addMonths}
-                    onChange={(e) => setAddMonths(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground uppercase">Days</label>
-                  <Input
-                    type="number"
-                    min="0"
-                    placeholder="0"
-                    className="h-12 text-center font-bold font-mono rounded-xl border-2"
-                    value={addDays}
-                    onChange={(e) => setAddDays(e.target.value)}
-                  />
+
+                <div className="flex flex-wrap gap-1.5 items-center pt-1">
+                  <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Quick Intervals:</span>
+                  {[
+                    { label: "+7 Days", op: "add" as const, y: 0, m: 0, d: 7 },
+                    { label: "+14 Days", op: "add" as const, y: 0, m: 0, d: 14 },
+                    { label: "+30 Days", op: "add" as const, y: 0, m: 0, d: 30 },
+                    { label: "+60 Days", op: "add" as const, y: 0, m: 0, d: 60 },
+                    { label: "+90 Days", op: "add" as const, y: 0, m: 0, d: 90 },
+                    { label: "+6 Months", op: "add" as const, y: 0, m: 6, d: 0 },
+                    { label: "+1 Year", op: "add" as const, y: 1, m: 0, d: 0 },
+                    { label: "-30 Days", op: "subtract" as const, y: 0, m: 0, d: 30 },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => applyMathPreset(preset.op, preset.y, preset.m, preset.d)}
+                      className="px-2.5 py-1 text-xs rounded-lg font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              <Button type="submit" className="w-full h-14 text-lg font-black shadow-lg rounded-xl">
-                Calculate Target Date
-              </Button>
+              <div className="flex gap-3">
+                <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg rounded-xl">
+                  Calculate Target Date
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleResetMath}
+                  className="h-14 px-5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                  title="Reset to default projection"
+                >
+                  <RotateCcw className="h-4 w-4 mr-2" /> Reset
+                </Button>
+              </div>
             </form>
 
             {mathResult && (
