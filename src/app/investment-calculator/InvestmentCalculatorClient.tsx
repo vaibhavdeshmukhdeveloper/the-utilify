@@ -800,7 +800,8 @@ export default function InvestmentCalculatorClient({
             })}
           </div>
 
-          <div className="flex items-center justify-end shrink-0">
+          <div className="flex items-center justify-between md:justify-end shrink-0 gap-2">
+            <span className="text-xs text-muted-foreground font-bold">Currency:</span>
             <CurrencySelector value={currency} onChange={setCurrency} size="default" />
           </div>
         </div>
