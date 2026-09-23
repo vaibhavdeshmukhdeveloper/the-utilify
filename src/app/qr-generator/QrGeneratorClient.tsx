@@ -216,26 +216,36 @@ export default function QrGeneratorClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
-        {/* Controls Column */}
-        <div className="lg:col-span-7 space-y-8">
-          <Tabs defaultValue="url" className="w-full" onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-5 h-12 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-900">
-              <TabsTrigger value="url" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center justify-center gap-1.5"><LinkIcon className="h-3.5 w-3.5" /> <span className="hidden sm:inline">URL</span></TabsTrigger>
-              <TabsTrigger value="text" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center justify-center gap-1.5"><FileText className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Text</span></TabsTrigger>
-              <TabsTrigger value="wifi" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center justify-center gap-1.5"><Wifi className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Wi-Fi</span></TabsTrigger>
-              <TabsTrigger value="email" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center justify-center gap-1.5"><Mail className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Email</span></TabsTrigger>
-              <TabsTrigger value="sms" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center justify-center gap-1.5"><MessageSquare className="h-3.5 w-3.5" /> <span className="hidden sm:inline">SMS</span></TabsTrigger>
+      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left">
+        {/* Left Column: Form Controls */}
+        <div className="lg:col-span-7 space-y-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-5 h-11 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-900 border">
+              <TabsTrigger value="url" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1">
+                <LinkIcon className="h-3.5 w-3.5" /> <span className="hidden sm:inline">URL</span>
+              </TabsTrigger>
+              <TabsTrigger value="text" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1">
+                <FileText className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Text</span>
+              </TabsTrigger>
+              <TabsTrigger value="wifi" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1">
+                <Wifi className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Wi-Fi</span>
+              </TabsTrigger>
+              <TabsTrigger value="email" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1">
+                <Mail className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Email</span>
+              </TabsTrigger>
+              <TabsTrigger value="sms" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1">
+                <MessageSquare className="h-3.5 w-3.5" /> <span className="hidden sm:inline">SMS</span>
+              </TabsTrigger>
             </TabsList>
 
-            {/* URL input */}
-            <TabsContent value="url" className="mt-6 space-y-4 m-0">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Target URL</label>
+            {/* URL Input */}
+            <TabsContent value="url" className="mt-3 space-y-3 m-0">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Website URL</label>
                 <Input
                   type="url"
                   placeholder="https://example.com"
-                  className="h-12 rounded-xl"
+                  className="h-11 rounded-xl font-bold border-2 focus:border-primary"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                 />
@@ -243,12 +253,12 @@ export default function QrGeneratorClient({
             </TabsContent>
 
             {/* Plain Text Input */}
-            <TabsContent value="text" className="mt-6 space-y-4 m-0">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Plain Text</label>
+            <TabsContent value="text" className="mt-3 space-y-3 m-0">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Plain Text</label>
                 <Textarea
                   placeholder="Type anything to encode..."
-                  className="min-h-[120px] rounded-xl"
+                  className="min-h-[100px] rounded-xl font-medium border-2 focus:border-primary p-3"
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                 />
@@ -256,32 +266,32 @@ export default function QrGeneratorClient({
             </TabsContent>
 
             {/* Wi-Fi Input */}
-            <TabsContent value="wifi" className="mt-6 space-y-4 m-0">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Network SSID (Name)</label>
+            <TabsContent value="wifi" className="mt-3 space-y-3 m-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Network SSID</label>
                   <Input
                     type="text"
                     placeholder="My Wi-Fi Network"
-                    className="h-12 rounded-xl"
+                    className="h-11 rounded-xl font-bold border-2 focus:border-primary"
                     value={wifiSsid}
                     onChange={(e) => setWifiSsid(e.target.value)}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Password</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Password</label>
                   <Input
                     type="text"
                     placeholder="Security Password"
-                    className="h-12 rounded-xl"
+                    className="h-11 rounded-xl font-bold border-2 focus:border-primary"
                     value={wifiPassword}
                     onChange={(e) => setWifiPassword(e.target.value)}
                   />
                 </div>
-                <div className="space-y-2 sm:col-span-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Security Type</label>
+                <div className="space-y-1 sm:col-span-2">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Security Type</label>
                   <select
-                    className="flex h-12 w-full rounded-xl border-2 border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    className="flex h-10 w-full rounded-xl border-2 border-input bg-card px-3 py-1 text-xs font-bold shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     value={wifiSecurity}
                     onChange={(e) => setWifiSecurity(e.target.value)}
                   >
@@ -294,33 +304,35 @@ export default function QrGeneratorClient({
             </TabsContent>
 
             {/* Email Input */}
-            <TabsContent value="email" className="mt-6 space-y-4 m-0">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">To (Email Address)</label>
-                  <Input
-                    type="email"
-                    placeholder="receiver@example.com"
-                    className="h-12 rounded-xl"
-                    value={emailTo}
-                    onChange={(e) => setEmailTo(e.target.value)}
-                  />
+            <TabsContent value="email" className="mt-3 space-y-3 m-0">
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">To (Email)</label>
+                    <Input
+                      type="email"
+                      placeholder="receiver@example.com"
+                      className="h-11 rounded-xl font-bold border-2 focus:border-primary"
+                      value={emailTo}
+                      onChange={(e) => setEmailTo(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Subject</label>
+                    <Input
+                      type="text"
+                      placeholder="Contact Request"
+                      className="h-11 rounded-xl font-bold border-2 focus:border-primary"
+                      value={emailSubject}
+                      onChange={(e) => setEmailSubject(e.target.value)}
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Subject</label>
-                  <Input
-                    type="text"
-                    placeholder="Contact Request"
-                    className="h-12 rounded-xl"
-                    value={emailSubject}
-                    onChange={(e) => setEmailSubject(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Message Body</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Message Body</label>
                   <Textarea
                     placeholder="Type message text here..."
-                    className="min-h-[100px] rounded-xl"
+                    className="min-h-[80px] rounded-xl font-medium border-2 focus:border-primary p-3"
                     value={emailBody}
                     onChange={(e) => setEmailBody(e.target.value)}
                   />
@@ -329,23 +341,23 @@ export default function QrGeneratorClient({
             </TabsContent>
 
             {/* SMS Input */}
-            <TabsContent value="sms" className="mt-6 space-y-4 m-0">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Phone Number</label>
+            <TabsContent value="sms" className="mt-3 space-y-3 m-0">
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Phone Number</label>
                   <Input
                     type="tel"
                     placeholder="+1 555 123 4567"
-                    className="h-12 rounded-xl"
+                    className="h-11 rounded-xl font-bold border-2 focus:border-primary"
                     value={smsPhone}
                     onChange={(e) => setSmsPhone(e.target.value)}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Message</label>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Message</label>
                   <Textarea
                     placeholder="Type SMS text here..."
-                    className="min-h-[100px] rounded-xl"
+                    className="min-h-[80px] rounded-xl font-medium border-2 focus:border-primary p-3"
                     value={smsMessage}
                     onChange={(e) => setSmsMessage(e.target.value)}
                   />
@@ -355,51 +367,51 @@ export default function QrGeneratorClient({
           </Tabs>
 
           {/* Design Controls */}
-          <div className="p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 space-y-6">
-            <h3 className="text-md font-bold flex items-center gap-2 border-b pb-3">
-              <Sliders className="h-5 w-5 text-primary" /> Customize Styling
+          <Card className="p-4 sm:p-5 rounded-2xl bg-card border-2 shadow-xs space-y-3">
+            <h3 className="text-xs font-bold flex items-center gap-1.5 border-b pb-2 text-muted-foreground uppercase tracking-wider">
+              <Sliders className="h-4 w-4 text-primary" /> Customize Styling
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Palette className="h-3.5 w-3.5" /> Foreground Color</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1"><Palette className="h-3 w-3" /> Foreground Color</label>
                 <div className="flex gap-2">
                   <Input
                     type="color"
-                    className="w-12 h-12 p-1 rounded-xl cursor-pointer border-2"
+                    className="w-10 h-10 p-1 rounded-xl cursor-pointer border-2"
                     value={fgColor}
                     onChange={(e) => setFgColor(e.target.value)}
                   />
                   <Input
                     type="text"
-                    className="h-12 rounded-xl font-mono uppercase"
+                    className="h-10 rounded-xl font-mono uppercase text-xs font-bold"
                     value={fgColor}
                     onChange={(e) => setFgColor(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Palette className="h-3.5 w-3.5" /> Background Color</label>
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1"><Palette className="h-3 w-3" /> Background Color</label>
                 <div className="flex gap-2">
                   <Input
                     type="color"
-                    className="w-12 h-12 p-1 rounded-xl cursor-pointer border-2"
+                    className="w-10 h-10 p-1 rounded-xl cursor-pointer border-2"
                     value={bgColor}
                     onChange={(e) => setBgColor(e.target.value)}
                   />
                   <Input
                     type="text"
-                    className="h-12 rounded-xl font-mono uppercase"
+                    className="h-10 rounded-xl font-mono uppercase text-xs font-bold"
                     value={bgColor}
                     onChange={(e) => setBgColor(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Quiet Zone (Margin)</label>
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Quiet Zone (Margin)</label>
                 <select
-                  className="flex h-12 w-full rounded-xl border-2 border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="flex h-10 w-full rounded-xl border-2 border-input bg-card px-3 py-1 text-xs font-bold shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   value={margin}
                   onChange={(e) => setMargin(parseInt(e.target.value))}
                 >
@@ -410,10 +422,10 @@ export default function QrGeneratorClient({
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Error Correction Level</label>
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Error Correction</label>
                 <select
-                  className="flex h-12 w-full rounded-xl border-2 border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="flex h-10 w-full rounded-xl border-2 border-input bg-card px-3 py-1 text-xs font-bold shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   value={errorCorrection}
                   onChange={(e) => setErrorCorrection(e.target.value as any)}
                 >
@@ -425,29 +437,29 @@ export default function QrGeneratorClient({
               </div>
             </div>
             
-            <div className="flex justify-end pt-2">
-              <Button variant="ghost" size="sm" onClick={resetSettings} className="text-muted-foreground hover:text-primary font-bold">
-                <RefreshCw className="h-3.5 w-3.5 mr-1.5" /> Reset styling
+            <div className="flex justify-end pt-1">
+              <Button variant="ghost" size="sm" onClick={resetSettings} className="text-muted-foreground hover:text-primary font-bold text-xs h-7">
+                <RefreshCw className="h-3 w-3 mr-1" /> Reset styling
               </Button>
             </div>
-          </div>
+          </Card>
         </div>
 
-        {/* Preview Column */}
-        <div className="lg:col-span-5 lg:sticky lg:top-8 flex flex-col items-center scroll-mt-24">
-          <Card className="w-full p-8 flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950/20 border border-zinc-100 dark:border-zinc-800 rounded-3xl shadow-md">
-            <h3 className="text-lg font-bold flex items-center gap-2 mb-6 self-start border-b pb-3 w-full">
-              <QrCode className="h-5 w-5 text-primary" /> QR Code Preview
+        {/* Right Column: Preview (Sticky) */}
+        <div className="lg:col-span-5 lg:sticky lg:top-4 flex flex-col items-center scroll-mt-24">
+          <Card className="w-full p-4 sm:p-5 flex flex-col items-center justify-center bg-card border-2 rounded-2xl shadow-xs">
+            <h3 className="text-sm font-bold flex items-center gap-1.5 mb-3 self-start border-b pb-2 w-full">
+              <QrCode className="h-4 w-4 text-primary" /> Live QR Code Preview
             </h3>
             
             {/* The QR Canvas wrapper */}
-            <div className="p-4 bg-white rounded-3xl border shadow-inner max-w-full overflow-hidden">
-              <canvas ref={canvasRef} className="mx-auto rounded-xl max-w-full" style={{ width: "260px", height: "260px" }} />
+            <div className="p-3 bg-white rounded-2xl border shadow-inner max-w-full overflow-hidden">
+              <canvas ref={canvasRef} className="mx-auto rounded-lg max-w-full" style={{ width: "230px", height: "230px" }} />
             </div>
 
-            <div className="w-full mt-8 space-y-3">
-              <Button onClick={downloadQr} className="w-full h-12 rounded-xl shadow-md font-bold flex items-center justify-center gap-2">
-                <Download className="h-5 w-5" /> Download QR Image
+            <div className="w-full mt-4 space-y-2.5">
+              <Button onClick={downloadQr} className="w-full h-11 rounded-xl shadow-xs font-bold flex items-center justify-center gap-2">
+                <Download className="h-4 w-4" /> Download QR Code Image
               </Button>
               <Button
                 type="button"
@@ -462,9 +474,9 @@ export default function QrGeneratorClient({
                   bg: bgColor !== "#ffffff" ? bgColor.replace("#", "") : undefined,
                 }, "QR Code Preset")}
                 variant="outline"
-                className="w-full h-11 rounded-xl border-2 font-bold text-primary border-primary/30 hover:bg-primary/5 flex items-center justify-center gap-2"
+                className="w-full h-10 rounded-xl border-2 font-bold text-primary border-primary/30 hover:bg-primary/5 flex items-center justify-center gap-1.5 text-xs"
               >
-                <Share2 className="h-4 w-4" /> Share QR Preset Link
+                <Share2 className="h-3.5 w-3.5" /> Share QR Preset Link
               </Button>
             </div>
           </Card>

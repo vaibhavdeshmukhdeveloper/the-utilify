@@ -213,19 +213,19 @@ export default function LoremIpsumClient() {
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
-        {/* Controls Column */}
-        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-8">
-          <div className="space-y-3">
-            <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><LayoutGrid className="h-4 w-4" /> Generation Type</label>
-            <div className="grid grid-cols-2 gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-2xl">
+      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left">
+        {/* Left Column: Controls */}
+        <div className="lg:col-span-5 space-y-3.5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><LayoutGrid className="h-3.5 w-3.5" /> Generation Type</label>
+            <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl border">
               {(["paragraphs", "sentences", "words", "lists"] as const).map((t) => (
                 <Button
                   key={t}
                   variant={type === t ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setType(t)}
-                  className="rounded-xl font-bold capitalize text-xs"
+                  className="rounded-lg font-bold capitalize text-xs h-8"
                 >
                   {t}
                 </Button>
@@ -233,72 +233,72 @@ export default function LoremIpsumClient() {
             </div>
           </div>
 
-          {/* Sizing Slider */}
-          <div className="space-y-3">
-            <div className="flex justify-between font-bold text-sm text-muted-foreground">
-              <span className="uppercase tracking-wider">Quantity Count</span>
-              <span className="text-primary font-mono text-lg">{count} {type}</span>
+          {/* Sizing Slider Card */}
+          <Card className="p-3.5 sm:p-4 rounded-xl border-2 bg-card space-y-2 shadow-xs">
+            <div className="flex justify-between font-bold text-xs text-muted-foreground">
+              <span className="uppercase tracking-wider">Quantity</span>
+              <span className="text-primary font-mono text-sm font-black">{count} {type}</span>
             </div>
-            <div className="flex items-center gap-4 bg-zinc-50 dark:bg-zinc-900 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800">
-              <span className="font-mono text-xs text-muted-foreground">{getSliderMin()}</span>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] text-muted-foreground">{getSliderMin()}</span>
               <Slider
                 value={[count]}
                 onValueChange={(val) => setCount(Array.isArray(val) ? val[0] : val)}
                 min={getSliderMin()}
                 max={getSliderMax()}
                 step={getSliderStep()}
-                className="flex-grow py-4"
+                className="flex-grow py-2"
               />
-              <span className="font-mono text-xs text-muted-foreground">{getSliderMax()}</span>
+              <span className="font-mono text-[10px] text-muted-foreground">{getSliderMax()}</span>
             </div>
-          </div>
+          </Card>
 
-          {/* Toggle Switches */}
-          <div className="p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 space-y-4">
-            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-2 border-b pb-3">
-              <Sliders className="h-4 w-4 text-primary" /> Modifiers
+          {/* Modifiers Card */}
+          <Card className="p-3.5 sm:p-4 rounded-xl bg-card border-2 shadow-xs space-y-2.5">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 border-b pb-2">
+              <Sliders className="h-3.5 w-3.5 text-primary" /> Modifiers
             </h3>
             
-            <label className="flex items-center gap-3 cursor-pointer select-none">
+            <label className="flex items-center gap-2.5 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={startWithLorem}
                 onChange={(e) => setStartWithLorem(e.target.checked)}
-                className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary accent-primary"
+                className="w-4 h-4 rounded border-border text-primary accent-primary"
               />
-              <span className="text-sm font-bold text-muted-foreground">
+              <span className="text-xs font-bold text-muted-foreground">
                 Start with &quot;Lorem ipsum...&quot;
               </span>
             </label>
 
-            <label className="flex items-center gap-3 cursor-pointer select-none">
+            <label className="flex items-center gap-2.5 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={includeHtml}
                 onChange={(e) => setIncludeHtml(e.target.checked)}
-                className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary accent-primary"
+                className="w-4 h-4 rounded border-border text-primary accent-primary"
               />
-              <span className="text-sm font-bold text-muted-foreground">
+              <span className="text-xs font-bold text-muted-foreground">
                 Wrap in HTML Markup Tags
               </span>
             </label>
-          </div>
+          </Card>
         </div>
 
-        {/* Output Column */}
-        <div className="lg:col-span-7 space-y-4 scroll-mt-24">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><AlignLeft className="h-4 w-4" /> Generated Output</span>
+        {/* Right Column: Output (Sticky) */}
+        <div className="lg:col-span-7 lg:sticky lg:top-4 space-y-3 scroll-mt-24">
+          <div className="flex justify-between items-center px-1">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><AlignLeft className="h-3.5 w-3.5" /> Generated Output</span>
             <CopyButton
               value={output}
               label="Copy Text"
               size="sm"
-              className="rounded-xl shadow-md font-bold px-4"
+              className="rounded-xl shadow-xs font-bold px-3.5 h-8 text-xs"
               title="Copy placeholder text"
             />
           </div>
-          <Card className="p-6 md:p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-[2rem] shadow-inner min-h-[350px] max-h-[500px] overflow-y-auto font-medium leading-relaxed select-all">
-            <div className="whitespace-pre-wrap font-sans text-base text-zinc-800 dark:text-zinc-200">
+          <Card className="p-5 sm:p-6 border-2 bg-card rounded-2xl shadow-xs min-h-[360px] max-h-[500px] overflow-y-auto font-medium leading-relaxed select-all">
+            <div className="whitespace-pre-wrap font-sans text-sm text-foreground">
               {output}
             </div>
           </Card>

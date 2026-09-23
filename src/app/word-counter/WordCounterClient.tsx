@@ -259,235 +259,232 @@ Est. Pages: ${estimatedPages}`;
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 text-left">
-        {/* Main Stats Header Ribbon */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-          <Card className="p-4 text-center bg-primary/5 border-primary/20 shadow-sm rounded-2xl">
-            <div className="text-3xl font-black text-primary font-mono">{wordCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1 flex items-center justify-center gap-1">
+      <div className="w-full max-w-6xl mx-auto space-y-4 text-left">
+        {/* Main Stats Header Ribbon - High Density */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-2.5">
+          <Card className="p-3 text-center bg-primary/5 border-2 border-primary/20 shadow-xs rounded-xl">
+            <div className="text-2xl sm:text-3xl font-black text-primary font-mono">{wordCount}</div>
+            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5 flex items-center justify-center gap-1">
               <FileText className="h-3 w-3" /> Words
             </div>
           </Card>
 
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-3xl font-black text-foreground font-mono">{charCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1 flex items-center justify-center gap-1">
+          <Card className="p-3 text-center bg-card border-2 shadow-xs rounded-xl">
+            <div className="text-2xl sm:text-3xl font-black text-foreground font-mono">{charCount}</div>
+            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5 flex items-center justify-center gap-1">
               <Type className="h-3 w-3" /> Characters
             </div>
           </Card>
 
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-3xl font-black text-foreground font-mono">{charNoSpaces}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">
+          <Card className="p-3 text-center bg-card border-2 shadow-xs rounded-xl">
+            <div className="text-2xl sm:text-3xl font-black text-foreground font-mono">{charNoSpaces}</div>
+            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">
               No Spaces
             </div>
           </Card>
 
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-3xl font-black text-foreground font-mono">{sentenceCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">
+          <Card className="p-3 text-center bg-card border-2 shadow-xs rounded-xl">
+            <div className="text-2xl sm:text-3xl font-black text-foreground font-mono">{sentenceCount}</div>
+            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">
               Sentences
             </div>
           </Card>
 
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-3xl font-black text-foreground font-mono">{paragraphCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">
+          <Card className="p-3 text-center bg-card border-2 shadow-xs rounded-xl">
+            <div className="text-2xl sm:text-3xl font-black text-foreground font-mono">{paragraphCount}</div>
+            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">
               Paragraphs
             </div>
           </Card>
 
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-3xl font-black text-foreground font-mono">{lineCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">
+          <Card className="p-3 text-center bg-card border-2 shadow-xs rounded-xl">
+            <div className="text-2xl sm:text-3xl font-black text-foreground font-mono">{lineCount}</div>
+            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">
               Lines
             </div>
           </Card>
         </div>
 
-        {/* Text Area Input */}
-        <div className="space-y-3">
-          <div className="flex flex-wrap justify-between items-center gap-2">
-            <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-              <Type className="h-4 w-4 text-primary" /> Content Editor
-            </span>
-            <div className="flex flex-wrap gap-2">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={loadSample} 
-                className="text-xs font-bold text-muted-foreground hover:text-foreground"
-              >
-                <RotateCcw className="h-3.5 w-3.5 mr-1" /> Load Sample
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={pasteFromClipboard} 
-                className="text-xs font-bold text-muted-foreground hover:text-primary"
-              >
-                <Clipboard className="h-3.5 w-3.5 mr-1" /> Paste
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={clearText} 
-                className="text-xs font-bold text-red-500 hover:bg-red-500/10"
-              >
-                <Trash2 className="h-3.5 w-3.5 mr-1" /> Clear
-              </Button>
-            </div>
-          </div>
-
-          <div className="relative scroll-mt-24">
-            <Textarea
-              className="min-h-[280px] text-lg font-medium p-6 rounded-3xl border-2 focus:border-primary bg-background shadow-inner leading-relaxed"
-              placeholder="Type, paste, or start writing your content here to see real-time statistics..."
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-            <CopyButton
-              value={text}
-              className="absolute right-4 bottom-4 w-10 h-10 shadow-md"
-              size="icon"
-              title="Copy text content"
-            />
-          </div>
-          
-          <div className="flex justify-between items-center text-xs text-muted-foreground font-medium px-2">
-            <span>✨ Auto-saved locally in browser</span>
-            <button 
-              onClick={copySummary}
-              className="hover:text-primary font-bold transition-colors cursor-pointer flex items-center gap-1"
-            >
-              <Share2 className="h-3 w-3" /> Copy Full Stats Summary
-            </button>
-          </div>
-        </div>
-
-        {/* Secondary Metrics: Time & Reading Estimates */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="p-5 bg-card border rounded-2xl flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
-              <Clock className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Reading Time</div>
-              <div className="text-lg font-black text-foreground font-mono">{readingTimeMinutes} min <span className="text-xs font-normal text-muted-foreground">(~200 wpm)</span></div>
-            </div>
-          </Card>
-
-          <Card className="p-5 bg-card border rounded-2xl flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
-              <Mic className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Speaking Time</div>
-              <div className="text-lg font-black text-foreground font-mono">{speakingTimeMinutes} min <span className="text-xs font-normal text-muted-foreground">(~130 wpm)</span></div>
-            </div>
-          </Card>
-
-          <Card className="p-5 bg-card border rounded-2xl flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
-              <BookOpen className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Est. Printed Pages</div>
-              <div className="text-lg font-black text-foreground font-mono">{estimatedPages} pages <span className="text-xs font-normal text-muted-foreground">(250 words/pg)</span></div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Social Media & SEO Limit Trackers */}
-        <div className="p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 space-y-4">
-          <h3 className="text-sm font-bold flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider border-b pb-3">
-            <AlertCircle className="h-4 w-4 text-primary" /> Social Media & Meta Tag Limit Trackers
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {socialLimits.map((item) => {
-              const percentage = Math.min(Math.round((item.count / item.limit) * 100), 100);
-              const isOver = item.count > item.limit;
-              
-              return (
-                <div key={item.name} className="p-4 bg-background rounded-2xl border space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-foreground">{item.name}</span>
-                    <span className={`font-mono font-bold ${isOver ? "text-red-500" : "text-muted-foreground"}`}>
-                      {item.count} / {item.limit}
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full transition-all duration-300 ${isOver ? "bg-red-500" : percentage > 85 ? "bg-amber-500" : "bg-primary"}`}
-                      style={{ width: `${percentage}%` }}
-                    />
-                  </div>
-                  {isOver && (
-                    <div className="text-[10px] text-red-500 font-bold flex items-center gap-1">
-                      ⚠️ Exceeds limit by {item.count - item.limit} chars
-                    </div>
-                  )}
+        {/* 2-Column Responsive Workspace */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          {/* Left Column: Content Editor & Quick Text Cleaners (lg:col-span-7 space-y-4) */}
+          <div className="lg:col-span-7 space-y-4">
+            {/* Text Area Card */}
+            <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+              <div className="flex flex-wrap justify-between items-center gap-2">
+                <span className="text-xs font-black text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <Type className="h-3.5 w-3.5 text-primary" /> Content Editor
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={loadSample} 
+                    className="h-8 px-2.5 text-xs font-bold text-muted-foreground hover:text-foreground"
+                  >
+                    <RotateCcw className="h-3 w-3 mr-1" /> Load Sample
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={pasteFromClipboard} 
+                    className="h-8 px-2.5 text-xs font-bold text-muted-foreground hover:text-primary"
+                  >
+                    <Clipboard className="h-3 w-3 mr-1" /> Paste
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={clearText} 
+                    className="h-8 px-2.5 text-xs font-bold text-red-500 hover:bg-red-500/10"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" /> Clear
+                  </Button>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Top Keyword Density Analyzer & Quick Formatting */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Keyword Density */}
-          <div className="p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 space-y-4">
-            <h3 className="text-sm font-bold flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider border-b pb-3">
-              <BarChart3 className="h-4 w-4 text-primary" /> Top Keyword Density
-            </h3>
-
-            {topKeywords.length > 0 ? (
-              <div className="space-y-3">
-                {topKeywords.map((item) => (
-                  <div key={item.word} className="flex items-center justify-between gap-3 text-xs">
-                    <span className="font-bold font-mono text-foreground w-28 truncate">{item.word}</span>
-                    <div className="flex-grow h-2 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-primary/80 rounded-full"
-                        style={{ width: `${Math.min(item.density * 10, 100)}%` }}
-                      />
-                    </div>
-                    <span className="font-mono text-muted-foreground font-bold shrink-0">
-                      {item.count}x ({item.density}%)
-                    </span>
-                  </div>
-                ))}
               </div>
-            ) : (
-              <p className="text-xs text-muted-foreground py-6 text-center italic">
-                Type more text to view keyword density distribution...
-              </p>
-            )}
+
+              <div className="relative">
+                <Textarea
+                  className="min-h-[260px] text-base font-medium p-4 rounded-xl border-2 focus:border-primary bg-background shadow-inner leading-relaxed"
+                  placeholder="Type, paste, or start writing your content here to see real-time statistics..."
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                />
+                <CopyButton
+                  value={text}
+                  className="absolute right-3 bottom-3 w-8 h-8 shadow-sm"
+                  size="icon"
+                  title="Copy text content"
+                />
+              </div>
+
+              <div className="flex justify-between items-center text-xs text-muted-foreground font-medium pt-1">
+                <span>✨ Auto-saved locally in browser</span>
+                <button 
+                  onClick={copySummary}
+                  className="hover:text-primary font-bold transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  <Share2 className="h-3 w-3" /> Copy Full Stats Summary
+                </button>
+              </div>
+            </Card>
+
+            {/* Quick Text Cleaners & Formatting */}
+            <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+              <h3 className="text-xs font-black flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider border-b pb-2">
+                <Sparkles className="h-3.5 w-3.5 text-primary" /> Quick Text Cleaners
+              </h3>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <Button onClick={toTitleCase} variant="outline" className="h-9 rounded-xl font-bold text-xs shadow-xs">
+                  Title Case
+                </Button>
+                <Button onClick={toUppercase} variant="outline" className="h-9 rounded-xl font-bold text-xs shadow-xs">
+                  UPPERCASE
+                </Button>
+                <Button onClick={toLowercase} variant="outline" className="h-9 rounded-xl font-bold text-xs shadow-xs">
+                  lowercase
+                </Button>
+                <Button onClick={removeExtraSpaces} variant="outline" className="h-9 rounded-xl font-bold text-xs shadow-xs">
+                  Clean Spaces
+                </Button>
+                <Button onClick={removeLineBreaks} variant="outline" className="h-9 rounded-xl font-bold text-xs shadow-xs col-span-2 sm:col-span-4">
+                  Remove Line Breaks
+                </Button>
+              </div>
+            </Card>
           </div>
 
-          {/* Quick Text Cleaners & Formatting */}
-          <div className="p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 space-y-4">
-            <h3 className="text-sm font-bold flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider border-b pb-3">
-              <Sparkles className="h-4 w-4 text-primary" /> Quick Text Cleaners
-            </h3>
+          {/* Right Column: Real-Time Sticky Analysis (lg:col-span-5 lg:sticky lg:top-4 space-y-3.5) */}
+          <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-3.5 scroll-mt-24">
+            {/* Reading / Speaking / Pages Estimate Card */}
+            <Card className="p-4 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+              <h3 className="text-xs font-black flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider border-b pb-2">
+                <Clock className="h-3.5 w-3.5 text-primary" /> Reading & Speaking Estimates
+              </h3>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="p-2.5 rounded-xl bg-blue-500/5 border border-blue-500/15 text-center">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Reading</div>
+                  <div className="text-base font-black text-foreground font-mono mt-0.5">{readingTimeMinutes} min</div>
+                  <div className="text-[9px] text-muted-foreground">~200 wpm</div>
+                </div>
+                <div className="p-2.5 rounded-xl bg-purple-500/5 border border-purple-500/15 text-center">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Speaking</div>
+                  <div className="text-base font-black text-foreground font-mono mt-0.5">{speakingTimeMinutes} min</div>
+                  <div className="text-[9px] text-muted-foreground">~130 wpm</div>
+                </div>
+                <div className="p-2.5 rounded-xl bg-emerald-500/5 border border-emerald-500/15 text-center">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Est. Pages</div>
+                  <div className="text-base font-black text-foreground font-mono mt-0.5">{estimatedPages}</div>
+                  <div className="text-[9px] text-muted-foreground">250 w/page</div>
+                </div>
+              </div>
+            </Card>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button onClick={toTitleCase} variant="outline" className="rounded-xl font-bold text-xs shadow-sm">
-                Title Case
-              </Button>
-              <Button onClick={toUppercase} variant="outline" className="rounded-xl font-bold text-xs shadow-sm">
-                UPPERCASE
-              </Button>
-              <Button onClick={toLowercase} variant="outline" className="rounded-xl font-bold text-xs shadow-sm">
-                lowercase
-              </Button>
-              <Button onClick={removeExtraSpaces} variant="outline" className="rounded-xl font-bold text-xs shadow-sm">
-                Remove Extra Spaces
-              </Button>
-              <Button onClick={removeLineBreaks} variant="outline" className="rounded-xl font-bold text-xs shadow-sm col-span-2">
-                Remove Line Breaks
-              </Button>
-            </div>
+            {/* Social Media & SEO Limit Trackers */}
+            <Card className="p-4 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+              <h3 className="text-xs font-black flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider border-b pb-2">
+                <AlertCircle className="h-3.5 w-3.5 text-primary" /> Social Media & Meta Tag Trackers
+              </h3>
+              <div className="space-y-2">
+                {socialLimits.map((item) => {
+                  const percentage = Math.min(Math.round((item.count / item.limit) * 100), 100);
+                  const isOver = item.count > item.limit;
+                  
+                  return (
+                    <div key={item.name} className="p-2.5 bg-muted/30 rounded-xl border border-border/50 space-y-1.5">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="font-bold text-foreground text-[11px]">{item.name}</span>
+                        <span className={`font-mono text-[11px] font-bold ${isOver ? "text-red-500" : "text-muted-foreground"}`}>
+                          {item.count} / {item.limit}
+                        </span>
+                      </div>
+                      <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all duration-300 ${isOver ? "bg-red-500" : percentage > 85 ? "bg-amber-500" : "bg-primary"}`}
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                      {isOver && (
+                        <div className="text-[9px] text-red-500 font-bold">
+                          ⚠️ Exceeds limit by {item.count - item.limit} chars
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+
+            {/* Top Keyword Density */}
+            <Card className="p-4 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+              <h3 className="text-xs font-black flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider border-b pb-2">
+                <BarChart3 className="h-3.5 w-3.5 text-primary" /> Top Keyword Density
+              </h3>
+
+              {topKeywords.length > 0 ? (
+                <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                  {topKeywords.map((item) => (
+                    <div key={item.word} className="flex items-center justify-between gap-2.5 text-xs">
+                      <span className="font-bold font-mono text-foreground text-[11px] w-24 truncate">{item.word}</span>
+                      <div className="flex-grow h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-primary/80 rounded-full"
+                          style={{ width: `${Math.min(item.density * 10, 100)}%` }}
+                        />
+                      </div>
+                      <span className="font-mono text-[10px] text-muted-foreground font-bold shrink-0">
+                        {item.count}x ({item.density}%)
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground py-3 text-center italic">
+                  Type more text to view keyword density distribution...
+                </p>
+              )}
+            </Card>
           </div>
         </div>
       </div>

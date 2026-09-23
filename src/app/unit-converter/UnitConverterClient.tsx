@@ -293,126 +293,138 @@ export default function UnitConverterClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-10 text-left">
-        {/* Category Switcher */}
-        <div className="flex justify-center">
-          <Tabs defaultValue="length" className="w-full" onValueChange={(val) => setCategory(val as UnitType)}>
-            <TabsList className="grid w-full grid-cols-5 h-14 rounded-2xl p-1 bg-zinc-100 dark:bg-zinc-900">
-              <TabsTrigger value="length" className="text-xs font-bold rounded-xl data-[state=active]:bg-background flex items-center justify-center gap-1.5"><Ruler className="h-4 w-4" /><span className="hidden sm:inline">Length</span></TabsTrigger>
-              <TabsTrigger value="weight" className="text-xs font-bold rounded-xl data-[state=active]:bg-background flex items-center justify-center gap-1.5"><Scale className="h-4 w-4" /><span className="hidden sm:inline">Weight</span></TabsTrigger>
-              <TabsTrigger value="temperature" className="text-xs font-bold rounded-xl data-[state=active]:bg-background flex items-center justify-center gap-1.5"><Thermometer className="h-4 w-4" /><span className="hidden sm:inline">Temp</span></TabsTrigger>
-              <TabsTrigger value="area" className="text-xs font-bold rounded-xl data-[state=active]:bg-background flex items-center justify-center gap-1.5"><Layers className="h-4 w-4" /><span className="hidden sm:inline">Area</span></TabsTrigger>
-              <TabsTrigger value="volume" className="text-xs font-bold rounded-xl data-[state=active]:bg-background flex items-center justify-center gap-1.5"><Box className="h-4 w-4" /><span className="hidden sm:inline">Volume</span></TabsTrigger>
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left">
+        {/* Left Column: Controls & Converter */}
+        <div className="lg:col-span-5 space-y-4">
+          {/* Category Switcher */}
+          <Tabs defaultValue="length" value={category} className="w-full" onValueChange={(val) => setCategory(val as UnitType)}>
+            <TabsList className="grid w-full grid-cols-5 h-11 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-900 border">
+              <TabsTrigger value="length" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1"><Ruler className="h-3.5 w-3.5" /><span className="hidden sm:inline">Length</span></TabsTrigger>
+              <TabsTrigger value="weight" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1"><Scale className="h-3.5 w-3.5" /><span className="hidden sm:inline">Weight</span></TabsTrigger>
+              <TabsTrigger value="temperature" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1"><Thermometer className="h-3.5 w-3.5" /><span className="hidden sm:inline">Temp</span></TabsTrigger>
+              <TabsTrigger value="area" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1"><Layers className="h-3.5 w-3.5" /><span className="hidden sm:inline">Area</span></TabsTrigger>
+              <TabsTrigger value="volume" className="text-xs font-bold rounded-lg data-[state=active]:bg-background flex items-center justify-center gap-1"><Box className="h-3.5 w-3.5" /><span className="hidden sm:inline">Vol</span></TabsTrigger>
             </TabsList>
           </Tabs>
-        </div>
 
-        {/* Input Cards Area */}
-        <div className="grid grid-cols-1 md:grid-cols-11 gap-6 items-center">
-          {/* From Unit Card */}
-          <Card className="md:col-span-5 p-6 bg-zinc-50 dark:bg-zinc-900 border-none rounded-3xl space-y-4">
-            <label className="text-xs font-bold text-muted-foreground uppercase">From</label>
-            <Input
-              type="number"
-              className="h-14 text-2xl font-black rounded-xl border-2 focus:border-primary font-mono"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="1"
-            />
-            <select
-              className="flex h-12 w-full rounded-xl border bg-background px-3 py-1 text-sm font-bold shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-              value={fromUnit}
-              onChange={(e) => setFromUnit(e.target.value)}
-            >
-              {unitsConfig[category].list.map((unit) => (
-                <option key={unit.value} value={unit.value}>
-                  {unit.label}
-                </option>
-              ))}
-            </select>
-          </Card>
-
-          {/* Swap icon */}
-          <div className="md:col-span-1 flex justify-center">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={swapUnits}
-              className="w-12 h-12 rounded-full border shadow-md hover:bg-zinc-100"
-            >
-              <ArrowLeftRight className="h-5 w-5 rotate-90 md:rotate-0" />
-            </Button>
-          </div>
-
-          {/* To Unit Card */}
-          <Card className="md:col-span-5 p-6 bg-zinc-50 dark:bg-zinc-900 border-none rounded-3xl space-y-4">
-            <label className="text-xs font-bold text-muted-foreground uppercase">To</label>
-            <Input
-              type="text"
-              readOnly
-              className="h-14 text-2xl font-black rounded-xl border bg-zinc-100 dark:bg-zinc-800 font-mono text-zinc-950 dark:text-zinc-50"
-              value={resultValue}
-              placeholder="Output value..."
-            />
-            <select
-              className="flex h-12 w-full rounded-xl border bg-background px-3 py-1 text-sm font-bold shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
-              value={toUnit}
-              onChange={(e) => setToUnit(e.target.value)}
-            >
-              {unitsConfig[category].list.map((unit) => (
-                <option key={unit.value} value={unit.value}>
-                  {unit.label}
-                </option>
-              ))}
-            </select>
-          </Card>
-        </div>
-
-        {/* Breakdown table */}
-        {allConversions.length > 0 && (
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">All Conversion Mappings</h3>
-              <Button
-                onClick={() => copyShareUrl({
-                  category,
-                  value: inputValue,
-                  from: fromUnit,
-                  to: toUnit,
-                }, `${fromUnit.toUpperCase()} to ${toUnit.toUpperCase()} Conversion`)}
-                variant="outline"
-                size="sm"
-                className="rounded-xl border-2 font-bold h-10 text-primary border-primary/30 hover:bg-primary/5"
+          {/* Converter Card */}
+          <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs space-y-4 bg-card">
+            {/* From Unit */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">From Value & Unit</label>
+              <Input
+                type="number"
+                className="h-11 text-xl font-black rounded-xl border-2 focus:border-primary font-mono"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="1"
+              />
+              <select
+                className="flex h-10 w-full rounded-xl border bg-background px-3 py-1 text-xs font-bold shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                value={fromUnit}
+                onChange={(e) => setFromUnit(e.target.value)}
               >
-                <Share2 className="h-4 w-4 mr-2" /> Share Conversion
+                {unitsConfig[category].list.map((unit) => (
+                  <option key={unit.value} value={unit.value}>
+                    {unit.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Swap Button */}
+            <div className="flex justify-center -my-1">
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={swapUnits}
+                className="w-9 h-9 rounded-full border shadow-xs hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                title="Swap units"
+              >
+                <ArrowLeftRight className="h-4 w-4" />
               </Button>
             </div>
-            <Card className="overflow-hidden border border-zinc-100 dark:border-zinc-800 rounded-3xl shadow-sm">
+
+            {/* To Unit */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">To Converted Result</label>
+              <Input
+                type="text"
+                readOnly
+                className="h-11 text-xl font-black rounded-xl border bg-muted/40 font-mono text-foreground"
+                value={resultValue}
+                placeholder="Output value..."
+              />
+              <select
+                className="flex h-10 w-full rounded-xl border bg-background px-3 py-1 text-xs font-bold shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                value={toUnit}
+                onChange={(e) => setToUnit(e.target.value)}
+              >
+                {unitsConfig[category].list.map((unit) => (
+                  <option key={unit.value} value={unit.value}>
+                    {unit.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Share Conversion */}
+            <Button
+              onClick={() => copyShareUrl({
+                category,
+                value: inputValue,
+                from: fromUnit,
+                to: toUnit,
+              }, `${fromUnit.toUpperCase()} to ${toUnit.toUpperCase()} Conversion`)}
+              variant="outline"
+              size="sm"
+              className="w-full rounded-xl border-2 font-bold h-10 text-primary border-primary/30 hover:bg-primary/5"
+            >
+              <Share2 className="h-4 w-4 mr-2" /> Share Conversion Link
+            </Button>
+          </Card>
+        </div>
+
+        {/* Right Column: All Conversion Mappings (Sticky) */}
+        <div className="lg:col-span-7 lg:sticky lg:top-4 space-y-3 scroll-mt-24">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-xs font-black text-muted-foreground uppercase tracking-wider">All {category} Conversions for {inputValue || "1"} {fromUnit}</h3>
+            <span className="text-[11px] font-mono text-muted-foreground">{allConversions.length} units</span>
+          </div>
+
+          <Card className="overflow-hidden border-2 rounded-2xl shadow-xs bg-card">
+            <div className="max-h-[520px] overflow-y-auto">
               <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-zinc-100/50 dark:bg-zinc-800/50">
-                    <th className="p-4 text-xs font-black uppercase text-muted-foreground tracking-wider border-b">Target Unit</th>
-                    <th className="p-4 text-xs font-black uppercase text-muted-foreground tracking-wider border-b text-right">Value</th>
+                <thead className="sticky top-0 z-10 bg-muted/90 backdrop-blur-xs">
+                  <tr className="border-b">
+                    <th className="py-2.5 px-4 text-xs font-black uppercase text-muted-foreground tracking-wider">Target Unit</th>
+                    <th className="py-2.5 px-4 text-xs font-black uppercase text-muted-foreground tracking-wider text-right">Value</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {allConversions.map((conv, idx) => (
-                    <tr
-                      key={idx}
-                      className={`hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 border-b last:border-b-0 ${
-                        toUnit === unitsConfig[category].list[idx]?.value ? "bg-primary/5 font-black text-primary" : ""
-                      }`}
-                    >
-                      <td className="p-4 font-bold text-sm">{conv.label}</td>
-                      <td className="p-4 text-right font-mono text-sm">{conv.value}</td>
-                    </tr>
-                  ))}
+                <tbody className="divide-y divide-border">
+                  {allConversions.map((conv, idx) => {
+                    const isTarget = toUnit === unitsConfig[category].list[idx]?.value;
+                    return (
+                      <tr
+                        key={idx}
+                        className={`hover:bg-muted/50 transition-colors ${
+                          isTarget ? "bg-primary/10 font-black text-primary" : ""
+                        }`}
+                      >
+                        <td className="py-2.5 px-4 font-bold text-xs sm:text-sm flex items-center gap-2">
+                          {isTarget && <span className="w-2 h-2 rounded-full bg-primary inline-block shrink-0" />}
+                          {conv.label}
+                        </td>
+                        <td className="py-2.5 px-4 text-right font-mono text-xs sm:text-sm font-semibold">{conv.value}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
-            </Card>
-          </div>
-        )}
+            </div>
+          </Card>
+        </div>
       </div>
     </ToolLayout>
   );

@@ -249,30 +249,31 @@ export default function Base64Client({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 text-left">
+      <div className="w-full max-w-6xl mx-auto space-y-4 text-left">
         <Tabs defaultValue="encode" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-12 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-900">
-            <TabsTrigger value="encode" className="text-sm font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm">Encode Text</TabsTrigger>
-            <TabsTrigger value="decode" className="text-sm font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm">Decode Text</TabsTrigger>
-            <TabsTrigger value="file" className="text-sm font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm">File to Base64</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 h-11 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-900">
+            <TabsTrigger value="encode" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-xs">Encode Text</TabsTrigger>
+            <TabsTrigger value="decode" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-xs">Decode Text</TabsTrigger>
+            <TabsTrigger value="file" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-xs">File to Base64</TabsTrigger>
           </TabsList>
 
           {/* Encode Text Tab */}
-          <TabsContent value="encode" className="mt-8 space-y-6 m-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Plain Text (Input)</label>
+          <TabsContent value="encode" className="mt-4 m-0">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+              {/* Input Card */}
+              <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-2.5">
+                <label className="text-xs font-black text-muted-foreground uppercase tracking-wider block">Plain Text (Input)</label>
                 <div 
                   onDragOver={handleDragOverPlain}
                   onDragLeave={handleDragLeavePlain}
                   onDrop={handleDropPlain}
                   className={cn(
-                    "relative rounded-2xl transition-all duration-200",
+                    "relative rounded-xl transition-all duration-200",
                     isDragOverPlain ? "ring-2 ring-primary/50" : ""
                   )}
                 >
                   {isDragOverPlain && (
-                    <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-2xl animate-in fade-in duration-200">
+                    <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-xl animate-in fade-in duration-200">
                       <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
                       <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Text File</p>
                     </div>
@@ -281,19 +282,21 @@ export default function Base64Client({
                     value={plainInput}
                     onChange={(e) => handleEncode(e.target.value)}
                     placeholder="Type plain text..."
-                    className="min-h-[220px] rounded-2xl border-2 focus:border-primary p-4 leading-relaxed font-semibold"
+                    className="min-h-[260px] rounded-xl border-2 focus:border-primary p-3.5 leading-relaxed font-semibold text-sm"
                   />
                 </div>
-              </div>
-              <div className="space-y-3">
+              </Card>
+
+              {/* Output Card */}
+              <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-2.5 lg:sticky lg:top-4 scroll-mt-24">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Base64 String (Output)</label>
+                  <label className="text-xs font-black text-muted-foreground uppercase tracking-wider">Base64 String (Output)</label>
                   <CopyButton
                     value={base64Output}
                     label="Copy"
                     variant="ghost"
                     size="sm"
-                    className="text-xs font-bold text-primary hover:bg-primary/5"
+                    className="h-8 px-2.5 text-xs font-bold text-primary hover:bg-primary/5"
                     disabled={!base64Output}
                     title="Copy Base64 Output"
                   />
@@ -302,28 +305,29 @@ export default function Base64Client({
                   readOnly
                   value={base64Output}
                   placeholder="Encoded output will appear here..."
-                  className="min-h-[220px] rounded-2xl border-2 p-4 leading-relaxed font-mono font-bold bg-zinc-50 dark:bg-zinc-900"
+                  className="min-h-[260px] rounded-xl border-2 p-3.5 leading-relaxed font-mono font-bold bg-muted/30 text-sm"
                 />
-              </div>
+              </Card>
             </div>
           </TabsContent>
 
           {/* Decode Text Tab */}
-          <TabsContent value="decode" className="mt-8 space-y-6 m-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Base64 String (Input)</label>
+          <TabsContent value="decode" className="mt-4 m-0">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+              {/* Input Card */}
+              <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-2.5">
+                <label className="text-xs font-black text-muted-foreground uppercase tracking-wider block">Base64 String (Input)</label>
                 <div 
                   onDragOver={handleDragOverBase64}
                   onDragLeave={handleDragLeaveBase64}
                   onDrop={handleDropBase64}
                   className={cn(
-                    "relative rounded-2xl transition-all duration-200",
+                    "relative rounded-xl transition-all duration-200",
                     isDragOverBase64 ? "ring-2 ring-primary/50" : ""
                   )}
                 >
                   {isDragOverBase64 && (
-                    <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-2xl animate-in fade-in duration-200">
+                    <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-xl animate-in fade-in duration-200">
                       <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
                       <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Base64 Text File</p>
                     </div>
@@ -332,19 +336,21 @@ export default function Base64Client({
                     value={base64Input}
                     onChange={(e) => handleDecode(e.target.value)}
                     placeholder="Paste Base64 string here..."
-                    className="min-h-[220px] rounded-2xl border-2 focus:border-primary p-4 leading-relaxed font-mono font-bold"
+                    className="min-h-[260px] rounded-xl border-2 focus:border-primary p-3.5 leading-relaxed font-mono font-bold text-sm"
                   />
                 </div>
-              </div>
-              <div className="space-y-3">
+              </Card>
+
+              {/* Output Card */}
+              <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-2.5 lg:sticky lg:top-4 scroll-mt-24">
                 <div className="flex justify-between items-center">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Plain Text (Output)</label>
+                  <label className="text-xs font-black text-muted-foreground uppercase tracking-wider">Plain Text (Output)</label>
                   <CopyButton
                     value={plainOutput}
                     label="Copy"
                     variant="ghost"
                     size="sm"
-                    className="text-xs font-bold text-primary hover:bg-primary/5"
+                    className="h-8 px-2.5 text-xs font-bold text-primary hover:bg-primary/5"
                     disabled={!plainOutput}
                     title="Copy Plain Text Output"
                   />
@@ -353,35 +359,36 @@ export default function Base64Client({
                   readOnly
                   value={plainOutput}
                   placeholder="Decoded text will appear here..."
-                  className="min-h-[220px] rounded-2xl border-2 p-4 leading-relaxed font-semibold bg-zinc-50 dark:bg-zinc-900"
+                  className="min-h-[260px] rounded-xl border-2 p-3.5 leading-relaxed font-semibold bg-muted/30 text-sm"
                 />
-              </div>
+              </Card>
             </div>
           </TabsContent>
 
           {/* File to Base64 Tab */}
-          <TabsContent value="file" className="mt-8 space-y-6 m-0">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-              <div className="md:col-span-5 space-y-6">
-                <div className="relative border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/50 dark:hover:border-primary/50 transition-colors bg-zinc-50 dark:bg-zinc-900/40">
+          <TabsContent value="file" className="mt-4 m-0">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+              {/* Left Column: Upload */}
+              <div className="lg:col-span-5 space-y-4">
+                <div className="relative border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-primary/50 dark:hover:border-primary/50 transition-colors bg-card">
                   <input
                     type="file"
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     onChange={handleFileUpload}
                   />
-                  <Upload className="h-10 w-10 text-muted-foreground mb-4" />
+                  <Upload className="h-8 w-8 text-muted-foreground mb-2" />
                   <p className="text-sm font-bold">Drag and drop file here</p>
-                  <p className="text-xs text-muted-foreground mt-1">or click to browse local files (max 5MB)</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">or click to browse local files (max 5MB)</p>
                 </div>
 
                 {fileName && (
-                  <Card className="p-6 border border-zinc-100 dark:border-zinc-800 rounded-2xl bg-zinc-50 dark:bg-zinc-900 space-y-4">
-                    <div className="flex justify-between items-start border-b pb-3">
+                  <Card className="p-4 border-2 rounded-2xl bg-card space-y-3">
+                    <div className="flex justify-between items-start border-b pb-2">
                       <div>
                         <h4 className="font-bold text-sm truncate max-w-[200px]">{fileName}</h4>
                         <p className="text-xs text-muted-foreground font-mono mt-0.5">{fileType || "unknown type"}</p>
                       </div>
-                      <Button variant="ghost" size="icon" onClick={clearFile} className="text-red-500 hover:bg-red-500/5">
+                      <Button variant="ghost" size="icon" onClick={clearFile} className="h-8 w-8 text-red-500 hover:bg-red-500/10">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -393,32 +400,37 @@ export default function Base64Client({
                 )}
               </div>
 
-              <div ref={resultsRef} className="md:col-span-7 space-y-3 scroll-mt-24">
-                <div className="flex justify-between items-center">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><ArrowLeftRight className="h-4 w-4 text-primary" /> Generated Base64 Data URI</label>
-                  {fileBase64 && (
-                    <CopyButton
-                      value={fileBase64 ? `data:${fileType};base64,${fileBase64}` : ""}
-                      label="Copy Data URI"
-                      variant="ghost"
-                      size="sm"
-                      className="text-xs font-bold text-primary hover:bg-primary/5"
-                      title="Copy Base64 Data URI"
-                    />
-                  )}
-                </div>
-                <Textarea
-                  readOnly
-                  value={fileBase64 ? `data:${fileType};base64,${fileBase64}` : ""}
-                  placeholder="Base64 Data URI representing the uploaded file will generate here..."
-                  className="min-h-[220px] rounded-2xl border-2 p-4 leading-relaxed font-mono text-xs bg-zinc-50 dark:bg-zinc-900"
-                />
-                <div className="p-3 bg-blue-500/5 rounded-xl border border-blue-500/10 flex gap-2">
-                  <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
-                  <span className="text-[10px] text-muted-foreground leading-normal">
-                    You can copy either the full HTML/CSS ready **Data URI** or just the raw base64 data. Useful for inline source files.
-                  </span>
-                </div>
+              {/* Right Column: Output */}
+              <div ref={resultsRef} className="lg:col-span-7 lg:sticky lg:top-4 scroll-mt-24">
+                <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-black text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                      <ArrowLeftRight className="h-3.5 w-3.5 text-primary" /> Generated Base64 Data URI
+                    </label>
+                    {fileBase64 && (
+                      <CopyButton
+                        value={fileBase64 ? `data:${fileType};base64,${fileBase64}` : ""}
+                        label="Copy Data URI"
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 px-2.5 text-xs font-bold text-primary hover:bg-primary/5"
+                        title="Copy Base64 Data URI"
+                      />
+                    )}
+                  </div>
+                  <Textarea
+                    readOnly
+                    value={fileBase64 ? `data:${fileType};base64,${fileBase64}` : ""}
+                    placeholder="Base64 Data URI representing the uploaded file will generate here..."
+                    className="min-h-[220px] rounded-xl border-2 p-3.5 leading-relaxed font-mono text-xs bg-muted/30"
+                  />
+                  <div className="p-2.5 bg-blue-500/5 rounded-xl border border-blue-500/10 flex gap-2">
+                    <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+                    <span className="text-[11px] text-muted-foreground leading-normal">
+                      Copy either the full HTML/CSS ready <strong>Data URI</strong> or the raw base64 data for inline source files.
+                    </span>
+                  </div>
+                </Card>
               </div>
             </div>
           </TabsContent>

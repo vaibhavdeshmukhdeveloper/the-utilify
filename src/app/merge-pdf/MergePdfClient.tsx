@@ -199,10 +199,10 @@ export default function MergePdfClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start text-left">
         {/* Left Column: Queue Management */}
-        <div className="lg:col-span-6 space-y-6">
-          <Card className="p-6 border-2 border-dashed bg-card rounded-[2rem]">
+        <div className="lg:col-span-6 space-y-4">
+          <Card className="p-4 sm:p-5 border-2 border-dashed bg-card rounded-2xl">
             <FileUploader
               label={text.uploaderLabel}
               lang={currentLang}
@@ -217,48 +217,48 @@ export default function MergePdfClient({
           </Card>
           
           {queuedFiles.length > 0 && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-left-4">
-               <div className="flex items-center justify-between px-2">
-                 <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.queueTitle}</p>
+            <div className="space-y-3 animate-in fade-in slide-in-from-left-4">
+               <div className="flex items-center justify-between px-1">
+                 <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{text.queueTitle}</p>
                  <Layers className="h-4 w-4 text-muted-foreground" />
                </div>
-               <div className="space-y-3 max-h-[500px] overflow-auto pr-2 pb-4">
+               <div className="space-y-2 max-h-[380px] overflow-auto pr-1 pb-2">
                 {queuedFiles.map((qFile, idx) => (
-                  <Card key={qFile.id} className="p-4 rounded-2xl border-2 flex items-center gap-4 bg-white dark:bg-zinc-950 shadow-sm relative group hover:border-primary/50 transition-all">
-                    <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary font-black text-sm">
+                  <Card key={qFile.id} className="p-3 rounded-xl border-2 flex items-center gap-3 bg-white dark:bg-zinc-950 shadow-xs relative group hover:border-primary/50 transition-all">
+                    <div className="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center text-primary font-black text-xs shrink-0">
                       {idx + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold truncate text-sm">{qFile.file.name}</p>
+                      <p className="font-bold truncate text-xs">{qFile.file.name}</p>
                       <p className="text-[11px] text-muted-foreground">{formatSize(qFile.file.size)}</p>
                     </div>
                     
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1 opacity-80 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 rounded-lg" 
+                        className="h-7 w-7 rounded-lg" 
                         disabled={idx === 0}
                         onClick={() => moveFile(idx, 'up')}
                       >
-                        <ArrowUp className="h-4 w-4" />
+                        <ArrowUp className="h-3.5 w-3.5" />
                       </Button>
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 rounded-lg" 
+                        className="h-7 w-7 rounded-lg" 
                         disabled={idx === queuedFiles.length - 1}
                         onClick={() => moveFile(idx, 'down')}
                       >
-                        <ArrowDown className="h-4 w-4" />
+                        <ArrowDown className="h-3.5 w-3.5" />
                       </Button>
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10"
+                        className="h-7 w-7 rounded-lg text-destructive hover:text-destructive hover:bg-destructive/10"
                         onClick={() => removeFile(qFile.id)}
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </Card>
@@ -269,40 +269,40 @@ export default function MergePdfClient({
         </div>
 
         {/* Right Column: Actions & Results */}
-        <div ref={resultsRef} className="lg:col-span-6 lg:sticky lg:top-8 scroll-mt-24">
+        <div ref={resultsRef} className="lg:col-span-6 lg:sticky lg:top-4 scroll-mt-24 space-y-4">
           {isLoading ? (
-            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
-              <div className="relative mb-6">
-                <Loader2 className="h-16 w-16 text-primary animate-spin" />
-                <Plus className="h-8 w-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <Card className="h-[340px] flex flex-col items-center justify-center p-6 text-center border-2 border-primary/20 bg-primary/5 rounded-2xl">
+              <div className="relative mb-4">
+                <Loader2 className="h-12 w-12 text-primary animate-spin" />
+                <Plus className="h-6 w-6 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">{text.mergingTitle}</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto text-sm">
+              <h3 className="text-xl font-black tracking-tight mb-1.5">{text.mergingTitle}</h3>
+              <p className="text-muted-foreground max-w-xs mx-auto text-xs">
                 {text.mergingDesc}
               </p>
             </Card>
           ) : result ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="p-10 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[3rem] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
-                  <Download className="h-32 w-32" />
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
+              <Card className="p-6 sm:p-7 bg-zinc-950 text-zinc-50 border-none shadow-xl rounded-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
+                  <Download className="h-24 w-24" />
                 </div>
                 <div className="relative z-10">
-                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
-                    <CheckCircle2 className="h-4 w-4" /> {text.successBadge}
+                  <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.3em] text-green-500 mb-2">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> {text.successBadge}
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">{text.successTitle}</h2>
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-6">{text.successTitle}</h2>
                   
-                  <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-5 border-t border-zinc-800">
                     <a href={result.url} download={result.filename} className="flex-1">
-                      <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                        <Download className="mr-2 h-6 w-6" /> {text.downloadBtn}
+                      <Button className="w-full h-12 text-sm sm:text-base font-bold rounded-xl shadow-md hover:shadow-lg transition-all">
+                        <Download className="mr-2 h-4 w-4" /> {text.downloadBtn}
                       </Button>
                     </a>
                     <Button 
                       variant="outline" 
                       onClick={() => {setResult(null); setQueuedFiles([]);}} 
-                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
+                      className="h-12 px-5 text-sm font-bold rounded-xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                     >
                       {text.clearBtn}
                     </Button>
@@ -313,69 +313,69 @@ export default function MergePdfClient({
               <Button 
                 variant="ghost" 
                 onClick={() => setResult(null)} 
-                className="w-full h-12 text-sm font-bold border-2 border-dashed rounded-xl"
+                className="w-full h-10 text-xs font-bold border-2 border-dashed rounded-xl"
               >
                 {text.backBtn}
               </Button>
             </div>
           ) : queuedFiles.length > 0 ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-4">
-               <Card className="p-10 bg-primary text-primary-foreground border-none shadow-xl rounded-[2.5rem] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
-                  <Plus className="h-32 w-32" />
+            <div className="space-y-4 animate-in fade-in slide-in-from-right-4">
+               <Card className="p-6 sm:p-7 bg-primary text-primary-foreground border-none shadow-xl rounded-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-15 pointer-events-none">
+                  <Plus className="h-24 w-24" />
                 </div>
                 <div className="relative z-10">
-                  <p className="text-xs font-black uppercase tracking-[0.3em] opacity-70 mb-4">{text.readyBadge}</p>
-                  <h2 className="text-3xl font-black tracking-tight mb-8">{text.readyTitle}</h2>
+                  <p className="text-[11px] font-black uppercase tracking-[0.3em] opacity-80 mb-2">{text.readyBadge}</p>
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-6">{text.readyTitle}</h2>
                   
                   <Button 
                     onClick={processMerge} 
                     disabled={queuedFiles.length < 2}
-                    className="w-full h-20 text-xl font-black bg-white text-primary hover:bg-zinc-100 rounded-2xl shadow-lg transition-all"
+                    className="w-full h-14 text-base font-black bg-white text-primary hover:bg-zinc-100 rounded-xl shadow-md transition-all"
                   >
-                    <Layers className="mr-2 h-6 w-6" /> {text.mergeBtn}
+                    <Layers className="mr-2 h-5 w-5" /> {text.mergeBtn}
                   </Button>
                   
                   {queuedFiles.length < 2 && (
-                    <p className="text-xs font-medium text-center mt-4 opacity-80">
+                    <p className="text-xs font-medium text-center mt-3 opacity-90">
                       {text.minFilesNotice}
                     </p>
                   )}
                 </div>
               </Card>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="p-6 bg-card border-none rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600">
-                    <FilePlus className="h-5 w-5" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Card className="p-3.5 bg-card border-2 rounded-xl flex items-center gap-3 shadow-xs">
+                  <div className="w-9 h-9 rounded-lg bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-300 shrink-0">
+                    <FilePlus className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.queueModeLabel}</p>
-                    <p className="font-bold">{text.queueModeVal}</p>
+                    <p className="text-[11px] font-black uppercase tracking-wider text-muted-foreground">{text.queueModeLabel}</p>
+                    <p className="text-xs font-bold">{text.queueModeVal}</p>
                   </div>
                 </Card>
-                <Card className="p-6 bg-card border-none rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600">
-                    <ArrowDown className="h-5 w-5" />
+                <Card className="p-3.5 bg-card border-2 rounded-xl flex items-center gap-3 shadow-xs">
+                  <div className="w-9 h-9 rounded-lg bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-300 shrink-0">
+                    <ArrowDown className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.orderingLabel}</p>
-                    <p className="font-bold">{text.orderingVal}</p>
+                    <p className="text-[11px] font-black uppercase tracking-wider text-muted-foreground">{text.orderingLabel}</p>
+                    <p className="text-xs font-bold">{text.orderingVal}</p>
                   </div>
                 </Card>
               </div>
             </div>
           ) : (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[3rem]">
-              <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
-                <Plus className="h-10 w-10 text-muted-foreground/40" />
+            <Card className="h-[340px] flex flex-col items-center justify-center p-6 text-center border-dashed border-2 bg-card rounded-2xl">
+              <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800/60 flex items-center justify-center mb-4">
+                <Plus className="h-8 w-8 text-muted-foreground/40" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">{text.emptyTitle}</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
+              <h3 className="text-xl font-black tracking-tight mb-1.5">{text.emptyTitle}</h3>
+              <p className="text-muted-foreground max-w-xs mx-auto text-xs leading-relaxed">
                 {text.emptyDesc}
               </p>
-              <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> {text.emptyAction}
+              <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 px-3.5 py-1.5 rounded-full">
+                <ArrowRight className="h-3.5 w-3.5" /> {text.emptyAction}
               </div>
             </Card>
           )}

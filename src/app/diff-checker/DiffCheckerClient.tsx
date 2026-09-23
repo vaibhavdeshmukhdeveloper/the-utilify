@@ -219,15 +219,15 @@ export default function DiffCheckerClient() {
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 text-left">
-        {/* Actions header */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl">
+      <div className="w-full max-w-6xl mx-auto space-y-4 text-left">
+        {/* Actions header toolbar */}
+        <Card className="p-3 rounded-2xl border-2 flex flex-col sm:flex-row justify-between items-center gap-3 bg-card shadow-xs">
+          <div className="flex gap-1.5 p-1 bg-muted/50 rounded-xl">
             <Button
               variant={viewMode === "split" ? "default" : "ghost"}
               size="sm"
               onClick={() => setViewMode("split")}
-              className="rounded-lg text-xs font-black"
+              className="h-8 rounded-lg text-xs font-bold"
             >
               Split View
             </Button>
@@ -235,30 +235,30 @@ export default function DiffCheckerClient() {
               variant={viewMode === "unified" ? "default" : "ghost"}
               size="sm"
               onClick={() => setViewMode("unified")}
-              className="rounded-lg text-xs font-black"
+              className="h-8 rounded-lg text-xs font-bold"
             >
               Unified View
             </Button>
           </div>
-          <div className="flex gap-3">
-            <Button variant="outline" size="sm" onClick={clearInputs} className="rounded-xl font-bold border-2 hover:bg-zinc-100">
-              <Trash2 className="h-4 w-4 mr-1.5 text-red-500" /> Clear
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={clearInputs} className="h-9 rounded-xl font-bold border-2 hover:bg-muted text-xs">
+              <Trash2 className="h-3.5 w-3.5 mr-1 text-red-500" /> Clear
             </Button>
-            <Button size="sm" onClick={compareText} className="rounded-xl shadow-md font-bold px-5">
-              <GitCompare className="h-4 w-4 mr-1.5" /> Compare Text
+            <Button size="sm" onClick={compareText} className="h-9 rounded-xl shadow-xs font-bold px-4 text-xs">
+              <GitCompare className="h-3.5 w-3.5 mr-1" /> Compare Text
             </Button>
           </div>
-        </div>
+        </Card>
 
         {/* Input Editors (Double layout) */}
         {!hasCompared && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-300">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center justify-between w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-300">
+            <Card className="p-4 rounded-2xl border-2 shadow-xs bg-card space-y-2">
+              <label className="text-xs font-black text-muted-foreground uppercase tracking-wider flex items-center justify-between w-full">
                 <span className="flex items-center gap-1.5">
-                  <FileText className="h-3.5 w-3.5" /> Original Text (Before)
+                  <FileText className="h-3.5 w-3.5 text-primary" /> Original Text (Before)
                 </span>
-                <span className="text-[9px] font-bold lowercase text-muted-foreground/60 select-none">
+                <span className="text-[10px] font-bold lowercase text-muted-foreground/60 select-none">
                   (or drag & drop file)
                 </span>
               </label>
@@ -267,30 +267,31 @@ export default function DiffCheckerClient() {
                 onDragLeave={handleDragLeaveLeft}
                 onDrop={handleDropLeft}
                 className={cn(
-                  "relative rounded-3xl transition-all duration-200",
+                  "relative rounded-xl transition-all duration-200",
                   isDragOverLeft ? "ring-2 ring-primary/50" : ""
                 )}
               >
                 {isDragOverLeft && (
-                  <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-3xl animate-in fade-in duration-200">
+                  <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-xl animate-in fade-in duration-200">
                     <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
                     <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Original File</p>
                   </div>
                 )}
                 <Textarea
                   placeholder="Paste original text here (or drag & drop text file)..."
-                  className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
+                  className="min-h-[260px] rounded-xl border-2 focus:border-primary p-3.5 leading-relaxed font-mono text-xs font-semibold"
                   value={originalText}
                   onChange={(e) => setOriginalText(e.target.value)}
                 />
               </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center justify-between w-full">
+            </Card>
+
+            <Card className="p-4 rounded-2xl border-2 shadow-xs bg-card space-y-2">
+              <label className="text-xs font-black text-muted-foreground uppercase tracking-wider flex items-center justify-between w-full">
                 <span className="flex items-center gap-1.5">
-                  <GitCompare className="h-3.5 w-3.5" /> Modified Text (After)
+                  <GitCompare className="h-3.5 w-3.5 text-primary" /> Modified Text (After)
                 </span>
-                <span className="text-[9px] font-bold lowercase text-muted-foreground/60 select-none">
+                <span className="text-[10px] font-bold lowercase text-muted-foreground/60 select-none">
                   (or drag & drop file)
                 </span>
               </label>
@@ -299,34 +300,36 @@ export default function DiffCheckerClient() {
                 onDragLeave={handleDragLeaveRight}
                 onDrop={handleDropRight}
                 className={cn(
-                  "relative rounded-3xl transition-all duration-200",
+                  "relative rounded-xl transition-all duration-200",
                   isDragOverRight ? "ring-2 ring-primary/50" : ""
                 )}
               >
                 {isDragOverRight && (
-                  <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-3xl animate-in fade-in duration-200">
+                  <div className="absolute inset-0 z-30 bg-background/90 backdrop-blur-xs flex flex-col items-center justify-center pointer-events-none border-2 border-dashed border-primary rounded-xl animate-in fade-in duration-200">
                     <Upload className="w-8 h-8 text-primary animate-bounce mb-1" />
                     <p className="text-xs font-black uppercase tracking-wider text-primary">Drop Modified File</p>
                   </div>
                 )}
                 <Textarea
                   placeholder="Paste modified text here (or drag & drop text file)..."
-                  className="min-h-[300px] rounded-3xl border-2 focus:border-primary p-5 leading-relaxed font-mono text-sm font-semibold"
+                  className="min-h-[260px] rounded-xl border-2 focus:border-primary p-3.5 leading-relaxed font-mono text-xs font-semibold"
                   value={modifiedText}
                   onChange={(e) => setModifiedText(e.target.value)}
                 />
               </div>
-            </div>
+            </Card>
           </div>
         )}
 
         {/* Diff Output */}
         {hasCompared && diffResult && (
-          <div ref={resultsRef} className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
+          <div ref={resultsRef} className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300 scroll-mt-24">
             <div className="flex justify-between items-center border-b pb-2">
-              <span className="text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1"><Eye className="h-4 w-4 text-primary" /> Comparison Results</span>
-              <Button variant="ghost" size="sm" onClick={() => setHasCompared(false)} className="text-xs font-bold text-primary">
-                Return to Editor <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+              <span className="text-xs font-black text-muted-foreground uppercase tracking-widest flex items-center gap-1">
+                <Eye className="h-3.5 w-3.5 text-primary" /> Comparison Results
+              </span>
+              <Button variant="ghost" size="sm" onClick={() => setHasCompared(false)} className="h-8 text-xs font-bold text-primary">
+                Return to Editor <ArrowRight className="h-3.5 w-3.5 ml-1" />
               </Button>
             </div>
 
@@ -334,22 +337,22 @@ export default function DiffCheckerClient() {
               /* Split View */
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Left Pane (Original / Removed) */}
-                <Card className="overflow-hidden border border-zinc-100 dark:border-zinc-800 rounded-3xl bg-zinc-50 dark:bg-zinc-950/20">
-                  <div className="p-4 bg-zinc-100 dark:bg-zinc-900 border-b text-xs font-black text-muted-foreground uppercase">Original Pane</div>
-                  <div className="p-4 font-mono text-xs overflow-x-auto leading-relaxed divide-y divide-zinc-100 dark:divide-zinc-800/20 max-h-[500px] overflow-y-auto">
+                <Card className="overflow-hidden border-2 rounded-2xl bg-card">
+                  <div className="p-3 bg-muted/40 border-b text-xs font-black text-muted-foreground uppercase">Original Pane</div>
+                  <div className="p-3 font-mono text-xs overflow-x-auto leading-relaxed divide-y divide-border/20 max-h-[460px] overflow-y-auto">
                     {diffResult.left.map((line, idx) => (
                       <div
                         key={idx}
-                        className={`flex gap-3 py-1.5 px-2 select-text ${
+                        className={`flex gap-2.5 py-1 px-1.5 select-text rounded-xs ${
                           line.type === "removed"
                             ? "bg-red-500/10 text-red-700 dark:text-red-400 font-bold"
                             : line.type === "empty"
-                            ? "bg-zinc-100/50 dark:bg-zinc-900/30 opacity-20 select-none"
-                            : "text-zinc-600 dark:text-zinc-400"
+                            ? "bg-muted/20 opacity-20 select-none"
+                            : "text-muted-foreground"
                         }`}
                       >
-                        <span className="w-8 select-none opacity-40 font-bold text-right shrink-0">{line.num || ""}</span>
-                        <span className="w-4 select-none opacity-45 shrink-0">{line.type === "removed" ? "-" : ""}</span>
+                        <span className="w-7 select-none opacity-40 font-bold text-right shrink-0">{line.num || ""}</span>
+                        <span className="w-3.5 select-none opacity-45 shrink-0">{line.type === "removed" ? "-" : ""}</span>
                         <span className="whitespace-pre truncate">{line.text}</span>
                       </div>
                     ))}
@@ -357,22 +360,22 @@ export default function DiffCheckerClient() {
                 </Card>
 
                 {/* Right Pane (Modified / Added) */}
-                <Card className="overflow-hidden border border-zinc-100 dark:border-zinc-800 rounded-3xl bg-zinc-50 dark:bg-zinc-950/20">
-                  <div className="p-4 bg-zinc-100 dark:bg-zinc-900 border-b text-xs font-black text-muted-foreground uppercase">Modified Pane</div>
-                  <div className="p-4 font-mono text-xs overflow-x-auto leading-relaxed divide-y divide-zinc-100 dark:divide-zinc-800/20 max-h-[500px] overflow-y-auto">
+                <Card className="overflow-hidden border-2 rounded-2xl bg-card">
+                  <div className="p-3 bg-muted/40 border-b text-xs font-black text-muted-foreground uppercase">Modified Pane</div>
+                  <div className="p-3 font-mono text-xs overflow-x-auto leading-relaxed divide-y divide-border/20 max-h-[460px] overflow-y-auto">
                     {diffResult.right.map((line, idx) => (
                       <div
                         key={idx}
-                        className={`flex gap-3 py-1.5 px-2 select-text ${
+                        className={`flex gap-2.5 py-1 px-1.5 select-text rounded-xs ${
                           line.type === "added"
                             ? "bg-green-500/10 text-green-700 dark:text-green-400 font-bold"
                             : line.type === "empty"
-                            ? "bg-zinc-100/50 dark:bg-zinc-900/30 opacity-20 select-none"
-                            : "text-zinc-600 dark:text-zinc-400"
+                            ? "bg-muted/20 opacity-20 select-none"
+                            : "text-muted-foreground"
                         }`}
                       >
-                        <span className="w-8 select-none opacity-40 font-bold text-right shrink-0">{line.num || ""}</span>
-                        <span className="w-4 select-none opacity-45 shrink-0">{line.type === "added" ? "+" : ""}</span>
+                        <span className="w-7 select-none opacity-40 font-bold text-right shrink-0">{line.num || ""}</span>
+                        <span className="w-3.5 select-none opacity-45 shrink-0">{line.type === "added" ? "+" : ""}</span>
                         <span className="whitespace-pre truncate">{line.text}</span>
                       </div>
                     ))}
@@ -381,23 +384,23 @@ export default function DiffCheckerClient() {
               </div>
             ) : (
               /* Unified View */
-              <Card className="overflow-hidden border border-zinc-100 dark:border-zinc-800 rounded-3xl bg-zinc-50 dark:bg-zinc-950/20">
-                <div className="p-4 bg-zinc-100 dark:bg-zinc-900 border-b text-xs font-black text-muted-foreground uppercase">Unified Timeline</div>
-                <div className="p-4 font-mono text-xs overflow-x-auto leading-relaxed divide-y divide-zinc-100 dark:divide-zinc-800/20 max-h-[500px] overflow-y-auto">
+              <Card className="overflow-hidden border-2 rounded-2xl bg-card">
+                <div className="p-3 bg-muted/40 border-b text-xs font-black text-muted-foreground uppercase">Unified Timeline</div>
+                <div className="p-3 font-mono text-xs overflow-x-auto leading-relaxed divide-y divide-border/20 max-h-[460px] overflow-y-auto">
                   {diffResult.unified.map((line, idx) => (
                     <div
                       key={idx}
-                      className={`flex gap-3 py-1.5 px-2 select-text ${
+                      className={`flex gap-2.5 py-1 px-1.5 select-text rounded-xs ${
                         line.type === "added"
                           ? "bg-green-500/10 text-green-700 dark:text-green-400 font-bold"
                           : line.type === "removed"
                           ? "bg-red-500/10 text-red-700 dark:text-red-400 font-bold"
-                          : "text-zinc-600 dark:text-zinc-400"
+                          : "text-muted-foreground"
                       }`}
                     >
                       <span className="w-6 select-none opacity-40 text-right shrink-0">{line.oldNum || ""}</span>
                       <span className="w-6 select-none opacity-40 text-right shrink-0">{line.newNum || ""}</span>
-                      <span className="w-4 select-none opacity-45 shrink-0">
+                      <span className="w-3.5 select-none opacity-45 shrink-0">
                         {line.type === "added" ? "+" : line.type === "removed" ? "-" : ""}
                       </span>
                       <span className="whitespace-pre truncate">{line.text}</span>

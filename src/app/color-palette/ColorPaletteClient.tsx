@@ -326,18 +326,18 @@ export default function ColorPaletteClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-10 text-left">
-        {/* Core Generator Card */}
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
-            <div className="flex flex-wrap gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-xl">
+      <div className="w-full max-w-6xl mx-auto space-y-4 text-left">
+        {/* Core Generator Card & Controls */}
+        <div className="space-y-4">
+          <Card className="p-3 sm:p-4 rounded-2xl border-2 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 bg-card shadow-xs">
+            <div className="flex flex-wrap gap-1.5 p-1 bg-muted/50 rounded-xl">
               {["random", "monochromatic", "analogous", "triadic", "complementary"].map((type) => (
                 <Button
                   key={type}
                   variant={schemeType === type ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setSchemeType(type)}
-                  className="rounded-lg text-xs font-black capitalize"
+                  className="h-8 rounded-lg text-xs font-bold capitalize px-2.5"
                 >
                   {type}
                 </Button>
@@ -345,17 +345,17 @@ export default function ColorPaletteClient({
             </div>
 
             {/* Copy Format Tabs Selector */}
-            <div className="flex items-center gap-2 self-end">
+            <div className="flex items-center gap-2 self-end md:self-center">
               <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest hidden sm:inline-block">Format:</span>
-              <div className="flex bg-zinc-100 dark:bg-zinc-900 rounded-xl p-1 gap-1">
+              <div className="flex bg-muted/50 rounded-xl p-1 gap-1">
                 {["hex", "rgb", "hsl"].map((fmt) => (
                   <button
                     key={fmt}
                     onClick={() => setCopyFormat(fmt as "hex" | "rgb" | "hsl")}
-                    className={`px-3 py-1.5 text-xs font-black rounded-lg uppercase transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs font-bold rounded-lg uppercase transition-all cursor-pointer ${
                       copyFormat === fmt
-                        ? "bg-primary text-primary-foreground shadow-sm"
-                        : "text-zinc-500 hover:text-foreground hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                        ? "bg-primary text-primary-foreground shadow-xs"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     }`}
                   >
                     {fmt}
@@ -364,15 +364,15 @@ export default function ColorPaletteClient({
               </div>
             </div>
 
-            <div className="flex gap-3 self-end">
-              <Button onClick={generatePalette} className="rounded-xl shadow-md font-bold px-5 h-11">
-                <RefreshCw className="mr-2 h-4 w-4" /> Generate <span className="hidden sm:inline ml-1 text-xs opacity-75 font-normal">(or press Space)</span>
+            <div className="flex gap-2 self-end md:self-center">
+              <Button onClick={generatePalette} className="rounded-xl shadow-xs font-bold px-4 h-9 text-xs">
+                <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Generate <span className="hidden sm:inline ml-1 text-[11px] opacity-75 font-normal">(Space)</span>
               </Button>
             </div>
-          </div>
+          </Card>
 
           {/* Palette Blocks */}
-          <div className="grid grid-cols-1 sm:grid-cols-5 h-[350px] sm:h-[220px] rounded-3xl overflow-hidden shadow-lg border border-zinc-100 dark:border-zinc-800">
+          <div className="grid grid-cols-1 sm:grid-cols-5 h-[300px] sm:h-[180px] rounded-2xl overflow-hidden shadow-xs border-2">
             {colors.map((color, idx) => {
               // Decide text color (black or white) based on background luminance
               const rgb = hexToRgb(color.hex) || { r: 0, g: 0, b: 0 };
@@ -391,7 +391,7 @@ export default function ColorPaletteClient({
               return (
                 <div
                   key={idx}
-                  className="relative flex sm:flex-col justify-between items-center p-6 h-full transition-all duration-300"
+                  className="relative flex sm:flex-col justify-between items-center p-4 sm:p-5 h-full transition-all duration-300"
                   style={{ backgroundColor: color.hex }}
                 >
                   {/* Lock icon */}
@@ -399,16 +399,16 @@ export default function ColorPaletteClient({
                     variant="ghost"
                     size="icon"
                     onClick={() => toggleLock(idx)}
-                    className={`rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${textClass}`}
+                    className={`h-8 w-8 rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${textClass}`}
                   >
-                    {color.locked ? <Lock className="h-5 w-5" /> : <Unlock className="h-5 w-5 opacity-40 hover:opacity-100" />}
+                    {color.locked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4 opacity-40 hover:opacity-100" />}
                   </Button>
 
                   {/* Format color display */}
-                  <div className="flex flex-col items-center sm:items-center max-w-full px-2 overflow-hidden text-center">
+                  <div className="flex flex-col items-center sm:items-center max-w-full px-1 overflow-hidden text-center">
                     <span
                       onClick={() => copyToClipboard(formattedVal)}
-                      className={`font-mono font-black text-sm tracking-tight cursor-pointer hover:scale-105 duration-200 transition-transform ${textClass} break-all select-all`}
+                      className={`font-mono font-black text-xs sm:text-sm tracking-tight cursor-pointer hover:scale-105 duration-200 transition-transform ${textClass} break-all select-all`}
                     >
                       {formattedVal}
                     </span>
@@ -419,7 +419,7 @@ export default function ColorPaletteClient({
                     value={formattedVal}
                     size="icon"
                     variant="ghost"
-                    className={`rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${textClass}`}
+                    className={`h-8 w-8 rounded-full hover:bg-black/10 dark:hover:bg-white/10 ${textClass}`}
                     title="Copy Color Value"
                   />
                 </div>
@@ -429,19 +429,19 @@ export default function ColorPaletteClient({
         </div>
 
         {/* Accessibility & Export row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
           {/* Contrast Ratio Check */}
-          <Card className="p-6 border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/20 rounded-3xl space-y-6 scroll-mt-24">
-            <h3 className="text-md font-bold flex items-center gap-2 border-b pb-3">
-              <Sparkles className="h-5 w-5 text-primary" /> WCAG Contrast Checker
+          <Card className="p-4 sm:p-5 border-2 bg-card rounded-2xl space-y-4 shadow-xs scroll-mt-24">
+            <h3 className="text-xs font-black flex items-center gap-1.5 border-b pb-2 uppercase tracking-wider text-muted-foreground">
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> WCAG Contrast Checker
             </h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Text Color</label>
-                <div className="flex gap-2">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Text Color</label>
+                <div className="flex gap-2 items-center">
                   <input
                     type="color"
-                    className="w-10 h-10 p-0.5 rounded-lg border cursor-pointer"
+                    className="w-8 h-8 p-0.5 rounded-lg border cursor-pointer shrink-0"
                     value={textContrastColor}
                     onChange={(e) => setTextContrastColor(e.target.value)}
                   />
@@ -453,12 +453,12 @@ export default function ColorPaletteClient({
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Background</label>
-                <div className="flex gap-2">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Background</label>
+                <div className="flex gap-2 items-center">
                   <input
                     type="color"
-                    className="w-10 h-10 p-0.5 rounded-lg border cursor-pointer"
+                    className="w-8 h-8 p-0.5 rounded-lg border cursor-pointer shrink-0"
                     value={bgContrastColor}
                     onChange={(e) => setBgContrastColor(e.target.value)}
                   />
@@ -474,29 +474,29 @@ export default function ColorPaletteClient({
 
             {/* Live Text Demo Box */}
             <div
-              className="p-4 rounded-2xl border text-center transition-colors font-medium"
+              className="p-3 rounded-xl border text-center transition-colors font-medium"
               style={{ color: textContrastColor, backgroundColor: bgContrastColor }}
             >
-              <div className="text-base font-bold">This is a demonstration of Contrast</div>
-              <div className="text-xs opacity-80 mt-1">Make sure it is readable for AA/AAA standards</div>
+              <div className="text-sm font-bold">Contrast Preview Sample</div>
+              <div className="text-[11px] opacity-80 mt-0.5">Ensure text readability meets AA & AAA standards</div>
             </div>
 
             {/* Results Grid */}
-            <div className="grid grid-cols-2 gap-4 text-xs font-bold">
-              <div className="p-3 bg-white dark:bg-zinc-900 border rounded-xl flex flex-col justify-center items-center">
-                <span className="text-muted-foreground">Contrast Ratio</span>
-                <span className="text-xl font-black font-mono mt-1 text-primary">{contrastRatio.toFixed(2)} : 1</span>
+            <div className="grid grid-cols-2 gap-3 text-xs font-bold">
+              <div className="p-2.5 bg-muted/40 border rounded-xl flex flex-col justify-center items-center">
+                <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">Contrast Ratio</span>
+                <span className="text-lg font-black font-mono mt-0.5 text-primary">{contrastRatio.toFixed(2)} : 1</span>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5 justify-center flex flex-col">
                 <div className="flex justify-between items-center">
-                  <span>Normal Text:</span>
-                  <span className={`px-2 py-0.5 rounded font-black text-[10px] ${wcagNormalAA ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                  <span className="text-xs">Normal Text:</span>
+                  <span className={`px-2 py-0.5 rounded font-black text-[9px] ${wcagNormalAA ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300" : "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300"}`}>
                     {wcagNormalAA ? "AA PASS" : "AA FAIL"}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span>Large Text:</span>
-                  <span className={`px-2 py-0.5 rounded font-black text-[10px] ${wcagLargeAAA ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                  <span className="text-xs">Large Text:</span>
+                  <span className={`px-2 py-0.5 rounded font-black text-[9px] ${wcagLargeAAA ? "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300" : "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300"}`}>
                     {wcagLargeAAA ? "AAA PASS" : "AAA FAIL"}
                   </span>
                 </div>
@@ -505,18 +505,18 @@ export default function ColorPaletteClient({
           </Card>
 
           {/* Export Formats */}
-          <Card className="p-6 border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/20 rounded-3xl space-y-6">
-            <h3 className="text-md font-bold flex items-center gap-2 border-b pb-3">
-              <Code className="h-5 w-5 text-primary" /> Export Palette
+          <Card className="p-4 sm:p-5 border-2 bg-card rounded-2xl space-y-4 shadow-xs">
+            <h3 className="text-xs font-black flex items-center gap-1.5 border-b pb-2 uppercase tracking-wider text-muted-foreground">
+              <Code className="h-3.5 w-3.5 text-primary" /> Export Palette
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Export your hex colors directly into your developer templates or configuration layouts.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Button onClick={exportAsCSS} className="rounded-xl h-11 font-bold" variant="outline">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <Button onClick={exportAsCSS} className="rounded-xl h-10 font-bold text-xs shadow-xs" variant="outline">
                 CSS Variables
               </Button>
-              <Button onClick={exportAsJSON} className="rounded-xl h-11 font-bold" variant="outline">
+              <Button onClick={exportAsJSON} className="rounded-xl h-10 font-bold text-xs shadow-xs" variant="outline">
                 JSON Object
               </Button>
               <Button
@@ -524,7 +524,7 @@ export default function ColorPaletteClient({
                   const format = colors.map((c, i) => `paletteColor${i + 1}: '${c.hex}',`).join("\n");
                   copyToClipboard(format);
                 }}
-                className="rounded-xl h-11 font-bold sm:col-span-2"
+                className="rounded-xl h-10 font-bold text-xs sm:col-span-2 shadow-xs"
                 variant="outline"
               >
                 Tailwind Config Theme

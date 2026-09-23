@@ -371,17 +371,17 @@ export default function ImageCompressorClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-start text-left">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start text-left">
         {/* Left Column: Settings & Upload */}
-        <div className="lg:col-span-5 space-y-6">
-          <Card className="p-6 sm:p-8 bg-card border rounded-3xl space-y-6 shadow-sm">
-            <div className="space-y-3">
+        <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-4">
+          <Card className="p-4 sm:p-5 bg-card border-2 rounded-2xl space-y-4 shadow-xs">
+            <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label className="text-sm font-bold flex items-center gap-2 text-foreground">
-                  <Settings className="w-4 h-4 text-primary" />
+                <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-foreground">
+                  <Settings className="w-3.5 h-3.5 text-primary" />
                   {t.quality}: {quality[0]}%
                 </label>
-                <span className="text-xs font-semibold text-muted-foreground bg-muted px-2.5 py-0.5 rounded-full">
+                <span className="text-[11px] font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
                   {quality[0] < 50 ? t.highCompression : quality[0] < 80 ? t.balanced : t.highQuality}
                 </span>
               </div>
@@ -391,21 +391,21 @@ export default function ImageCompressorClient({
                 max={100}
                 min={10}
                 step={1}
-                className="py-3"
+                className="py-1.5"
               />
             </div>
 
-            <div className="space-y-3">
-              <label className="text-sm font-bold flex items-center gap-2 text-foreground">
-                <ImageIcon className="w-4 h-4 text-primary" />
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-foreground">
+                <ImageIcon className="w-3.5 h-3.5 text-primary" />
                 {t.outputFormat}
               </label>
               <Tabs value={format} onValueChange={(val) => setFormat(val as any)} className="w-full">
-                <TabsList className="grid grid-cols-4 w-full h-10 rounded-xl">
-                  <TabsTrigger value="original">Original</TabsTrigger>
-                  <TabsTrigger value="png">PNG</TabsTrigger>
-                  <TabsTrigger value="jpeg">JPEG</TabsTrigger>
-                  <TabsTrigger value="webp">WebP</TabsTrigger>
+                <TabsList className="grid grid-cols-4 w-full h-9 rounded-xl">
+                  <TabsTrigger value="original" className="text-xs">Original</TabsTrigger>
+                  <TabsTrigger value="png" className="text-xs">PNG</TabsTrigger>
+                  <TabsTrigger value="jpeg" className="text-xs">JPEG</TabsTrigger>
+                  <TabsTrigger value="webp" className="text-xs">WebP</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -420,7 +420,7 @@ export default function ImageCompressorClient({
               hideDownload={true}
             />
 
-            <div className="p-4 bg-muted/40 rounded-2xl border flex items-start gap-3 text-xs text-muted-foreground">
+            <div className="p-3 bg-muted/40 rounded-xl border flex items-start gap-2.5 text-xs text-muted-foreground">
               <AlertCircle className="w-4 h-4 text-primary shrink-0 mt-0.5" />
               <p className="leading-relaxed">
                 {t.batchNotice}
@@ -429,49 +429,49 @@ export default function ImageCompressorClient({
           </Card>
 
           {/* Quick Metrics Badges */}
-          <div className="grid grid-cols-2 gap-3">
-            <Card className="p-4 bg-card/60 border rounded-2xl flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
-                <Minimize2 className="h-5 w-5" />
+          <div className="grid grid-cols-2 gap-2.5">
+            <Card className="p-3 bg-card/60 border-2 rounded-xl flex items-center gap-2.5 shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                <Minimize2 className="h-4 w-4" />
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-medium">{t.sizeReduction}</p>
-                <p className="text-sm font-bold text-foreground">{t.upTo85}</p>
+              <div className="min-w-0">
+                <p className="text-[11px] text-muted-foreground font-medium truncate">{t.sizeReduction}</p>
+                <p className="text-xs font-bold text-foreground">{t.upTo85}</p>
               </div>
             </Card>
-            <Card className="p-4 bg-card/60 border rounded-2xl flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                <Layers className="h-5 w-5" />
+            <Card className="p-3 bg-card/60 border-2 rounded-xl flex items-center gap-2.5 shadow-xs">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <Layers className="h-4 w-4" />
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground font-medium">{t.batchQueue}</p>
-                <p className="text-sm font-bold text-foreground">{t.zipExport}</p>
+              <div className="min-w-0">
+                <p className="text-[11px] text-muted-foreground font-medium truncate">{t.batchQueue}</p>
+                <p className="text-xs font-bold text-foreground">{t.zipExport}</p>
               </div>
             </Card>
           </div>
         </div>
 
         {/* Right Column: Interactive Results & Batch Queue */}
-        <div ref={resultsRef} className="lg:col-span-7 space-y-6">
+        <div ref={resultsRef} className="lg:col-span-7 space-y-4 scroll-mt-24">
           {isLoading ? (
-            <Card className="h-[460px] flex flex-col items-center justify-center p-8 text-center border-primary/20 bg-primary/5 rounded-3xl">
-              <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 text-primary animate-pulse">
-                <Loader2 className="h-10 w-10 animate-spin" />
+            <Card className="h-[380px] flex flex-col items-center justify-center p-6 text-center border-2 border-primary/20 bg-primary/5 rounded-2xl">
+              <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary animate-pulse">
+                <Loader2 className="h-8 w-8 animate-spin" />
               </div>
-              <h3 className="text-2xl font-black mb-2 text-foreground">{t.compressingTitle}</h3>
-              <p className="text-sm text-muted-foreground max-w-sm">
+              <h3 className="text-xl font-black mb-1.5 text-foreground">{t.compressingTitle}</h3>
+              <p className="text-xs text-muted-foreground max-w-sm">
                 {t.compressingDesc}
               </p>
             </Card>
           ) : items.length > 0 ? (
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Batch Summary Bar */}
-              <Card className="p-6 bg-card border rounded-3xl flex flex-wrap items-center justify-between gap-4 shadow-sm">
+              <Card className="p-4 sm:p-5 bg-card border-2 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-green-500 flex items-center gap-1.5 mb-1">
-                    <Zap className="h-3.5 w-3.5" /> {t.batchComplete}
+                  <span className="text-[11px] font-black uppercase tracking-wider text-green-500 flex items-center gap-1 mb-0.5">
+                    <Zap className="h-3 w-3" /> {t.batchComplete}
                   </span>
-                  <h3 className="text-xl font-black text-foreground">
+                  <h3 className="text-lg font-black text-foreground">
                     {items.filter((i) => i.status === "done").length} {t.imagesCompressed}
                   </h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
@@ -484,7 +484,7 @@ export default function ImageCompressorClient({
                     variant="outline"
                     size="sm"
                     onClick={handleClear}
-                    className="rounded-xl text-xs gap-1"
+                    className="rounded-xl text-xs gap-1 h-9"
                   >
                     <Trash2 className="h-3.5 w-3.5" /> {t.clearAll}
                   </Button>
@@ -492,7 +492,7 @@ export default function ImageCompressorClient({
                     onClick={handleDownloadAllZip}
                     disabled={isZipping}
                     size="sm"
-                    className="rounded-xl font-bold text-xs gap-1.5 shadow-md"
+                    className="rounded-xl font-bold text-xs gap-1.5 shadow-sm h-9"
                   >
                     {isZipping ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Archive className="h-3.5 w-3.5" />}
                     {t.downloadZip}
@@ -504,8 +504,8 @@ export default function ImageCompressorClient({
               {selectedItem && selectedItem.compressedUrl && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-bold text-muted-foreground px-1">
-                    <span>{t.interactiveComparison}: {selectedItem.name}</span>
-                    <span className="text-green-500 font-bold">-{selectedItem.savingsPercent}% {t.smaller}</span>
+                    <span className="truncate max-w-[260px] sm:max-w-none">{t.interactiveComparison}: {selectedItem.name}</span>
+                    <span className="text-green-500 font-bold shrink-0">-{selectedItem.savingsPercent}% {t.smaller}</span>
                   </div>
                   <BeforeAfterSlider
                     beforeImage={selectedItem.originalUrl}
@@ -518,34 +518,34 @@ export default function ImageCompressorClient({
               )}
 
               {/* Batch Queue List */}
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <h4 className="text-xs font-black uppercase tracking-wider text-muted-foreground px-1">
                   {t.queueItems} ({items.length})
                 </h4>
-                <div className="space-y-2.5 max-h-[360px] overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
                   {items.map((item) => (
                     <Card
                       key={item.id}
                       onClick={() => setSelectedItemId(item.id)}
                       className={cn(
-                        "p-4 rounded-2xl border transition-all flex items-center justify-between gap-4 cursor-pointer hover:border-primary/50",
-                        selectedItemId === item.id ? "border-primary bg-primary/5 shadow-sm" : "bg-card"
+                        "p-3 rounded-xl border-2 transition-all flex items-center justify-between gap-3 cursor-pointer hover:border-primary/50",
+                        selectedItemId === item.id ? "border-primary bg-primary/5 shadow-xs" : "bg-card"
                       )}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <img
                           src={item.originalUrl}
                           alt={item.name}
-                          className="w-12 h-12 rounded-xl object-cover border shrink-0 bg-zinc-100 dark:bg-zinc-900"
+                          className="w-10 h-10 rounded-lg object-cover border shrink-0 bg-zinc-100 dark:bg-zinc-900"
                         />
                         <div className="min-w-0">
-                          <p className="font-bold text-sm text-foreground truncate">{item.name}</p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <p className="font-bold text-xs text-foreground truncate">{item.name}</p>
+                          <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                             <span>{item.originalSizeFormatted}</span>
                             <span>→</span>
                             <span className="font-bold text-green-500">{item.compressedSizeFormatted || "..."}</span>
                             {item.savingsPercent !== undefined && (
-                              <span className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-500 font-black text-[10px]">
+                              <span className="px-1.5 py-0.2 rounded bg-green-500/10 text-green-500 font-black text-[10px]">
                                 -{item.savingsPercent}%
                               </span>
                             )}
@@ -563,8 +563,8 @@ export default function ImageCompressorClient({
                               triggerConfetti();
                             }}
                           >
-                            <Button size="sm" variant="outline" className="rounded-xl h-9 px-3 text-xs font-bold gap-1.5">
-                              <Download className="h-3.5 w-3.5" /> {t.download}
+                            <Button size="sm" variant="outline" className="rounded-lg h-8 px-2.5 text-xs font-bold gap-1">
+                              <Download className="h-3 w-3" /> {t.download}
                             </Button>
                           </a>
                         )}
@@ -575,15 +575,15 @@ export default function ImageCompressorClient({
               </div>
             </div>
           ) : (
-            <Card className="h-[460px] flex flex-col items-center justify-center p-8 text-center border-2 border-dashed bg-card rounded-3xl">
-              <div className="w-20 h-20 rounded-3xl bg-muted/60 flex items-center justify-center mb-6">
-                <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
+            <Card className="h-[380px] flex flex-col items-center justify-center p-6 text-center border-2 border-dashed bg-card rounded-2xl">
+              <div className="w-16 h-16 rounded-2xl bg-muted/60 flex items-center justify-center mb-4">
+                <ImageIcon className="h-8 w-8 text-muted-foreground/40" />
               </div>
-              <h3 className="text-2xl font-black mb-2 text-foreground">{t.emptyTitle}</h3>
-              <p className="text-sm text-muted-foreground max-w-md leading-relaxed mb-6">
+              <h3 className="text-xl font-black mb-1.5 text-foreground">{t.emptyTitle}</h3>
+              <p className="text-xs text-muted-foreground max-w-md leading-relaxed mb-4">
                 {t.emptyDesc}
               </p>
-              <div className="inline-flex items-center gap-2 text-xs font-bold text-primary bg-primary/10 px-4 py-2 rounded-full">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 px-3.5 py-1.5 rounded-full">
                 <ArrowRight className="h-3.5 w-3.5" /> {t.emptyCta}
               </div>
             </Card>

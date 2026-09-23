@@ -258,46 +258,46 @@ export default function MarkdownToPdfClient() {
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-7xl mx-auto space-y-8">
+      <div className="w-full max-w-7xl mx-auto space-y-4 text-left">
         
         {/* Workspace Toolbar Controls */}
-        <Card className="p-4 rounded-3xl flex flex-wrap gap-4 items-center justify-between shadow-sm bg-card border-2">
+        <Card className="p-3 sm:p-3.5 rounded-2xl flex flex-wrap gap-3 items-center justify-between shadow-xs bg-card border-2">
           {/* Left Side: View Modes */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-black uppercase text-muted-foreground mr-2 tracking-wider">Workspace:</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase text-muted-foreground mr-1 tracking-wider">View:</span>
             <Button 
               variant={viewMode === "split" ? "default" : "outline"}
               size="sm"
               onClick={() => setViewMode("split")}
-              className="h-9 px-3 rounded-xl gap-1.5"
+              className="h-8 px-2.5 rounded-lg gap-1.5"
             >
-              <Columns className="h-4 w-4" />
-              <span className="hidden sm:inline text-xs font-bold">Split View</span>
+              <Columns className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline text-xs font-bold">Split</span>
             </Button>
             <Button 
               variant={viewMode === "editor" ? "default" : "outline"}
               size="sm"
               onClick={() => setViewMode("editor")}
-              className="h-9 px-3 rounded-xl gap-1.5"
+              className="h-8 px-2.5 rounded-lg gap-1.5"
             >
-              <Edit3 className="h-4 w-4" />
-              <span className="hidden sm:inline text-xs font-bold">Editor Only</span>
+              <Edit3 className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline text-xs font-bold">Editor</span>
             </Button>
             <Button 
               variant={viewMode === "preview" ? "default" : "outline"}
               size="sm"
               onClick={() => setViewMode("preview")}
-              className="h-9 px-3 rounded-xl gap-1.5"
+              className="h-8 px-2.5 rounded-lg gap-1.5"
             >
-              <Eye className="h-4 w-4" />
-              <span className="hidden sm:inline text-xs font-bold">Preview Only</span>
+              <Eye className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline text-xs font-bold">Preview</span>
             </Button>
           </div>
 
           {/* Center: Template Styles */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-black uppercase text-muted-foreground mr-2 tracking-wider">Template Style:</span>
-            <div className="flex gap-1.5 bg-zinc-50 dark:bg-zinc-900 p-1 rounded-2xl border">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase text-muted-foreground mr-1 tracking-wider">Style:</span>
+            <div className="flex gap-1 bg-zinc-50 dark:bg-zinc-900 p-0.5 rounded-xl border">
               {themes.map((t) => (
                 <button
                   key={t.id}
@@ -306,9 +306,9 @@ export default function MarkdownToPdfClient() {
                     setResult(null);
                   }}
                   className={cn(
-                    "px-3 h-8 text-[11px] font-black uppercase tracking-wider rounded-xl transition-all",
+                    "px-2.5 h-7 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all",
                     activeTheme === t.id 
-                      ? "bg-white dark:bg-zinc-950 text-primary shadow-sm"
+                      ? "bg-white dark:bg-zinc-950 text-primary shadow-xs"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -319,7 +319,7 @@ export default function MarkdownToPdfClient() {
           </div>
 
           {/* Right Side: Quick Action utilities */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <Button 
               variant="outline" 
               size="icon" 
@@ -329,9 +329,9 @@ export default function MarkdownToPdfClient() {
                 toast.info("Sample template loaded!");
               }}
               title="Reload sample markdown"
-              className="h-9 w-9 rounded-xl"
+              className="h-8 w-8 rounded-lg"
             >
-              <BookOpen className="h-4 w-4" />
+              <BookOpen className="h-3.5 w-3.5" />
             </Button>
             <Button 
               variant="outline" 
@@ -342,33 +342,33 @@ export default function MarkdownToPdfClient() {
                 toast.info("Workspace cleared!");
               }}
               title="Clear editor"
-              className="h-9 w-9 text-destructive rounded-xl hover:bg-destructive/5"
+              className="h-8 w-8 text-destructive rounded-lg hover:bg-destructive/5"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-3.5 w-3.5" />
             </Button>
           </div>
         </Card>
 
         {/* Workspace Panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
           
           {/* Left Column: Markdown Editor */}
           <Card className={cn(
-            "rounded-[2.5rem] overflow-hidden bg-card shadow-xl transition-all duration-300 border-2",
+            "rounded-2xl overflow-hidden bg-card shadow-xs transition-all duration-300 border-2",
             viewMode === "editor" ? "lg:col-span-12" : viewMode === "preview" ? "hidden" : "lg:col-span-6"
           )}>
-            <CardHeader className="border-b px-8 py-6 flex flex-row items-center justify-between">
+            <CardHeader className="border-b px-4 py-2.5 flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-black tracking-tight">Markdown Compose Panel</CardTitle>
-                <CardDescription className="text-xs">Type raw markdown with standard headers, tables, and lists</CardDescription>
+                <CardTitle className="text-sm font-bold tracking-tight">Markdown Compose Panel</CardTitle>
+                <CardDescription className="text-[11px]">Type raw markdown with standard headers, tables, and lists</CardDescription>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider">
+              <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider">
                 <FileCode className="h-3 w-3" /> EDITOR
               </div>
             </CardHeader>
             <CardContent className="p-0 relative">
               <textarea
-                className="w-full min-h-[500px] h-[550px] p-8 font-mono text-[13px] leading-relaxed resize-y bg-zinc-50/30 dark:bg-zinc-950/20 text-foreground focus:outline-none placeholder:text-zinc-400 dark:placeholder:text-zinc-700"
+                className="w-full min-h-[420px] h-[480px] p-4 font-mono text-xs leading-relaxed resize-y bg-zinc-50/30 dark:bg-zinc-950/20 text-foreground focus:outline-none placeholder:text-zinc-400 dark:placeholder:text-zinc-700"
                 placeholder="# Compose your markdown document here..."
                 value={markdown}
                 onChange={(e) => {
@@ -381,24 +381,24 @@ export default function MarkdownToPdfClient() {
 
           {/* Right Column: Live A4 Simulation Preview */}
           <Card className={cn(
-            "rounded-[2.5rem] overflow-hidden bg-card shadow-inner min-h-[640px] flex flex-col transition-all duration-300 border-2",
+            "rounded-2xl overflow-hidden bg-card shadow-inner min-h-[480px] flex flex-col transition-all duration-300 border-2",
             viewMode === "preview" ? "lg:col-span-12" : viewMode === "editor" ? "hidden" : "lg:col-span-6"
           )}>
-            <CardHeader className="border-b bg-white dark:bg-zinc-950/50 px-8 py-6 flex flex-row items-center justify-between">
+            <CardHeader className="border-b bg-white dark:bg-zinc-950/50 px-4 py-2.5 flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-black tracking-tight">Live A4 Preview</CardTitle>
-                <CardDescription className="text-xs">Approximate rendered formatting of your print layout</CardDescription>
+                <CardTitle className="text-sm font-bold tracking-tight">Live A4 Preview</CardTitle>
+                <CardDescription className="text-[11px]">Approximate rendered formatting of your print layout</CardDescription>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase tracking-wider">
+              <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase tracking-wider">
                 <Eye className="h-3 w-3" /> PREVIEW
               </div>
             </CardHeader>
             
             {/* Scrollable Document Container */}
-            <CardContent className="p-8 flex-grow overflow-y-auto max-h-[550px] flex justify-center">
+            <CardContent className="p-4 flex-grow overflow-y-auto max-h-[480px] flex justify-center">
               {/* Simulated Page A4 */}
               <div className={cn(
-                "w-full max-w-[800px] shadow-lg rounded-2xl p-10 min-h-[500px] border border-zinc-200/50 overflow-x-auto",
+                "w-full max-w-[800px] shadow-sm rounded-xl p-6 min-h-[420px] border border-zinc-200/50 overflow-x-auto",
                 activeTheme === "default" && "bg-white theme-default",
                 activeTheme === "academic" && "bg-white theme-academic",
                 activeTheme === "developer" && "bg-zinc-950 theme-developer",
@@ -407,7 +407,7 @@ export default function MarkdownToPdfClient() {
                 {htmlContent ? (
                   <div ref={previewRef} dangerouslySetInnerHTML={{ __html: htmlContent }} />
                 ) : (
-                  <p className="text-muted-foreground italic text-center py-20 text-sm">No content composed to preview...</p>
+                  <p className="text-muted-foreground italic text-center py-20 text-xs">No content composed to preview...</p>
                 )}
               </div>
             </CardContent>
@@ -416,42 +416,42 @@ export default function MarkdownToPdfClient() {
         </div>
 
         {/* Generate / Action Area */}
-        <div ref={actionAreaRef} className="max-w-3xl mx-auto pt-6 scroll-mt-24">
+        <div ref={actionAreaRef} className="max-w-3xl mx-auto pt-2 scroll-mt-24 space-y-3">
           {isLoading ? (
-            <Card className="p-8 border-2 border-primary/20 bg-primary/5 rounded-[2.5rem] text-center shadow-lg animate-pulse">
-              <div className="relative mb-4 flex justify-center">
-                <RefreshCw className="h-12 w-12 text-primary animate-spin" />
-                <Sparkles className="h-6 w-6 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <Card className="p-6 border-2 border-primary/20 bg-primary/5 rounded-2xl text-center shadow-md animate-pulse">
+              <div className="relative mb-3 flex justify-center">
+                <RefreshCw className="h-10 w-10 text-primary animate-spin" />
+                <Sparkles className="h-5 w-5 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-xl font-black tracking-tight mb-1">Generating PDF...</h3>
+              <h3 className="text-lg font-black tracking-tight mb-1">Generating PDF...</h3>
               <p className="text-xs text-muted-foreground leading-relaxed font-medium">
-                Using Playwright headless Chromium for high-fidelity A4 rendering. This usually takes 3-10 seconds depending on size (first compile may take slightly longer).
+                Using Playwright headless Chromium for high-fidelity A4 rendering. This usually takes 3-10 seconds depending on size.
               </p>
             </Card>
           ) : result ? (
-            <Card className="p-8 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden animate-in fade-in slide-in-from-bottom-4">
-              <div className="absolute top-0 right-0 p-8 opacity-10">
-                <CheckCircle2 className="h-24 w-24 text-green-400" />
+            <Card className="p-6 bg-zinc-950 text-zinc-50 border-none shadow-xl rounded-2xl relative overflow-hidden animate-in fade-in slide-in-from-bottom-4">
+              <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
+                <CheckCircle2 className="h-20 w-20 text-green-400" />
               </div>
-              <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 justify-between">
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-4 justify-between">
                 <div className="text-center md:text-left">
-                  <div className="flex items-center justify-center md:justify-start gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-2">
-                    <Zap className="h-4 w-4" /> COMPILATION COMPLETE
+                  <div className="flex items-center justify-center md:justify-start gap-1.5 text-[11px] font-black uppercase tracking-[0.3em] text-green-500 mb-1">
+                    <Zap className="h-3.5 w-3.5" /> COMPILATION COMPLETE
                   </div>
-                  <h2 className="text-3xl font-black tracking-tight">Your PDF is ready!</h2>
-                  <p className="text-zinc-400 text-sm mt-1">{result.filename}</p>
+                  <h2 className="text-2xl font-black tracking-tight">Your PDF is ready!</h2>
+                  <p className="text-zinc-400 text-xs mt-0.5">{result.filename}</p>
                 </div>
                 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2.5">
                   <a href={result.url} download={result.filename}>
-                    <Button className="h-14 px-8 text-md font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                      <Download className="mr-2 h-5 w-5" /> Download PDF
+                    <Button className="h-11 px-6 text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all">
+                      <Download className="mr-2 h-4 w-4" /> Download PDF
                     </Button>
                   </a>
                   <Button 
                     variant="outline" 
                     onClick={() => setResult(null)} 
-                    className="h-14 px-6 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
+                    className="h-11 px-5 text-xs font-bold rounded-xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                   >
                     Modify Document
                   </Button>
@@ -459,20 +459,20 @@ export default function MarkdownToPdfClient() {
               </div>
             </Card>
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <Button 
                 onClick={handleTextConvert} 
-                className="w-full h-16 text-lg font-black rounded-2xl shadow-xl hover:-translate-y-0.5 hover:shadow-2xl transition-all"
+                className="w-full h-12 text-sm sm:text-base font-bold rounded-xl shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all"
                 disabled={isLoading}
               >
-                <Sparkles className="mr-2 h-5 w-5 animate-pulse" /> Compile & Generate A4 PDF
+                <Sparkles className="mr-2 h-4 w-4 animate-pulse" /> Compile & Generate A4 PDF
               </Button>
               
-              <div className="text-center py-4 text-xs text-muted-foreground">
+              <div className="text-center py-1 text-xs text-muted-foreground">
                 — OR —
               </div>
               
-              <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem]">
+              <Card className="p-4 sm:p-5 border-2 border-dashed bg-card rounded-2xl">
                 <FileUploader
                   label="Or Upload .md / .markdown file"
                   accept={{ "text/markdown": [".md", ".markdown"] }}

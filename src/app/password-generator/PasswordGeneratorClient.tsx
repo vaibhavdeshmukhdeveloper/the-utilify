@@ -204,184 +204,182 @@ export default function PasswordGeneratorClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
-        {/* Main controls */}
-        <div className="lg:col-span-8 space-y-8">
-          {/* Display box */}
-          <div className="relative flex items-center bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-3xl p-3 pl-6 pr-4 focus-within:border-primary transition-all shadow-sm scroll-mt-24">
+      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left">
+        {/* Left Column: Generator Controls */}
+        <div className="lg:col-span-7 space-y-4">
+          {/* Display Box */}
+          <div className="relative flex items-center bg-card border-2 rounded-2xl p-2 pl-4 pr-2 focus-within:border-primary transition-all shadow-xs scroll-mt-24">
             <input
               type="text"
               readOnly
               value={password}
               placeholder="Click generate..."
-              className="w-full bg-transparent border-none outline-none font-mono text-xl sm:text-2xl font-bold py-3 pr-12 text-zinc-950 dark:text-zinc-50"
+              className="w-full bg-transparent border-none outline-none font-mono text-lg sm:text-xl font-black py-2 pr-3 text-foreground"
             />
-            <div className="flex gap-2 shrink-0">
+            <div className="flex gap-1.5 shrink-0">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={generatePassword}
-                className="w-12 h-12 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 hover:text-zinc-900"
+                className="w-10 h-10 rounded-xl border hover:bg-muted"
                 title="Regenerate"
               >
-                <RefreshCw className="h-5 w-5" />
+                <RefreshCw className="h-4 w-4" />
               </Button>
               <CopyButton
                 value={password}
-                className="w-12 h-12 shadow-md animate-in fade-in"
+                className="w-10 h-10 shadow-xs"
                 size="icon"
                 title="Copy Password"
               />
             </div>
           </div>
 
-          {/* Password strength bar */}
-          <div className="bg-zinc-50 dark:bg-zinc-900 p-6 rounded-3xl space-y-3 border border-zinc-100 dark:border-zinc-800">
-            <div className="flex justify-between items-center text-sm font-bold">
-              <span className="text-muted-foreground flex items-center gap-1.5"><Shield className="h-4 w-4" /> Password Strength:</span>
-              <span className={`${strength.color}`}>{strength.label}</span>
+          {/* Password Strength Bar */}
+          <div className="bg-card p-3 sm:p-3.5 rounded-xl space-y-2 border">
+            <div className="flex justify-between items-center text-xs font-bold">
+              <span className="text-muted-foreground flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" /> Password Strength:</span>
+              <span className={`font-black ${strength.color}`}>{strength.label}</span>
             </div>
-            <div className="w-full h-3 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
               <div className={`h-full transition-all duration-300 ${strength.bg}`} style={{ width: `${strength.percent}%` }} />
             </div>
           </div>
 
-          {/* Customizations */}
-          <div className="space-y-6">
-            <div className="space-y-3">
-              <div className="flex justify-between font-bold text-sm text-muted-foreground">
-                <span>PASSWORD LENGTH</span>
-                <span className="text-primary font-mono text-lg">{length} Characters</span>
-              </div>
-              <div className="flex items-center gap-4 bg-zinc-50 dark:bg-zinc-900 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800">
-                <span className="font-mono text-xs text-muted-foreground">4</span>
-                <Slider
-                  value={[length]}
-                  onValueChange={(val) => setLength(Array.isArray(val) ? val[0] : val)}
-                  min={4}
-                  max={64}
-                  step={1}
-                  className="flex-grow py-4"
-                />
-                <span className="font-mono text-xs text-muted-foreground">64</span>
-              </div>
+          {/* Password Length Slider Card */}
+          <Card className="p-3.5 sm:p-4 rounded-xl border-2 bg-card space-y-2.5 shadow-xs">
+            <div className="flex justify-between font-bold text-xs text-muted-foreground">
+              <span className="uppercase tracking-wider">Password Length</span>
+              <span className="text-primary font-mono text-sm font-black">{length} Characters</span>
             </div>
-
-            {/* Checkboxes */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <label className="flex items-center gap-3 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={includeUpper}
-                  onChange={(e) => setIncludeUpper(e.target.checked)}
-                  className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary focus:ring-primary accent-primary"
-                />
-                <div className="text-left">
-                  <div className="font-bold text-sm">Uppercase Letters</div>
-                  <div className="text-xs text-muted-foreground">A-Z characters</div>
-                </div>
-              </label>
-
-              <label className="flex items-center gap-3 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={includeLower}
-                  onChange={(e) => setIncludeLower(e.target.checked)}
-                  className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary focus:ring-primary accent-primary"
-                />
-                <div className="text-left">
-                  <div className="font-bold text-sm">Lowercase Letters</div>
-                  <div className="text-xs text-muted-foreground">a-z characters</div>
-                </div>
-              </label>
-
-              <label className="flex items-center gap-3 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={includeNumbers}
-                  onChange={(e) => setIncludeNumbers(e.target.checked)}
-                  className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary focus:ring-primary accent-primary"
-                />
-                <div className="text-left">
-                  <div className="font-bold text-sm">Numbers</div>
-                  <div className="text-xs text-muted-foreground">0-9 digits</div>
-                </div>
-              </label>
-
-              <label className="flex items-center gap-3 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={includeSymbols}
-                  onChange={(e) => setIncludeSymbols(e.target.checked)}
-                  className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary focus:ring-primary accent-primary"
-                />
-                <div className="text-left">
-                  <div className="font-bold text-sm">Symbols</div>
-                  <div className="text-xs text-muted-foreground">Special characters</div>
-                </div>
-              </label>
-
-              <label className="sm:col-span-2 flex items-center gap-3 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 cursor-pointer transition-colors">
-                <input
-                  type="checkbox"
-                  checked={excludeSimilar}
-                  onChange={(e) => setExcludeSimilar(e.target.checked)}
-                  className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary focus:ring-primary accent-primary"
-                />
-                <div className="text-left">
-                  <div className="font-bold text-sm">Exclude Similar Characters</div>
-                  <div className="text-xs text-muted-foreground">Avoids confusable letters like (1, l, I, 0, O)</div>
-                </div>
-              </label>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] text-muted-foreground">4</span>
+              <Slider
+                value={[length]}
+                onValueChange={(val) => setLength(Array.isArray(val) ? val[0] : val)}
+                min={4}
+                max={64}
+                step={1}
+                className="flex-grow py-2"
+              />
+              <span className="font-mono text-[10px] text-muted-foreground">64</span>
             </div>
+          </Card>
 
-            <Button
-              type="button"
-              onClick={() => copyShareUrl({
-                length,
-                upper: includeUpper ? "true" : "false",
-                lower: includeLower ? "true" : "false",
-                numbers: includeNumbers ? "true" : "false",
-                symbols: includeSymbols ? "true" : "false",
-                excludeSimilar: excludeSimilar ? "true" : undefined,
-              }, "Password Preset")}
-              variant="outline"
-              size="sm"
-              className="w-full rounded-2xl border-2 font-bold h-12 text-primary border-primary/30 hover:bg-primary/5"
-            >
-              <Share2 className="h-4 w-4 mr-2" /> Share Password Preset URL
-            </Button>
+          {/* Character Checkboxes (Compact Grid) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <label className="flex items-center gap-2.5 p-3 rounded-xl bg-card hover:bg-muted/40 border-2 cursor-pointer transition-colors shadow-xs">
+              <input
+                type="checkbox"
+                checked={includeUpper}
+                onChange={(e) => setIncludeUpper(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary"
+              />
+              <div className="text-left">
+                <div className="font-bold text-xs">Uppercase Letters</div>
+                <div className="text-[10px] text-muted-foreground">A-Z characters</div>
+              </div>
+            </label>
+
+            <label className="flex items-center gap-2.5 p-3 rounded-xl bg-card hover:bg-muted/40 border-2 cursor-pointer transition-colors shadow-xs">
+              <input
+                type="checkbox"
+                checked={includeLower}
+                onChange={(e) => setIncludeLower(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary"
+              />
+              <div className="text-left">
+                <div className="font-bold text-xs">Lowercase Letters</div>
+                <div className="text-[10px] text-muted-foreground">a-z characters</div>
+              </div>
+            </label>
+
+            <label className="flex items-center gap-2.5 p-3 rounded-xl bg-card hover:bg-muted/40 border-2 cursor-pointer transition-colors shadow-xs">
+              <input
+                type="checkbox"
+                checked={includeNumbers}
+                onChange={(e) => setIncludeNumbers(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary"
+              />
+              <div className="text-left">
+                <div className="font-bold text-xs">Numbers</div>
+                <div className="text-[10px] text-muted-foreground">0-9 digits</div>
+              </div>
+            </label>
+
+            <label className="flex items-center gap-2.5 p-3 rounded-xl bg-card hover:bg-muted/40 border-2 cursor-pointer transition-colors shadow-xs">
+              <input
+                type="checkbox"
+                checked={includeSymbols}
+                onChange={(e) => setIncludeSymbols(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary"
+              />
+              <div className="text-left">
+                <div className="font-bold text-xs">Symbols</div>
+                <div className="text-[10px] text-muted-foreground">!@#$%^&*()_+</div>
+              </div>
+            </label>
+
+            <label className="sm:col-span-2 flex items-center gap-2.5 p-3 rounded-xl bg-card hover:bg-muted/40 border-2 cursor-pointer transition-colors shadow-xs">
+              <input
+                type="checkbox"
+                checked={excludeSimilar}
+                onChange={(e) => setExcludeSimilar(e.target.checked)}
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary"
+              />
+              <div className="text-left">
+                <div className="font-bold text-xs">Exclude Similar Characters</div>
+                <div className="text-[10px] text-muted-foreground">Avoids confusable characters (1, l, I, 0, O)</div>
+              </div>
+            </label>
           </div>
+
+          <Button
+            type="button"
+            onClick={() => copyShareUrl({
+              length,
+              upper: includeUpper ? "true" : "false",
+              lower: includeLower ? "true" : "false",
+              numbers: includeNumbers ? "true" : "false",
+              symbols: includeSymbols ? "true" : "false",
+              excludeSimilar: excludeSimilar ? "true" : undefined,
+            }, "Password Preset")}
+            variant="outline"
+            size="sm"
+            className="w-full rounded-xl border-2 font-bold h-10 text-primary border-primary/30 hover:bg-primary/5"
+          >
+            <Share2 className="h-4 w-4 mr-2" /> Share Password Preset Link
+          </Button>
         </div>
 
-        {/* History column */}
-        <div className="lg:col-span-4 space-y-6">
-          <Card className="p-6 border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/20 rounded-3xl">
-            <h3 className="text-lg font-bold flex items-center gap-2 mb-4 border-b pb-3">
-              <List className="h-5 w-5 text-primary" /> Session History
+        {/* Right Column: Session History (Sticky) */}
+        <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-4 scroll-mt-24">
+          <Card className="p-4 sm:p-5 border-2 bg-card rounded-2xl shadow-xs space-y-3">
+            <h3 className="text-sm font-bold flex items-center gap-2 border-b pb-2.5">
+              <List className="h-4 w-4 text-primary" /> Session History
             </h3>
             {history.length === 0 ? (
               <p className="text-xs text-muted-foreground py-4 text-center">Passwords generated in this session will appear here.</p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {history.map((pw, index) => (
-                  <div key={index} className="flex justify-between items-center bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800 shadow-sm animate-in fade-in slide-in-from-right-3 duration-200">
-                    <span className="font-mono text-xs select-all truncate max-w-[150px]">{pw}</span>
+                  <div key={index} className="flex justify-between items-center bg-muted/40 p-2.5 rounded-xl border shadow-xs animate-in fade-in slide-in-from-right-3 duration-200">
+                    <span className="font-mono text-xs select-all truncate max-w-[170px] font-bold">{pw}</span>
                     <CopyButton
                       value={pw}
                       variant="ghost"
                       size="icon"
-                      className="w-8 h-8 rounded-lg text-muted-foreground hover:text-primary hover:bg-zinc-100"
+                      className="w-7 h-7 rounded-lg text-muted-foreground hover:text-primary hover:bg-muted"
                       title="Copy Password"
                     />
                   </div>
                 ))}
               </div>
             )}
-            <div className="mt-4 p-3 bg-blue-500/5 rounded-xl border border-blue-500/10 flex gap-2">
-              <Info className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
+            <div className="p-2.5 bg-blue-500/5 rounded-xl border border-blue-500/10 flex gap-2">
+              <Info className="h-3.5 w-3.5 text-blue-500 shrink-0 mt-0.5" />
               <span className="text-[10px] text-muted-foreground leading-normal">
-                History is stored transiently in local component memory and will reset if you refresh or leave the page.
+                History is stored transiently in local component memory and clears upon page refresh.
               </span>
             </div>
           </Card>

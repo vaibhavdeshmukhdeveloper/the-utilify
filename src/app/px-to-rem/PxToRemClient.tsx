@@ -142,21 +142,36 @@ export default function PxToRemClient({
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
     >
-      <div className="w-full max-w-5xl mx-auto space-y-8">
-        {/* Base Size Config Header */}
-        <div className="bg-card border rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-primary/10 text-primary">
-              <Type className="h-6 w-6" />
+      <div className="w-full max-w-6xl mx-auto space-y-4 text-left">
+        {/* Base Size Config Header Toolbar */}
+        <div className="bg-card border-2 rounded-2xl p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-primary/10 text-primary">
+              <Type className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-bold text-base text-foreground">Root Base Font Size</h3>
-              <p className="text-xs text-muted-foreground">Standard browser default is 16px (1rem = 16px)</p>
+              <h3 className="font-black text-sm text-foreground">Root Base Font Size: <span className="font-mono text-primary font-black">{baseSize}px</span></h3>
+              <p className="text-[11px] text-muted-foreground">Standard browser standard is 16px (1rem = 16px)</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-bold font-mono text-primary">{baseSize}px Base</span>
-            <div className="w-32">
+            <div className="flex gap-1.5">
+              {[14, 16, 18].map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => setBaseSize(size)}
+                  className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition-all ${
+                    baseSize === size
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:bg-muted"
+                  }`}
+                >
+                  {size}px
+                </button>
+              ))}
+            </div>
+            <div className="w-28 sm:w-32">
               <Slider
                 value={[baseSize]}
                 onValueChange={(v) => setBaseSize(Array.isArray(v) ? v[0] : v)}
@@ -168,219 +183,232 @@ export default function PxToRemClient({
           </div>
         </div>
 
-        {/* Live Converter Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* PX to REM Card */}
-          <Card className="p-6 sm:p-8 rounded-3xl border bg-card space-y-6 shadow-sm">
-            <div className="flex items-center justify-between border-b pb-4">
-              <h3 className="font-black text-lg text-foreground flex items-center gap-2">
-                <ArrowRightLeft className="w-5 h-5 text-primary" /> Pixels to REM
-              </h3>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">Base: {baseSize}px</span>
+        {/* 2-Column Responsive Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Converters & Clamp Generator */}
+          <div className="lg:col-span-6 space-y-4">
+            {/* Live Converter Dual Card */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* PX to REM Card */}
+              <Card className="p-4 sm:p-5 rounded-2xl border-2 bg-card space-y-3 shadow-xs">
+                <div className="flex items-center justify-between border-b pb-2.5">
+                  <h3 className="font-black text-sm text-foreground flex items-center gap-1.5">
+                    <ArrowRightLeft className="w-4 h-4 text-primary" /> PX &rarr; REM
+                  </h3>
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/10 text-primary font-bold">{baseSize}px</span>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Pixels (px)</label>
+                  <Input
+                    type="number"
+                    value={pixelInput}
+                    onChange={(e) => setPixelInput(e.target.value)}
+                    className="rounded-xl text-xl font-black font-mono h-11 border-2 focus:border-primary"
+                    placeholder="24"
+                  />
+                </div>
+
+                <div className="p-3 rounded-xl bg-muted/40 border space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Result</span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleCopyToken(`${calculatedRem}rem`)}
+                      className="rounded-lg h-7 px-2 text-[11px] font-bold gap-1 text-primary hover:bg-primary/5"
+                    >
+                      <Copy className="h-3 w-3" /> Copy
+                    </Button>
+                  </div>
+                  <p className="text-2xl font-black font-mono text-primary">{calculatedRem}rem</p>
+                  <div className="flex gap-3 text-[11px] text-muted-foreground font-mono pt-1.5 border-t">
+                    <span>EM: <strong>{calculatedEm}em</strong></span>
+                    <span>PT: <strong>{calculatedPt}pt</strong></span>
+                  </div>
+                </div>
+              </Card>
+
+              {/* REM to PX Card */}
+              <Card className="p-4 sm:p-5 rounded-2xl border-2 bg-card space-y-3 shadow-xs">
+                <div className="flex items-center justify-between border-b pb-2.5">
+                  <h3 className="font-black text-sm text-foreground flex items-center gap-1.5">
+                    <ArrowRightLeft className="w-4 h-4 text-primary" /> REM &rarr; PX
+                  </h3>
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-primary/10 text-primary font-bold">{baseSize}px</span>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">REM (rem)</label>
+                  <Input
+                    type="number"
+                    step="0.125"
+                    value={remInput}
+                    onChange={(e) => setRemInput(e.target.value)}
+                    className="rounded-xl text-xl font-black font-mono h-11 border-2 focus:border-primary"
+                    placeholder="1.5"
+                  />
+                </div>
+
+                <div className="p-3 rounded-xl bg-muted/40 border space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Result</span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleCopyToken(`${calculatedPx}px`)}
+                      className="rounded-lg h-7 px-2 text-[11px] font-bold gap-1 text-foreground hover:bg-muted"
+                    >
+                      <Copy className="h-3 w-3" /> Copy
+                    </Button>
+                  </div>
+                  <p className="text-2xl font-black font-mono text-foreground">{calculatedPx}px</p>
+                  <div className="flex gap-2 text-[11px] text-muted-foreground font-mono pt-1.5 border-t truncate">
+                    <span>{remInput}rem × {baseSize}px = {calculatedPx}px</span>
+                  </div>
+                </div>
+              </Card>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase">Enter Pixels (px)</label>
-              <Input
-                type="number"
-                value={pixelInput}
-                onChange={(e) => setPixelInput(e.target.value)}
-                className="rounded-2xl text-2xl font-black font-mono h-14"
-                placeholder="24"
-              />
-            </div>
-
-            <div className="p-5 rounded-2xl bg-muted/40 border space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-muted-foreground uppercase">Result in REM</span>
+            {/* Fluid Typography CSS clamp() Generator */}
+            <Card className="p-4 sm:p-5 rounded-2xl border-2 bg-card space-y-3.5 shadow-xs">
+              <div className="flex items-center justify-between border-b pb-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-violet-500/10 text-violet-500">
+                    <Code className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-sm text-foreground">Fluid Typography CSS clamp() Generator</h3>
+                    <p className="text-[10px] text-muted-foreground">Self-scaling font sizes between viewports</p>
+                  </div>
+                </div>
                 <Button
+                  onClick={handleCopyClamp}
                   size="sm"
-                  variant="outline"
-                  onClick={() => handleCopyToken(`${calculatedRem}rem`)}
-                  className="rounded-xl h-8 px-3 text-xs font-bold gap-1"
+                  className="rounded-xl h-8 px-3 font-bold text-xs gap-1"
                 >
-                  <Copy className="h-3 w-3" /> Copy
+                  {copiedClamp ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                  {copiedClamp ? "Copied!" : "Copy clamp()"}
                 </Button>
               </div>
-              <p className="text-3xl font-black font-mono text-primary">{calculatedRem}rem</p>
-              <div className="flex gap-4 text-xs text-muted-foreground font-mono pt-2 border-t">
-                <span>EM: <strong>{calculatedEm}em</strong></span>
-                <span>Points: <strong>{calculatedPt}pt</strong></span>
-              </div>
-            </div>
-          </Card>
 
-          {/* REM to PX Card */}
-          <Card className="p-6 sm:p-8 rounded-3xl border bg-card space-y-6 shadow-sm">
-            <div className="flex items-center justify-between border-b pb-4">
-              <h3 className="font-black text-lg text-foreground flex items-center gap-2">
-                <ArrowRightLeft className="w-5 h-5 text-primary" /> REM to Pixels
-              </h3>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-primary/10 text-primary font-bold">Base: {baseSize}px</span>
-            </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Min Size</label>
+                  <div className="flex items-center gap-1">
+                    <Input
+                      type="number"
+                      value={clampMinPx}
+                      onChange={(e) => setClampMinPx(parseFloat(e.target.value) || 0)}
+                      className="rounded-lg font-bold font-mono h-9 text-xs"
+                    />
+                    <span className="text-[10px] font-mono text-muted-foreground">px</span>
+                  </div>
+                </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-muted-foreground uppercase">Enter REM (rem)</label>
-              <Input
-                type="number"
-                step="0.125"
-                value={remInput}
-                onChange={(e) => setRemInput(e.target.value)}
-                className="rounded-2xl text-2xl font-black font-mono h-14"
-                placeholder="1.5"
-              />
-            </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Max Size</label>
+                  <div className="flex items-center gap-1">
+                    <Input
+                      type="number"
+                      value={clampMaxPx}
+                      onChange={(e) => setClampMaxPx(parseFloat(e.target.value) || 0)}
+                      className="rounded-lg font-bold font-mono h-9 text-xs"
+                    />
+                    <span className="text-[10px] font-mono text-muted-foreground">px</span>
+                  </div>
+                </div>
 
-            <div className="p-5 rounded-2xl bg-muted/40 border space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-muted-foreground uppercase">Result in Pixels</span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleCopyToken(`${calculatedPx}px`)}
-                  className="rounded-xl h-8 px-3 text-xs font-bold gap-1"
-                >
-                  <Copy className="h-3 w-3" /> Copy
-                </Button>
-              </div>
-              <p className="text-3xl font-black font-mono text-foreground">{calculatedPx}px</p>
-              <div className="flex gap-4 text-xs text-muted-foreground font-mono pt-2 border-t">
-                <span>Calculation: {remInput}rem × {baseSize}px = {calculatedPx}px</span>
-              </div>
-            </div>
-          </Card>
-        </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Min Viewport</label>
+                  <div className="flex items-center gap-1">
+                    <Input
+                      type="number"
+                      value={clampMinVw}
+                      onChange={(e) => setClampMinVw(parseFloat(e.target.value) || 0)}
+                      className="rounded-lg font-bold font-mono h-9 text-xs"
+                    />
+                    <span className="text-[10px] font-mono text-muted-foreground">px</span>
+                  </div>
+                </div>
 
-        {/* Fluid Typography CSS clamp() Generator */}
-        <Card className="p-6 sm:p-8 rounded-3xl border bg-card space-y-6 shadow-sm">
-          <div className="flex items-center justify-between border-b pb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-violet-500/10 text-violet-500">
-                <Code className="h-5 w-5" />
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Max Viewport</label>
+                  <div className="flex items-center gap-1">
+                    <Input
+                      type="number"
+                      value={clampMaxVw}
+                      onChange={(e) => setClampMaxVw(parseFloat(e.target.value) || 0)}
+                      className="rounded-lg font-bold font-mono h-9 text-xs"
+                    />
+                    <span className="text-[10px] font-mono text-muted-foreground">px</span>
+                  </div>
+                </div>
               </div>
-              <div>
-                <h3 className="font-black text-lg text-foreground">Fluid Typography CSS clamp() Generator</h3>
-                <p className="text-xs text-muted-foreground">Self-scaling font sizes between mobile and desktop viewports</p>
+
+              <div className="p-3 rounded-xl bg-zinc-950 text-zinc-100 font-mono text-xs overflow-x-auto border border-zinc-800">
+                <code>{clampCode}</code>
               </div>
-            </div>
-            <Button
-              onClick={handleCopyClamp}
-              className="rounded-xl h-10 px-4 font-bold gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              {copiedClamp ? <CheckCircle2 className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {copiedClamp ? "Copied CSS!" : "Copy clamp()"}
-            </Button>
+            </Card>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-muted-foreground">Min Size (Mobile)</label>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  value={clampMinPx}
-                  onChange={(e) => setClampMinPx(parseFloat(e.target.value) || 0)}
-                  className="rounded-xl font-bold font-mono h-11"
-                />
-                <span className="text-xs font-mono text-muted-foreground">px</span>
+          {/* Right Column: Standard Design Token Table (Sticky) */}
+          <div className="lg:col-span-6 lg:sticky lg:top-4 space-y-3 scroll-mt-24">
+            <Card className="p-4 sm:p-5 rounded-2xl border-2 bg-card space-y-3 shadow-xs">
+              <div className="flex items-center justify-between border-b pb-2.5">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+                    <Layers className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-sm text-foreground">PX &harr; REM & Tailwind Spacing Cheat Sheet</h3>
+                    <p className="text-[10px] text-muted-foreground">1-click copy values</p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-muted text-muted-foreground font-bold">{tokenTable.length} tokens</span>
               </div>
-            </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-muted-foreground">Max Size (Desktop)</label>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  value={clampMaxPx}
-                  onChange={(e) => setClampMaxPx(parseFloat(e.target.value) || 0)}
-                  className="rounded-xl font-bold font-mono h-11"
-                />
-                <span className="text-xs font-mono text-muted-foreground">px</span>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-muted-foreground">Min Viewport</label>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  value={clampMinVw}
-                  onChange={(e) => setClampMinVw(parseFloat(e.target.value) || 0)}
-                  className="rounded-xl font-bold font-mono h-11"
-                />
-                <span className="text-xs font-mono text-muted-foreground">px</span>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-muted-foreground">Max Viewport</label>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="number"
-                  value={clampMaxVw}
-                  onChange={(e) => setClampMaxVw(parseFloat(e.target.value) || 0)}
-                  className="rounded-xl font-bold font-mono h-11"
-                />
-                <span className="text-xs font-mono text-muted-foreground">px</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-zinc-950 text-zinc-100 font-mono text-sm overflow-x-auto border border-zinc-800 flex items-center justify-between">
-            <code>{clampCode}</code>
-          </div>
-        </Card>
-
-        {/* Standard Design Token Conversion Table */}
-        <Card className="p-6 sm:p-8 rounded-3xl border bg-card space-y-6 shadow-sm">
-          <div className="flex items-center gap-3 border-b pb-4">
-            <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
-              <Layers className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="font-black text-lg text-foreground">Standard PX &harr; REM Conversion & Tailwind Cheat Sheet</h3>
-              <p className="text-xs text-muted-foreground">Click any REM value to copy immediately</p>
-            </div>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b text-xs font-black uppercase text-muted-foreground">
-                  <th className="pb-3">Pixels (px)</th>
-                  <th className="pb-3">REM Value (rem)</th>
-                  <th className="pb-3">Tailwind Utility</th>
-                  <th className="pb-3">Typical Usage</th>
-                  <th className="pb-3 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y font-mono">
-                {tokenTable.map((row) => {
-                  const safeBase = baseSize > 0 ? baseSize : 16;
-                  const remVal = `${(row.px / safeBase).toFixed(row.px % safeBase === 0 ? 1 : 3)}rem`;
-                  return (
-                    <tr key={row.px} className="hover:bg-muted/40 transition-colors">
-                      <td className="py-3 font-bold text-foreground">{row.px}px</td>
-                      <td className="py-3 text-primary font-bold">{remVal}</td>
-                      <td className="py-3 text-muted-foreground text-xs">{row.tailwind}</td>
-                      <td className="py-3 text-muted-foreground font-sans text-xs">{row.name}</td>
-                      <td className="py-3 text-right">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleCopyToken(remVal)}
-                          className="h-8 px-2.5 text-xs font-bold"
-                        >
-                          {copiedToken === remVal ? <CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
-                        </Button>
-                      </td>
+              <div className="max-h-[460px] overflow-y-auto pr-1">
+                <table className="w-full text-left text-xs">
+                  <thead className="sticky top-0 bg-card z-10">
+                    <tr className="border-b text-[10px] font-black uppercase text-muted-foreground">
+                      <th className="pb-2">Pixels</th>
+                      <th className="pb-2">REM</th>
+                      <th className="pb-2">Tailwind Token</th>
+                      <th className="pb-2">Usage</th>
+                      <th className="pb-2 text-right">Copy</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody className="divide-y font-mono">
+                    {tokenTable.map((row) => {
+                      const safeBase = baseSize > 0 ? baseSize : 16;
+                      const remVal = `${(row.px / safeBase).toFixed(row.px % safeBase === 0 ? 1 : 3)}rem`;
+                      return (
+                        <tr key={row.px} className="hover:bg-muted/50 transition-colors">
+                          <td className="py-2 font-bold text-foreground">{row.px}px</td>
+                          <td className="py-2 text-primary font-bold">{remVal}</td>
+                          <td className="py-2 text-muted-foreground text-[11px]">{row.tailwind}</td>
+                          <td className="py-2 text-muted-foreground font-sans text-[11px] truncate max-w-[90px]">{row.name}</td>
+                          <td className="py-2 text-right">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleCopyToken(remVal)}
+                              className="h-7 w-7 p-0 rounded-md"
+                              title={`Copy ${remVal}`}
+                            >
+                              {copiedToken === remVal ? <CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
           </div>
-        </Card>
+        </div>
       </div>
     </ToolLayout>
   );

@@ -174,10 +174,10 @@ export default function PdfToImageClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start text-left">
         {/* Left Column: Upload */}
-        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
-          <Card className="p-8 border-2 border-dashed bg-card rounded-[2rem]">
+        <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-4">
+          <Card className="p-4 sm:p-5 border-2 border-dashed bg-card rounded-2xl">
             <FileUploader
               label={isEs ? "Subir PDF" : isPt ? "Enviar PDF" : "Upload PDF"}
               accept={{ "application/pdf": [".pdf"] }}
@@ -188,54 +188,54 @@ export default function PdfToImageClient({
           </Card>
 
           {fileInfo && (
-            <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-card shadow-sm animate-in fade-in slide-in-from-left-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <FileImage className="h-6 w-6" />
+            <Card className="p-3.5 rounded-xl border-2 flex items-center gap-3 bg-card shadow-xs animate-in fade-in slide-in-from-left-4">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <FileImage className="h-5 w-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-bold truncate text-sm">{fileInfo.name}</p>
-                <p className="text-xs text-muted-foreground">{fileInfo.size}</p>
+                <p className="font-bold truncate text-xs">{fileInfo.name}</p>
+                <p className="text-[11px] text-muted-foreground">{fileInfo.size}</p>
               </div>
-              {result && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+              {result && <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />}
             </Card>
           )}
         </div>
 
         {/* Right Column: Results */}
-        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24">
+        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24 space-y-4">
           {isLoading ? (
-            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
-              <div className="relative mb-6">
-                <Loader2 className="h-16 w-16 text-primary animate-spin" />
-                <Layers className="h-8 w-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <Card className="h-[340px] flex flex-col items-center justify-center p-6 text-center border-2 border-primary/20 bg-primary/5 rounded-2xl">
+              <div className="relative mb-4">
+                <Loader2 className="h-12 w-12 text-primary animate-spin" />
+                <Layers className="h-6 w-6 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">{t.convertingTitle}</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto">
+              <h3 className="text-xl font-black tracking-tight mb-1.5 text-foreground">{t.convertingTitle}</h3>
+              <p className="text-xs text-muted-foreground max-w-xs mx-auto">
                 {t.convertingDesc}
               </p>
             </Card>
           ) : result ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="p-10 bg-primary text-primary-foreground border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-20">
-                  <Download className="h-32 w-32" />
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
+              <Card className="p-6 sm:p-7 bg-primary text-primary-foreground border-none shadow-xl rounded-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-15 pointer-events-none">
+                  <Download className="h-24 w-24" />
                 </div>
                 <div className="relative z-10">
-                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] mb-4">
-                    <CheckCircle2 className="h-4 w-4" /> {t.conversionComplete}
+                  <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.3em] mb-2 text-primary-foreground/90">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> {t.conversionComplete}
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">{t.readyTitle}</h2>
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-6">{t.readyTitle}</h2>
 
-                  <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-primary-foreground/20">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-5 border-t border-primary-foreground/20">
                     <a href={result.url} download={result.filename} className="flex-1">
-                      <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all bg-background text-foreground hover:bg-background/90">
-                        <Download className="mr-2 h-6 w-6" /> {t.downloadZip}
+                      <Button className="w-full h-12 text-sm sm:text-base font-bold rounded-xl shadow-md hover:shadow-lg transition-all bg-background text-foreground hover:bg-background/90">
+                        <Download className="mr-2 h-4 w-4" /> {t.downloadZip}
                       </Button>
                     </a>
                     <Button
                       variant="outline"
                       onClick={() => { setResult(null); setFileInfo(null); }}
-                      className="h-16 px-8 rounded-2xl border-primary-foreground/20 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                      className="h-12 px-5 text-sm font-bold rounded-xl border-primary-foreground/20 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
                     >
                       {t.convertAnother}
                     </Button>
@@ -243,46 +243,46 @@ export default function PdfToImageClient({
                 </div>
               </Card>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="p-6 bg-card border rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-primary">
-                    <Layers className="h-5 w-5" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Card className="p-3.5 bg-card border-2 rounded-xl flex items-center gap-3 shadow-xs">
+                  <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-primary shrink-0">
+                    <Layers className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{t.formatLabel}</p>
-                    <p className="font-bold text-foreground">{t.formatVal}</p>
+                    <p className="text-[11px] font-black uppercase tracking-wider text-muted-foreground">{t.formatLabel}</p>
+                    <p className="text-xs font-bold text-foreground">{t.formatVal}</p>
                   </div>
                 </Card>
-                <Card className="p-6 bg-card border rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-primary">
-                    <CheckCircle2 className="h-5 w-5" />
+                <Card className="p-3.5 bg-card border-2 rounded-xl flex items-center gap-3 shadow-xs">
+                  <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center text-primary shrink-0">
+                    <CheckCircle2 className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{t.statusLabel}</p>
-                    <p className="font-bold text-foreground">{t.statusVal}</p>
+                    <p className="text-[11px] font-black uppercase tracking-wider text-muted-foreground">{t.statusLabel}</p>
+                    <p className="text-xs font-bold text-foreground">{t.statusVal}</p>
                   </div>
                 </Card>
               </div>
             </div>
           ) : (
-            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
-              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-6">
-                <FileImage className="h-10 w-10 text-muted-foreground" />
+            <Card className="h-[340px] flex flex-col items-center justify-center p-6 text-center border-dashed border-2 bg-card rounded-2xl">
+              <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
+                <FileImage className="h-8 w-8 text-muted-foreground" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2 text-foreground">{t.emptyTitle}</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto">
+              <h3 className="text-xl font-black tracking-tight mb-1.5 text-foreground">{t.emptyTitle}</h3>
+              <p className="text-xs text-muted-foreground max-w-xs mx-auto">
                 {t.emptyDesc}
               </p>
-              <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> {t.emptyCta}
+              <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 px-3.5 py-1.5 rounded-full">
+                <ArrowRight className="h-3.5 w-3.5" /> {t.emptyCta}
               </div>
             </Card>
           )}
 
           {/* Error fallback */}
           {!isLoading && !result && fileInfo && (
-            <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
-              <AlertCircle className="h-5 w-5 shrink-0" />
+            <div className="p-3 bg-red-50 text-red-600 rounded-xl flex items-center gap-2.5 text-xs font-medium border border-red-100">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{t.errorDesc}</span>
             </div>
           )}

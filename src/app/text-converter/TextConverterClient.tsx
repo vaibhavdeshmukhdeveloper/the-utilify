@@ -209,97 +209,130 @@ export default function TextConverterClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 text-left">
-        {/* Editor Area */}
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Type className="h-4 w-4" /> Text Editor</span>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={pasteFromClipboard} className="text-xs font-bold text-muted-foreground hover:text-primary">
-                <Clipboard className="h-3.5 w-3.5 mr-1" /> Paste
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left">
+        {/* Left Column: Editor & Conversion Actions (lg:col-span-8 space-y-4) */}
+        <div className="lg:col-span-8 space-y-4">
+          {/* Editor Area Card */}
+          <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-black text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                <Type className="h-3.5 w-3.5 text-primary" /> Text Editor
+              </span>
+              <div className="flex gap-1.5">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={pasteFromClipboard} 
+                  className="h-8 px-2.5 text-xs font-bold text-muted-foreground hover:text-primary"
+                >
+                  <Clipboard className="h-3 w-3 mr-1" /> Paste
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={clearText} 
+                  className="h-8 px-2.5 text-xs font-bold text-red-500 hover:bg-red-500/10"
+                >
+                  <Trash2 className="h-3 w-3 mr-1" /> Clear
+                </Button>
+              </div>
+            </div>
+
+            <div className="relative">
+              <Textarea
+                className="min-h-[260px] text-base font-medium p-4 rounded-xl border-2 focus:border-primary bg-background shadow-inner leading-relaxed"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Type or paste your text here to convert it..."
+              />
+              <CopyButton
+                value={text}
+                className="absolute right-3 bottom-3 w-8 h-8 shadow-sm"
+                size="icon"
+                title="Copy converted text"
+              />
+            </div>
+          </Card>
+
+          {/* Action Panel Card */}
+          <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+            <h3 className="text-xs font-black flex items-center gap-1.5 border-b pb-2 text-muted-foreground uppercase tracking-wider">
+              <Sparkles className="h-3.5 w-3.5 text-primary" /> Case Conversion Actions
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <Button onClick={toTitleCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                Title Case
               </Button>
-              <Button variant="ghost" size="sm" onClick={clearText} className="text-xs font-bold text-red-500 hover:bg-red-500/5">
-                <Trash2 className="h-3.5 w-3.5 mr-1" /> Clear
+              <Button onClick={toSentenceCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                Sentence case
+              </Button>
+              <Button onClick={toUppercase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                UPPERCASE
+              </Button>
+              <Button onClick={toLowercase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                lowercase
+              </Button>
+              <Button onClick={toCapitalizedCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                Capitalize Words
+              </Button>
+              <Button onClick={toInverseCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                iNVERSE cASE
+              </Button>
+              <Button onClick={toCamelCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                camelCase
+              </Button>
+              <Button onClick={toSnakeCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                snake_case
+              </Button>
+              <Button onClick={toKebabCase} className="h-9 rounded-xl font-bold shadow-xs text-xs col-span-2 sm:col-span-1" variant="outline">
+                kebab-case
               </Button>
             </div>
-          </div>
-          <div className="relative scroll-mt-24">
-            <Textarea
-              className="min-h-[250px] text-lg font-medium p-6 rounded-3xl border-2 focus:border-primary bg-background shadow-inner leading-relaxed"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-            <CopyButton
-              value={text}
-              className="absolute right-4 bottom-4 w-10 h-10 shadow-md"
-              size="icon"
-              title="Copy converted text"
-            />
-          </div>
-        </div>
-
-        {/* Real-time stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-2xl font-black text-primary font-mono">{charCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Characters</div>
-          </Card>
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-2xl font-black text-primary font-mono">{charNoSpaces}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">No Spaces</div>
-          </Card>
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-2xl font-black text-primary font-mono">{wordCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Words</div>
-          </Card>
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-2xl font-black text-primary font-mono">{lineCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Lines</div>
-          </Card>
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-2xl font-black text-primary font-mono">{sentenceCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Sentences</div>
-          </Card>
-          <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-sm rounded-2xl">
-            <div className="text-2xl font-black text-primary font-mono">{paragraphCount}</div>
-            <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">Paragraphs</div>
           </Card>
         </div>
 
-        {/* Action Panel */}
-        <div className="p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 space-y-4">
-          <h3 className="text-sm font-bold flex items-center gap-1.5 border-b pb-3 text-muted-foreground uppercase tracking-wider">
-            <Sparkles className="h-4 w-4 text-primary" /> Case Conversion Actions
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            <Button onClick={toTitleCase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              Title Case
-            </Button>
-            <Button onClick={toSentenceCase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              Sentence case
-            </Button>
-            <Button onClick={toUppercase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              UPPERCASE
-            </Button>
-            <Button onClick={toLowercase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              lowercase
-            </Button>
-            <Button onClick={toCapitalizedCase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              Capitalize Words
-            </Button>
-            <Button onClick={toInverseCase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              Inverse Case
-            </Button>
-            <Button onClick={toCamelCase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              camelCase
-            </Button>
-            <Button onClick={toSnakeCase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              snake_case
-            </Button>
-            <Button onClick={toKebabCase} className="rounded-xl px-5 font-bold shadow-sm" variant="outline">
-              kebab-case
-            </Button>
-          </div>
+        {/* Right Column: Sticky Real-Time Metrics (lg:col-span-4 lg:sticky lg:top-4 space-y-3.5 scroll-mt-24) */}
+        <div className="lg:col-span-4 lg:sticky lg:top-4 space-y-3.5 scroll-mt-24">
+          <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs bg-card space-y-3">
+            <h3 className="text-xs font-black flex items-center gap-1.5 border-b pb-2 text-muted-foreground uppercase tracking-wider">
+              <Type className="h-3.5 w-3.5 text-primary" /> Live Document Metrics
+            </h3>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-3 text-center bg-muted/40 rounded-xl border border-border/50">
+                <div className="text-2xl font-black text-primary font-mono">{charCount}</div>
+                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Characters</div>
+              </div>
+              <div className="p-3 text-center bg-muted/40 rounded-xl border border-border/50">
+                <div className="text-2xl font-black text-primary font-mono">{charNoSpaces}</div>
+                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">No Spaces</div>
+              </div>
+              <div className="p-3 text-center bg-muted/40 rounded-xl border border-border/50">
+                <div className="text-2xl font-black text-primary font-mono">{wordCount}</div>
+                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Words</div>
+              </div>
+              <div className="p-3 text-center bg-muted/40 rounded-xl border border-border/50">
+                <div className="text-2xl font-black text-primary font-mono">{lineCount}</div>
+                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Lines</div>
+              </div>
+              <div className="p-3 text-center bg-muted/40 rounded-xl border border-border/50">
+                <div className="text-2xl font-black text-primary font-mono">{sentenceCount}</div>
+                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Sentences</div>
+              </div>
+              <div className="p-3 text-center bg-muted/40 rounded-xl border border-border/50">
+                <div className="text-2xl font-black text-primary font-mono">{paragraphCount}</div>
+                <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Paragraphs</div>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <CopyButton
+                value={text}
+                label="Copy Converted Text"
+                className="w-full h-10 rounded-xl font-bold text-xs shadow-xs"
+              />
+            </div>
+          </Card>
         </div>
       </div>
     </ToolLayout>

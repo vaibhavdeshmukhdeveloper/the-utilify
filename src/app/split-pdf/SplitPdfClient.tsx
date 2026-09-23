@@ -202,38 +202,38 @@ export default function SplitPdfClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start text-left">
         {/* Left Column: Config & Upload */}
-        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
-          <Card className="p-8 space-y-8 border-2 shadow-sm rounded-[2rem]">
-            <div className="space-y-4">
-              <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                <Scissors className="h-4 w-4" /> {text.modeLabel}
+        <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-4">
+          <Card className="p-4 sm:p-5 space-y-4 border-2 shadow-xs rounded-2xl">
+            <div className="space-y-3">
+              <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                <Scissors className="h-3.5 w-3.5 text-primary" /> {text.modeLabel}
               </Label>
               <Tabs defaultValue="range" onValueChange={setSplitMode} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 h-12 rounded-xl">
+                <TabsList className="grid w-full grid-cols-2 h-10 rounded-xl">
                   <TabsTrigger value="range" className="text-xs font-bold rounded-lg">{text.rangeTrigger}</TabsTrigger>
                   <TabsTrigger value="all" className="text-xs font-bold rounded-lg">{text.allTrigger}</TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="range" className="pt-6 space-y-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-bold">{text.pagesLabel}</Label>
+                <TabsContent value="range" className="pt-3 space-y-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-bold">{text.pagesLabel}</Label>
                     <Input 
                       placeholder="e.g. 1, 3, 5-10" 
                       value={pages} 
                       onChange={(e) => setPages(e.target.value)}
-                      className="h-14 text-lg font-bold rounded-2xl border-2 focus:border-primary transition-all"
+                      className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary transition-all"
                     />
-                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-2">
+                    <p className="text-[11px] text-muted-foreground flex items-center gap-1 mt-1.5">
                       <Info className="h-3 w-3" /> {text.rangeHelper}
                     </p>
                   </div>
                 </TabsContent>
                 
-                <TabsContent value="all" className="pt-6">
-                   <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl flex items-start gap-3">
-                      <Layers className="h-5 w-5 text-primary mt-0.5" />
+                <TabsContent value="all" className="pt-3">
+                   <div className="p-3 bg-primary/5 border border-primary/20 rounded-xl flex items-start gap-2.5">
+                      <Layers className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                       <p className="text-xs text-primary/80 font-medium leading-relaxed">
                         {text.allHelper}
                       </p>
@@ -242,7 +242,7 @@ export default function SplitPdfClient({
               </Tabs>
             </div>
 
-            <div className="pt-6 border-t">
+            <div className="pt-3 border-t">
               <FileUploader
                 label={text.uploaderLabel}
                 lang={currentLang}
@@ -255,58 +255,58 @@ export default function SplitPdfClient({
           </Card>
           
           {fileInfo && (
-            <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-white dark:bg-zinc-950 shadow-sm animate-in fade-in slide-in-from-left-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <FileText className="h-6 w-6" />
+            <Card className="p-3.5 rounded-xl border-2 flex items-center gap-3 bg-card shadow-xs animate-in fade-in slide-in-from-left-4">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <FileText className="h-5 w-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-bold truncate text-sm">{fileInfo.name}</p>
-                <p className="text-xs text-muted-foreground">{fileInfo.size}</p>
+                <p className="font-bold truncate text-xs">{fileInfo.name}</p>
+                <p className="text-[11px] text-muted-foreground">{fileInfo.size}</p>
               </div>
-              {result && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+              {result && <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />}
             </Card>
           )}
         </div>
 
         {/* Right Column: Results */}
-        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24">
+        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24 space-y-4">
           {isLoading ? (
-            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
-              <div className="relative mb-6">
-                <Loader2 className="h-16 w-16 text-primary animate-spin" />
-                <Scissors className="h-8 w-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            <Card className="h-[340px] flex flex-col items-center justify-center p-6 text-center border-2 border-primary/20 bg-primary/5 rounded-2xl">
+              <div className="relative mb-4">
+                <Loader2 className="h-12 w-12 text-primary animate-spin" />
+                <Scissors className="h-6 w-6 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">
+              <h3 className="text-xl font-black tracking-tight mb-1.5">
                 {text.loadingTitle}
               </h3>
-              <p className="text-muted-foreground max-w-xs mx-auto text-sm">
+              <p className="text-muted-foreground max-w-xs mx-auto text-xs">
                 {text.loadingDesc}
               </p>
             </Card>
           ) : result ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-              <Card className="p-10 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[3rem] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
-                  <Download className="h-32 w-32" />
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
+              <Card className="p-6 sm:p-7 bg-zinc-950 text-zinc-50 border-none shadow-xl rounded-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
+                  <Download className="h-24 w-24" />
                 </div>
                 <div className="relative z-10">
-                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
-                    <CheckCircle2 className="h-4 w-4" /> {text.successBadge}
+                  <div className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.3em] text-green-500 mb-2">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> {text.successBadge}
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-6">
                     {text.successTitle}
                   </h2>
                   
-                  <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-5 border-t border-zinc-800">
                     <a href={result.url} download={result.filename} className="flex-1">
-                      <Button className="w-full h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                        <Download className="mr-2 h-6 w-6" /> {text.downloadBtn}
+                      <Button className="w-full h-12 text-sm sm:text-base font-bold rounded-xl shadow-md hover:shadow-lg transition-all">
+                        <Download className="mr-2 h-4 w-4" /> {text.downloadBtn}
                       </Button>
                     </a>
                     <Button 
                       variant="outline" 
                       onClick={() => {setResult(null); setFileInfo(null);}} 
-                      className="h-16 px-8 rounded-2xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
+                      className="h-12 px-5 text-sm font-bold rounded-xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                     >
                       {text.restartBtn}
                     </Button>
@@ -314,27 +314,27 @@ export default function SplitPdfClient({
                 </div>
               </Card>
 
-              <Card className="p-6 bg-card border-none rounded-2xl flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600">
-                  {splitMode === "all" ? <Layers className="h-5 w-5" /> : <Scissors className="h-5 w-5" />}
+              <Card className="p-3.5 bg-card border-2 rounded-xl flex items-center gap-3 shadow-xs">
+                <div className="w-9 h-9 rounded-lg bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 dark:text-zinc-300 shrink-0">
+                  {splitMode === "all" ? <Layers className="h-4 w-4" /> : <Scissors className="h-4 w-4" />}
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">{text.modeAppliedLabel}</p>
-                  <p className="font-bold">{text.modeAppliedVal}</p>
+                  <p className="text-[11px] font-black uppercase tracking-wider text-muted-foreground">{text.modeAppliedLabel}</p>
+                  <p className="text-xs font-bold">{text.modeAppliedVal}</p>
                 </div>
               </Card>
             </div>
           ) : (
-            <Card className="h-[400px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[3rem]">
-              <div className="w-20 h-20 rounded-full bg-zinc-100 flex items-center justify-center mb-6">
-                <Scissors className="h-10 w-10 text-muted-foreground/40" />
+            <Card className="h-[340px] flex flex-col items-center justify-center p-6 text-center border-dashed border-2 bg-card rounded-2xl">
+              <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800/60 flex items-center justify-center mb-4">
+                <Scissors className="h-8 w-8 text-muted-foreground/40" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">{text.emptyTitle}</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto text-sm">
+              <h3 className="text-xl font-black tracking-tight mb-1.5">{text.emptyTitle}</h3>
+              <p className="text-muted-foreground max-w-xs mx-auto text-xs">
                 {text.emptyDesc}
               </p>
-              <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> {text.emptyAction}
+              <div className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/10 px-3.5 py-1.5 rounded-full">
+                <ArrowRight className="h-3.5 w-3.5" /> {text.emptyAction}
               </div>
             </Card>
           )}

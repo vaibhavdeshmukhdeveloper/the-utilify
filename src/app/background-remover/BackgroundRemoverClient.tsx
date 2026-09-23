@@ -660,10 +660,10 @@ export default function BackgroundRemoverClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Upload */}
-        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
-          <Card className="p-8 border-2 border-dashed bg-card rounded-[2.5rem]">
+        <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-4">
+          <Card className="p-5 border-2 border-dashed bg-card rounded-2xl shadow-xs">
             <FileUploader
               key={uploaderKey}
               label={currentLang === "es" ? "Subir Imagen" : currentLang === "pt" ? "Enviar Imagem" : "Upload Image"}
@@ -675,63 +675,63 @@ export default function BackgroundRemoverClient({
             />
           </Card>
 
-          <Card className="p-6 border-2 bg-card rounded-[2rem] space-y-6">
-            <div className="flex items-center gap-3 border-b pb-4">
-              <Settings className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-black tracking-tight m-0">
+          <Card className="p-4 sm:p-5 border-2 bg-card rounded-2xl space-y-4 shadow-xs">
+            <div className="flex items-center gap-2.5 border-b pb-3">
+              <Settings className="w-4 h-4 text-primary" />
+              <h3 className="text-base font-black tracking-tight m-0">
                 {t.settingsTitle}
               </h3>
             </div>
             
             {/* Resolution selection */}
-            <div className="space-y-3">
-              <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block">
+            <div className="space-y-2">
+              <label className="text-[11px] font-black uppercase tracking-wider text-muted-foreground block">
                 {t.targetRes}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setResolutionMode("standard")}
-                  className={`py-3 px-4 rounded-xl text-xs font-bold transition-all border-2 text-center flex flex-col justify-center items-center gap-1 ${
+                  className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border-2 text-center flex flex-col justify-center items-center gap-0.5 ${
                     resolutionMode === "standard"
                       ? "border-primary bg-primary/5 text-primary"
                       : "border-transparent bg-muted/50 hover:bg-muted text-muted-foreground"
                   }`}
                 >
-                  <span className="font-extrabold text-sm">{t.standardResTitle}</span>
-                  <span className="text-[10px] opacity-80">{t.standardResDesc}</span>
+                  <span className="font-extrabold text-xs">{t.standardResTitle}</span>
+                  <span className="text-[9px] opacity-80">{t.standardResDesc}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setResolutionMode("original")}
-                  className={`py-3 px-4 rounded-xl text-xs font-bold transition-all border-2 text-center flex flex-col justify-center items-center gap-1 ${
+                  className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border-2 text-center flex flex-col justify-center items-center gap-0.5 ${
                     resolutionMode === "original"
                       ? "border-primary bg-primary/5 text-primary"
                       : "border-transparent bg-muted/50 hover:bg-muted text-muted-foreground"
                   }`}
                 >
-                  <span className="font-extrabold text-sm">{t.originalResTitle}</span>
-                  <span className="text-[10px] opacity-80">{t.originalResDesc}</span>
+                  <span className="font-extrabold text-xs">{t.originalResTitle}</span>
+                  <span className="text-[9px] opacity-80">{t.originalResDesc}</span>
                 </button>
               </div>
             </div>
 
             {/* Subject Mode Selection */}
-            <div className="space-y-3 pt-2 border-t">
-              <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block">
+            <div className="space-y-2 pt-2 border-t">
+              <label className="text-[11px] font-black uppercase tracking-wider text-muted-foreground block">
                 {t.modelTitle}
               </label>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {t.models.map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => setModelMode(item.id)}
                     className={cn(
-                      "w-full text-left p-3 rounded-xl border-2 transition-all duration-300 flex flex-col gap-1 hover:shadow-sm active:scale-[0.99]",
+                      "w-full text-left p-2.5 rounded-xl border-2 transition-all duration-300 flex flex-col gap-0.5 hover:shadow-xs active:scale-[0.99]",
                       modelMode === item.id
                         ? "border-primary bg-primary/[0.03] text-foreground"
-                        : "border-zinc-200 dark:border-zinc-800 bg-muted/20 hover:bg-muted/40 text-muted-foreground"
+                        : "border-border/60 bg-muted/20 hover:bg-muted/40 text-muted-foreground"
                     )}
                   >
                     <div className="flex items-center justify-between w-full">
@@ -741,7 +741,7 @@ export default function BackgroundRemoverClient({
                       )}>
                         {item.name}
                       </span>
-                      <span className={cn("text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded border", item.badgeColor)}>
+                      <span className={cn("text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 rounded border", item.badgeColor)}>
                         {item.badge}
                       </span>
                     </div>
@@ -754,10 +754,10 @@ export default function BackgroundRemoverClient({
             </div>
 
             {/* Edge Refinement Toggle */}
-            <div className="space-y-3 pt-2 border-t">
+            <div className="space-y-2 pt-2 border-t">
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs font-black uppercase tracking-wider text-muted-foreground block mb-0.5">
+                  <label className="text-[11px] font-black uppercase tracking-wider text-muted-foreground block mb-0.5">
                     {t.smoothContours}
                   </label>
                   <span className="text-[10px] text-muted-foreground">
@@ -767,13 +767,13 @@ export default function BackgroundRemoverClient({
                 <button
                   type="button"
                   onClick={() => setRefineEdges(prev => !prev)}
-                  className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 focus:outline-none ${
+                  className={`w-11 h-6 rounded-full p-0.5 transition-colors duration-300 focus:outline-none shrink-0 ml-2 ${
                     refineEdges ? "bg-primary" : "bg-zinc-300 dark:bg-zinc-700"
                   }`}
                 >
                   <div
-                    className={`w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-300 ${
-                      refineEdges ? "translate-x-6" : "translate-x-0"
+                    className={`w-5 h-5 rounded-full bg-white shadow-xs transform transition-transform duration-300 ${
+                      refineEdges ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
                 </button>
@@ -782,8 +782,8 @@ export default function BackgroundRemoverClient({
           </Card>
 
           {originalFile && (
-            <Card className="p-6 rounded-2xl border-2 flex items-center gap-4 bg-white dark:bg-zinc-950 shadow-sm animate-in fade-in slide-in-from-left-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0 overflow-hidden">
+            <Card className="p-3.5 rounded-xl border-2 flex items-center gap-3 bg-card shadow-xs animate-in fade-in slide-in-from-left-2">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 overflow-hidden">
                 {originalUrl ? (
                   <img
                     src={originalUrl}
@@ -791,34 +791,34 @@ export default function BackgroundRemoverClient({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <ImageIcon className="h-6 w-6" />
+                  <ImageIcon className="h-5 w-5" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-bold truncate text-sm">{originalFile.name}</p>
-                <p className="text-xs text-muted-foreground">{originalFile.size}</p>
+                <p className="font-bold truncate text-xs">{originalFile.name}</p>
+                <p className="text-[10px] text-muted-foreground font-mono">{originalFile.size}</p>
               </div>
-              {result && <CheckCircle2 className="h-5 w-5 text-green-500" />}
+              {result && <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />}
             </Card>
           )}
 
-          <div className="grid grid-cols-2 gap-4">
-            <Card className="p-4 bg-muted border-none rounded-2xl flex items-center gap-3">
-              <Sparkles className="h-4 w-4 text-amber-500" />
+          <div className="grid grid-cols-2 gap-2.5">
+            <Card className="p-3 bg-muted/40 border rounded-xl flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-amber-500 shrink-0" />
               <span className="text-xs font-bold text-foreground">{t.aiPowered}</span>
             </Card>
-            <Card className="p-4 bg-muted border-none rounded-2xl flex items-center gap-3">
-              <Maximize2 className="h-4 w-4 text-blue-500" />
+            <Card className="p-3 bg-muted/40 border rounded-xl flex items-center gap-2">
+              <Maximize2 className="h-3.5 w-3.5 text-blue-500 shrink-0" />
               <span className="text-xs font-bold text-foreground">{t.fullResolution}</span>
             </Card>
           </div>
         </div>
 
         {/* Right Column: Results */}
-        <div ref={resultsRef} className="lg:col-span-7 scroll-mt-24">
+        <div ref={resultsRef} className="lg:col-span-7 space-y-4 scroll-mt-24">
           {isLoading ? (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-2 border-primary/20 bg-primary/5 rounded-[2.5rem]">
-              <div className="relative mb-6 w-32 h-32 rounded-3xl border border-primary/20 overflow-hidden flex items-center justify-center bg-zinc-100 dark:bg-zinc-900 shadow-md">
+            <Card className="h-[420px] flex flex-col items-center justify-center p-8 text-center border-2 border-primary/20 bg-primary/5 rounded-2xl">
+              <div className="relative mb-5 w-24 h-24 rounded-2xl border border-primary/20 overflow-hidden flex items-center justify-center bg-card shadow-xs">
                 {originalUrl && (
                   <img
                     src={originalUrl}
@@ -827,27 +827,27 @@ export default function BackgroundRemoverClient({
                   />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent animate-pulse" />
-                <Loader2 className="h-12 w-12 text-primary animate-spin relative z-10" />
+                <Loader2 className="h-10 w-10 text-primary animate-spin relative z-10" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">{t.removingBg}</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
+              <h3 className="text-xl font-black tracking-tight mb-1.5">{t.removingBg}</h3>
+              <p className="text-muted-foreground max-w-xs mx-auto text-xs leading-relaxed">
                 {t.removingBgDesc}
               </p>
             </Card>
           ) : result ? (
-            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
+            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2">
               {/* View Mode Switcher */}
-              <div className="flex items-center justify-between px-2">
+              <div className="flex items-center justify-between px-1">
                 <span className="text-xs font-black uppercase tracking-wider text-muted-foreground">
                   {t.previewMode}
                 </span>
-                <div className="flex items-center gap-1.5 p-1 bg-muted rounded-xl">
+                <div className="flex items-center gap-1 p-1 bg-muted rounded-xl">
                   <button
                     type="button"
                     onClick={() => setViewMode("slider")}
                     className={cn(
                       "px-3 py-1 rounded-lg text-xs font-bold transition-all",
-                      viewMode === "slider" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                      viewMode === "slider" ? "bg-background text-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     {t.interactiveSlider}
@@ -857,7 +857,7 @@ export default function BackgroundRemoverClient({
                     onClick={() => setViewMode("side-by-side")}
                     className={cn(
                       "px-3 py-1 rounded-lg text-xs font-bold transition-all",
-                      viewMode === "side-by-side" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                      viewMode === "side-by-side" ? "bg-background text-foreground shadow-xs" : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     {t.sideBySide}
@@ -866,48 +866,50 @@ export default function BackgroundRemoverClient({
               </div>
 
               {viewMode === "slider" && originalUrl ? (
-                <BeforeAfterSlider
-                  beforeImage={originalUrl}
-                  afterImage={result.url}
-                  beforeLabel={t.originalImageLabel}
-                  afterLabel={t.cutoutAiLabel}
-                  alt={originalFile?.name || "Removed Background"}
-                />
+                <div className="rounded-2xl border-2 overflow-hidden bg-card shadow-xs">
+                  <BeforeAfterSlider
+                    beforeImage={originalUrl}
+                    afterImage={result.url}
+                    beforeLabel={t.originalImageLabel}
+                    afterLabel={t.cutoutAiLabel}
+                    alt={originalFile?.name || "Removed Background"}
+                  />
+                </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Original Preview */}
-                  <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
-                    <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-zinc-950/80 text-zinc-50 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                  <Card className="p-3 bg-card border-2 rounded-2xl overflow-hidden relative flex flex-col justify-between">
+                    <div className="absolute top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-zinc-950/80 text-zinc-50 text-[9px] font-black uppercase tracking-wider shadow-xs">
                       {t.originalBadge}
                     </div>
-                    <div className="p-4 min-h-[350px] flex items-center justify-center">
+                    <div className="p-2 min-h-[300px] flex items-center justify-center">
                       {originalUrl && (
                         <img
                           src={originalUrl}
                           alt="Original Upload"
-                          className="max-w-full max-h-[350px] object-contain rounded-2xl shadow-md"
+                          className="max-w-full max-h-[300px] object-contain rounded-xl shadow-xs"
                         />
                       )}
                     </div>
                   </Card>
 
                   {/* Background Removed */}
-                  <Card className="p-4 bg-card border-2 rounded-[2.5rem] overflow-hidden relative flex flex-col justify-between">
-                    <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider shadow-sm">
+                  <Card className="p-3 bg-card border-2 rounded-2xl overflow-hidden relative flex flex-col justify-between">
+                    <div className="absolute top-3 left-3 z-20 px-2.5 py-0.5 rounded-full bg-primary text-primary-foreground text-[9px] font-black uppercase tracking-wider shadow-xs">
                       {t.bgRemovedBadge}
                     </div>
                     {/* Transparency Grid Pattern or custom background color */}
                     <div
                       className={cn(
-                        "absolute inset-4 rounded-[1.5rem] transition-all duration-300",
+                        "absolute inset-3 rounded-xl transition-all duration-300",
                         bgPreviewMode === "transparent" ? "opacity-40 dark:opacity-10" : "opacity-100"
                       )}
                       style={{
                         ...(bgPreviewMode === "transparent"
                           ? {
                               backgroundImage: 'linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(-45deg, transparent 75%, #e5e5e5 75%)',
-                              backgroundSize: '20px 20px',
-                              backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+                              backgroundSize: '16px 16px',
+                              backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px'
                             }
                           : bgPreviewMode === "white"
                           ? { backgroundColor: "#ffffff" }
@@ -920,13 +922,13 @@ export default function BackgroundRemoverClient({
                           : { backgroundImage: "linear-gradient(135deg, #34d399, #059669)" })
                       }}
                     />
-                    <div className="relative z-10 p-4 min-h-[350px] flex items-center justify-center">
+                    <div className="relative z-10 p-2 min-h-[300px] flex items-center justify-center">
                       <img
                         src={result.url}
                         alt="Removed Background"
                         className={cn(
-                          "max-w-full max-h-[350px] object-contain transition-all duration-300",
-                          applyShadow ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.55)]" : "drop-shadow-2xl"
+                          "max-w-full max-h-[300px] object-contain transition-all duration-300",
+                          applyShadow ? "drop-shadow-[0_16px_25px_rgba(0,0,0,0.55)]" : "drop-shadow-xl"
                         )}
                       />
                     </div>
@@ -934,38 +936,40 @@ export default function BackgroundRemoverClient({
                 </div>
               )}
 
-              <Card className="p-10 bg-zinc-950 text-zinc-50 border-none shadow-2xl rounded-[2.5rem] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
-                  <Sparkles className="h-32 w-32" />
+              <Card className="p-6 sm:p-8 bg-zinc-950 text-zinc-50 border-none shadow-xl rounded-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 opacity-10">
+                  <Sparkles className="h-24 w-24" />
                 </div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.4em] text-green-500 mb-4">
-                    <Zap className="h-4 w-4" /> {t.aiTransformationReady}
+                <div className="relative z-10 space-y-5">
+                  <div>
+                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.3em] text-green-500 mb-2">
+                      <Zap className="h-3.5 w-3.5" /> {t.aiTransformationReady}
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-black tracking-tight">{t.pixelPerfectTransparency}</h2>
                   </div>
-                  <h2 className="text-4xl font-black tracking-tight mb-8">{t.pixelPerfectTransparency}</h2>
 
                   {/* Backdrop Quick Editor panel */}
-                  <div className="space-y-4 mb-8 pb-8 border-b border-zinc-800 animate-in fade-in duration-300">
-                    <label className="text-xs font-black uppercase tracking-wider text-zinc-400 block">
+                  <div className="space-y-3 pb-5 border-b border-zinc-800 animate-in fade-in duration-300">
+                    <label className="text-[11px] font-black uppercase tracking-wider text-zinc-400 block">
                       {t.quickBackdropPresets}
                     </label>
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2.5">
                       <button
                         type="button"
                         onClick={() => setBgPreviewMode("transparent")}
                         className={cn(
-                          "w-10 h-10 rounded-full border-2 transition-all relative overflow-hidden active:scale-95",
+                          "w-9 h-9 rounded-full border-2 transition-all relative overflow-hidden active:scale-95",
                           bgPreviewMode === "transparent" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         title={t.gridTitle}
                       >
-                        <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center text-[9px] text-zinc-400 font-black">Grid</div>
+                        <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center text-[8px] text-zinc-400 font-black">Grid</div>
                       </button>
                       <button
                         type="button"
                         onClick={() => setBgPreviewMode("white")}
                         className={cn(
-                          "w-10 h-10 rounded-full border-2 bg-white transition-all active:scale-95",
+                          "w-9 h-9 rounded-full border-2 bg-white transition-all active:scale-95",
                           bgPreviewMode === "white" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         title={t.whiteTitle}
@@ -974,7 +978,7 @@ export default function BackgroundRemoverClient({
                         type="button"
                         onClick={() => setBgPreviewMode("black")}
                         className={cn(
-                          "w-10 h-10 rounded-full border-2 bg-black transition-all active:scale-95",
+                          "w-9 h-9 rounded-full border-2 bg-black transition-all active:scale-95",
                           bgPreviewMode === "black" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         title={t.blackTitle}
@@ -983,7 +987,7 @@ export default function BackgroundRemoverClient({
                         type="button"
                         onClick={() => setBgPreviewMode("blue")}
                         className={cn(
-                          "w-10 h-10 rounded-full border-2 transition-all active:scale-95",
+                          "w-9 h-9 rounded-full border-2 transition-all active:scale-95",
                           bgPreviewMode === "blue" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         style={{ backgroundImage: "linear-gradient(135deg, #60a5fa, #2563eb)" }}
@@ -993,7 +997,7 @@ export default function BackgroundRemoverClient({
                         type="button"
                         onClick={() => setBgPreviewMode("sunset")}
                         className={cn(
-                          "w-10 h-10 rounded-full border-2 transition-all active:scale-95",
+                          "w-9 h-9 rounded-full border-2 transition-all active:scale-95",
                           bgPreviewMode === "sunset" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         style={{ backgroundImage: "linear-gradient(135deg, #fb923c, #db2777)" }}
@@ -1003,7 +1007,7 @@ export default function BackgroundRemoverClient({
                         type="button"
                         onClick={() => setBgPreviewMode("neon")}
                         className={cn(
-                          "w-10 h-10 rounded-full border-2 transition-all active:scale-95",
+                          "w-9 h-9 rounded-full border-2 transition-all active:scale-95",
                           bgPreviewMode === "neon" ? "border-primary scale-110" : "border-zinc-700"
                         )}
                         style={{ backgroundImage: "linear-gradient(135deg, #34d399, #059669)" }}
@@ -1014,7 +1018,7 @@ export default function BackgroundRemoverClient({
                         type="button"
                         onClick={() => setApplyShadow(!applyShadow)}
                         className={cn(
-                          "ml-auto px-4 py-2 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95",
+                          "ml-auto px-3 py-1.5 rounded-xl border text-xs font-bold transition-all flex items-center gap-1 active:scale-95",
                           applyShadow ? "bg-primary border-primary text-primary-foreground" : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
                         )}
                       >
@@ -1024,34 +1028,34 @@ export default function BackgroundRemoverClient({
                   </div>
 
                   {/* Leftover background helper tip */}
-                  <div className="mb-8 p-5 rounded-[1.5rem] bg-zinc-900 border border-zinc-800/80 flex items-start gap-4 animate-in fade-in duration-500">
-                    <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5 animate-pulse" />
-                    <div className="text-left space-y-1">
+                  <div className="p-3.5 rounded-xl bg-zinc-900 border border-zinc-800/80 flex items-start gap-3 animate-in fade-in duration-500">
+                    <Sparkles className="h-4 w-4 text-primary shrink-0 mt-0.5 animate-pulse" />
+                    <div className="text-left space-y-0.5">
                       <p className="text-xs font-black text-zinc-200">{t.leftoverElementsTitle}</p>
-                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                      <p className="text-[10px] text-zinc-400 leading-relaxed">
                         {t.leftoverElementsDesc}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 pt-8 border-t border-zinc-800">
+                  <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-zinc-800">
                     <Button 
                       onClick={handleBakeAndDownload} 
-                      className="flex-1 h-16 text-lg font-black rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                      className="flex-1 h-12 text-sm sm:text-base font-black rounded-xl shadow-md hover:shadow-lg transition-all"
                     >
-                      <Download className="mr-2 h-6 w-6" /> {t.downloadResult}
+                      <Download className="mr-2 h-4 w-4" /> {t.downloadResult}
                     </Button>
                     <Button
                       type="button"
                       onClick={() => setIsEditing(true)}
-                      className="h-16 px-6 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-bold transition-all border border-zinc-700 flex items-center justify-center gap-2"
+                      className="h-12 px-5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-bold transition-all border border-zinc-700 flex items-center justify-center gap-1.5 text-xs"
                     >
-                      <Eraser className="h-5 w-5 text-primary animate-pulse" /> {t.editCutout}
+                      <Eraser className="h-4 w-4 text-primary animate-pulse" /> {t.editCutout}
                     </Button>
                     <Button
                       variant="outline"
                       onClick={handleReset}
-                      className="h-16 px-8 rounded-2xl border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-900 hover:text-white font-bold transition-all duration-300"
+                      className="h-12 px-5 rounded-xl border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-900 hover:text-white font-bold transition-all duration-300 text-xs"
                     >
                       {t.processAnother}
                     </Button>
@@ -1060,23 +1064,23 @@ export default function BackgroundRemoverClient({
               </Card>
             </div>
           ) : (
-            <Card className="h-[500px] flex flex-col items-center justify-center p-12 text-center border-dashed border-2 bg-card rounded-[2.5rem]">
-              <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
-                <ImageIcon className="h-12 w-12 text-muted-foreground" />
+            <Card className="h-[420px] flex flex-col items-center justify-center p-8 text-center border-dashed border-2 bg-card rounded-2xl">
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <ImageIcon className="h-8 w-8 text-muted-foreground" />
               </div>
-              <h3 className="text-2xl font-black tracking-tight mb-2">{t.readyForMagic}</h3>
-              <p className="text-muted-foreground max-w-xs mx-auto text-sm leading-relaxed">
+              <h3 className="text-xl font-black tracking-tight mb-1.5">{t.readyForMagic}</h3>
+              <p className="text-muted-foreground max-w-xs mx-auto text-xs leading-relaxed">
                 {t.readyForMagicDesc}
               </p>
-              <div className="mt-8 flex items-center gap-2 text-sm font-bold text-primary">
-                <ArrowRight className="h-4 w-4" /> {t.selectPhotoToBegin}
+              <div className="mt-6 flex items-center gap-1.5 text-xs font-bold text-primary">
+                <ArrowRight className="h-3.5 w-3.5" /> {t.selectPhotoToBegin}
               </div>
             </Card>
           )}
 
           {!isLoading && !result && originalFile && (
-            <div className="mt-6 p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-sm font-medium border border-red-100">
-              <AlertCircle className="h-5 w-5 shrink-0" />
+            <div className="mt-4 p-3 bg-red-50 text-red-600 rounded-xl flex items-center gap-2 text-xs font-medium border border-red-100">
+              <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{t.errorDesc}</span>
             </div>
           )}
