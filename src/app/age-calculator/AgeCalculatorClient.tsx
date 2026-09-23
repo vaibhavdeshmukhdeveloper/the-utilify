@@ -311,220 +311,230 @@ export default function AgeCalculatorClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-10 text-left">
-        {/* Controls form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            <div className="space-y-3">
-              <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Date of Birth</label>
-              <Input
-                type="date"
-                className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-                value={dob}
-                onChange={(e) => setDob(e.target.value)}
-              />
-              <div className="flex flex-wrap gap-1.5 pt-1 items-center">
-                <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Milestones:</span>
-                {[
-                  { label: "18 Yrs", years: 18 },
-                  { label: "25 Yrs", years: 25 },
-                  { label: "30 Yrs", years: 30 },
-                  { label: "40 Yrs", years: 40 },
-                  { label: "50 Yrs", years: 50 },
-                  { label: "65 Yrs", years: 65 },
-                ].map((m) => (
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-left">
+        {/* Left Column: Form & Inputs */}
+        <div className="lg:col-span-5 space-y-4">
+          <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5" /> Date of Birth
+                </label>
+                <Input
+                  type="date"
+                  className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                />
+                <div className="flex flex-wrap gap-1 pt-1 items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase mr-1">Milestones:</span>
+                  {[
+                    { label: "18Y", years: 18 },
+                    { label: "25Y", years: 25 },
+                    { label: "30Y", years: 30 },
+                    { label: "40Y", years: 40 },
+                    { label: "50Y", years: 50 },
+                    { label: "65Y", years: 65 },
+                  ].map((m) => (
+                    <button
+                      key={m.label}
+                      type="button"
+                      onClick={() => setDobForAge(m.years)}
+                      className="px-2 py-0.5 text-[11px] rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                    >
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" /> Target Date
+                  </label>
                   <button
-                    key={m.label}
                     type="button"
-                    onClick={() => setDobForAge(m.years)}
-                    className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                    onClick={() => setTargetDate(formatLocalDate(new Date()))}
+                    className="text-xs font-semibold text-primary hover:underline cursor-pointer"
                   >
-                    {m.label}
+                    Today
                   </button>
-                ))}
+                </div>
+                <Input
+                  type="date"
+                  className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary"
+                  value={targetDate}
+                  onChange={(e) => setTargetDate(e.target.value)}
+                />
+                <div className="flex flex-wrap gap-1 pt-1 items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase mr-1">Target:</span>
+                  <button
+                    type="button"
+                    onClick={setTargetToEndOfYear}
+                    className="px-2 py-0.5 text-[11px] rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                  >
+                    Dec 31
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTargetYearOffset(5)}
+                    className="px-2 py-0.5 text-[11px] rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                  >
+                    +5 Yrs
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTargetYearOffset(10)}
+                    className="px-2 py-0.5 text-[11px] rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                  >
+                    +10 Yrs
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Clock className="h-4 w-4" /> Calculate Age at Date</label>
-                <button
-                  type="button"
-                  onClick={() => setTargetDate(formatLocalDate(new Date()))}
-                  className="text-xs font-semibold text-primary hover:underline cursor-pointer"
-                >
-                  Today
-                </button>
-              </div>
-              <Input
-                type="date"
-                className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-                value={targetDate}
-                onChange={(e) => setTargetDate(e.target.value)}
-              />
-              <div className="flex flex-wrap gap-1.5 pt-1 items-center">
-                <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Target:</span>
-                <button
-                  type="button"
-                  onClick={setTargetToEndOfYear}
-                  className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
-                >
-                  End of Year
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setTargetYearOffset(5)}
-                  className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
-                >
-                  +5 Yrs
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setTargetYearOffset(10)}
-                  className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
-                >
-                  +10 Yrs
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-3">
-            <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg rounded-xl">
-              Calculate Age
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleReset}
-              className="h-14 px-5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
-              title="Reset to default dates"
-            >
-              <RotateCcw className="h-4 w-4 mr-2" /> Reset
-            </Button>
-          </div>
-        </form>
-
-        {validationError && (
-          <div className="p-5 bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 rounded-2xl flex items-center gap-3 animate-in fade-in">
-            <AlertCircle className="h-5 w-5 shrink-0 text-amber-500" />
-            <p className="text-sm font-semibold">{validationError}</p>
-          </div>
-        )}
-
-        {result && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
-            {result.isLeapDayBaby && (
-              <div className="p-3 bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 rounded-xl text-xs flex items-center gap-2">
-                <Sparkles className="h-4 w-4 shrink-0 text-purple-500" />
-                <span>Born on Leap Day (Feb 29): In non-leap common years, your official anniversary is observed on March 1st.</span>
-              </div>
-            )}
-            {/* Main outputs */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
-              {/* Exact Age Card */}
-              <Card className="md:col-span-6 p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center flex flex-col justify-center space-y-3 shadow-sm">
-                <div className="text-sm text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
-                  <Hourglass className="h-4 w-4 text-primary" /> {t.ageCalculator.exactAge}
-                </div>
-                <div className="text-4xl sm:text-5xl font-black text-primary tracking-tight">
-                  {result.years} <span className="text-xl text-muted-foreground font-normal">{t.ageCalculator.years}</span>
-                </div>
-                <div className="text-lg font-bold text-muted-foreground">
-                  {result.months} {t.ageCalculator.months}, {result.days} {t.ageCalculator.days}
-                </div>
-                {liveMode && (
-                  <span className="text-[10px] text-emerald-500 font-black tracking-widest uppercase flex items-center justify-center gap-1.5 mt-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" /> Live Ticking Enabled
-                  </span>
-                )}
-              </Card>
-
-              {/* Next Birthday Card */}
-              <Card className="md:col-span-6 p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center flex flex-col justify-center space-y-4 shadow-sm">
-                <div className="text-sm text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
-                  <Gift className="h-4 w-4 text-primary" /> {t.ageCalculator.nextBirthday}
-                </div>
-                <div className="flex justify-center items-center gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-primary font-mono">{result.nextBirthday.months}</div>
-                    <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Mths</div>
-                  </div>
-                  <div className="text-muted-foreground font-bold">:</div>
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-primary font-mono">{result.nextBirthday.days}</div>
-                    <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Days</div>
-                  </div>
-                  <div className="text-muted-foreground font-bold">:</div>
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-primary font-mono">{result.nextBirthday.hours.toString().padStart(2, "0")}</div>
-                    <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Hrs</div>
-                  </div>
-                  <div className="text-muted-foreground font-bold">:</div>
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-primary font-mono">{result.nextBirthday.minutes.toString().padStart(2, "0")}</div>
-                    <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Mins</div>
-                  </div>
-                  <div className="text-muted-foreground font-bold">:</div>
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-primary font-mono">{result.nextBirthday.seconds.toString().padStart(2, "0")}</div>
-                    <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">Secs</div>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground leading-normal font-medium">
-                  {result.nextBirthday.months === 0 && result.nextBirthday.days === 0
-                    ? t.ageCalculator.happyBirthday
-                    : t.ageCalculator.birthdayIn(result.nextBirthday.months, result.nextBirthday.days)}
-                </p>
-              </Card>
-            </div>
-
-            {/* Cumulative stats */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{t.ageCalculator.milestones}</h3>
+              <div className="flex gap-2.5 pt-2">
+                <Button type="submit" className="flex-1 h-11 text-sm font-black shadow-md hover:shadow-lg transition-all rounded-xl cursor-pointer">
+                  Calculate Age
+                </Button>
                 <Button
                   type="button"
-                  onClick={() => copyShareUrl({
-                    dob,
-                    target: targetDate,
-                  }, "Age Calculation")}
                   variant="outline"
-                  size="sm"
-                  className="rounded-xl border-2 font-bold h-10 text-primary border-primary/30 hover:bg-primary/5"
+                  onClick={handleReset}
+                  className="h-11 px-3.5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                  title="Reset to default dates"
                 >
-                  <Share2 className="h-4 w-4 mr-2" /> Share Age Milestones
+                  <RotateCcw className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-                <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none rounded-2xl shadow-sm">
-                  <div className="text-lg font-black text-primary font-mono truncate">{result.totalMonths.toLocaleString()}</div>
-                  <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-1">Months</div>
+            </form>
+          </Card>
+
+          {validationError && (
+            <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 rounded-xl flex items-center gap-2.5 text-xs">
+              <AlertCircle className="h-4 w-4 shrink-0 text-amber-500" />
+              <p className="font-semibold">{validationError}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: Live Results */}
+        <div className="lg:col-span-7 lg:sticky lg:top-4 space-y-4 scroll-mt-24">
+          {result && (
+            <div className="space-y-4 animate-in fade-in duration-200">
+              {result.isLeapDayBaby && (
+                <div className="p-2.5 bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 rounded-xl text-xs flex items-center gap-2">
+                  <Sparkles className="h-3.5 w-3.5 shrink-0 text-purple-500" />
+                  <span>Born on Leap Day (Feb 29): Celebrated on March 1st in common years.</span>
+                </div>
+              )}
+
+              {/* Exact Age & Birthday Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-stretch">
+                {/* Exact Age Card */}
+                <Card className="p-5 border-2 rounded-2xl text-center flex flex-col justify-center space-y-2 shadow-xs">
+                  <div className="text-xs text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
+                    <Hourglass className="h-3.5 w-3.5 text-primary" /> {t.ageCalculator.exactAge}
+                  </div>
+                  <div className="text-4xl sm:text-5xl font-black text-primary tracking-tight font-mono">
+                    {result.years} <span className="text-base text-muted-foreground font-normal">{t.ageCalculator.years}</span>
+                  </div>
+                  <div className="text-sm font-bold text-muted-foreground">
+                    {result.months} {t.ageCalculator.months}, {result.days} {t.ageCalculator.days}
+                  </div>
+                  {liveMode && (
+                    <span className="text-[10px] text-emerald-500 font-bold tracking-wider uppercase flex items-center justify-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Live Ticking
+                    </span>
+                  )}
                 </Card>
-                <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none rounded-2xl shadow-sm">
-                  <div className="text-lg font-black text-primary font-mono truncate">{result.totalWeeks.toLocaleString()}</div>
-                  <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-1">Weeks</div>
-                </Card>
-                <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none rounded-2xl shadow-sm">
-                  <div className="text-lg font-black text-primary font-mono truncate">{result.totalDays.toLocaleString()}</div>
-                  <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-1">Days</div>
-                </Card>
-                <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none rounded-2xl shadow-sm">
-                  <div className="text-lg font-black text-primary font-mono truncate">{result.totalHours.toLocaleString()}</div>
-                  <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-1">Hours</div>
-                </Card>
-                <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none rounded-2xl shadow-sm">
-                  <div className="text-lg font-black text-primary font-mono truncate">{result.totalMinutes.toLocaleString()}</div>
-                  <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-1">Minutes</div>
-                </Card>
-                <Card className="p-4 text-center bg-zinc-50 dark:bg-zinc-900 border-none rounded-2xl shadow-sm">
-                  <div className="text-lg font-black text-primary font-mono truncate">{result.totalSeconds.toLocaleString()}</div>
-                  <div className="text-[9px] uppercase font-black text-muted-foreground tracking-wider mt-1">Seconds</div>
+
+                {/* Next Birthday Card */}
+                <Card className="p-5 border-2 rounded-2xl text-center flex flex-col justify-center space-y-2.5 shadow-xs">
+                  <div className="text-xs text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
+                    <Gift className="h-3.5 w-3.5 text-primary" /> {t.ageCalculator.nextBirthday}
+                  </div>
+                  <div className="flex justify-center items-center gap-2.5">
+                    <div className="text-center">
+                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.months}</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Mths</div>
+                    </div>
+                    <div className="text-muted-foreground font-bold">:</div>
+                    <div className="text-center">
+                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.days}</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Days</div>
+                    </div>
+                    <div className="text-muted-foreground font-bold">:</div>
+                    <div className="text-center">
+                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.hours.toString().padStart(2, "0")}</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Hrs</div>
+                    </div>
+                    <div className="text-muted-foreground font-bold">:</div>
+                    <div className="text-center">
+                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.minutes.toString().padStart(2, "0")}</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Mins</div>
+                    </div>
+                    <div className="text-muted-foreground font-bold">:</div>
+                    <div className="text-center">
+                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.seconds.toString().padStart(2, "0")}</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Secs</div>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-tight font-medium">
+                    {result.nextBirthday.months === 0 && result.nextBirthday.days === 0
+                      ? t.ageCalculator.happyBirthday
+                      : t.ageCalculator.birthdayIn(result.nextBirthday.months, result.nextBirthday.days)}
+                  </p>
                 </Card>
               </div>
+
+              {/* Cumulative stats */}
+              <Card className="p-4 border-2 rounded-2xl space-y-3 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-black text-muted-foreground uppercase tracking-wider">{t.ageCalculator.milestones}</h3>
+                  <Button
+                    type="button"
+                    onClick={() => copyShareUrl({
+                      dob,
+                      target: targetDate,
+                    }, "Age Calculation")}
+                    variant="outline"
+                    size="sm"
+                    className="rounded-lg border font-bold h-8 text-xs text-primary border-primary/30 hover:bg-primary/5 cursor-pointer"
+                  >
+                    <Share2 className="h-3.5 w-3.5 mr-1.5" /> Share
+                  </Button>
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalMonths.toLocaleString()}</div>
+                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Months</div>
+                  </div>
+                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalWeeks.toLocaleString()}</div>
+                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Weeks</div>
+                  </div>
+                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalDays.toLocaleString()}</div>
+                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Days</div>
+                  </div>
+                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalHours.toLocaleString()}</div>
+                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Hours</div>
+                  </div>
+                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalMinutes.toLocaleString()}</div>
+                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Minutes</div>
+                  </div>
+                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
+                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalSeconds.toLocaleString()}</div>
+                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Seconds</div>
+                  </div>
+                </div>
+              </Card>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10 flex gap-3">
           <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />

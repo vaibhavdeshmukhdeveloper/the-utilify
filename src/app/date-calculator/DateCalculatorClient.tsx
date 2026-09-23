@@ -336,336 +336,358 @@ export default function DateCalculatorClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-10 text-left">
+      <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 text-left">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 h-14 rounded-2xl p-1 bg-zinc-100 dark:bg-zinc-900">
-            <TabsTrigger value="diff" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">Difference Between Dates</TabsTrigger>
-            <TabsTrigger value="math" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">Add / Subtract Days</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 h-11 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-800">
+            <TabsTrigger value="diff" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-xs">Difference Between Dates</TabsTrigger>
+            <TabsTrigger value="math" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-xs">Add / Subtract Days</TabsTrigger>
           </TabsList>
 
           {/* Difference Tab */}
-          <TabsContent value="diff" className="mt-8 m-0 space-y-8">
-            <form onSubmit={calculateDiff} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Start Date</label>
-                    <button
-                      type="button"
-                      onClick={() => setStartDate(formatLocalDate(new Date()))}
-                      className="text-xs font-semibold text-primary hover:underline cursor-pointer"
-                    >
-                      Today
-                    </button>
-                  </div>
-                  <Input
-                    type="date"
-                    className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                  />
-                </div>
+          <TabsContent value="diff" className="mt-4 m-0">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Left Column: Form & Controls */}
+              <div className="lg:col-span-5 space-y-4">
+                <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs space-y-4">
+                  <form onSubmit={calculateDiff} className="space-y-4">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5" /> Start Date
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setStartDate(formatLocalDate(new Date()))}
+                          className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                        >
+                          Today
+                        </button>
+                      </div>
+                      <Input
+                        type="date"
+                        className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                      />
+                    </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> End Date</label>
-                    <button
-                      type="button"
-                      onClick={() => setEndDate(formatLocalDate(new Date()))}
-                      className="text-xs font-semibold text-primary hover:underline cursor-pointer"
-                    >
-                      Today
-                    </button>
-                  </div>
-                  <Input
-                    type="date"
-                    className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                  />
-                  <div className="flex flex-wrap gap-1.5 pt-1 items-center">
-                    <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Quick Add:</span>
-                    {[
-                      { label: "+7D", days: 7 },
-                      { label: "+30D", days: 30 },
-                      { label: "+90D", days: 90 },
-                      { label: "+180D", days: 180 },
-                      { label: "+1Y", days: 365 },
-                    ].map((p) => (
-                      <button
-                        key={p.label}
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5" /> End Date
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setEndDate(formatLocalDate(new Date()))}
+                          className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                        >
+                          Today
+                        </button>
+                      </div>
+                      <Input
+                        type="date"
+                        className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                      />
+                      <div className="flex flex-wrap gap-1 pt-1 items-center">
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase mr-1">Quick Add:</span>
+                        {[
+                          { label: "+7D", days: 7 },
+                          { label: "+30D", days: 30 },
+                          { label: "+90D", days: 90 },
+                          { label: "+180D", days: 180 },
+                          { label: "+1Y", days: 365 },
+                        ].map((p) => (
+                          <button
+                            key={p.label}
+                            type="button"
+                            onClick={() => setEndDateOffset(p.days)}
+                            className="px-2 py-0.5 text-[11px] rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                          >
+                            {p.label}
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={setEndToYearEnd}
+                          className="px-2 py-0.5 text-[11px] rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                        >
+                          Dec 31
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2.5 pt-1">
+                      <input
+                        type="checkbox"
+                        id="includeEndDate"
+                        checked={includeEndDate}
+                        onChange={(e) => setIncludeEndDate(e.target.checked)}
+                        className="w-4 h-4 rounded border-zinc-300 dark:border-zinc-700 text-primary accent-primary cursor-pointer"
+                      />
+                      <label htmlFor="includeEndDate" className="text-xs font-bold text-muted-foreground cursor-pointer select-none">
+                        Include end date (+1 day)
+                      </label>
+                    </div>
+
+                    {startDate && endDate && startDate > endDate && (
+                      <div className="p-2.5 bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-300 rounded-xl text-xs flex items-center gap-2">
+                        <Info className="h-3.5 w-3.5 shrink-0" />
+                        <span>Start is after End — calculating absolute interval.</span>
+                      </div>
+                    )}
+
+                    <div className="flex gap-2.5 pt-2">
+                      <Button type="submit" className="flex-1 h-11 text-sm font-black shadow-md hover:shadow-lg transition-all rounded-xl cursor-pointer">
+                        Calculate Difference
+                      </Button>
+                      <Button
                         type="button"
-                        onClick={() => setEndDateOffset(p.days)}
-                        className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                        variant="outline"
+                        onClick={handleResetDiff}
+                        className="h-11 px-3.5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                        title="Reset dates"
                       >
-                        {p.label}
-                      </button>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={setEndToYearEnd}
-                      className="px-2 py-0.5 text-xs rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
-                    >
-                      Dec 31
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between p-1 flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    id="includeEndDate"
-                    checked={includeEndDate}
-                    onChange={(e) => setIncludeEndDate(e.target.checked)}
-                    className="w-5 h-5 rounded border-zinc-300 dark:border-zinc-700 text-primary accent-primary cursor-pointer"
-                  />
-                  <label htmlFor="includeEndDate" className="text-sm font-bold text-muted-foreground cursor-pointer select-none">
-                    Include end date in calculation (adds 1 day)
-                  </label>
-                </div>
-              </div>
-
-              {startDate && endDate && startDate > endDate && (
-                <div className="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-700 dark:text-blue-300 rounded-xl text-xs flex items-center gap-2">
-                  <Info className="h-4 w-4 shrink-0" />
-                  <span>Start date is after End date — calculating absolute elapsed interval between both dates.</span>
-                </div>
-              )}
-
-              <div className="flex gap-3">
-                <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg rounded-xl">
-                  Calculate Difference
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleResetDiff}
-                  className="h-14 px-5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
-                  title="Reset to default dates"
-                >
-                  <RotateCcw className="h-4 w-4 mr-2" /> Reset
-                </Button>
-              </div>
-            </form>
-
-            {diffResult && (
-              <div ref={diffResultsRef} className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
-                {/* Years-Months-Days layout */}
-                <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
-                  <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">Time Breakdown</div>
-                  <div className="flex justify-center items-center gap-6">
-                    <div className="text-center">
-                      <div className="text-5xl font-black text-primary font-mono">{diffResult.years}</div>
-                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">{t.dateCalculator.years}</div>
+                        <RotateCcw className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <div className="text-2xl font-bold text-zinc-300">/</div>
-                    <div className="text-center">
-                      <div className="text-5xl font-black text-primary font-mono">{diffResult.months}</div>
-                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">{t.dateCalculator.months}</div>
-                    </div>
-                    <div className="text-2xl font-bold text-zinc-300">/</div>
-                    <div className="text-center">
-                      <div className="text-5xl font-black text-primary font-mono">{diffResult.days}</div>
-                      <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-1">{t.dateCalculator.days}</div>
-                    </div>
-                  </div>
+                  </form>
                 </Card>
-
-                {/* Totals layout */}
-                <div className="grid grid-cols-2 gap-4 h-full">
-                  <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.businessDays}</span>
-                    <span className="text-3xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-2">{diffResult.businessDays.toLocaleString()}</span>
-                    <span className="text-[9px] text-muted-foreground mt-0.5">Mon–Fri</span>
-                  </Card>
-                  <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weekendDays}</span>
-                    <span className="text-3xl font-black text-zinc-500 font-mono mt-2">{diffResult.weekendDays.toLocaleString()}</span>
-                    <span className="text-[9px] text-muted-foreground mt-0.5">Sat &amp; Sun</span>
-                  </Card>
-                  <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.totalDays}</span>
-                    <span className="text-3xl font-black text-primary font-mono mt-2">{diffResult.totalDays.toLocaleString()}</span>
-                    <span className="text-[9px] text-muted-foreground mt-0.5">Calendar</span>
-                  </Card>
-                  <Card className="p-6 border-none bg-zinc-50 dark:bg-zinc-900 rounded-2xl flex flex-col justify-center items-center text-center">
-                    <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weeks}</span>
-                    <span className="text-3xl font-black text-primary font-mono mt-2">{diffResult.totalWeeks.toLocaleString()}</span>
-                    <span className="text-[9px] text-muted-foreground mt-0.5">Weeks</span>
-                  </Card>
-                  <div className="col-span-2 pt-2">
-                    <Button
-                      type="button"
-                      onClick={() => copyShareUrl({
-                        tab: "diff",
-                        start: startDate,
-                        end: endDate,
-                      }, "Date Interval")}
-                      variant="outline"
-                      size="sm"
-                      className="w-full rounded-xl border-2 font-bold h-11 text-primary border-primary/30 hover:bg-primary/5"
-                    >
-                      <Share2 className="h-4 w-4 mr-2" /> Share Date Interval
-                    </Button>
-                  </div>
-                </div>
               </div>
-            )}
+
+              {/* Right Column: Live Breakdown & Totals */}
+              <div ref={diffResultsRef} className="lg:col-span-7 lg:sticky lg:top-4 space-y-4 scroll-mt-24">
+                {diffResult && (
+                  <div className="space-y-4 animate-in fade-in duration-200">
+                    {/* Years-Months-Days layout */}
+                    <Card className="p-5 border-2 rounded-2xl text-center space-y-3 shadow-xs">
+                      <div className="text-xs text-muted-foreground font-black uppercase tracking-wider">Elapsed Time Interval</div>
+                      <div className="flex justify-center items-center gap-4 sm:gap-6">
+                        <div className="text-center">
+                          <div className="text-4xl sm:text-5xl font-black text-primary font-mono">{diffResult.years}</div>
+                          <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">{t.dateCalculator.years}</div>
+                        </div>
+                        <div className="text-xl font-bold text-zinc-300 dark:text-zinc-700">/</div>
+                        <div className="text-center">
+                          <div className="text-4xl sm:text-5xl font-black text-primary font-mono">{diffResult.months}</div>
+                          <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">{t.dateCalculator.months}</div>
+                        </div>
+                        <div className="text-xl font-bold text-zinc-300 dark:text-zinc-700">/</div>
+                        <div className="text-center">
+                          <div className="text-4xl sm:text-5xl font-black text-primary font-mono">{diffResult.days}</div>
+                          <div className="text-[10px] uppercase font-black text-muted-foreground tracking-wider mt-0.5">{t.dateCalculator.days}</div>
+                        </div>
+                      </div>
+                    </Card>
+
+                    {/* Totals grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
+                        <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.businessDays}</span>
+                        <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-1">{diffResult.businessDays.toLocaleString()}</span>
+                        <span className="text-[9px] text-muted-foreground">Mon–Fri</span>
+                      </Card>
+                      <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
+                        <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weekendDays}</span>
+                        <span className="text-2xl font-black text-zinc-500 font-mono mt-1">{diffResult.weekendDays.toLocaleString()}</span>
+                        <span className="text-[9px] text-muted-foreground">Sat &amp; Sun</span>
+                      </Card>
+                      <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
+                        <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.totalDays}</span>
+                        <span className="text-2xl font-black text-primary font-mono mt-1">{diffResult.totalDays.toLocaleString()}</span>
+                        <span className="text-[9px] text-muted-foreground">Calendar</span>
+                      </Card>
+                      <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
+                        <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weeks}</span>
+                        <span className="text-2xl font-black text-primary font-mono mt-1">{diffResult.totalWeeks.toLocaleString()}</span>
+                        <span className="text-[9px] text-muted-foreground">Weeks</span>
+                      </Card>
+                    </div>
+
+                    <div className="pt-1">
+                      <Button
+                        type="button"
+                        onClick={() => copyShareUrl({
+                          tab: "diff",
+                          start: startDate,
+                          end: endDate,
+                        }, "Date Interval")}
+                        variant="outline"
+                        size="sm"
+                        className="w-full rounded-xl border font-bold h-9 text-xs text-primary border-primary/30 hover:bg-primary/5 cursor-pointer"
+                      >
+                        <Share2 className="h-3.5 w-3.5 mr-1.5" /> Share Date Interval
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </TabsContent>
 
           {/* Math Tab */}
-          <TabsContent value="math" className="mt-8 m-0 space-y-8">
-            <form onSubmit={calculateMath} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5"><Calendar className="h-4 w-4" /> Base Date</label>
-                    <button
-                      type="button"
-                      onClick={() => setBaseDate(formatLocalDate(new Date()))}
-                      className="text-xs font-semibold text-primary hover:underline cursor-pointer"
-                    >
-                      Today
-                    </button>
-                  </div>
-                  <Input
-                    type="date"
-                    className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary"
-                    value={baseDate}
-                    onChange={(e) => setBaseDate(e.target.value)}
-                  />
-                </div>
+          <TabsContent value="math" className="mt-4 m-0">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Left Column: Form */}
+              <div className="lg:col-span-6 space-y-4">
+                <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs space-y-4">
+                  <form onSubmit={calculateMath} className="space-y-4">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5" /> Base Date
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setBaseDate(formatLocalDate(new Date()))}
+                          className="text-xs font-semibold text-primary hover:underline cursor-pointer"
+                        >
+                          Today
+                        </button>
+                      </div>
+                      <Input
+                        type="date"
+                        className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary"
+                        value={baseDate}
+                        onChange={(e) => setBaseDate(e.target.value)}
+                      />
+                    </div>
 
-                <div className="space-y-3">
-                  <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Operation</label>
-                  <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-900 h-14 rounded-xl items-center">
-                    <Button
-                      type="button"
-                      variant={operation === "add" ? "default" : "ghost"}
-                      onClick={() => setOperation("add")}
-                      className="flex-1 rounded-lg h-12 font-bold cursor-pointer"
-                    >
-                      <Plus className="h-4 w-4 mr-1.5" /> Add
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={operation === "subtract" ? "default" : "ghost"}
-                      onClick={() => setOperation("subtract")}
-                      className="flex-1 rounded-lg h-12 font-bold cursor-pointer"
-                    >
-                      <Minus className="h-4 w-4 mr-1.5" /> Subtract
-                    </Button>
-                  </div>
-                </div>
-              </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Operation</label>
+                      <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 h-11 rounded-xl items-center">
+                        <Button
+                          type="button"
+                          variant={operation === "add" ? "default" : "ghost"}
+                          onClick={() => setOperation("add")}
+                          className="flex-1 rounded-lg h-9 font-bold text-xs cursor-pointer"
+                        >
+                          <Plus className="h-3.5 w-3.5 mr-1" /> Add
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={operation === "subtract" ? "default" : "ghost"}
+                          onClick={() => setOperation("subtract")}
+                          className="flex-1 rounded-lg h-9 font-bold text-xs cursor-pointer"
+                        >
+                          <Minus className="h-3.5 w-3.5 mr-1" /> Subtract
+                        </Button>
+                      </div>
+                    </div>
 
-              {/* Adjustments row */}
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-muted-foreground uppercase">Years</label>
-                    <Input
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      className="h-12 text-center font-bold font-mono rounded-xl border-2"
-                      value={addYears}
-                      onChange={(e) => setAddYears(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-muted-foreground uppercase">Months</label>
-                    <Input
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      className="h-12 text-center font-bold font-mono rounded-xl border-2"
-                      value={addMonths}
-                      onChange={(e) => setAddMonths(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-muted-foreground uppercase">Days</label>
-                    <Input
-                      type="number"
-                      min="0"
-                      placeholder="0"
-                      className="h-12 text-center font-bold font-mono rounded-xl border-2"
-                      value={addDays}
-                      onChange={(e) => setAddDays(e.target.value)}
-                    />
-                  </div>
-                </div>
+                    {/* Adjustments row */}
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-muted-foreground uppercase">Duration Adjustment</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="space-y-1">
+                          <span className="text-[11px] font-bold text-muted-foreground">Years</span>
+                          <Input
+                            type="number"
+                            min="0"
+                            placeholder="0"
+                            className="h-10 text-center font-bold font-mono rounded-xl border-2"
+                            value={addYears}
+                            onChange={(e) => setAddYears(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <span className="text-[11px] font-bold text-muted-foreground">Months</span>
+                          <Input
+                            type="number"
+                            min="0"
+                            placeholder="0"
+                            className="h-10 text-center font-bold font-mono rounded-xl border-2"
+                            value={addMonths}
+                            onChange={(e) => setAddMonths(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <span className="text-[11px] font-bold text-muted-foreground">Days</span>
+                          <Input
+                            type="number"
+                            min="0"
+                            placeholder="0"
+                            className="h-10 text-center font-bold font-mono rounded-xl border-2"
+                            value={addDays}
+                            onChange={(e) => setAddDays(e.target.value)}
+                          />
+                        </div>
+                      </div>
 
-                <div className="flex flex-wrap gap-1.5 items-center pt-1">
-                  <span className="text-[11px] font-bold text-muted-foreground uppercase mr-1">Quick Intervals:</span>
-                  {[
-                    { label: "+7 Days", op: "add" as const, y: 0, m: 0, d: 7 },
-                    { label: "+14 Days", op: "add" as const, y: 0, m: 0, d: 14 },
-                    { label: "+30 Days", op: "add" as const, y: 0, m: 0, d: 30 },
-                    { label: "+60 Days", op: "add" as const, y: 0, m: 0, d: 60 },
-                    { label: "+90 Days", op: "add" as const, y: 0, m: 0, d: 90 },
-                    { label: "+6 Months", op: "add" as const, y: 0, m: 6, d: 0 },
-                    { label: "+1 Year", op: "add" as const, y: 1, m: 0, d: 0 },
-                    { label: "-30 Days", op: "subtract" as const, y: 0, m: 0, d: 30 },
-                  ].map((preset) => (
-                    <button
-                      key={preset.label}
-                      type="button"
-                      onClick={() => applyMathPreset(preset.op, preset.y, preset.m, preset.d)}
-                      className="px-2.5 py-1 text-xs rounded-lg font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
-                    >
-                      {preset.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                      <div className="flex flex-wrap gap-1 items-center pt-1">
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase mr-1">Quick:</span>
+                        {[
+                          { label: "+7D", op: "add" as const, y: 0, m: 0, d: 7 },
+                          { label: "+14D", op: "add" as const, y: 0, m: 0, d: 14 },
+                          { label: "+30D", op: "add" as const, y: 0, m: 0, d: 30 },
+                          { label: "+60D", op: "add" as const, y: 0, m: 0, d: 60 },
+                          { label: "+90D", op: "add" as const, y: 0, m: 0, d: 90 },
+                          { label: "+6M", op: "add" as const, y: 0, m: 6, d: 0 },
+                          { label: "+1Y", op: "add" as const, y: 1, m: 0, d: 0 },
+                          { label: "-30D", op: "subtract" as const, y: 0, m: 0, d: 30 },
+                        ].map((preset) => (
+                          <button
+                            key={preset.label}
+                            type="button"
+                            onClick={() => applyMathPreset(preset.op, preset.y, preset.m, preset.d)}
+                            className="px-2 py-0.5 text-[11px] rounded-md font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors cursor-pointer"
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-              <div className="flex gap-3">
-                <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg rounded-xl">
-                  Calculate Target Date
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleResetMath}
-                  className="h-14 px-5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
-                  title="Reset to default projection"
-                >
-                  <RotateCcw className="h-4 w-4 mr-2" /> Reset
-                </Button>
-              </div>
-            </form>
-
-            {mathResult && (
-              <div ref={mathResultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-xl mx-auto scroll-mt-24">
-                <Card className="p-8 border-none bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-center space-y-4">
-                  <div className="text-sm text-muted-foreground font-black uppercase tracking-widest">{t.dateCalculator.projectedDate}</div>
-                  <div className="text-3xl font-black text-primary tracking-tight">{mathResult.formattedDate}</div>
-                  <div className="text-lg font-bold text-muted-foreground flex items-center justify-center gap-1.5 mb-4">
-                    <ArrowRight className="h-4 w-4 text-primary" /> {mathResult.dayOfWeek}
-                  </div>
-                  <Button
-                    type="button"
-                    onClick={() => copyShareUrl({
-                      tab: "math",
-                      base: baseDate,
-                      op: operation,
-                      years: addYears !== "0" ? addYears : undefined,
-                      months: addMonths !== "0" ? addMonths : undefined,
-                      days: addDays !== "0" ? addDays : undefined,
-                    }, "Date Calculation")}
-                    variant="outline"
-                    size="sm"
-                    className="rounded-xl border-2 font-bold h-11 text-primary border-primary/30 hover:bg-primary/5 mx-auto"
-                  >
-                    <Share2 className="h-4 w-4 mr-2" /> Share Calculation
-                  </Button>
+                    <div className="flex gap-2.5 pt-2">
+                      <Button type="submit" className="flex-1 h-11 text-sm font-black shadow-md hover:shadow-lg transition-all rounded-xl cursor-pointer">
+                        Calculate Target Date
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleResetMath}
+                        className="h-11 px-3.5 rounded-xl border-2 font-bold hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                        title="Reset"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </form>
                 </Card>
               </div>
-            )}
+
+              {/* Right Column: Result */}
+              <div ref={mathResultsRef} className="lg:col-span-6 lg:sticky lg:top-4 space-y-4 scroll-mt-24">
+                {mathResult && (
+                  <Card className="p-6 border-2 rounded-2xl text-center space-y-3.5 shadow-xs animate-in fade-in duration-200">
+                    <div className="text-xs text-muted-foreground font-black uppercase tracking-wider">{t.dateCalculator.projectedDate}</div>
+                    <div className="text-3xl sm:text-4xl font-black text-primary tracking-tight font-mono">{mathResult.formattedDate}</div>
+                    <div className="text-sm font-bold text-muted-foreground flex items-center justify-center gap-1.5 pb-2">
+                      <ArrowRight className="h-4 w-4 text-primary" /> {mathResult.dayOfWeek}
+                    </div>
+                    <div className="pt-2 border-t">
+                      <Button
+                        type="button"
+                        onClick={() => copyShareUrl({
+                          tab: "math",
+                          base: baseDate,
+                          op: operation,
+                          years: addYears !== "0" ? addYears : undefined,
+                          months: addMonths !== "0" ? addMonths : undefined,
+                          days: addDays !== "0" ? addDays : undefined,
+                        }, "Date Calculation")}
+                        variant="outline"
+                        size="sm"
+                        className="rounded-xl border font-bold h-9 text-xs text-primary border-primary/30 hover:bg-primary/5 mx-auto cursor-pointer"
+                      >
+                        <Share2 className="h-3.5 w-3.5 mr-1.5" /> Share Calculation
+                      </Button>
+                    </div>
+                  </Card>
+                )}
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
         

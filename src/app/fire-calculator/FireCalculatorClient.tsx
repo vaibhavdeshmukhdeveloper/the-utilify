@@ -15,6 +15,8 @@ import {
   CheckCircle2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useCurrency, formatCurrencyValue, formatNumberWithCurrency } from "@/lib/currency";
+import { CurrencySelector } from "@/components/CurrencySelector";
 
 export interface FireCalculatorClientProps {
   customTitle?: string;
@@ -33,6 +35,7 @@ export default function FireCalculatorClient({
   customFaqs,
   lang,
 }: FireCalculatorClientProps = {}) {
+  const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
   const [annualExpenses, setAnnualExpenses] = useState<number>(48000);
   const [currentNetWorth, setCurrentNetWorth] = useState<number>(100000);
   const [monthlySavings, setMonthlySavings] = useState<number>(2000);
@@ -105,9 +108,15 @@ export default function FireCalculatorClient({
   }, [annualExpenses, currentNetWorth, monthlySavings, expectedReturn, expectedInflation, swr]);
 
   const reset = () => {
-    setAnnualExpenses(48000);
-    setCurrentNetWorth(100000);
-    setMonthlySavings(2000);
+    if (currency === "INR") {
+      setAnnualExpenses(1200000);
+      setCurrentNetWorth(2500000);
+      setMonthlySavings(50000);
+    } else {
+      setAnnualExpenses(48000);
+      setCurrentNetWorth(100000);
+      setMonthlySavings(2000);
+    }
     setExpectedReturn(10);
     setExpectedInflation(3.5);
     setSwr(4.0);
@@ -115,11 +124,11 @@ export default function FireCalculatorClient({
 
   const handleCopySummary = () => {
     const text = `🔥 My FIRE Plan (The Utilify)
-• Target FIRE Number: $${calculations.fireNumber.toLocaleString()}
+• Target FIRE Number: ${formatCurrencyValue(calculations.fireNumber, currency)}
 • Safe Withdrawal Rate: ${swr}%
 • Estimated Time to FIRE: ${calculations.yearsToFire} Years (${calculations.targetDateFormatted})
-• Lean FIRE (75%): $${calculations.leanFireNumber.toLocaleString()}
-• Fat FIRE (125%): $${calculations.fatFireNumber.toLocaleString()}
+• Lean FIRE (75%): ${formatCurrencyValue(calculations.leanFireNumber, currency)}
+• Fat FIRE (125%): ${formatCurrencyValue(calculations.fatFireNumber, currency)}
 Calculate yours: https://www.theutilify.com/fire-calculator`;
 
     navigator.clipboard.writeText(text);
@@ -170,35 +179,35 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
     >
-      <div className="w-full max-w-5xl mx-auto space-y-8">
+      <div className="w-full max-w-5xl mx-auto space-y-5 sm:space-y-6">
         {/* Top Summary Header Banner */}
-        <div className="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-primary/10 border border-orange-500/20 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-          <div className="space-y-2 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-black uppercase tracking-wider">
+        <div className="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-primary/10 border border-orange-500/20 rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xs">
+          <div className="space-y-1.5 text-center md:text-left">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 text-[11px] font-black uppercase tracking-wider">
               <Flame className="w-3.5 h-3.5" /> 4% Safe Withdrawal Rule
             </div>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-foreground">
-              ${calculations.fireNumber.toLocaleString()}
+              {formatCurrencyValue(calculations.fireNumber, currency)}
             </h2>
-            <p className="text-sm text-muted-foreground">
-              Target portfolio to generate <span className="font-bold text-foreground">${annualExpenses.toLocaleString()}/year</span> in perpetual passive income.
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Target portfolio to generate <span className="font-bold text-foreground">{formatCurrencyValue(annualExpenses, currency)}/year</span> in perpetual passive income.
             </p>
             {calculations.statusMessage && (
-              <p className="text-xs text-amber-500 dark:text-amber-400 font-bold mt-2">
+              <p className="text-xs text-amber-500 dark:text-amber-400 font-bold mt-1">
                 {calculations.statusMessage}
               </p>
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-            <div className="text-center bg-card/80 backdrop-blur border rounded-2xl px-5 py-3 w-full sm:w-auto">
-              <span className="text-xs text-muted-foreground uppercase font-bold block">Years to FIRE</span>
-              <span className="text-2xl font-black text-primary">{calculations.yearsToFire} Yrs</span>
-              <span className="text-[11px] text-muted-foreground block">{calculations.targetDateFormatted}</span>
+          <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto">
+            <div className="text-center bg-card/80 backdrop-blur border rounded-xl px-4 py-2.5 w-full sm:w-auto">
+              <span className="text-[10px] text-muted-foreground uppercase font-bold block">Years to FIRE</span>
+              <span className="text-xl sm:text-2xl font-black text-primary">{calculations.yearsToFire} Yrs</span>
+              <span className="text-[10px] text-muted-foreground block">{calculations.targetDateFormatted}</span>
             </div>
             <Button
               onClick={handleCopySummary}
-              className="rounded-2xl h-14 px-6 font-bold gap-2 w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
+              className="rounded-xl h-11 px-4 text-xs sm:text-sm font-bold gap-1.5 w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/20"
             >
               {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copied ? "Copied!" : "Share Plan"}
@@ -206,15 +215,19 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
           </div>
         </div>
 
-        {/* Quick Strategy Presets */}
-        <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-muted/30 border rounded-2xl">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-muted-foreground px-2">Presets:</span>
-            {[
-              { label: "Lean FIRE ($36k/yr)", exp: 36000, pmt: 1500 },
-              { label: "Standard FIRE ($60k/yr)", exp: 60000, pmt: 2500 },
-              { label: "Fat FIRE ($120k/yr)", exp: 120000, pmt: 5000 },
-            ].map((preset) => (
+        {/* Quick Strategy Presets + Currency Selector */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-2.5 bg-muted/30 border rounded-xl sm:rounded-2xl">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-bold text-muted-foreground px-1.5">Presets:</span>
+            {(currency === "INR" ? [
+              { label: "Lean FIRE (₹6L/yr)", exp: 600000, pmt: 25000 },
+              { label: "Standard FIRE (₹12L/yr)", exp: 1200000, pmt: 50000 },
+              { label: "Fat FIRE (₹25L/yr)", exp: 2500000, pmt: 100000 },
+            ] : [
+              { label: `Lean (${currencyInfo.symbol}36k/yr)`, exp: 36000, pmt: 1500 },
+              { label: `Standard (${currencyInfo.symbol}60k/yr)`, exp: 60000, pmt: 2500 },
+              { label: `Fat (${currencyInfo.symbol}120k/yr)`, exp: 120000, pmt: 5000 },
+            ]).map((preset) => (
               <button
                 key={preset.label}
                 type="button"
@@ -222,7 +235,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                   setAnnualExpenses(preset.exp);
                   setMonthlySavings(preset.pmt);
                 }}
-                className={`text-xs px-3 py-1.5 rounded-xl border font-bold transition-all cursor-pointer ${
+                className={`text-xs px-2.5 py-1 rounded-lg border font-bold transition-all cursor-pointer ${
                   annualExpenses === preset.exp
                     ? "bg-primary text-primary-foreground border-primary shadow-xs"
                     : "bg-card hover:bg-muted text-foreground border-border/60"
@@ -231,160 +244,171 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                 {preset.label}
               </button>
             ))}
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={reset}
+              className="text-xs font-bold rounded-lg text-muted-foreground hover:text-foreground h-7 px-2"
+            >
+              Reset
+            </Button>
           </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={reset}
-            className="text-xs font-bold rounded-xl text-muted-foreground hover:text-foreground"
-          >
-            Reset Defaults
-          </Button>
+
+          <div className="flex items-center justify-end gap-2 shrink-0">
+            <span className="text-xs text-muted-foreground font-semibold hidden sm:inline">Currency:</span>
+            <CurrencySelector value={currency} onChange={setCurrency} size="sm" />
+          </div>
         </div>
 
         {/* Main Grid: Inputs vs Tiers */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Left Column: Inputs */}
-          <div className="lg:col-span-7 space-y-6">
-            <Card className="p-6 sm:p-8 rounded-3xl border bg-card space-y-6 shadow-sm">
-              <div className="flex items-center justify-between border-b pb-4">
-                <h3 className="font-black text-lg text-foreground flex items-center gap-2">
-                  <Target className="w-5 h-5 text-primary" /> Financial Assumptions
+          <div className="lg:col-span-7 space-y-4">
+            <Card className="p-4 sm:p-5 rounded-2xl border bg-card space-y-4 shadow-xs">
+              <div className="flex items-center justify-between border-b pb-3">
+                <h3 className="font-black text-base text-foreground flex items-center gap-1.5">
+                  <Target className="w-4 h-4 text-primary" /> Financial Assumptions
                 </h3>
                 <span className="text-xs text-muted-foreground font-mono">Real CAGR: ~{calculations.realReturnRate}%</span>
               </div>
 
               {/* Annual Expenses */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-sm font-bold">
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs font-bold">
                   <label className="text-foreground">Annual Living Expenses in Retirement</label>
                   <div className="relative w-36">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
+                      {currencyInfo.symbol}
+                    </span>
                     <Input
                       type="text"
                       inputMode="numeric"
-                      value={annualExpenses.toLocaleString()}
+                      value={formatNumberWithCurrency(String(annualExpenses), currency)}
                       onChange={(e) => {
                         const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
                         setAnnualExpenses(Math.max(0, val));
                       }}
-                      className="h-9 pl-7 pr-2 font-mono font-black text-right rounded-lg text-sm bg-background border"
+                      className="h-8 pl-6 pr-2 font-mono font-bold text-right rounded-lg text-xs bg-background border"
                     />
                   </div>
                 </div>
                 <Slider
-                  value={[Math.min(250000, Math.max(12000, annualExpenses))]}
+                  value={[Math.min(currency === "INR" ? 10000000 : 250000, Math.max(currency === "INR" ? 100000 : 12000, annualExpenses))]}
                   onValueChange={(val) => setAnnualExpenses(Array.isArray(val) ? val[0] : val)}
-                  min={12000}
-                  max={250000}
-                  step={1000}
-                  className="py-2"
+                  min={currency === "INR" ? 100000 : 12000}
+                  max={currency === "INR" ? 10000000 : 250000}
+                  step={currency === "INR" ? 25000 : 1000}
+                  className="py-1"
                 />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>$12,000 / yr ($1k/mo)</span>
-                  <span>$250,000 / yr (~$21k/mo)</span>
+                <div className="flex justify-between text-[11px] text-muted-foreground">
+                  <span>{formatCurrencyValue(currency === "INR" ? 100000 : 12000, currency)}/yr</span>
+                  <span>{formatCurrencyValue(currency === "INR" ? 10000000 : 250000, currency)}/yr</span>
                 </div>
               </div>
 
               {/* Current Net Worth */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-sm font-bold">
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs font-bold">
                   <label className="text-foreground">Current Investment Portfolio Net Worth</label>
                   <div className="relative w-36">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
+                      {currencyInfo.symbol}
+                    </span>
                     <Input
                       type="text"
                       inputMode="numeric"
-                      value={currentNetWorth.toLocaleString()}
+                      value={formatNumberWithCurrency(String(currentNetWorth), currency)}
                       onChange={(e) => {
                         const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
                         setCurrentNetWorth(Math.max(0, val));
                       }}
-                      className="h-9 pl-7 pr-2 font-mono font-black text-right rounded-lg text-sm bg-background border"
+                      className="h-8 pl-6 pr-2 font-mono font-bold text-right rounded-lg text-xs bg-background border"
                     />
                   </div>
                 </div>
                 <Slider
-                  value={[Math.min(1000000, Math.max(0, currentNetWorth))]}
+                  value={[Math.min(currency === "INR" ? 50000000 : 1000000, Math.max(0, currentNetWorth))]}
                   onValueChange={(val) => setCurrentNetWorth(Array.isArray(val) ? val[0] : val)}
                   min={0}
-                  max={1000000}
-                  step={5000}
-                  className="py-2"
+                  max={currency === "INR" ? 50000000 : 1000000}
+                  step={currency === "INR" ? 100000 : 5000}
+                  className="py-1"
                 />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>$0</span>
-                  <span>$1,000,000+</span>
+                <div className="flex justify-between text-[11px] text-muted-foreground">
+                  <span>{formatCurrencyValue(0, currency)}</span>
+                  <span>{formatCurrencyValue(currency === "INR" ? 50000000 : 1000000, currency)}+</span>
                 </div>
               </div>
 
               {/* Monthly Savings */}
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-sm font-bold">
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center text-xs font-bold">
                   <label className="text-foreground">Monthly Investment Contribution</label>
                   <div className="relative w-36">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">$</span>
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
+                      {currencyInfo.symbol}
+                    </span>
                     <Input
                       type="text"
                       inputMode="numeric"
-                      value={monthlySavings.toLocaleString()}
+                      value={formatNumberWithCurrency(String(monthlySavings), currency)}
                       onChange={(e) => {
                         const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
                         setMonthlySavings(val);
                       }}
-                      className="h-9 pl-7 pr-2 font-mono font-black text-right rounded-lg text-sm bg-background border"
+                      className="h-8 pl-6 pr-2 font-mono font-bold text-right rounded-lg text-xs bg-background border"
                     />
                   </div>
                 </div>
                 <Slider
-                  value={[Math.min(20000, Math.max(100, monthlySavings))]}
+                  value={[Math.min(currency === "INR" ? 500000 : 20000, Math.max(currency === "INR" ? 1000 : 100, monthlySavings))]}
                   onValueChange={(val) => setMonthlySavings(Array.isArray(val) ? val[0] : val)}
-                  min={100}
-                  max={20000}
-                  step={100}
-                  className="py-2"
+                  min={currency === "INR" ? 1000 : 100}
+                  max={currency === "INR" ? 500000 : 20000}
+                  step={currency === "INR" ? 1000 : 100}
+                  className="py-1"
                 />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>$100 / mo</span>
-                  <span>$20,000 / mo</span>
+                <div className="flex justify-between text-[11px] text-muted-foreground">
+                  <span>{formatCurrencyValue(currency === "INR" ? 1000 : 100, currency)}/mo</span>
+                  <span>{formatCurrencyValue(currency === "INR" ? 500000 : 20000, currency)}/mo</span>
                 </div>
               </div>
 
-              {/* Expected Return & Inflation */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground uppercase">Expected Annual Return</label>
-                  <div className="flex items-center gap-2">
+              {/* Expected Return & Inflation (Side-by-Side) */}
+              <div className="grid grid-cols-2 gap-3 pt-2 border-t">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Expected Return</label>
+                  <div className="flex items-center gap-1.5">
                     <Input
                       type="number"
                       value={expectedReturn}
                       onChange={(e) => setExpectedReturn(parseFloat(e.target.value) || 0)}
-                      className="rounded-xl font-bold font-mono h-11"
+                      className="rounded-xl font-bold font-mono h-9 text-xs sm:text-sm"
                     />
-                    <span className="text-sm font-bold text-muted-foreground">%</span>
+                    <span className="text-xs font-bold text-muted-foreground">%</span>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-muted-foreground uppercase">Expected Inflation Rate</label>
-                  <div className="flex items-center gap-2">
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Expected Inflation</label>
+                  <div className="flex items-center gap-1.5">
                     <Input
                       type="number"
                       value={expectedInflation}
                       onChange={(e) => setExpectedInflation(parseFloat(e.target.value) || 0)}
-                      className="rounded-xl font-bold font-mono h-11"
+                      className="rounded-xl font-bold font-mono h-9 text-xs sm:text-sm"
                     />
-                    <span className="text-sm font-bold text-muted-foreground">%</span>
+                    <span className="text-xs font-bold text-muted-foreground">%</span>
                   </div>
                 </div>
               </div>
 
               {/* Safe Withdrawal Rate */}
-              <div className="space-y-2 pt-2 border-t">
-                <div className="flex justify-between items-center text-sm font-bold">
+              <div className="space-y-1.5 pt-2 border-t">
+                <div className="flex justify-between items-center text-xs font-bold">
                   <label className="text-foreground">Safe Withdrawal Rate (SWR)</label>
-                  <span className="text-orange-500 font-mono font-black">{swr.toFixed(1)}% (Multiplier: {swr > 0 ? (100 / swr).toFixed(1) : 0}x)</span>
+                  <span className="text-orange-500 font-mono font-black">{swr.toFixed(1)}% ({swr > 0 ? (100 / swr).toFixed(1) : 0}x)</span>
                 </div>
                 <Slider
                   value={[swr]}
@@ -392,10 +416,10 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                   min={2.5}
                   max={5.0}
                   step={0.1}
-                  className="py-2"
+                  className="py-1"
                 />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>2.5% (Ultra-Conservative)</span>
+                <div className="flex justify-between text-[11px] text-muted-foreground">
+                  <span>2.5% (Ultra-Safe)</span>
                   <span>4.0% (Trinity Rule)</span>
                   <span>5.0% (Aggressive)</span>
                 </div>
@@ -404,75 +428,87 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
           </div>
 
           {/* Right Column: FIRE Tiers & Progress */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-4">
             {/* Progress Card */}
-            <Card className="p-6 rounded-3xl border bg-card space-y-4 shadow-sm">
+            <Card className="p-4 sm:p-5 rounded-2xl border bg-card space-y-3 shadow-xs">
               <div className="flex items-center justify-between">
-                <h4 className="font-bold text-sm text-foreground">FIRE Portfolio Progress</h4>
-                <span className="text-xs font-black px-2.5 py-1 rounded-full bg-primary/10 text-primary">
+                <h4 className="font-bold text-xs text-foreground uppercase tracking-wider">FIRE Progress</h4>
+                <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-primary/10 text-primary">
                   {calculations.currentProgress}% Funded
                 </span>
               </div>
-              <div className="w-full bg-muted/60 h-3 rounded-full overflow-hidden">
+              <div className="w-full bg-muted/60 h-2.5 rounded-full overflow-hidden">
                 <div
                   className="bg-gradient-to-r from-orange-500 to-amber-500 h-full rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(100, calculations.currentProgress)}%` }}
                 />
               </div>
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Current: ${currentNetWorth.toLocaleString()}</span>
-                <span>Target: ${calculations.fireNumber.toLocaleString()}</span>
+              <div className="flex justify-between text-[11px] text-muted-foreground font-medium">
+                <span>Current: {formatCurrencyValue(currentNetWorth, currency)}</span>
+                <span>Target: {formatCurrencyValue(calculations.fireNumber, currency)}</span>
               </div>
             </Card>
 
             {/* FIRE Milestone Tiers */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-black uppercase tracking-wider text-muted-foreground px-1">
+            <div className="space-y-2.5">
+              <h4 className="text-[11px] font-black uppercase tracking-wider text-muted-foreground px-1">
                 FIRE Strategy Variations
               </h4>
 
               {/* Lean FIRE */}
-              <Card className="p-5 rounded-2xl border bg-card/60 hover:bg-card transition-all flex items-center justify-between">
+              <Card className="p-3.5 sm:p-4 rounded-xl border bg-card/60 hover:bg-card transition-all flex items-center justify-between">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                    <span className="font-black text-sm text-foreground">Lean FIRE (75%)</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="font-black text-xs sm:text-sm text-foreground">Lean FIRE (75%)</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">Essential living expenses only</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">Essential living expenses only</p>
                 </div>
                 <div className="text-right">
-                  <span className="font-black font-mono text-base text-foreground">${calculations.leanFireNumber.toLocaleString()}</span>
-                  <span className="text-[11px] text-muted-foreground block">${Math.round(annualExpenses * 0.75).toLocaleString()}/yr</span>
+                  <span className="font-black font-mono text-sm sm:text-base text-foreground">
+                    {formatCurrencyValue(calculations.leanFireNumber, currency)}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block">
+                    {formatCurrencyValue(Math.round(annualExpenses * 0.75), currency)}/yr
+                  </span>
                 </div>
               </Card>
 
               {/* Standard FIRE */}
-              <Card className="p-5 rounded-2xl border-2 border-orange-500/30 bg-orange-500/5 flex items-center justify-between">
+              <Card className="p-3.5 sm:p-4 rounded-xl border-2 border-orange-500/30 bg-orange-500/5 flex items-center justify-between">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                    <span className="font-black text-sm text-foreground">Standard FIRE (100%)</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-orange-500" />
+                    <span className="font-black text-xs sm:text-sm text-foreground">Standard FIRE (100%)</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">Current standard of living</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">Current standard of living</p>
                 </div>
                 <div className="text-right">
-                  <span className="font-black font-mono text-lg text-orange-600 dark:text-orange-400">${calculations.fireNumber.toLocaleString()}</span>
-                  <span className="text-[11px] text-muted-foreground block">${annualExpenses.toLocaleString()}/yr</span>
+                  <span className="font-black font-mono text-base sm:text-lg text-orange-600 dark:text-orange-400">
+                    {formatCurrencyValue(calculations.fireNumber, currency)}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block">
+                    {formatCurrencyValue(annualExpenses, currency)}/yr
+                  </span>
                 </div>
               </Card>
 
               {/* Fat FIRE */}
-              <Card className="p-5 rounded-2xl border bg-card/60 hover:bg-card transition-all flex items-center justify-between">
+              <Card className="p-3.5 sm:p-4 rounded-xl border bg-card/60 hover:bg-card transition-all flex items-center justify-between">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-violet-500" />
-                    <span className="font-black text-sm text-foreground">Fat FIRE (125%)</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-violet-500" />
+                    <span className="font-black text-xs sm:text-sm text-foreground">Fat FIRE (125%)</span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">Abundant budget & luxury travel</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">Abundant budget & luxury travel</p>
                 </div>
                 <div className="text-right">
-                  <span className="font-black font-mono text-base text-foreground">${calculations.fatFireNumber.toLocaleString()}</span>
-                  <span className="text-[11px] text-muted-foreground block">${Math.round(annualExpenses * 1.25).toLocaleString()}/yr</span>
+                  <span className="font-black font-mono text-sm sm:text-base text-foreground">
+                    {formatCurrencyValue(calculations.fatFireNumber, currency)}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block">
+                    {formatCurrencyValue(Math.round(annualExpenses * 1.25), currency)}/yr
+                  </span>
                 </div>
               </Card>
             </div>

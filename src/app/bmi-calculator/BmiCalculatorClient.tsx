@@ -314,191 +314,209 @@ export default function BmiCalculatorClient({
       relatedTools={relatedTools}
       detailedContent={detailedContent}
     >
-      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <div className="space-y-8">
-          <Tabs defaultValue="metric" className="w-full" value={unitSystem} onValueChange={handleUnitSystemChange}>
-            <TabsList className="grid w-full grid-cols-2 h-14 rounded-2xl p-1 bg-zinc-100 dark:bg-zinc-900">
-              <TabsTrigger value="metric" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">Metric Units</TabsTrigger>
-              <TabsTrigger value="us" className="text-sm font-bold rounded-xl data-[state=active]:bg-background data-[state=active]:shadow-sm">US Units</TabsTrigger>
-            </TabsList>
-            
-            <form onSubmit={calculateBmi} className="mt-8 space-y-6">
-              <TabsContent value="metric" className="space-y-6 m-0">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                      Weight (kg) <Info className="h-3 w-3" />
-                    </label>
-                    <Input 
-                      type="number" 
-                      placeholder="e.g. 70" 
-                      className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary transition-all"
-                      value={weight} 
-                      onChange={(e) => setWeight(e.target.value)} 
-                    />
+      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        {/* Left Column: Form & Inputs */}
+        <div className="lg:col-span-5 space-y-4">
+          <Card className="p-4 sm:p-5 rounded-2xl border-2 shadow-xs space-y-4">
+            <Tabs defaultValue="metric" className="w-full" value={unitSystem} onValueChange={handleUnitSystemChange}>
+              <TabsList className="grid w-full grid-cols-2 h-11 rounded-xl p-1 bg-zinc-100 dark:bg-zinc-800">
+                <TabsTrigger value="metric" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-xs">Metric Units</TabsTrigger>
+                <TabsTrigger value="us" className="text-xs font-bold rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-xs">US Units</TabsTrigger>
+              </TabsList>
+              
+              <form onSubmit={calculateBmi} className="mt-4 space-y-4">
+                <TabsContent value="metric" className="space-y-4 m-0">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                        Weight (kg) <Info className="h-3 w-3" />
+                      </label>
+                      <Input 
+                        type="number" 
+                        placeholder="e.g. 70" 
+                        className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary transition-all"
+                        value={weight} 
+                        onChange={(e) => setWeight(e.target.value)} 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                        Height (cm) <Info className="h-3 w-3" />
+                      </label>
+                      <Input 
+                        type="number" 
+                        placeholder="e.g. 175" 
+                        className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary transition-all"
+                        value={height} 
+                        onChange={(e) => setHeight(e.target.value)} 
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                      Height (cm) <Info className="h-3 w-3" />
-                    </label>
-                    <Input 
-                      type="number" 
-                      placeholder="e.g. 175" 
-                      className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary transition-all"
-                      value={height} 
-                      onChange={(e) => setHeight(e.target.value)} 
-                    />
-                  </div>
-                </div>
-              </TabsContent>
+                </TabsContent>
 
-              <TabsContent value="us" className="space-y-6 m-0">
-                <div className="space-y-3">
-                  <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Weight (lbs)</label>
-                  <Input 
-                    type="number" 
-                    placeholder="e.g. 160" 
-                    className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary transition-all"
-                    value={weightLbs} 
-                    onChange={(e) => setWeightLbs(e.target.value)} 
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Height (Feet)</label>
+                <TabsContent value="us" className="space-y-4 m-0">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Weight (lbs)</label>
                     <Input 
                       type="number" 
-                      placeholder="e.g. 5" 
-                      className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary transition-all"
-                      value={heightFt} 
-                      onChange={(e) => setHeightFt(e.target.value)} 
+                      placeholder="e.g. 160" 
+                      className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary transition-all"
+                      value={weightLbs} 
+                      onChange={(e) => setWeightLbs(e.target.value)} 
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Height (Inches)</label>
-                    <Input 
-                      type="number" 
-                      placeholder="e.g. 10" 
-                      className="h-14 text-lg font-bold rounded-xl border-2 focus:border-primary transition-all"
-                      value={heightIn} 
-                      onChange={(e) => setHeightIn(e.target.value)} 
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Height (Feet)</label>
+                      <Input 
+                        type="number" 
+                        placeholder="e.g. 5" 
+                        className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary transition-all"
+                        value={heightFt} 
+                        onChange={(e) => setHeightFt(e.target.value)} 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Height (Inches)</label>
+                      <Input 
+                        type="number" 
+                        placeholder="e.g. 10" 
+                        className="h-11 text-base font-bold rounded-xl border-2 focus:border-primary transition-all"
+                        value={heightIn} 
+                        onChange={(e) => setHeightIn(e.target.value)} 
+                      />
+                    </div>
                   </div>
+                </TabsContent>
+
+                <div className="flex gap-2.5 pt-2">
+                  <Button type="submit" className="flex-1 h-11 text-sm font-black shadow-md hover:shadow-lg transition-all rounded-xl cursor-pointer">
+                    <Calculator className="mr-2 h-4 w-4" /> {t.bmiCalculator.calculateButton}
+                  </Button>
+                  <Button type="button" onClick={reset} variant="outline" className="h-11 px-3.5 rounded-xl border-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer" title="Reset">
+                    <RefreshCw className="h-4 w-4" />
+                  </Button>
                 </div>
-              </TabsContent>
+              </form>
+            </Tabs>
+          </Card>
 
-              <div className="flex gap-4 pt-4">
-                <Button type="submit" className="flex-1 h-14 text-lg font-black shadow-lg hover:shadow-xl transition-all rounded-xl">
-                  <Calculator className="mr-2 h-5 w-5" /> {t.bmiCalculator.calculateButton}
-                </Button>
-                <Button type="button" onClick={reset} variant="outline" className="h-14 px-6 rounded-xl border-2 hover:bg-zinc-100">
-                  <RefreshCw className="h-5 w-5" />
-                </Button>
-              </div>
-            </form>
-          </Tabs>
+          <Card className="p-4 bg-primary/10 border border-primary/20 rounded-2xl text-xs space-y-1.5">
+            <h4 className="font-bold text-foreground flex items-center gap-1.5">
+              <Info className="h-3.5 w-3.5 text-primary" /> Healthy BMI Range
+            </h4>
+            <p className="text-muted-foreground leading-relaxed">
+              Standard healthy BMI ranges between <strong>18.5 and 24.9</strong> according to WHO guidelines. Body composition, bone density, and muscle mass also influence individual metrics.
+            </p>
+          </Card>
+        </div>
 
+        {/* Right Column: Live Result Card & Range Chart */}
+        <div ref={resultsRef} className="lg:col-span-7 lg:sticky lg:top-4 space-y-4 scroll-mt-24">
           {result && (
-            <div ref={resultsRef} className="animate-in fade-in slide-in-from-bottom-4 duration-300 scroll-mt-24">
-              <Card className="p-8 text-center bg-zinc-50 dark:bg-zinc-900 border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
-                <div className="text-sm text-muted-foreground uppercase tracking-[0.2em] font-black mb-4">{t.bmiCalculator.title}</div>
-                <div className={`text-7xl font-black mb-6 ${result.color} tracking-tighter`}>
-                  {result.bmi}
-                </div>
-                <div className={`text-xl font-black ${result.color} bg-white dark:bg-zinc-800 inline-flex items-center px-6 py-2 rounded-2xl shadow-sm border mb-6`}>
+            <Card className="p-5 sm:p-6 text-center bg-zinc-50 dark:bg-zinc-900 border-2 rounded-2xl shadow-xs animate-in fade-in duration-200">
+              <div className="flex items-center justify-between border-b pb-3 mb-4">
+                <div className="text-xs text-muted-foreground uppercase tracking-widest font-black">{t.bmiCalculator.title}</div>
+                <div className={`text-xs font-black ${result.color} bg-white dark:bg-zinc-800 px-3 py-1 rounded-lg shadow-xs border`}>
                   {result.category}
                 </div>
+              </div>
 
-                {result.validationMessage ? (
-                  <p className="text-sm text-amber-600 dark:text-amber-400 font-bold mb-6">
-                    {result.validationMessage}
-                  </p>
-                ) : (
-                  <>
-                    {/* Visual Gauge Scale */}
-                    <div className="w-full max-w-md mx-auto mb-8 px-2">
-                      <div className="relative h-3 rounded-full bg-gradient-to-r from-sky-400 via-green-400 via-yellow-400 to-red-400 overflow-visible mb-3">
-                        {/* Floating gauge pointer */}
-                        <div 
-                          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-white border-4 border-primary shadow-md flex items-center justify-center transition-all duration-700"
-                          style={{ 
-                            left: `${Math.max(5, Math.min(95, ((Number(result.bmi) - 15) / 25) * 100))}%` 
-                          }}
-                        >
-                          <div className="w-2 h-2 rounded-full bg-primary" />
-                        </div>
-                      </div>
-                      <div className="flex justify-between text-[10px] text-muted-foreground font-black uppercase tracking-wider px-1">
-                        <span>15 (Under)</span>
-                        <span>18.5 (Normal)</span>
-                        <span>25 (Over)</span>
-                        <span>30+ (Obese)</span>
+              <div className="flex items-baseline justify-center gap-3 mb-3">
+                <span className={`text-5xl sm:text-6xl font-black ${result.color} tracking-tight font-mono`}>
+                  {result.bmi}
+                </span>
+                <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">kg/m²</span>
+              </div>
+
+              {result.validationMessage ? (
+                <p className="text-xs text-amber-600 dark:text-amber-400 font-bold mb-3">
+                  {result.validationMessage}
+                </p>
+              ) : (
+                <>
+                  {/* Visual Gauge Scale */}
+                  <div className="w-full max-w-sm mx-auto mb-4 px-2">
+                    <div className="relative h-2.5 rounded-full bg-gradient-to-r from-sky-400 via-green-400 via-yellow-400 to-red-500 overflow-visible mb-2">
+                      {/* Floating gauge pointer */}
+                      <div 
+                        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-white dark:bg-zinc-950 border-3 border-primary shadow-sm flex items-center justify-center transition-all duration-500"
+                        style={{ 
+                          left: `${Math.max(5, Math.min(95, ((Number(result.bmi) - 15) / 25) * 100))}%` 
+                        }}
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                       </div>
                     </div>
+                    <div className="flex justify-between text-[10px] text-muted-foreground font-bold uppercase tracking-wider px-1">
+                      <span>15 Under</span>
+                      <span>18.5 Normal</span>
+                      <span>25 Over</span>
+                      <span>30+ Obese</span>
+                    </div>
+                  </div>
 
-                    {result.healthyWeightRange && (
-                      <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl max-w-md mx-auto mb-6 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
-                        <span className="font-black uppercase tracking-wider block text-[11px] mb-1 text-emerald-600 dark:text-emerald-400">
-                          {t.bmiCalculator.healthyRange}
-                        </span>
-                        <span className="font-bold text-sm text-foreground">{result.healthyWeightRange}</span>
-                      </div>
-                    )}
+                  {result.healthyWeightRange && (
+                    <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl max-w-sm mx-auto mb-3 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
+                      <span className="font-bold uppercase tracking-wider block text-[10px] text-emerald-600 dark:text-emerald-400 mb-0.5">
+                        {t.bmiCalculator.healthyRange}
+                      </span>
+                      <span className="font-bold text-xs text-foreground">{result.healthyWeightRange}</span>
+                    </div>
+                  )}
+                </>
+              )}
 
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                      Based on your input, your BMI indicates that you are in the <strong>{result.category}</strong> range.
-                    </p>
-                  </>
-                )}
-
+              <div className="pt-2 border-t flex items-center justify-center">
                 <Button
                   type="button"
                   onClick={() => copyShareUrl({
                     unit: unitSystem,
-                    weight: unitSystem === "metric" ? weight : undefined,
-                    height: unitSystem === "metric" ? height : undefined,
-                    weightLbs: unitSystem === "us" ? weightLbs : undefined,
-                    heightFt: unitSystem === "us" ? heightFt : undefined,
-                    heightIn: unitSystem === "us" ? heightIn : undefined,
+                    w: unitSystem === "metric" ? weight : undefined,
+                    h: unitSystem === "metric" ? height : undefined,
+                    lbs: unitSystem === "us" ? weightLbs : undefined,
+                    ft: unitSystem === "us" ? heightFt : undefined,
+                    in: unitSystem === "us" ? heightIn : undefined,
                   }, "BMI Calculation")}
                   variant="outline"
                   size="sm"
-                  className="rounded-xl border-2 font-bold h-11 text-primary border-primary/30 hover:bg-primary/5 mx-auto"
+                  className="rounded-xl border font-bold h-9 text-xs text-primary border-primary/30 hover:bg-primary/5 cursor-pointer"
                 >
-                  <Share2 className="h-4 w-4 mr-2" /> Share Result
+                  <Share2 className="h-3.5 w-3.5 mr-1.5" /> Share Result
                 </Button>
-              </Card>
-            </div>
+              </div>
+            </Card>
           )}
-        </div>
 
-        <div className="space-y-8">
-          <Card className="overflow-hidden border-none shadow-[0_20px_50px_rgba(0,0,0,0.05)] rounded-3xl">
-            <div className="p-8 bg-zinc-50 dark:bg-zinc-900 border-b">
-              <h3 className="text-2xl font-black tracking-tight">BMI Range Chart</h3>
-              <p className="text-sm text-muted-foreground mt-1">Standard World Health Organization (WHO) categories</p>
+          {/* WHO Category Range Table */}
+          <Card className="overflow-hidden border-2 rounded-2xl shadow-xs">
+            <div className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border-b flex items-center justify-between">
+              <div>
+                <h3 className="text-xs font-black tracking-tight text-foreground uppercase">WHO BMI Classification</h3>
+              </div>
+              <span className="text-[10px] text-muted-foreground font-semibold">Adults 20+</span>
             </div>
             <div className="p-0">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-zinc-100/50 dark:bg-zinc-800/50">
-                    <th className="p-5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">Category</th>
-                    <th className="p-5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b text-right">Range</th>
+                    <th className="py-2 px-3 text-[11px] font-bold uppercase tracking-wider text-muted-foreground border-b">Category</th>
+                    <th className="py-2 px-3 text-[11px] font-bold uppercase tracking-wider text-muted-foreground border-b text-right">Range</th>
                   </tr>
                 </thead>
                 <tbody>
                   {bmiRanges.map((item, i) => (
                     <tr 
                       key={i} 
-                      className={`group transition-colors ${result?.category === item.label ? "bg-primary/5" : "hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50"}`}
+                      className={`transition-colors ${result?.category === item.label ? "bg-primary/10 font-bold" : "hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50"}`}
                     >
-                      <td className="p-5 border-b flex items-center gap-3">
-                        <div className={`w-3 h-3 rounded-full ${item.color}`} />
-                        <span className={`font-bold ${result?.category === item.label ? "text-primary" : ""}`}>
+                      <td className="py-2 px-3 border-b flex items-center gap-2">
+                        <div className={`w-2.5 h-2.5 rounded-full ${item.color} shrink-0`} />
+                        <span className={result?.category === item.label ? "text-primary font-black" : ""}>
                           {item.label}
                         </span>
                       </td>
-                      <td className={`p-5 border-b text-right font-mono text-sm ${result?.category === item.label ? "text-primary font-black" : "text-muted-foreground"}`}>
+                      <td className={`py-2 px-3 border-b text-right font-mono text-xs ${result?.category === item.label ? "text-primary font-black" : "text-muted-foreground"}`}>
                         {item.range}
                       </td>
                     </tr>
@@ -506,21 +524,6 @@ export default function BmiCalculatorClient({
                 </tbody>
               </table>
             </div>
-            <div className="p-6 bg-zinc-50 dark:bg-zinc-900 flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
-                <Info className="h-5 w-5 text-blue-500" />
-              </div>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                This chart applies to adults aged 20 years and older. For children and teens, BMI is interpreted differently using age and sex-specific percentiles.
-              </p>
-            </div>
-          </Card>
-
-          <Card className="p-8 bg-primary text-primary-foreground rounded-3xl shadow-[0_20px_50px_rgba(var(--primary),0.2)]">
-            <h3 className="text-xl font-black mb-4">Did you know?</h3>
-            <p className="opacity-90 leading-relaxed">
-              Maintaining a healthy weight is important for overall health. In addition to BMI, healthcare providers use other measurements and factors - such as skinfold thickness, waist circumference, and diet - to assess a person’s health status.
-            </p>
           </Card>
         </div>
       </div>

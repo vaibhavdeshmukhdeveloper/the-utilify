@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { TrendingUp } from "lucide-react";
+import { formatCurrencyValue, formatCompactCurrency } from "@/lib/currency";
 
 interface YearlyBreakdown {
   year: number;
@@ -10,23 +11,17 @@ interface YearlyBreakdown {
   balance: number;
 }
 
-// Helper to format currency values cleanly for positive and negative numbers
-function formatCurrency(val: number): string {
-  const isNeg = val < 0;
-  const abs = Math.abs(val);
-  const formatted = "$" + Math.round(abs).toLocaleString("en-US");
-  return isNeg ? `-${formatted}` : formatted;
-}
-
 // ----------------------------------------------------
 // 1. DONUT CHART COMPONENT (Invested vs. Wealth Gain)
 // ----------------------------------------------------
 export function DonutChart({ 
   invested, 
-  returns 
+  returns,
+  currencyCode = "USD",
 }: { 
   invested: number; 
   returns: number; 
+  currencyCode?: string;
 }) {
   const absInvested = Math.abs(invested);
   const absReturns = Math.abs(returns);
@@ -110,12 +105,12 @@ export function DonutChart({
           {hovered === "none" ? (
             <>
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Total Value</span>
-              <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrency(netTotal)}</span>
+              <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrencyValue(netTotal, currencyCode)}</span>
             </>
           ) : hovered === "invested" ? (
             <>
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Invested</span>
-              <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrency(invested)}</span>
+              <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrencyValue(invested, currencyCode)}</span>
               <span className="text-[10px] font-bold text-muted-foreground mt-0.5">{Math.round(investedPct)}%</span>
             </>
           ) : (
@@ -123,7 +118,7 @@ export function DonutChart({
               <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isReturnsNegative ? "text-red-500" : "text-green-500"}`}>
                 {isReturnsNegative ? "Est. Loss" : "Wealth Gain"}
               </span>
-              <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrency(returns)}</span>
+              <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrencyValue(returns, currencyCode)}</span>
               <span className="text-[10px] font-bold text-muted-foreground mt-0.5">{Math.round(returnsPct)}%</span>
             </>
           )}
@@ -145,7 +140,7 @@ export function DonutChart({
           <div className="w-4 h-4 rounded bg-primary shrink-0 mt-0.5" />
           <div>
             <div className="text-xs font-black text-muted-foreground uppercase tracking-wider">Invested Capital</div>
-            <div className="text-base font-bold text-foreground">{formatCurrency(invested)}</div>
+            <div className="text-base font-bold text-foreground">{formatCurrencyValue(invested, currencyCode)}</div>
             <div className="text-xs font-semibold text-muted-foreground">{Math.round(investedPct)}% ratio</div>
           </div>
         </div>
@@ -164,7 +159,7 @@ export function DonutChart({
               {isReturnsNegative ? "Est. Wealth Loss" : "Est. Wealth Gain"}
             </div>
             <div className={`text-base font-bold ${isReturnsNegative ? "text-red-500" : "text-green-500"}`}>
-              {formatCurrency(returns)}
+              {formatCurrencyValue(returns, currencyCode)}
             </div>
             <div className="text-xs font-semibold text-muted-foreground">{Math.round(returnsPct)}% ratio</div>
           </div>
@@ -178,9 +173,11 @@ export function DonutChart({
 // 2. AREA GROWTH CHART COMPONENT (Progression Curve)
 // ----------------------------------------------------
 export function GrowthChart({ 
-  breakdown 
+  breakdown,
+  currencyCode = "USD",
 }: { 
   breakdown: YearlyBreakdown[];
+  currencyCode?: string;
 }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -282,16 +279,7 @@ export function GrowthChart({
     return [0, Math.floor((totalYears - 1) / 2), totalYears - 1];
   })();
 
-  const formatCurrencyAbbrev = (val: number) => {
-    const isNeg = val < 0;
-    const abs = Math.abs(val);
-    let formatted = "";
-    if (abs >= 1e9) formatted = `$${(abs / 1e9).toFixed(1)}B`;
-    else if (abs >= 1e6) formatted = `$${(abs / 1e6).toFixed(1)}M`;
-    else if (abs >= 1e3) formatted = `$${(abs / 1e3).toFixed(0)}K`;
-    else formatted = `$${Math.round(abs)}`;
-    return isNeg ? `-${formatted}` : formatted;
-  };
+  const formatCurrencyAbbrev = (val: number) => formatCompactCurrency(val, currencyCode);
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!containerRef.current) return;
@@ -489,11 +477,11 @@ export function GrowthChart({
             </div>
             <div>
               <div className="text-[9px] font-black uppercase text-primary tracking-wider">Invested</div>
-              <div className="text-sm font-bold">{formatCurrency(activeData.principal)}</div>
+              <div className="text-sm font-bold">{formatCurrencyValue(activeData.principal, currencyCode)}</div>
             </div>
             <div>
               <div className="text-[9px] font-black uppercase text-green-400 tracking-wider">Maturity</div>
-              <div className="text-sm font-black text-green-400">{formatCurrency(activeData.balance)}</div>
+              <div className="text-sm font-black text-green-400">{formatCurrencyValue(activeData.balance, currencyCode)}</div>
             </div>
           </div>
         )}
