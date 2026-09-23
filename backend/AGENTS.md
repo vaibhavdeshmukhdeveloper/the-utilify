@@ -32,9 +32,10 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
 | `/pdf/to-image` | `POST` | PyMuPDF (`fitz`) + `zipfile` | Converts PDF pages into 150 DPI (2x) PNGs packed into a `.zip` archive |
 | `/pdf/split` | `POST` | PyMuPDF (`fitz`) | Extracts selected page ranges (e.g. `1-3, 5, 8-10`) into a new PDF |
 | `/pdf/merge` | `POST` | PyMuPDF (`fitz`) | Combines multiple PDF files sequentially into a single PDF |
-| `/pdf/html-to-pdf` | `POST` | Playwright Chromium | Renders styled HTML/Markdown to pixel-perfect A4 PDF with 1cm print margins |
-| `/api/ratings` | `GET` | Firestore / Cache | Fetches authentic community rating statistics (`ratingValue`, `reviewCount`) for a tool or all tools |
-| `/api/rate` | `POST` | Firestore / Cache | Records genuine user rating (1-5 stars) using atomic increments (`firestore.Increment`) |
+| `/pdf/html-to-pdf` | `POST` | Playwright Chromium | Renders styled HTML/Markdown to pixel-perfect A4 PDF with 1cm print margins (proxied by Next.js `/api/markdown-to-pdf`) |
+| `/api/ratings` | `GET` | Firestore / Cache | Fetches authentic community rating statistics (`ratingValue`, `reviewCount`) for a tool or all tools (proxied by Next.js `/api/ratings`) |
+| `/api/rate` | `POST` | Firestore / Cache | Records genuine user rating (1-5 stars) using atomic increments (`firestore.Increment`) (proxied by Next.js `/api/ratings`) |
+
 
 ---
 

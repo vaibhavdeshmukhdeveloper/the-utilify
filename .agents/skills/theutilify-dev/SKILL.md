@@ -14,11 +14,12 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 - **Frontend:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 CSS-first architecture (`@import "tailwindcss";` in `src/app/globals.css`, no `tailwind.config.js`). UI primitives configured via `components.json` (`base-nova`, `@base-ui/react`).
 - **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash normalization), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
 - **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social sharing cards.
-- **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 117+ blog publications.
+- **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 123 blog publications.
 - **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks for 15 interactive tools, accompanied by modal snippet generator (`EmbedModal.tsx`).
+- **Internal API Proxies & Utilities:** Dedicated Next.js Route Handlers (`/api/ratings`, `/api/markdown-to-pdf`) proxy client requests to Cloud Run backend microservices with automatic fallback to local memory/temp file caching. Standalone Edge and Node routes provide dynamic OpenGraph card generation (`/api/og`), client image compression fallback (`/api/image-compressor` via Sharp), and on-demand search engine indexing (`/api/indexnow`).
 - **Multilingual (i18n):** Spanish (`/es`) and Portuguese (`/pt`) category hubs and dynamic localized routes `src/app/[lang]/[tool]/page.tsx` with 38 pre-rendered static routes and bidirectional `hreflang` tags. Governed by dual sources of truth: `translations.ts` (SEO & metadata) and `ui-strings.ts` (UI component strings with zero English leakage).
 - **Generative Engine Optimization (GEO):** `public/llms.txt` and `public/llms-full.txt` machine-readable manifests (with App Router route mirrors in `src/app/llms.txt` and `src/app/llms-full.txt`), `<link rel="describedby">`, and AI crawler permissions in `src/app/robots.ts` (`OAI-SearchBot`, `Meta-ExternalAgent`, `cohere-ai`, `ClaudeBot`, `GPTBot`, `PerplexityBot`, `anthropic-ai`, `CCBot`, etc.).
-- **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 206 URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow`) and XML sitemap pings upon build/deploy.
+- **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 212 URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow`) and XML sitemap pings upon build/deploy.
 - **Interactive UI Stack:** Global Command Palette (`Ctrl+K` / `Cmd+K`), Tool Workflow Chaining (`ToolWorkflowChaining.tsx`), Before/After Comparison Slider (`BeforeAfterSlider.tsx`), Homepage Micro-Playground (`HeroPlayground.tsx`), Language Switcher (`LanguageSwitcher.tsx`), and Firestore-backed Rating Widget (`RatingWidget.tsx`).
 - **Monetization & Apps:** Google AdSense (`ca-pub-6366007730203648`, toggled by `NEXT_PUBLIC_ADS_ENABLED`), Google Ads tag (`AW-936767269`), and `CrossPromo.tsx` featuring developer Android apps on Google Play.
 - **Backend:** FastAPI (Python 3.11) with PyMuPDF (`fitz`), Playwright Chromium Headless, and ONNX runtime (`rembg`).
@@ -285,7 +286,7 @@ When adding new capabilities or tools:
 ## Runbook 9: Search Engine & IndexNow Submission
 
 1. **Automated Submission on Build:**
-   Runs automatically via `npm run build` (`postbuild` hook in `package.json`). Submits 206 URLs.
+   Runs automatically via `npm run build` (`postbuild` hook in `package.json`). Submits 212 URLs.
 2. **Manual CLI Submission:**
    ```bash
    npm run ping
@@ -373,7 +374,7 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
    npx tsc --noEmit
    npm run build
    ```
-   Ensure 0 TypeScript errors, clean static generation for all 115+ SSG routes, and successful execution of `postbuild` search engine pinging (206 URLs).
+   Ensure 0 TypeScript errors, clean static generation for all 227+ pre-rendered SSG routes, and successful execution of `postbuild` search engine pinging (212 URLs).
 
 2. **Verify Backend Locally:**
    ```powershell

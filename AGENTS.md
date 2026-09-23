@@ -29,6 +29,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash normalization) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`).
 - **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), PX to REM converters, and batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
 - **Embed Engine:** `/embed/[tool]` route rendering standalone iframe widgets with canonical backlinks for 15 interactive tools, accompanied by `EmbedModal.tsx` for 1-click embed code copying.
+- **Internal API Proxies & Utilities:** Dedicated Next.js Route Handlers (`/api/ratings`, `/api/markdown-to-pdf`) proxy client requests to Cloud Run backend microservices with automatic fallback to local memory/temp file caching. Standalone Edge and Node routes provide dynamic OpenGraph card generation (`/api/og`), client image compression fallback (`/api/image-compressor` via Sharp), and on-demand search engine indexing (`/api/indexnow`).
 - **Monetization & Promotion:** Google AdSense (`ca-pub-6366007730203648`, toggled by `NEXT_PUBLIC_ADS_ENABLED`), Google Ads tag (`AW-936767269`), and `CrossPromo.tsx` featuring developer Android apps on Google Play.
 
 ### Backend (`/backend`)
@@ -105,13 +106,13 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 
 ### AI Crawler Configuration (`src/app/robots.ts`)
 Explicitly welcomes modern AI indexers alongside standard search bots:
-- `Googlebot`, `Bingbot`, `Yandex`, `SeznamBot`
+- `Googlebot`, `Bingbot`, `Yandex`, `SeznamBot`, `Applebot`
 - `OAI-SearchBot`, `GPTBot` (OpenAI / ChatGPT Search)
-- `ClaudeBot` (Anthropic)
+- `ClaudeBot`, `anthropic-ai` (Anthropic)
 - `PerplexityBot` (Perplexity AI)
 - `Meta-ExternalAgent` (Meta AI)
 - `cohere-ai` (Cohere)
-- `Applebot` (Apple Intelligence)
+- `CCBot` (Common Crawl)
 
 ---
 
@@ -135,7 +136,7 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 
 ### Automated Search Engine & IndexNow Submission
 - **Lifecycle Hook (`package.json`):** `"postbuild": "node scripts/ping-search-engines.mjs"` automatically triggers upon successful static builds on Vercel and Google Cloud Run.
-- **IndexNow Protocol:** Automatically submits all **206 platform URLs** to `api.indexnow.org` and `yandex.com/indexnow` with domain verification key `8e4f1a293c7d4b6e8a0f2c4e6a8d0b2f`.
+- **IndexNow Protocol:** Automatically submits all **212 platform URLs** to `api.indexnow.org` and `yandex.com/indexnow` with domain verification key `8e4f1a293c7d4b6e8a0f2c4e6a8d0b2f`.
 - **On-Demand Endpoints:** `npm run ping` CLI command and `GET /api/indexnow?action=submit-all`.
 
 ### Dynamic OpenGraph & Meta Engine (`src/app/api/og/route.tsx`)
@@ -143,14 +144,14 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 - Auto-linked across tool pages, blog articles, category hubs, and root layout.
 
 ### Dynamic RSS 2.0 Feed (`src/app/feed.xml/route.ts`)
-- Automated XML feed generated from 117 in-depth articles in `src/lib/blog-data.ts`.
+- Automated XML feed generated from 123 in-depth articles in `src/lib/blog-data.ts`.
 
 ### Structured Data (Schema.org JSON-LD)
 - **Tool Pages:** `src/lib/seo-helpers.ts` provides `getSoftwareAppSchema()` with `SoftwareApplication`, `AggregateRating`, and `offers: { price: "0.00" }`.
 - **Tool Layout:** `src/components/ToolLayout.tsx` automatically injects `FAQPage`, `HowTo`, and `BreadcrumbList` JSON-LD schemas.
 - **Blog Pages:** `src/app/blog/[slug]/page.tsx` injects `Article` and `BreadcrumbList` JSON-LD.
 - **Comparison Pages:** `src/components/ComparisonLayout.tsx` injects `FAQPage` and `BreadcrumbList` JSON-LD.
-- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all 101 static routes, 38 localized routes, and 117 blog posts.
+- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all 51 static base routes, 38 localized routes, and 123 blog posts (212 indexed URLs total). Embedded widgets (`/embed/[tool]`) specify `robots: { index: false, follow: true }` and are excluded from sitemaps by design.
 
 ---
 
@@ -260,3 +261,8 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
    - Ensure zero boilerplate leakage: never paste foreign UI widgets (e.g., image-compression HTML or file dropzones) into financial or developer articles.
    - Ensure all mathematical equations use double backslashes (`\\frac{...}{...}`) in template strings.
    - Always run `npx tsc --noEmit` and `npm run build` locally before pushing.
+
+9. **Next.js API Route Handlers & Microservice Proxies:**
+   - When tools communicate with the backend, route client requests through internal Next.js App Router API endpoints (`/api/ratings`, `/api/markdown-to-pdf`) when server-side orchestration, fallback caching, or request transformation is needed.
+   - For direct binary streaming operations (e.g. image background removal, PDF splitting/merging), frontend clients use `@/lib/api` `uploadToBackend()` pointing directly to `NEXT_PUBLIC_API_URL`.
+

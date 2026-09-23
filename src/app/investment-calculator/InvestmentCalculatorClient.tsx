@@ -110,7 +110,7 @@ export default function InvestmentCalculatorClient({
   const [calculationTarget, setCalculationTarget] = useState<CalculationTarget>("end_amount");
 
   // Input states
-  const [targetAmount, setTargetAmount] = useState("100,000");
+  const [targetAmount, setTargetAmount] = useState("200,000");
   const [initialAmount, setInitialAmount] = useState("20,000");
   const [additionalContribution, setAdditionalContribution] = useState("1,000");
   const [years, setYears] = useState("10");
@@ -215,7 +215,7 @@ export default function InvestmentCalculatorClient({
 
   // Reactive Multi-Target Calculation Engine
   useEffect(() => {
-    const rawTargetAmount = parseFloat(parseNumber(targetAmount)) || 0;
+    const rawTargetAmount = parseFloat(parseNumber(targetAmount));
     const rawInitialAmount = parseFloat(parseNumber(initialAmount)) || 0;
     const rawContribution = parseFloat(parseNumber(additionalContribution)) || 0;
     const rawYears = parseFloat(parseNumber(years)) || 0;
@@ -236,15 +236,18 @@ export default function InvestmentCalculatorClient({
 
     // Calculation by Target Mode
     if (calculationTarget === "end_amount") {
-      if (rawYears <= 0 || (!rawInitialAmount && !rawContribution)) {
+      if (rawYears <= 0 || (rawInitialAmount === 0 && rawContribution === 0)) {
         setResult(null);
         return;
       }
       effFV = calcEndAmount(effP, effPMT, effT, effRate, compoundFrequency, contributionTiming, contributionFrequency);
       mainTitle = strings.results.totalFutureWealth;
       mainValue = (effFV < 0 ? "-$" : "$") + Math.abs(Math.round(effFV)).toLocaleString("en-US");
+      if (effFV < 0) {
+        subNote = "Your portfolio depletes to zero before the end of the duration due to withdrawals exceeding growth.";
+      }
     } else if (calculationTarget === "contribution") {
-      if (rawYears <= 0 || rawTargetAmount <= 0) {
+      if (rawYears <= 0 || isNaN(rawTargetAmount) || rawTargetAmount < 0) {
         setResult(null);
         return;
       }
@@ -262,10 +265,10 @@ export default function InvestmentCalculatorClient({
       const freqSuffix = contributionFrequency === "annually" ? ` / ${strings.labels.year}` : ` / ${strings.labels.month}`;
       mainValue = (effPMT < 0 ? "-$" : "$") + Math.abs(Math.round(effPMT)).toLocaleString("en-US") + freqSuffix;
       if (effPMT < 0) {
-        subNote = "Your initial deposit already exceeds your target via compound interest alone.";
+        subNote = `Your starting deposit exceeds your target. You can withdraw $${Math.abs(Math.round(effPMT)).toLocaleString("en-US")}${freqSuffix} while still meeting your target.`;
       }
     } else if (calculationTarget === "starting_amount") {
-      if (rawYears <= 0 || rawTargetAmount <= 0) {
+      if (rawYears <= 0 || isNaN(rawTargetAmount) || rawTargetAmount < 0) {
         setResult(null);
         return;
       }
@@ -280,116 +283,293 @@ export default function InvestmentCalculatorClient({
         effP = (effFV - effPMT * S) / F;
       }
       mainTitle = strings.results.neededStartingAmount;
-      mainValue = (effP < 0 ? "-$" : "$") + Math.abs(Math.round(effP)).toLocaleString("en-US");
-      if (effP < 0) {
-        subNote = "Your regular contributions alone exceed the target without any upfront deposit.";
+      if (effP <= 0) {
+        mainValue = "$0";
+        subNote = `No initial capital required! Your regular contributions alone exceed the target by $${Math.abs(Math.round(effP)).toLocaleString("en-US")}.`;
+      } else {
+        mainValue = "$" + Math.round(effP).toLocaleString("en-US");
       }
     } else if (calculationTarget === "return_rate") {
-      if (rawYears <= 0 || rawTargetAmount <= 0 || (!rawInitialAmount && !rawContribution)) {
+      if (rawYears <= 0 || isNaN(rawTargetAmount) || rawTargetAmount < 0 || (rawInitialAmount === 0 && rawContribution === 0)) {
         setResult(null);
         return;
       }
       effFV = rawTargetAmount;
       // Bisection numerical solver for annual return rate
       let low = -0.99; // -99% minimum return
-      let high = 5.0;  // 500% maximum return
-      for (let iter = 0; iter < 100; iter++) {
-        const mid = (low + high) / 2;
-        const testFV = calcEndAmount(effP, effPMT, effT, mid, compoundFrequency, contributionTiming, contributionFrequency);
-        if (testFV < effFV) {
-          low = mid;
-        } else {
-          high = mid;
+      let high = 10.0;  // 1000% maximum return
+
+      const testFVLow = calcEndAmount(effP, effPMT, effT, low, compoundFrequency, contributionTiming, contributionFrequency);
+      const testFVHigh = calcEndAmount(effP, effPMT, effT, high, compoundFrequency, contributionTiming, contributionFrequency);
+
+      if (effFV < testFVLow) {
+        mainTitle = strings.results.neededReturnRate;
+        mainValue = "<-99%";
+        subNote = "Target requires a capital loss exceeding 99%.";
+        effRate = -0.99;
+      } else if (effFV > testFVHigh) {
+        mainTitle = strings.results.neededReturnRate;
+        mainValue = ">1000%";
+        subNote = "Target requires an annualized return exceeding 1000%.";
+        effRate = 10.0;
+      } else {
+        for (let iter = 0; iter < 100; iter++) {
+          const mid = (low + high) / 2;
+          const testFV = calcEndAmount(effP, effPMT, effT, mid, compoundFrequency, contributionTiming, contributionFrequency);
+          if (testFV < effFV) {
+            low = mid;
+          } else {
+            high = mid;
+          }
+        }
+        effRate = (low + high) / 2;
+        mainTitle = strings.results.neededReturnRate;
+        mainValue = (effRate * 100).toFixed(2) + "%";
+        if (effRate < 0) {
+          subNote = "A negative return (capital drawdown) is required because total deposits exceed your target.";
         }
       }
-      effRate = (low + high) / 2;
-      mainTitle = strings.results.neededReturnRate;
-      mainValue = (effRate * 100).toFixed(2) + "%";
     } else if (calculationTarget === "length") {
-      if (rawTargetAmount <= 0 || (!rawInitialAmount && !rawContribution)) {
+      if (isNaN(rawTargetAmount) || rawTargetAmount < 0 || (rawInitialAmount === 0 && rawContribution === 0)) {
         setResult(null);
         return;
       }
       effFV = rawTargetAmount;
       const i = getPeriodicRate(effRate, compoundFrequency, contributionFrequency);
 
-      if (effP >= effFV) {
+      // Scenario 1: Target already met and not withdrawing
+      if (effP >= effFV && effPMT >= 0) {
         effT = 0;
         mainTitle = strings.results.neededLength;
         mainValue = "0 " + strings.results.yearsOnly(0);
         subNote = "Your starting capital already meets or exceeds your target amount.";
-      } else if (effRate === 0 || i === 0) {
-        if (effPMT <= 0) {
-          setResult(null);
-          return;
-        }
-        const N = (effFV - effP) / effPMT;
-        effT = N / p;
-        const totalMonths = Math.round(effT * 12);
-        const y = Math.floor(totalMonths / 12);
-        const m = totalMonths % 12;
-        mainTitle = strings.results.neededLength;
-        mainValue = strings.results.yearsAndMonths(y, m);
-      } else {
+      } 
+      // Scenario 2: Zero interest rate
+      else if (effRate === 0 || i === 0) {
         if (effPMT === 0) {
+          mainTitle = strings.results.neededLength;
+          mainValue = "Unreachable";
+          subNote = "Without growth or contributions, the target cannot be reached.";
+          effT = 0;
+        } else {
+          const N = (effFV - effP) / effPMT;
+          if (N < 0) {
+            mainTitle = strings.results.neededLength;
+            mainValue = "Unreachable";
+            subNote = effPMT < 0
+              ? "Target cannot be reached because withdrawals are depleting the balance."
+              : "Target cannot be reached with the current parameters.";
+            effT = 0;
+          } else {
+            effT = N / p;
+            const decimalYears = effT.toFixed(3);
+            const totalMonths = effT * 12;
+            const wholeY = Math.floor(effT);
+            const remM = Number((totalMonths - wholeY * 12).toFixed(1));
+            const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
+
+            mainTitle = strings.results.neededLength;
+            if (isWholeYear) {
+              mainValue = strings.results.yearsOnly(Math.round(effT));
+            } else {
+              mainValue = `${decimalYears} Years`;
+              const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
+              const mStr = `${remM} Months`;
+              subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+            }
+          }
+        }
+      } 
+      // Scenario 3: Lump sum only (no periodic additions/withdrawals)
+      else if (effPMT === 0) {
+        if (effFV > effP) {
           const N = Math.log(effFV / effP) / Math.log(1 + i);
           effT = N / p;
+          const decimalYears = effT.toFixed(3);
+          const totalMonths = effT * 12;
+          const wholeY = Math.floor(effT);
+          const remM = Number((totalMonths - wholeY * 12).toFixed(1));
+          const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
+
+          mainTitle = strings.results.neededLength;
+          if (effT > 100) {
+            mainValue = "100+ " + strings.results.yearsOnly(100);
+            subNote = "Target horizon exceeds 100 years at the current return rate.";
+            effT = 100;
+          } else if (isWholeYear) {
+            mainValue = strings.results.yearsOnly(Math.round(effT));
+          } else {
+            mainValue = `${decimalYears} Years`;
+            const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
+            const mStr = `${remM} Months`;
+            subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+          }
         } else {
-          const A = (effPMT * (1 + i * timingFactor)) / i;
-          if (effP + A <= 0 || (effFV + A) / (effP + A) <= 0) {
+          mainTitle = strings.results.neededLength;
+          mainValue = "N/A";
+          subNote = "With positive returns and no withdrawals, the balance only increases.";
+          effT = 0;
+        }
+      } 
+      // Scenario 4: Periodic contribution or withdrawal with compounding
+      else {
+        const A = (effPMT * (1 + i * timingFactor)) / i;
+
+        // Subcase 4A: Depletion / Drawdown (effFV < effP and effPMT < 0)
+        if (effFV < effP && effPMT < 0) {
+          // If principal growth exceeds or equals withdrawal rate, fund is perpetual
+          if (effP + A >= 0) {
+            mainTitle = strings.results.neededLength;
+            mainValue = "Perpetual Fund";
+            subNote = "Your portfolio generates more in investment returns than you withdraw, so the balance will never deplete to your target.";
+            effT = 0;
+          } else {
+            // Withdrawals exceed growth; balance steadily draws down to effFV
+            const ratio = (effFV + A) / (effP + A);
+            if (ratio <= 0) {
+              mainTitle = strings.results.neededLength;
+              mainValue = "Unreachable";
+              subNote = "Target cannot be reached under the current withdrawal and return parameters.";
+              effT = 0;
+            } else {
+              const N = Math.log(ratio) / Math.log(1 + i);
+              effT = N / p;
+              const decimalYears = effT.toFixed(3);
+              const totalMonths = effT * 12;
+              const wholeY = Math.floor(effT);
+              const remM = Number((totalMonths - wholeY * 12).toFixed(1));
+              const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
+
+              mainTitle = strings.results.neededLength;
+              if (effT > 100) {
+                mainValue = "100+ " + strings.results.yearsOnly(100);
+                subNote = "Target horizon exceeds 100 years at current withdrawal and return rate.";
+                effT = 100;
+              } else if (isWholeYear) {
+                mainValue = strings.results.yearsOnly(Math.round(effT));
+              } else {
+                mainValue = `${decimalYears} Years`;
+                const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
+                const mStr = `${remM} Months`;
+                subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+              }
+            }
+          }
+        } 
+        // Subcase 4B: Attempting to grow with withdrawals (effFV > effP and effPMT < 0)
+        else if (effFV > effP && effPMT < 0) {
+          if (effP + A <= 0) {
+            mainTitle = strings.results.neededLength;
+            mainValue = "Unreachable";
+            subNote = "Target cannot be reached because periodic withdrawals exceed portfolio investment growth.";
+            effT = 0;
+          } else {
+            const ratio = (effFV + A) / (effP + A);
+            if (ratio <= 0) {
+              mainTitle = strings.results.neededLength;
+              mainValue = "Unreachable";
+              effT = 0;
+            } else {
+              const N = Math.log(ratio) / Math.log(1 + i);
+              effT = N / p;
+              const decimalYears = effT.toFixed(3);
+              const totalMonths = effT * 12;
+              const wholeY = Math.floor(effT);
+              const remM = Number((totalMonths - wholeY * 12).toFixed(1));
+              const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
+
+              mainTitle = strings.results.neededLength;
+              if (effT > 100) {
+                mainValue = "100+ " + strings.results.yearsOnly(100);
+                subNote = "Target horizon exceeds 100 years.";
+                effT = 100;
+              } else if (isWholeYear) {
+                mainValue = strings.results.yearsOnly(Math.round(effT));
+              } else {
+                mainValue = `${decimalYears} Years`;
+                const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
+                const mStr = `${remM} Months`;
+                subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+              }
+            }
+          }
+        }
+        // Subcase 4C: Standard accumulation (effFV > effP and effPMT > 0)
+        else {
+          const ratio = (effFV + A) / (effP + A);
+          if (ratio <= 0) {
             setResult(null);
             return;
           }
-          const N = Math.log((effFV + A) / (effP + A)) / Math.log(1 + i);
+          const N = Math.log(ratio) / Math.log(1 + i);
           effT = N / p;
-        }
 
-        if (effT > 100) {
-          mainTitle = strings.results.neededLength;
-          mainValue = "100+ " + strings.results.yearsOnly(100);
-          subNote = "Target horizon exceeds 100 years at the current contribution and return rate.";
-          effT = 100;
-        } else {
-          const totalMonths = Math.round(effT * 12);
-          const y = Math.floor(totalMonths / 12);
-          const m = totalMonths % 12;
-          mainTitle = strings.results.neededLength;
-          mainValue = strings.results.yearsAndMonths(y, m);
+          if (effT > 100) {
+            mainTitle = strings.results.neededLength;
+            mainValue = "100+ " + strings.results.yearsOnly(100);
+            subNote = "Target horizon exceeds 100 years at the current contribution and return rate.";
+            effT = 100;
+          } else {
+            const decimalYears = effT.toFixed(3);
+            const totalMonths = effT * 12;
+            const wholeY = Math.floor(effT);
+            const remM = Number((totalMonths - wholeY * 12).toFixed(1));
+            const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
+
+            mainTitle = strings.results.neededLength;
+            if (isWholeYear) {
+              mainValue = strings.results.yearsOnly(Math.round(effT));
+            } else {
+              mainValue = `${decimalYears} Years`;
+              const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
+              const mStr = `${remM} Months`;
+              subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+            }
+          }
         }
       }
     }
 
     // Build accumulation schedule and breakdown
     const breakdown: YearlyBreakdown[] = [];
-    const maxHorizonYears = Math.min(Math.max(1, Math.ceil(effT)), 100);
 
-    for (let year = 1; year <= Math.floor(effT); year++) {
-      const balanceAtYear = calcEndAmount(effP, effPMT, year, effRate, compoundFrequency, contributionTiming, contributionFrequency);
-      const principalAtYear = effP + effPMT * (year * p);
+    if (effT <= 0) {
       breakdown.push({
-        year,
-        principal: principalAtYear,
-        interest: balanceAtYear - principalAtYear,
-        balance: balanceAtYear,
-        label: `Year ${year}`,
+        year: 0,
+        principal: effP,
+        interest: 0,
+        balance: effP,
+        label: "Starting Capital",
       });
-    }
+    } else {
+      for (let year = 1; year <= Math.floor(effT); year++) {
+        const balanceAtYear = calcEndAmount(effP, effPMT, year, effRate, compoundFrequency, contributionTiming, contributionFrequency);
+        const principalAtYear = effP + effPMT * (year * p);
+        breakdown.push({
+          year,
+          principal: principalAtYear,
+          interest: balanceAtYear - principalAtYear,
+          balance: balanceAtYear,
+          label: `Year ${year}`,
+        });
+      }
 
-    // If fractional year exists in length mode or custom duration
-    const hasFractionalYear = effT > Math.floor(effT) && effT <= 100;
-    if (hasFractionalYear) {
-      const finalMonths = Math.round(effT * 12);
-      const finalY = Math.floor(finalMonths / 12);
-      const finalM = finalMonths % 12;
-      const finalLabel = finalM > 0 ? `Yr ${finalY} (Mo ${finalM})` : `Year ${finalY}`;
-      const finalPrincipal = effP + effPMT * (effT * p);
-      breakdown.push({
-        year: Number(effT.toFixed(2)),
-        principal: finalPrincipal,
-        interest: effFV - finalPrincipal,
-        balance: effFV,
-        label: finalLabel,
-      });
+      // If fractional year exists in length mode or custom duration
+      const hasFractionalYear = effT > Math.floor(effT) && effT <= 100;
+      if (hasFractionalYear) {
+        const finalMonths = Math.round(effT * 12 * 10) / 10;
+        const finalY = Math.floor(effT);
+        const finalM = Number((finalMonths - finalY * 12).toFixed(1));
+        const finalLabel = finalM > 0 ? `Yr ${finalY} (Mo ${finalM})` : `Year ${finalY}`;
+        const finalPrincipal = effP + effPMT * (effT * p);
+        breakdown.push({
+          year: Number(effT.toFixed(2)),
+          principal: finalPrincipal,
+          interest: effFV - finalPrincipal,
+          balance: effFV,
+          label: finalLabel,
+        });
+      }
     }
 
     const totalPrincipalDeposited = effP + effPMT * (effT * p);
@@ -432,7 +612,7 @@ export default function InvestmentCalculatorClient({
   };
 
   const reset = () => {
-    setTargetAmount("100,000");
+    setTargetAmount("200,000");
     setInitialAmount("20,000");
     setAdditionalContribution("1,000");
     setYears("10");
@@ -642,9 +822,45 @@ export default function InvestmentCalculatorClient({
                 {/* Field 3: Additional Contribution (Shown when NOT solving for contribution) */}
                 {calculationTarget !== "contribution" && (
                   <div className="space-y-3">
-                    <Label className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                      <DollarSign className="h-4 w-4" /> {strings.labels.additionalContribution}
-                    </Label>
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                        <DollarSign className="h-4 w-4" /> {strings.labels.additionalContribution}
+                      </Label>
+                      <div className="flex items-center p-0.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-xs font-semibold">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const num = Math.abs(parseFloat(parseNumber(additionalContribution)) || 0);
+                            setAdditionalContribution(formatNumber(String(num)));
+                          }}
+                          className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                            !additionalContribution.startsWith("-")
+                              ? "bg-white dark:bg-zinc-700 text-emerald-600 dark:text-emerald-400 shadow-xs font-bold"
+                              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                          }`}
+                        >
+                          + Deposit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const num = Math.abs(parseFloat(parseNumber(additionalContribution)) || 0);
+                            if (num > 0) {
+                              setAdditionalContribution("-" + formatNumber(String(num)));
+                            } else {
+                              setAdditionalContribution("-");
+                            }
+                          }}
+                          className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                            additionalContribution.startsWith("-")
+                              ? "bg-white dark:bg-zinc-700 text-red-600 dark:text-red-400 shadow-xs font-bold"
+                              : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                          }`}
+                        >
+                          − Withdraw
+                        </button>
+                      </div>
+                    </div>
                     <Input 
                       type="text" 
                       inputMode="numeric"
@@ -669,6 +885,28 @@ export default function InvestmentCalculatorClient({
                         value={years} 
                         onChange={handleInputChange(setYears)} 
                       />
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {[
+                          { label: "5 Yrs", val: "5" },
+                          { label: "10 Yrs", val: "10" },
+                          { label: "15 Yrs", val: "15" },
+                          { label: "20 Yrs", val: "20" },
+                          { label: "30 Yrs", val: "30" },
+                        ].map((chip) => (
+                          <button
+                            key={chip.val}
+                            type="button"
+                            onClick={() => setYears(chip.val)}
+                            className={`text-[11px] px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                              years === chip.val
+                                ? "bg-primary text-primary-foreground border-primary font-bold shadow-xs"
+                                : "bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground border-border/50"
+                            }`}
+                          >
+                            {chip.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
 
@@ -684,6 +922,27 @@ export default function InvestmentCalculatorClient({
                         value={interestRate} 
                         onChange={handleInputChange(setInterestRate)} 
                       />
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {[
+                          { label: "4% Bonds", val: "4" },
+                          { label: "7% Balanced", val: "7" },
+                          { label: "10% S&P 500", val: "10" },
+                          { label: "12% Growth", val: "12" },
+                        ].map((chip) => (
+                          <button
+                            key={chip.val}
+                            type="button"
+                            onClick={() => setInterestRate(chip.val)}
+                            className={`text-[11px] px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                              interestRate === chip.val
+                                ? "bg-primary text-primary-foreground border-primary font-bold shadow-xs"
+                                : "bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground border-border/50"
+                            }`}
+                          >
+                            {chip.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -802,10 +1061,10 @@ export default function InvestmentCalculatorClient({
 
                       <div>
                         <div className="text-[11px] font-black uppercase tracking-widest text-zinc-500 mb-1">
-                          {strings.results.totalContributions}
+                          {parseFloat(result.totalContributions.replace(/,/g, "")) < 0 ? "Total Withdrawals" : strings.results.totalContributions}
                         </div>
                         <div className="text-xl font-bold text-white">
-                          ${result.totalContributions}
+                          ${result.totalContributions.replace("-", "")}
                         </div>
                       </div>
 
@@ -825,7 +1084,7 @@ export default function InvestmentCalculatorClient({
                 <div className="flex flex-col gap-6 w-full">
                   <DonutChart 
                     invested={(parseFloat(result.startingAmount.replace(/,/g, "")) || 0) + (parseFloat(result.totalContributions.replace(/,/g, "")) || 0)} 
-                    returns={Math.max(0, parseFloat(result.totalInterest.replace(/,/g, "")) || 0)} 
+                    returns={parseFloat(result.totalInterest.replace(/,/g, "")) || 0} 
                   />
                   <GrowthChart breakdown={result.breakdown} />
                 </div>

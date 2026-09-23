@@ -84,24 +84,21 @@ For each art direction option:
 
 ### Step 4: Export Banners to Images
 
-After designing HTML banners, export each to PNG using `chrome-devtools` skill:
+After designing HTML banners, export each to PNG using `playwright-cli` (or Playwright script):
 
 1. **Serve HTML files** via local server (python http.server or similar)
 2. **Screenshot each banner** at exact platform dimensions:
    ```bash
-   # Export banner to PNG at exact dimensions
-   node .claude/skills/chrome-devtools/scripts/screenshot.js \
-     --url "http://localhost:8765/banner-01-minimalist.html" \
-     --width 1500 --height 500 \
-     --output "assets/banners/{campaign}/{variant}-{size}.png"
+   # Open browser and resize to exact platform dimensions
+   playwright-cli open "http://localhost:8765/banner-01-minimalist.html"
+   playwright-cli resize 1500 500
+   playwright-cli screenshot --filename="assets/banners/{campaign}/{variant}-{size}.png"
+   playwright-cli close
    ```
-3. **Auto-compress** if >5MB (Sharp compression built-in):
+3. **Auto-compress** if >5MB (use Sharp or client-side compressor):
    ```bash
-   # With custom max size threshold
-   node .claude/skills/chrome-devtools/scripts/screenshot.js \
-     --url "http://localhost:8765/banner-02-gradient.html" \
-     --width 1500 --height 500 --max-size 3 \
-     --output "assets/banners/{campaign}/{variant}-{size}.png"
+   # In Node.js environment with sharp (installed in repo)
+   node -e "const sharp = require('sharp'); sharp('input.png').png({ quality: 85 }).toFile('output.png');"
    ```
 
 **Output path convention** (per `assets-organizing` skill):

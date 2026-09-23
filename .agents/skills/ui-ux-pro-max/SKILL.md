@@ -59,7 +59,7 @@ Extract key information from user request:
 - **Product type**: Entertainment (social, video, music, gaming), Tool (scanner, editor, converter), Productivity (task manager, notes, calendar), or hybrid
 - **Target audience**: C-end consumer users; consider age group, usage context (commute, leisure, work)
 - **Style keywords**: playful, vibrant, minimal, dark mode, content-first, immersive, etc.
-- **Stack**: React Native (this project's only tech stack)
+- **Stack**: Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS v4 (this project's active stack)
 
 ### Step 2: Generate Design System (REQUIRED)
 
@@ -212,12 +212,12 @@ python3 skills/ui-ux-pro-max/scripts/search.py "enterprise tableview density per
 - Product type: Tool (AI search engine)
 - Target audience: C-end users looking for fast, intelligent search
 - Style keywords: modern, minimal, content-first, dark mode
-- Stack: React Native
+- Stack: Next.js 16 (App Router) + React 19 + Tailwind CSS v4
 
 ### Step 2: Generate Design System (REQUIRED)
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
+python skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" --design-system -p "AI Search"
 ```
 
 **Output:** Complete design system with pattern, style, colors, typography, effects, and anti-patterns.
@@ -226,16 +226,16 @@ python3 skills/ui-ux-pro-max/scripts/search.py "AI search tool modern minimal" -
 
 ```bash
 # Get style options for a modern tool product
-python3 skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
+python skills/ui-ux-pro-max/scripts/search.py "minimalism dark mode" --domain style
 
 # Get UX best practices for search interaction and loading
-python3 skills/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
+python skills/ui-ux-pro-max/scripts/search.py "search loading animation" --domain ux
 ```
 
 ### Step 4: Stack Guidelines
 
 ```bash
-python3 skills/ui-ux-pro-max/scripts/search.py "list performance navigation" --stack react-native
+python skills/ui-ux-pro-max/scripts/search.py "web performance responsive navigation" --domain react
 ```
 
 **Then:** Synthesize design system + detailed searches and implement the design.
@@ -291,14 +291,14 @@ python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system 
 ## Common Rules for Professional UI
 
 These are frequently overlooked issues that make UI look unprofessional:
-Scope notice: The rules below are for App UI (iOS/Android/React Native/Flutter), not desktop-web interaction patterns.
+Scope notice: The rules below govern responsive web applications (Next.js 16 / React 19 / Tailwind CSS v4) and cross-platform UI.
 
 ### Icons & Visual Elements
 
-- 默认图标库使用 **Phosphor (`@phosphor-icons/react`)**。`src/ui-ux-pro-max/data/icons.csv` 中列出的只是常用推荐图标，不是完整集合。
-- 当推荐表中找不到合适的图标时：
-  - **优先继续从 Phosphor 的完整图标集中选择任何语义更贴切的图标**；
-  - 如果 Phosphor 也没有理想选项，可以使用 **Heroicons (`@heroicons/react`)** 作为备选，注意保持风格一致（线性/填充、笔画粗细、圆角风格）。
+- For The Utilify web application, icons are powered by **`lucide-react`** combined with Base UI / Radix primitives.
+- When generating or extending UI:
+  - **Always use vector SVG icons** (e.g. `lucide-react` components) matching the clean, modern aesthetic of the site.
+  - Maintain consistent icon sizing via Tailwind classes (`h-4 w-4`, `h-5 w-5`, `h-6 w-6`) and semantic color tokens.
 
 | Rule | Standard | Avoid | Why It Matters |
 |------|----------|--------|----------------|
@@ -356,7 +356,7 @@ Scope notice: The rules below are for App UI (iOS/Android/React Native/Flutter),
 ## Pre-Delivery Checklist
 
 Before delivering UI code, verify these items:
-Scope notice: This checklist is for App UI (iOS/Android/React Native/Flutter).
+Scope notice: This checklist covers responsive web applications (Next.js 16 / React 19 / Tailwind CSS v4) and cross-platform UI.
 
 ### Visual Quality
 - [ ] No emojis used as icons (use SVG instead)
