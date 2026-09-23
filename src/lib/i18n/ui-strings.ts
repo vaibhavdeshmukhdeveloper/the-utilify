@@ -87,6 +87,8 @@ export interface UIStrings {
       obese3: string;
     };
     healthyRange: string;
+    invalidInput: string;
+    validationMessage: string;
   };
   dateCalculator: {
     years: string;
@@ -161,6 +163,68 @@ export interface UIStrings {
       readyToPlanDesc: string;
       startPrompt: string;
     };
+  };
+  sipCalculator: {
+    badge: string;
+    monthlyAmount: string;
+    years: string;
+    rate: string;
+    advancedSettings: string;
+    compoundFrequency: string;
+    annually: string;
+    monthly: string;
+    contributionTiming: string;
+    beginning: string;
+    end: string;
+    calculateButton: string;
+    totalEstimatedValue: string;
+    totalInvested: string;
+    wealthGain: string;
+    totalLoss: string;
+    yearlyProjection: string;
+    yearlyProjectionDesc: string;
+    shareLink: string;
+    exportCsv: string;
+    yearHeader: string;
+    investedHeader: string;
+    interestHeader: string;
+    balanceHeader: string;
+    yearPrefix: string;
+    startPlanTitle: string;
+    startPlanDesc: string;
+    calculateNow: string;
+    csvYear: string;
+    csvInvested: string;
+    csvInterest: string;
+    csvBalance: string;
+    negativeRateWarning: string;
+  };
+  fireCalculator: {
+    annualExpenses: string;
+    currentNetWorth: string;
+    monthlySavings: string;
+    expectedReturn: string;
+    expectedInflation: string;
+    swr: string;
+    copyPlan: string;
+    copied: string;
+    fireTargetTitle: string;
+    estimatedTimeToFire: string;
+    years: string;
+    currentProgress: string;
+    annualPassiveIncome: string;
+    realReturnRate: string;
+    expectedRetirementDate: string;
+    milestoneTiers: string;
+    leanFire: string;
+    standardFire: string;
+    fatFire: string;
+    baristaFire: string;
+    resetButton: string;
+    statusAlreadyMet: string;
+    statusExceeds100: string;
+    statusInvalidExpenses: string;
+    statusNegativeSavings: string;
   };
 }
 
@@ -257,6 +321,8 @@ export const uiStrings: Record<Locale, UIStrings> = {
         obese3: "Obese Class III",
       },
       healthyRange: "Healthy BMI Range: 18.5 – 24.9",
+      invalidInput: "Invalid Input",
+      validationMessage: "Please enter positive numbers greater than zero for weight and height.",
     },
     dateCalculator: {
       years: "Years",
@@ -331,6 +397,68 @@ export const uiStrings: Record<Locale, UIStrings> = {
         readyToPlanDesc: "Enter your investment parameters and click Calculate Projection to see your wealth trajectory.",
         startPrompt: "Start by entering an amount",
       },
+    },
+    sipCalculator: {
+      badge: "Systematic Investment Plan Compounding Simulator",
+      monthlyAmount: "Monthly SIP Amount",
+      years: "Years",
+      rate: "Rate (%)",
+      advancedSettings: "Advanced Settings",
+      compoundFrequency: "Compounding Frequency",
+      annually: "Annually",
+      monthly: "Monthly",
+      contributionTiming: "Contribution Timing",
+      beginning: "Beginning",
+      end: "End",
+      calculateButton: "Calculate Growth",
+      totalEstimatedValue: "Total Estimated Value",
+      totalInvested: "Total Invested",
+      wealthGain: "Wealth Gain",
+      totalLoss: "Total Loss",
+      yearlyProjection: "Yearly Projection",
+      yearlyProjectionDesc: "See how your portfolio grows year after year",
+      shareLink: "Share Link",
+      exportCsv: "Export CSV",
+      yearHeader: "Year",
+      investedHeader: "Invested",
+      interestHeader: "Interest",
+      balanceHeader: "Balance",
+      yearPrefix: "Year",
+      startPlanTitle: "Start Your SIP Plan",
+      startPlanDesc: "Enter your monthly contribution and expected returns on the left to generate your wealth projection.",
+      calculateNow: "Calculate now",
+      csvYear: "Year",
+      csvInvested: "Invested Principal",
+      csvInterest: "Interest Earned",
+      csvBalance: "Total Balance",
+      negativeRateWarning: "A negative return rate simulates portfolio capital loss / market downturn.",
+    },
+    fireCalculator: {
+      annualExpenses: "Annual Living Expenses",
+      currentNetWorth: "Current Net Worth",
+      monthlySavings: "Monthly Savings",
+      expectedReturn: "Expected Return (CAGR %)",
+      expectedInflation: "Expected Inflation (%)",
+      swr: "Safe Withdrawal Rate (SWR %)",
+      copyPlan: "Share / Copy FIRE Plan",
+      copied: "FIRE Plan Copied!",
+      fireTargetTitle: "Target FIRE Number",
+      estimatedTimeToFire: "Estimated Time to FIRE",
+      years: "Years",
+      currentProgress: "Current Progress",
+      annualPassiveIncome: "Annual Passive Income",
+      realReturnRate: "Real Return Rate (Inflation-Adjusted)",
+      expectedRetirementDate: "Target Retirement Date",
+      milestoneTiers: "FIRE Milestone Tiers",
+      leanFire: "Lean FIRE (75% Spending)",
+      standardFire: "Standard FIRE (100% Spending)",
+      fatFire: "Fat FIRE (125% Spending)",
+      baristaFire: "Barista FIRE (50% Spending)",
+      resetButton: "Reset to Default",
+      statusAlreadyMet: "🎉 Congratulations! Your current portfolio already meets or exceeds your FIRE target.",
+      statusExceeds100: "Target horizon exceeds 100 years at your current contribution and growth rate.",
+      statusInvalidExpenses: "Please specify your annual retirement living expenses.",
+      statusNegativeSavings: "⚠️ With ongoing withdrawals or negative savings, your portfolio decreases and cannot reach the target.",
     },
   },
   es: {
@@ -425,6 +553,8 @@ export const uiStrings: Record<Locale, UIStrings> = {
         obese3: "Obesidad Clase III",
       },
       healthyRange: "Rango de IMC saludable: 18.5 – 24.9",
+      invalidInput: "Entrada Inválida",
+      validationMessage: "Por favor ingresa números positivos mayores a cero para peso y altura.",
     },
     dateCalculator: {
       years: "Años",
@@ -499,6 +629,68 @@ export const uiStrings: Record<Locale, UIStrings> = {
         readyToPlanDesc: "Ingresa los parámetros de tu inversión y haz clic en Calcular Proyección para ver la trayectoria.",
         startPrompt: "Comienza ingresando un monto",
       },
+    },
+    sipCalculator: {
+      badge: "Simulador de Crecimiento Compuesto de Plan SIP",
+      monthlyAmount: "Monto Mensual SIP",
+      years: "Años",
+      rate: "Tasa (%)",
+      advancedSettings: "Configuración Avanzada",
+      compoundFrequency: "Frecuencia de Capitalización",
+      annually: "Anual",
+      monthly: "Mensual",
+      contributionTiming: "Momento del Aporte",
+      beginning: "Inicio",
+      end: "Fin",
+      calculateButton: "Calcular Crecimiento",
+      totalEstimatedValue: "Valor Total Estimado",
+      totalInvested: "Capital Invertido",
+      wealthGain: "Ganancia de Capital",
+      totalLoss: "Pérdida Total",
+      yearlyProjection: "Proyección Anual",
+      yearlyProjectionDesc: "Descubre cómo evoluciona tu patrimonio año tras año",
+      shareLink: "Compartir Enlace",
+      exportCsv: "Exportar CSV",
+      yearHeader: "Año",
+      investedHeader: "Invertido",
+      interestHeader: "Interés",
+      balanceHeader: "Saldo Total",
+      yearPrefix: "Año",
+      startPlanTitle: "Inicia tu Plan SIP",
+      startPlanDesc: "Ingresa tu aporte mensual y rentabilidad esperada a la izquierda para proyectar tu patrimonio.",
+      calculateNow: "Calcular ahora",
+      csvYear: "Año",
+      csvInvested: "Capital Invertido",
+      csvInterest: "Interés Generado",
+      csvBalance: "Saldo Total",
+      negativeRateWarning: "Una tasa de rentabilidad negativa simula pérdida de capital o caída del mercado.",
+    },
+    fireCalculator: {
+      annualExpenses: "Gastos Anuales de Vida",
+      currentNetWorth: "Patrimonio Neto Actual",
+      monthlySavings: "Ahorro Mensual",
+      expectedReturn: "Rentabilidad Esperada (CAGR %)",
+      expectedInflation: "Inflación Esperada (%)",
+      swr: "Tasa de Retiro Seguro (SWR %)",
+      copyPlan: "Compartir / Copiar Plan FIRE",
+      copied: "¡Plan FIRE Copiado!",
+      fireTargetTitle: "Monto Objetivo FIRE",
+      estimatedTimeToFire: "Tiempo Estimado para FIRE",
+      years: "Años",
+      currentProgress: "Progreso Actual",
+      annualPassiveIncome: "Ingreso Pasivo Anual",
+      realReturnRate: "Rentabilidad Real (Ajustada por Inflación)",
+      expectedRetirementDate: "Fecha Objetivo de Retiro",
+      milestoneTiers: "Niveles y Variantes FIRE",
+      leanFire: "Lean FIRE (75% de Gasto)",
+      standardFire: "Standard FIRE (100% de Gasto)",
+      fatFire: "Fat FIRE (125% de Gasto)",
+      baristaFire: "Barista FIRE (50% de Gasto)",
+      resetButton: "Restablecer Valores",
+      statusAlreadyMet: "🎉 ¡Felicitaciones! Tu patrimonio actual ya alcanza o supera tu objetivo FIRE.",
+      statusExceeds100: "El horizonte estimado supera los 100 años con el ritmo de ahorro y rendimiento actual.",
+      statusInvalidExpenses: "Por favor especifica tus gastos anuales de vida en el retiro.",
+      statusNegativeSavings: "⚠️ Con retiros continuos o ahorro negativo, el patrimonio disminuye y no alcanzará el objetivo.",
     },
   },
   pt: {
@@ -593,6 +785,8 @@ export const uiStrings: Record<Locale, UIStrings> = {
         obese3: "Obesidade Grau III",
       },
       healthyRange: "Faixa de IMC saudável: 18.5 – 24.9",
+      invalidInput: "Entrada Inválida",
+      validationMessage: "Por favor insira números positivos maiores que zero para peso e altura.",
     },
     dateCalculator: {
       years: "Anos",
@@ -667,6 +861,68 @@ export const uiStrings: Record<Locale, UIStrings> = {
         readyToPlanDesc: "Insira os parâmetros do seu investimento e clique em Calcular Projeção para ver a evolução.",
         startPrompt: "Comece inserindo um valor",
       },
+    },
+    sipCalculator: {
+      badge: "Simulador de Juros Compostos de Plano SIP",
+      monthlyAmount: "Valor Mensal do Aporte SIP",
+      years: "Anos",
+      rate: "Taxa (%)",
+      advancedSettings: "Configurações Avançadas",
+      compoundFrequency: "Frequência de Capitalização",
+      annually: "Anual",
+      monthly: "Mensal",
+      contributionTiming: "Momento do Aporte",
+      beginning: "Início",
+      end: "Fim",
+      calculateButton: "Calcular Crescimento",
+      totalEstimatedValue: "Valor Total Estimado",
+      totalInvested: "Capital Investido",
+      wealthGain: "Ganho Patrimonial",
+      totalLoss: "Perda Total",
+      yearlyProjection: "Projeção Ano a Ano",
+      yearlyProjectionDesc: "Acompanhe como seu patrimônio evolui com o passar dos anos",
+      shareLink: "Compartilhar Link",
+      exportCsv: "Exportar CSV",
+      yearHeader: "Ano",
+      investedHeader: "Investido",
+      interestHeader: "Juros",
+      balanceHeader: "Saldo Total",
+      yearPrefix: "Ano",
+      startPlanTitle: "Inicie seu Plano SIP",
+      startPlanDesc: "Insira seu aporte mensal e rentabilidade esperada à esquerda para gerar sua projeção.",
+      calculateNow: "Calcular agora",
+      csvYear: "Ano",
+      csvInvested: "Capital Investido",
+      csvInterest: "Juros Acumulados",
+      csvBalance: "Saldo Total",
+      negativeRateWarning: "Uma taxa de retorno negativa simula perda de capital ou desvalorização de mercado.",
+    },
+    fireCalculator: {
+      annualExpenses: "Despesas Anuais de Custo de Vida",
+      currentNetWorth: "Patrimônio Líquido Atual",
+      monthlySavings: "Aporte Mensal",
+      expectedReturn: "Rentabilidade Esperada (CAGR %)",
+      expectedInflation: "Inflação Esperada (%)",
+      swr: "Taxa Segura de Retirada (SWR %)",
+      copyPlan: "Compartilhar / Copiar Plano FIRE",
+      copied: "Plano FIRE Copiado!",
+      fireTargetTitle: "Meta de Patrimônio FIRE",
+      estimatedTimeToFire: "Tempo Estimado até o FIRE",
+      years: "Anos",
+      currentProgress: "Progresso Atual",
+      annualPassiveIncome: "Renda Passiva Anual",
+      realReturnRate: "Rentabilidade Real (Ajustada pela Inflação)",
+      expectedRetirementDate: "Data Alvo de Aposentadoria",
+      milestoneTiers: "Marcos e Modalidades FIRE",
+      leanFire: "Lean FIRE (75% dos Gastos)",
+      standardFire: "Standard FIRE (100% dos Gastos)",
+      fatFire: "Fat FIRE (125% dos Gastos)",
+      baristaFire: "Barista FIRE (50% dos Gastos)",
+      resetButton: "Restaurar Padrão",
+      statusAlreadyMet: "🎉 Parabéns! Seu patrimônio atual já atinge ou supera a sua meta FIRE.",
+      statusExceeds100: "O horizonte estimado ultrapassa 100 anos com seu ritmo de poupança e rentabilidade atual.",
+      statusInvalidExpenses: "Por favor informe suas despesas anuais de custo de vida na aposentadoria.",
+      statusNegativeSavings: "⚠️ Com resgates contínuos ou poupança negativa, o patrimônio diminui e não atinge o objetivo.",
     },
   },
 };

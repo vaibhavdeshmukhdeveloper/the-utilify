@@ -17,6 +17,7 @@ import {
 import { toast } from "sonner";
 import { useCurrency, formatCurrencyValue, formatNumberWithCurrency } from "@/lib/currency";
 import { CurrencySelector } from "@/components/CurrencySelector";
+import { getUIStrings, Locale } from "@/lib/i18n/ui-strings";
 
 export interface FireCalculatorClientProps {
   customTitle?: string;
@@ -36,6 +37,7 @@ export default function FireCalculatorClient({
   lang,
 }: FireCalculatorClientProps = {}) {
   const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
+  const strings = getUIStrings((lang as Locale) || "en").fireCalculator;
   const [annualExpenses, setAnnualExpenses] = useState<number>(48000);
   const [currentNetWorth, setCurrentNetWorth] = useState<number>(100000);
   const [monthlySavings, setMonthlySavings] = useState<number>(2000);
@@ -54,7 +56,7 @@ export default function FireCalculatorClient({
 
     // Real CAGR (adjusted for inflation)
     const inflationFactor = Math.max(0.01, 1 + (expectedInflation || 0) / 100);
-    const realReturnRate = Math.max(0.001, (1 + (expectedReturn || 0) / 100) / inflationFactor - 1);
+    const realReturnRate = (1 + (expectedReturn || 0) / 100) / inflationFactor - 1;
     const monthlyRealRate = realReturnRate / 12;
 
     // Simulation of compounding growth to target
@@ -77,19 +79,20 @@ export default function FireCalculatorClient({
     const targetDate = new Date();
     targetDate.setDate(1);
     targetDate.setMonth(targetDate.getMonth() + months);
+    const dateLocale = lang === "es" ? "es-ES" : lang === "pt" ? "pt-BR" : "en-US";
     const targetDateFormatted = months >= maxMonths 
-      ? "100+ years away" 
-      : targetDate.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+      ? strings.statusExceeds100 
+      : targetDate.toLocaleDateString(dateLocale, { month: "short", year: "numeric" });
 
     let statusMessage = "";
     if (annualExpenses <= 0) {
-      statusMessage = "Please specify your annual retirement living expenses.";
+      statusMessage = strings.statusInvalidExpenses;
     } else if (currentNetWorth >= fireNumber) {
-      statusMessage = "🎉 Congratulations! Your current portfolio already meets or exceeds your FIRE target.";
+      statusMessage = strings.statusAlreadyMet;
     } else if (monthlySavings < 0 && (currentNetWorth * monthlyRealRate + monthlySavings <= 0)) {
-      statusMessage = "⚠️ With ongoing withdrawals / negative savings, your portfolio decreases and cannot reach the target.";
+      statusMessage = strings.statusNegativeSavings;
     } else if (months >= maxMonths) {
-      statusMessage = "Target horizon exceeds 100 years at your current contribution and growth rate.";
+      statusMessage = strings.statusExceeds100;
     }
 
     return {
@@ -105,7 +108,7 @@ export default function FireCalculatorClient({
       statusMessage,
       realReturnRate: (realReturnRate * 100).toFixed(1)
     };
-  }, [annualExpenses, currentNetWorth, monthlySavings, expectedReturn, expectedInflation, swr]);
+  }, [annualExpenses, currentNetWorth, monthlySavings, expectedReturn, expectedInflation, swr, strings, lang]);
 
   const reset = () => {
     if (currency === "INR") {
@@ -134,7 +137,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     triggerConfetti();
-    toast.success("FIRE plan copied to clipboard!");
+    toast.success(strings.copied);
     setTimeout(() => setCopied(false), 2500);
   };
 
@@ -201,8 +204,8 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
 
           <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto">
             <div className="text-center bg-card/80 backdrop-blur border rounded-xl px-4 py-2.5 w-full sm:w-auto">
-              <span className="text-[10px] text-muted-foreground uppercase font-bold block">Years to FIRE</span>
-              <span className="text-xl sm:text-2xl font-black text-primary">{calculations.yearsToFire} Yrs</span>
+              <span className="text-[10px] text-muted-foreground uppercase font-bold block">{strings.estimatedTimeToFire}</span>
+              <span className="text-xl sm:text-2xl font-black text-primary">{calculations.yearsToFire} {strings.years}</span>
               <span className="text-[10px] text-muted-foreground block">{calculations.targetDateFormatted}</span>
             </div>
             <Button
@@ -210,7 +213,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               className="rounded-xl h-11 px-4 text-xs sm:text-sm font-bold gap-1.5 w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/20"
             >
               {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              {copied ? "Copied!" : "Share Plan"}
+              {copied ? strings.copied : strings.copyPlan}
             </Button>
           </div>
         </div>
@@ -251,7 +254,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               onClick={reset}
               className="text-xs font-bold rounded-lg text-muted-foreground hover:text-foreground h-7 px-2"
             >
-              Reset
+              {strings.resetButton}
             </Button>
           </div>
 
@@ -270,13 +273,13 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                 <h3 className="font-black text-base text-foreground flex items-center gap-1.5">
                   <Target className="w-4 h-4 text-primary" /> Financial Assumptions
                 </h3>
-                <span className="text-xs text-muted-foreground font-mono">Real CAGR: ~{calculations.realReturnRate}%</span>
+                <span className="text-xs text-muted-foreground font-mono">{strings.realReturnRate}: ~{calculations.realReturnRate}%</span>
               </div>
 
               {/* Annual Expenses */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs font-bold">
-                  <label className="text-foreground">Annual Living Expenses in Retirement</label>
+                  <label className="text-foreground">{strings.annualExpenses}</label>
                   <div className="relative w-36">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
                       {currencyInfo.symbol}
@@ -310,7 +313,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               {/* Current Net Worth */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs font-bold">
-                  <label className="text-foreground">Current Investment Portfolio Net Worth</label>
+                  <label className="text-foreground">{strings.currentNetWorth}</label>
                   <div className="relative w-36">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
                       {currencyInfo.symbol}
@@ -344,7 +347,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               {/* Monthly Savings */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs font-bold">
-                  <label className="text-foreground">Monthly Investment Contribution</label>
+                  <label className="text-foreground">{strings.monthlySavings}</label>
                   <div className="relative w-36">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
                       {currencyInfo.symbol}
@@ -378,7 +381,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               {/* Expected Return & Inflation (Side-by-Side) */}
               <div className="grid grid-cols-2 gap-3 pt-2 border-t">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Expected Return</label>
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase">{strings.expectedReturn}</label>
                   <div className="flex items-center gap-1.5">
                     <Input
                       type="number"
@@ -391,7 +394,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-muted-foreground uppercase">Expected Inflation</label>
+                  <label className="text-[11px] font-bold text-muted-foreground uppercase">{strings.expectedInflation}</label>
                   <div className="flex items-center gap-1.5">
                     <Input
                       type="number"
@@ -407,7 +410,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               {/* Safe Withdrawal Rate */}
               <div className="space-y-1.5 pt-2 border-t">
                 <div className="flex justify-between items-center text-xs font-bold">
-                  <label className="text-foreground">Safe Withdrawal Rate (SWR)</label>
+                  <label className="text-foreground">{strings.swr}</label>
                   <span className="text-orange-500 font-mono font-black">{swr.toFixed(1)}% ({swr > 0 ? (100 / swr).toFixed(1) : 0}x)</span>
                 </div>
                 <Slider
@@ -432,7 +435,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
             {/* Progress Card */}
             <Card className="p-4 sm:p-5 rounded-2xl border bg-card space-y-3 shadow-xs">
               <div className="flex items-center justify-between">
-                <h4 className="font-bold text-xs text-foreground uppercase tracking-wider">FIRE Progress</h4>
+                <h4 className="font-bold text-xs text-foreground uppercase tracking-wider">{strings.currentProgress}</h4>
                 <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-primary/10 text-primary">
                   {calculations.currentProgress}% Funded
                 </span>
@@ -452,7 +455,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
             {/* FIRE Milestone Tiers */}
             <div className="space-y-2.5">
               <h4 className="text-[11px] font-black uppercase tracking-wider text-muted-foreground px-1">
-                FIRE Strategy Variations
+                {strings.milestoneTiers}
               </h4>
 
               {/* Lean FIRE */}
@@ -460,7 +463,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span className="font-black text-xs sm:text-sm text-foreground">Lean FIRE (75%)</span>
+                    <span className="font-black text-xs sm:text-sm text-foreground">{strings.leanFire}</span>
                   </div>
                   <p className="text-[11px] text-muted-foreground mt-0.5">Essential living expenses only</p>
                 </div>
@@ -479,7 +482,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-orange-500" />
-                    <span className="font-black text-xs sm:text-sm text-foreground">Standard FIRE (100%)</span>
+                    <span className="font-black text-xs sm:text-sm text-foreground">{strings.standardFire}</span>
                   </div>
                   <p className="text-[11px] text-muted-foreground mt-0.5">Current standard of living</p>
                 </div>
@@ -498,7 +501,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-violet-500" />
-                    <span className="font-black text-xs sm:text-sm text-foreground">Fat FIRE (125%)</span>
+                    <span className="font-black text-xs sm:text-sm text-foreground">{strings.fatFire}</span>
                   </div>
                   <p className="text-[11px] text-muted-foreground mt-0.5">Abundant budget & luxury travel</p>
                 </div>

@@ -91,9 +91,9 @@ export default function BmiCalculatorClient({
       if (isNaN(w) || isNaN(hCm) || w <= 0 || hCm <= 0) {
         setResult({
           bmi: "--",
-          category: "Invalid Input",
+          category: t.bmiCalculator.invalidInput || "Invalid Input",
           color: "text-amber-500",
-          validationMessage: "Please enter positive numbers greater than zero for weight and height.",
+          validationMessage: t.bmiCalculator.validationMessage || "Please enter positive numbers greater than zero for weight and height.",
         });
         return;
       }
@@ -118,9 +118,9 @@ export default function BmiCalculatorClient({
       if (isNaN(lbs) || isNaN(totalInches) || lbs <= 0 || totalInches <= 0) {
         setResult({
           bmi: "--",
-          category: "Invalid Input",
+          category: t.bmiCalculator.invalidInput || "Invalid Input",
           color: "text-amber-500",
-          validationMessage: "Please enter positive numbers greater than zero for weight and height.",
+          validationMessage: t.bmiCalculator.validationMessage || "Please enter positive numbers greater than zero for weight and height.",
         });
         return;
       }

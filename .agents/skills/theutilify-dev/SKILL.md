@@ -12,7 +12,7 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 ## Architecture Quick Reference
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 CSS-first architecture (`@import "tailwindcss";` in `src/app/globals.css`, no `tailwind.config.js`). UI primitives configured via `components.json` (`base-nova`, `@base-ui/react`).
-- **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash normalization), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
+- **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t` -> `\\t`), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
 - **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social sharing cards.
 - **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 123 blog publications.
 - **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks for 15 interactive tools, accompanied by modal snippet generator (`EmbedModal.tsx`).
@@ -186,6 +186,7 @@ When localizing tools for global audiences (Spanish & Portuguese):
 2. **Ensure Zero English UI String Leakage:**
    - Open `src/lib/i18n/ui-strings.ts`.
    - Verify all shared UI elements (navigation, footer, tool layout headers, file uploader drag-and-drop texts, rating widget labels, cross-promotion banners) are localized for `es` and `pt`.
+   - For interactive tools with dynamic inputs, selects, table projections, status banners, or result cards (e.g. `sipCalculator`, `fireCalculator`, `investmentCalculator`, `bmiCalculator`), define typed sub-dictionaries in `UIStrings` across `en`, `es`, and `pt`.
    - In components, always bind user-facing strings using `const t = getUIStrings(currentLang);`.
 3. **Register in Localized Route:**
    - Open `src/app/[lang]/[tool]/page.tsx`.
@@ -228,16 +229,21 @@ When adding new capabilities or tools:
 3. **Measurement Precision:**
    - Use `formatNumber()` with `toPrecision(6)` fallback for small values ($< 10^{-6}$) and large values ($\ge 10^{10}$) to avoid rounding non-zero numbers to `"0"`.
 
-4. **Division-by-Zero Safety:**
-   - In `PxToRemClient.tsx`, clamp `baseSize > 0`.
-   - In `FireCalculatorClient.tsx`, clamp inflation denominator `Math.max(0.01, 1 + inflation/100)`.
+4. **Division-by-Zero Safety & Horizon Modeling:**
+   - In `PxToRemClient.tsx`, clamp `baseSize > 0` and equal viewport bounds (`clampMaxVw <= clampMinVw`).
+   - In `FireCalculatorClient.tsx`, compute real return via the Fisher equation `(1 + return/100) / (1 + inflation/100) - 1` without artificial lower clamping (`Math.max(0.001, ...)`), clamp inflation denominator `Math.max(0.01, 1 + inflation/100)`, and cap horizons $\ge 100$ years as `"100+ Yrs"` via loop guards (`maxMonths = 1200`). Derive target dates dynamically from `lang` (`es-ES`, `pt-BR`, `en-US`).
 
 5. **LaTeX Template Literal Escaping & Control Character Safety:**
    - In JavaScript/TypeScript template literals (`src/lib/blog-data.ts`), **ALWAYS** use double backslashes for LaTeX commands: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, breaking KaTeX parsing.
-   - In `src/app/blog/[slug]/page.tsx`, `sanitizeMath()` specifically normalizes control characters created by template literal parsing: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before passing strings to `katex.renderToString()`.
+   - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before KaTeX compilation.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
+
+6. **Unicode Character Safety in String Tools:**
+   - In string manipulation and text analysis tools (e.g. Word Counter, Text Converter), never use ASCII-only ranges `/[^a-z0-9]/g`.
+   - Always use Unicode property escapes `/[^\p{L}\p{N}]/gu` (or `/[^\p{L}\p{N}\s_-]/gu` when allowing whitespace and punctuation) with the `u` flag to preserve accented letters (`á`, `é`, `í`, `ó`, `ú`, `ñ`, `ç`, etc.).
+   - When specifying hyphens in character classes under the `u` flag, place the hyphen at the end (`[\s_-]`) or escape it (`[\s\-_]`) to avoid syntax error TS1516 ("A character class range must not be bounded by another character class").
 
 ---
 

@@ -26,7 +26,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **Theme:** `next-themes` (Dark/Light mode with glassmorphic navigation and animated theme toggles).
 - **Icons & UI:** `lucide-react`, Base UI / Radix Primitives (`components.json` with style `base-nova`), `sonner` for toast notifications.
 - **Micro-Interactions:** `canvas-confetti` (`src/lib/confetti.ts`) for celebratory feedback on copying, calculations, and downloads.
-- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash normalization) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`).
+- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t` -> `\\t`) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`).
 - **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), PX to REM converters, and batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
 - **Embed Engine:** `/embed/[tool]` route rendering standalone iframe widgets with canonical backlinks for 15 interactive tools, accompanied by `EmbedModal.tsx` for 1-click embed code copying.
 - **Internal API Proxies & Utilities:** Dedicated Next.js Route Handlers (`/api/ratings`, `/api/markdown-to-pdf`) proxy client requests to Cloud Run backend microservices with automatic fallback to local memory/temp file caching. Standalone Edge and Node routes provide dynamic OpenGraph card generation (`/api/og`), client image compression fallback (`/api/image-compressor` via Sharp), and on-demand search engine indexing (`/api/indexnow`).
@@ -176,16 +176,22 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 3. **Small-Quantity Precision:**
    - When converting measurements (e.g. milligrams to metric tons), avoid blanket `toFixed(6)` which rounds small values to `"0"`. Use `toPrecision(6)` fallback for numbers $< 10^{-6}$ or $\ge 10^{10}$.
 
-4. **Division-by-Zero Safety:**
+4. **Division-by-Zero Safety & Horizon Modeling:**
    - In fluid typography `clamp()`, guard against `baseSize <= 0` and equal viewport boundaries (`clampMaxVw <= clampMinVw`).
-   - In retirement calculations, clamp inflation denominators (`Math.max(0.01, 1 + inflation/100)`) and cap time horizons $\ge 100$ years as `"100+ Yrs"`.
+   - In retirement calculations (`FireCalculatorClient.tsx`), calculate real returns via the Fisher equation `(1 + return/100) / (1 + inflation/100) - 1` without artificial lower clamping (`Math.max(0.001, ...)`), allowing accurate modeling of zero or negative real returns while capping time horizons $\ge 100$ years as `"100+ Yrs"` via simulation loop guards (`maxMonths = 1200`).
+   - For all user-facing milestone date calculations, dynamically resolve date locale from `lang` (`es-ES`, `pt-BR`, `en-US`) to eliminate hardcoded English month formatting.
 
 5. **Template Literal LaTeX Escaping Standards & Control Character Safety:**
    - In JavaScript/TypeScript template literals (e.g. `src/lib/blog-data.ts`), **ALWAYS** escape LaTeX command backslashes with double backslashes: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical JS Parser Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, corrupting KaTeX parsing.
-   - In `src/app/blog/[slug]/page.tsx`, `sanitizeMath()` specifically normalizes control characters created by template literal parsing: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before passing strings to `katex.renderToString()`.
+   - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before KaTeX compilation.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
+
+6. **Unicode Character Safety in String Tools:**
+   - In string manipulation and text analysis tools (e.g. Word Counter, Text Converter), never use ASCII-only ranges `/[^a-z0-9]/g`.
+   - Always use Unicode property escapes `/[^\p{L}\p{N}]/gu` (or `/[^\p{L}\p{N}\s_-]/gu` when allowing whitespace and punctuation) with the `u` flag to preserve accented letters (`á`, `é`, `í`, `ó`, `ú`, `ñ`, `ç`, etc.).
+   - When specifying hyphens in character classes under the `u` flag, place the hyphen at the end (`[\s_-]`) or escape it (`[\s\-_]`) to avoid syntax error TS1516 ("A character class range must not be bounded by another character class").
 
 ---
 
@@ -265,4 +271,16 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 9. **Next.js API Route Handlers & Microservice Proxies:**
    - When tools communicate with the backend, route client requests through internal Next.js App Router API endpoints (`/api/ratings`, `/api/markdown-to-pdf`) when server-side orchestration, fallback caching, or request transformation is needed.
    - For direct binary streaming operations (e.g. image background removal, PDF splitting/merging), frontend clients use `@/lib/api` `uploadToBackend()` pointing directly to `NEXT_PUBLIC_API_URL`.
+
+10. **Unicode Text Processing Pattern:**
+    - In text processing tools (e.g. Word Counter, Text Converter), never use ASCII-only regex patterns (`/[^a-z0-9]/g`) that strip or mangle international characters.
+    - Always use Unicode property escapes with the `u` flag (`/[^\p{L}\p{N}]/gu`). When specifying character classes with hyphens, place the hyphen at the end (`/[^\p{L}\p{N}\s_-]/gu`) to prevent TS1516 syntax errors.
+
+11. **Locale-Aware Date Formatting:**
+    - In interactive calculators projecting future dates (e.g. FIRE Calculator, Date Calculator), never hardcode `"en-US"` in `toLocaleDateString`.
+    - Always derive the locale from the active `lang` prop (`const dateLocale = lang === "es" ? "es-ES" : lang === "pt" ? "pt-BR" : "en-US";`).
+
+12. **Financial Growth & Retirement Modeling:**
+    - In wealth and retirement calculators (e.g. `FireCalculatorClient.tsx`), calculate real returns via the Fisher equation `r_real = (1 + r_nominal) / (1 + i_inflation) - 1` without artificial lower clamping (`Math.max(0.001, ...)`).
+    - Safely bound multi-decade simulations using a maximum months horizon cap (e.g. `maxMonths = 1200` for 100 years).
 

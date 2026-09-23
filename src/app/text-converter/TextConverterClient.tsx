@@ -104,7 +104,7 @@ export default function TextConverterClient({
   };
 
   const toCamelCase = () => {
-    const words = text.replace(/[^a-zA-Z0-9\s-_]/g, "").split(/[\s-_]+/);
+    const words = text.replace(/[^\p{L}\p{N}\s_-]/gu, "").split(/[\s_-]+/);
     if (words.length === 0) return;
     const res = words
       .map((word, index) => {
@@ -120,8 +120,8 @@ export default function TextConverterClient({
     const res = text
       .trim()
       .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-      .replace(/[^a-zA-Z0-9\s-_]/g, "")
-      .replace(/[\s-_]+/g, "_")
+      .replace(/[^\p{L}\p{N}\s_-]/gu, "")
+      .replace(/[\s_-]+/g, "_")
       .toLowerCase();
     setText(res);
     toast.success("Converted to snake_case");
@@ -131,8 +131,8 @@ export default function TextConverterClient({
     const res = text
       .trim()
       .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-      .replace(/[^a-zA-Z0-9\s-_]/g, "")
-      .replace(/[\s-_]+/g, "-")
+      .replace(/[^\p{L}\p{N}\s_-]/gu, "")
+      .replace(/[\s_-]+/g, "-")
       .toLowerCase();
     setText(res);
     toast.success("Converted to kebab-case");

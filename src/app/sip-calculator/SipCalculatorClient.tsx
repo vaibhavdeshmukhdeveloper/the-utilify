@@ -16,6 +16,7 @@ import { triggerConfetti } from "@/lib/confetti";
 import { copyShareUrl } from "@/lib/share-utils";
 import { useCurrency, formatCurrencyValue, formatNumberWithCurrency } from "@/lib/currency";
 import { CurrencySelector } from "@/components/CurrencySelector";
+import { getUIStrings, Locale } from "@/lib/i18n/ui-strings";
 
 const DonutChart = dynamic(() => import("@/components/CalculatorCharts").then((m) => m.DonutChart), {
   ssr: false,
@@ -51,6 +52,7 @@ export default function SipCalculatorClient({
   customFaqs,
   lang,
 }: SipCalculatorClientProps = {}) {
+  const strings = getUIStrings((lang as Locale) || "en").sipCalculator;
   const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
   const [monthlyInvestment, setMonthlyInvestment] = useState("1,000");
   const [years, setYears] = useState("10");
@@ -200,7 +202,7 @@ export default function SipCalculatorClient({
 
     let subNote = undefined;
     if (annualRate < 0) {
-      subNote = "A negative return rate simulates portfolio capital loss / market downturn.";
+      subNote = strings.negativeRateWarning;
     }
 
     setResult({
@@ -233,9 +235,9 @@ export default function SipCalculatorClient({
   const exportToCsv = () => {
     if (!result) return;
     const sym = currencyInfo.symbol;
-    const headers = ["Year", `Invested Principal (${sym})`, `Interest Earned (${sym})`, `Total Balance (${sym})`];
+    const headers = [strings.csvYear, `${strings.csvInvested} (${sym})`, `${strings.csvInterest} (${sym})`, `${strings.csvBalance} (${sym})`];
     const rows = result.breakdown.map((row) => [
-      `Year ${row.year}`,
+      `${strings.yearPrefix} ${row.year}`,
       Math.round(row.principal),
       Math.round(row.interest),
       Math.round(row.balance)
@@ -339,8 +341,8 @@ export default function SipCalculatorClient({
         <div className="flex items-center justify-between gap-3 p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl sm:rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
           <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-muted-foreground">
             <PiggyBank className="h-4 w-4 text-primary shrink-0" />
-            <span className="hidden sm:inline">Systematic Investment Plan Compounding Simulator</span>
-            <span className="sm:hidden">SIP Growth Planner</span>
+            <span className="hidden sm:inline">{strings.badge}</span>
+            <span className="sm:hidden">{strings.badge}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground font-semibold hidden sm:inline">Currency:</span>
@@ -357,7 +359,7 @@ export default function SipCalculatorClient({
                 {/* Monthly Investment */}
                 <div className="space-y-1.5">
                   <Label className="text-xs font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                    <DollarSign className="h-3.5 w-3.5" /> Monthly SIP Amount
+                    <DollarSign className="h-3.5 w-3.5" /> {strings.monthlyAmount}
                   </Label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-bold text-muted-foreground">
@@ -403,7 +405,7 @@ export default function SipCalculatorClient({
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <Label className="text-xs font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5" /> Years
+                      <Calendar className="h-3.5 w-3.5" /> {strings.years}
                     </Label>
                     <Input 
                       type="text" 
@@ -437,7 +439,7 @@ export default function SipCalculatorClient({
 
                   <div className="space-y-1.5">
                     <Label className="text-xs font-black uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                      <Percent className="h-3.5 w-3.5" /> Rate (%)
+                      <Percent className="h-3.5 w-3.5" /> {strings.rate}
                     </Label>
                     <Input 
                       type="text" 
@@ -472,32 +474,32 @@ export default function SipCalculatorClient({
                 {/* Advanced Compounding & Timing Settings */}
                 <div className="pt-3 border-t space-y-3">
                   <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-primary">
-                    <Settings2 className="h-3.5 w-3.5" /> Advanced Settings
+                    <Settings2 className="h-3.5 w-3.5" /> {strings.advancedSettings}
                   </div>
                   
                   <div className="space-y-1.5">
-                    <Label className="text-[11px] font-bold uppercase text-muted-foreground">Compounding Frequency</Label>
+                    <Label className="text-[11px] font-bold uppercase text-muted-foreground">{strings.compoundFrequency}</Label>
                     <Select value={compoundFrequency} onValueChange={(val) => val && setCompoundFrequency(val)}>
                       <SelectTrigger className="h-10 rounded-xl border-2 font-medium text-xs sm:text-sm">
                         <SelectValue placeholder="Select frequency" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="annually">Annually</SelectItem>
-                        <SelectItem value="monthly">Monthly</SelectItem>
+                        <SelectItem value="annually">{strings.annually}</SelectItem>
+                        <SelectItem value="monthly">{strings.monthly}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-1.5 pt-1">
-                    <Label className="text-[11px] font-bold uppercase text-muted-foreground">Contribution Timing</Label>
+                    <Label className="text-[11px] font-bold uppercase text-muted-foreground">{strings.contributionTiming}</Label>
                     <RadioGroup value={contributionTiming} onValueChange={setContributionTiming} className="flex gap-4">
                       <div className="flex items-center space-x-1.5">
                         <RadioGroupItem value="beginning" id="beginning" />
-                        <Label htmlFor="beginning" className="text-xs font-medium cursor-pointer">Beginning</Label>
+                        <Label htmlFor="beginning" className="text-xs font-medium cursor-pointer">{strings.beginning}</Label>
                       </div>
                       <div className="flex items-center space-x-1.5">
                         <RadioGroupItem value="end" id="end" />
-                        <Label htmlFor="end" className="text-xs font-medium cursor-pointer">End</Label>
+                        <Label htmlFor="end" className="text-xs font-medium cursor-pointer">{strings.end}</Label>
                       </div>
                     </RadioGroup>
                   </div>
@@ -507,7 +509,7 @@ export default function SipCalculatorClient({
               {/* Action Buttons */}
               <div className="flex gap-3">
                 <Button type="submit" className="flex-1 h-12 text-base font-black shadow-md hover:shadow-lg transition-all rounded-xl bg-primary text-primary-foreground">
-                  <PiggyBank className="mr-2 h-5 w-5" /> Calculate Growth
+                  <PiggyBank className="mr-2 h-5 w-5" /> {strings.calculateButton}
                 </Button>
                 <Button type="button" onClick={reset} variant="outline" className="h-12 px-4 rounded-xl border-2">
                   <RefreshCw className="h-5 w-5" />
@@ -526,7 +528,7 @@ export default function SipCalculatorClient({
                     <PiggyBank className="h-28 w-28" />
                   </div>
                   <div className="relative z-10">
-                    <div className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-500 mb-2">Total Estimated Value</div>
+                    <div className="text-[11px] font-black uppercase tracking-[0.25em] text-zinc-500 mb-2">{strings.totalEstimatedValue}</div>
                     <div className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-3">
                       {currencyInfo.symbol}{result.total}
                     </div>
@@ -538,14 +540,14 @@ export default function SipCalculatorClient({
                     
                     <div className="grid grid-cols-2 gap-4 pt-5 border-t border-zinc-800">
                       <div>
-                        <div className="text-[10px] font-black uppercase tracking-wider text-zinc-500 mb-0.5">Total Invested</div>
+                        <div className="text-[10px] font-black uppercase tracking-wider text-zinc-500 mb-0.5">{strings.totalInvested}</div>
                         <div className="text-lg sm:text-xl font-bold">
                           {currencyInfo.symbol}{result.invested}
                         </div>
                       </div>
                       <div>
                         <div className="text-[10px] font-black uppercase tracking-wider text-zinc-500 mb-0.5">
-                          {result.returns.startsWith("-") ? "Total Loss" : "Wealth Gain"}
+                          {result.returns.startsWith("-") ? strings.totalLoss : strings.wealthGain}
                         </div>
                         <div className={`text-lg sm:text-xl font-bold ${result.returns.startsWith("-") ? "text-red-500" : "text-emerald-400"}`}>
                           {result.returns.startsWith("-") ? `-${currencyInfo.symbol}${result.returns.slice(1)}` : `+${currencyInfo.symbol}${result.returns}`}
@@ -572,8 +574,8 @@ export default function SipCalculatorClient({
                 <Card className="overflow-hidden border shadow-sm rounded-2xl">
                   <div className="p-4 sm:p-5 bg-zinc-50 dark:bg-zinc-900 border-b flex flex-wrap gap-3 items-center justify-between">
                     <div>
-                      <h3 className="text-lg sm:text-xl font-black tracking-tight">Yearly Projection</h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">See how your portfolio grows year after year</p>
+                      <h3 className="text-lg sm:text-xl font-black tracking-tight">{strings.yearlyProjection}</h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">{strings.yearlyProjectionDesc}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button 
@@ -589,7 +591,7 @@ export default function SipCalculatorClient({
                         size="sm"
                         className="rounded-xl border font-bold h-9 shrink-0 text-primary border-primary/30 hover:bg-primary/5 text-xs"
                       >
-                        <Share2 className="h-3.5 w-3.5 mr-1.5" /> Share Link
+                        <Share2 className="h-3.5 w-3.5 mr-1.5" /> {strings.shareLink}
                       </Button>
                       <Button 
                         onClick={exportToCsv} 
@@ -597,7 +599,7 @@ export default function SipCalculatorClient({
                         size="sm"
                         className="rounded-xl border font-bold h-9 shrink-0 text-xs"
                       >
-                        <Download className="h-3.5 w-3.5 mr-1.5" /> Export CSV
+                        <Download className="h-3.5 w-3.5 mr-1.5" /> {strings.exportCsv}
                       </Button>
                     </div>
                   </div>
@@ -605,10 +607,10 @@ export default function SipCalculatorClient({
                     <table className="w-full text-left border-collapse">
                       <thead className="sticky top-0 bg-background/95 backdrop-blur z-20">
                         <tr className="bg-zinc-100/50 dark:bg-zinc-800/50">
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">Year</th>
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">Invested</th>
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">Interest</th>
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b text-right">Balance</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">{strings.yearHeader}</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">{strings.investedHeader}</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">{strings.interestHeader}</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b text-right">{strings.balanceHeader}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -619,7 +621,7 @@ export default function SipCalculatorClient({
                           const balStr = formatCurrencyValue(row.balance, currency);
                           return (
                             <tr key={row.year} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-colors">
-                              <td className="p-3.5 font-bold text-xs sm:text-sm text-primary">Year {row.year}</td>
+                              <td className="p-3.5 font-bold text-xs sm:text-sm text-primary">{strings.yearPrefix} {row.year}</td>
                               <td className="p-3.5 text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400">{prinStr}</td>
                               <td className={`p-3.5 text-xs sm:text-sm font-bold ${isIntNeg ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}>{intStr}</td>
                               <td className="p-3.5 text-right font-black tracking-tight text-xs sm:text-sm">{balStr}</td>
@@ -637,12 +639,12 @@ export default function SipCalculatorClient({
                 <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-4">
                   <PiggyBank className="h-8 w-8 text-muted-foreground/30" />
                 </div>
-                <h3 className="text-xl font-black tracking-tight mb-2">Start Your SIP Plan</h3>
+                <h3 className="text-xl font-black tracking-tight mb-2">{strings.startPlanTitle}</h3>
                 <p className="text-muted-foreground max-w-sm mx-auto text-xs sm:text-sm">
-                  Enter your monthly contribution and expected returns on the left to generate your wealth projection.
+                  {strings.startPlanDesc}
                 </p>
                 <div className="mt-6 flex items-center gap-2 text-xs font-bold text-primary">
-                  <ArrowRight className="h-4 w-4" /> Calculate now
+                  <ArrowRight className="h-4 w-4" /> {strings.calculateNow}
                 </div>
               </Card>
             )}

@@ -103,7 +103,7 @@ export default function WordCounterClient({
     const freqMap: Record<string, number> = {};
     
     rawWords.forEach((word) => {
-      const cleaned = word.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const cleaned = word.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
       if (cleaned.length > 2 && !COMMON_STOP_WORDS.has(cleaned)) {
         freqMap[cleaned] = (freqMap[cleaned] || 0) + 1;
       }
