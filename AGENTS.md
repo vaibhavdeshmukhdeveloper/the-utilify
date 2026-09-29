@@ -28,6 +28,9 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **Micro-Interactions:** `canvas-confetti` (`src/lib/confetti.ts`) for celebratory feedback on copying, calculations, and downloads.
 - **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t` -> `\\t`) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`).
 - **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), PX to REM converters, and batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
+- **Privacy-First Multi-Currency Engine:** `src/lib/currency.ts` providing 36 popular world currencies (`POPULAR_CURRENCIES`), client-side timezone/locale auto-detection without server requests or IP lookups, persistent multi-tab synchronized storage (`theutilify_preferred_currency`), formatting helpers (`formatCurrencyValue`, `formatNumberWithCurrency`), and the interactive `<CurrencySelector />` component.
+- **High-Density 2-Column Responsive Layout Architecture:** All 30 tools implement a space-effective 2-column layout (`grid grid-cols-1 lg:grid-cols-12 gap-6`) positioning inputs on the left and sticky live preview/results on the right (`lg:sticky lg:top-24`), maximizing above-the-fold workspace efficiency on desktop and cleanly stacking on mobile.
+- **Recently Visited Tools Tray:** `ToolLayout.tsx` automatically logs visited tools to `localStorage` (`utilify-recent-tools`, maximum 4 items) for fast navigation.
 - **Embed Engine:** `/embed/[tool]` route rendering standalone iframe widgets with canonical backlinks for 15 interactive tools, accompanied by `EmbedModal.tsx` for 1-click embed code copying.
 - **Internal API Proxies & Utilities:** Dedicated Next.js Route Handlers (`/api/ratings`, `/api/markdown-to-pdf`) proxy client requests to Cloud Run backend microservices with automatic fallback to local memory/temp file caching. Standalone Edge and Node routes provide dynamic OpenGraph card generation (`/api/og`), client image compression fallback (`/api/image-compressor` via Sharp), and on-demand search engine indexing (`/api/indexnow`).
 - **Monetization & Promotion:** Google AdSense (`ca-pub-6366007730203648`, toggled by `NEXT_PUBLIC_ADS_ENABLED`), Google Ads tag (`AW-936767269`), and `CrossPromo.tsx` featuring developer Android apps on Google Play.
@@ -37,7 +40,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **AI Background Removal:** `rembg[cpu]` with ONNX runtime models (default `isnet-general-use`, options `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) with strict single-session memory management and explicit garbage collection.
 - **PDF Manipulation:** PyMuPDF (`fitz`) for fast in-memory page splitting, merging, and 150 DPI page-to-PNG ZIP streaming.
 - **Document Compiling:** Playwright Chromium Headless for styled HTML/Markdown-to-A4-PDF rendering with 1cm print margins.
-- **Persistent Ratings Database:** Google Cloud Firestore (Native Mode, Always Free Tier) via `google-cloud-firestore` with serverless atomic increments (`firestore.Increment`) and local JSON fallback for offline development.
+- **Persistent Ratings Database:** Google Cloud Firestore (Native Mode, Always Free Tier) via `google-cloud-firestore` with serverless atomic increments (`firestore.Increment`) and local JSON fallback (`_resolve_ratings_file()`) for offline development.
 - **RFC 5987 / RFC 6266 Unicode Downloads:** `format_content_disposition(filename)` providing percent-encoded UTF-8 directives (`filename*=UTF-8''...`) with sanitized ASCII fallbacks to prevent `latin-1` byte header crashes on international filenames.
 
 ---
@@ -62,10 +65,10 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 13. **White Background Product Photos (`/white-background-product-photos`):** Replaces messy backdrops with pure `#FFFFFF` Amazon, Shopify, and eBay compliant studio backgrounds.
 
 ### Financial & Health Calculators (7)
-14. **SIP Calculator (`/sip-calculator`):** Systematic Investment Plan compound wealth growth calculator with step-up SIP, inflation adjustment, LaTeX formula breakdowns, and interactive Canvas/Chart visualizers (`CalculatorCharts.tsx`).
-15. **Investment Calculator (`/investment-calculator`):** Compound interest growth calculator with monthly contributions and daily, monthly, quarterly, or annual compounding frequencies.
-16. **FIRE Calculator (`/fire-calculator`):** Financial Independence Retire Early calculator computing 4% rule targets, Lean FIRE (75%), Standard FIRE (100%), and Fat FIRE (125%) milestones with Fisher inflation adjustment and 100+ year horizon handling.
-17. **BMI Calculator (`/bmi-calculator`):** Body Mass Index and healthy weight calculator (Metric & Imperial) with WHO classification tiers and LaTeX proof breakdowns.
+14. **SIP Calculator (`/sip-calculator`):** Systematic Investment Plan compound wealth growth calculator with step-up SIP, inflation adjustment, multi-currency support (`CurrencySelector.tsx`), dynamic comma grouping, preset scenarios, 1-click reset, LaTeX formula breakdowns, and interactive Canvas/Chart visualizers (`CalculatorCharts.tsx`).
+15. **Investment Calculator (`/investment-calculator`):** Comprehensive compound wealth calculator featuring a 5-target solver (End Balance, Starting Amount, Regular Contribution, Return Rate, Investment Horizon), drawdown / negative contribution support, 5 compounding frequencies (Annually, Semi-Annually, Quarterly, Monthly, Daily), strictly monthly deposits ($12 \times PMT$/year), multi-currency support, dynamic comma grouping, and preset scenarios.
+16. **FIRE Calculator (`/fire-calculator`):** Financial Independence Retire Early calculator computing 4% rule targets, Lean FIRE (75%), Standard FIRE (100%), and Fat FIRE (125%) milestones with Fisher inflation adjustment, 100+ year horizon handling, multi-currency support, dynamic comma grouping, and localized milestone dates.
+17. **BMI Calculator (`/bmi-calculator`):** Body Mass Index and healthy weight calculator (Metric & Imperial) with WHO classification tiers, healthy weight ranges, and LaTeX proof breakdowns.
 18. **Date Calculator (`/date-calculator`):** Date arithmetic, interval duration, business day counts, and timezone-safe duration breakdown.
 19. **Business Days Calculator (`/business-days-calculator`):** Dedicated programmatic landing page calculating working days, weekends, and project timelines.
 20. **Age Calculator (`/age-calculator`):** Exact chronological age calculator (years, months, days, minutes, seconds), next birthday countdown, and timezone-safe leap-year handling.
@@ -89,10 +92,10 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 ### Category Hubs & Localized Routes
 - **Spanish Hub (`/es`):** Curated Spanish landing page highlighting core PDF, image, and financial tools.
 - **Portuguese Hub (`/pt`):** Curated Portuguese landing page for Brazilian & Portuguese audiences.
-- **Dynamic Localized Tool Routes (`/[lang]/[tool]`):** Powered by `src/app/[lang]/[tool]/page.tsx` with static site generation (`generateStaticParams` pre-rendering 38 localized routes).
+- **Dynamic Localized Tool Routes (`/[lang]/[tool]`):** Powered by `src/app/[lang]/[tool]/page.tsx` with static site generation (`generateStaticParams` pre-rendering 38 localized routes: 19 Spanish + 19 Portuguese).
 - **Dual Translation Architecture:**
   1. **Tool Metadata & SEO (`src/lib/i18n/translations.ts`):** Centralized translation repository with tool names, titles, meta descriptions, feature lists, step-by-step guides, and localized FAQs for Spanish and Portuguese. Also exports `getCanonicalToolSlug(slug)` and `getLanguageFromPathname(pathname)` for language-agnostic tool resolution.
-  2. **UI Strings & Components (`src/lib/i18n/ui-strings.ts`):** Centralized dictionary providing typed, zero-leakage strings (`getUIStrings(lang)`) for navigation, footer, tool layout headers/badges, file uploader labels, rating widget copy, and cross-promotion across English, Spanish, and Portuguese.
+  2. **UI Strings & Components (`src/lib/i18n/ui-strings.ts`):** Centralized dictionary providing typed, zero-leakage strings (`getUIStrings(lang)`) for navigation, footer, tool layout headers/badges, file uploader labels, rating widget copy, currency labels, and cross-promotion across English, Spanish, and Portuguese.
 - **Bidirectional `hreflang` Tags:** Automatically injected into `<head>` alternates (`en`, `es`, `pt`, and `x-default`) on both English and localized pages to prevent duplicate content penalties.
 
 ---
@@ -100,12 +103,12 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 ## 4. Generative Engine Optimization (GEO) & AI Crawlers
 
 ### Machine-Readable LLM Manifests
-- **`/llms.txt` (`public/llms.txt`):** Concise markdown index designed for LLMs, Perplexity, and AI search engines detailing the site's privacy-first architecture, tools, and category hubs.
-- **`/llms-full.txt` (`public/llms-full.txt`):** Comprehensive technical manifest documenting full URL endpoints, math formulas, schemas, and usage specifications.
+- **`/llms.txt` (`public/llms.txt` and App Router route `src/app/llms.txt`):** Concise markdown index designed for LLMs, Perplexity, and AI search engines detailing the site's privacy-first architecture, tools, and category hubs.
+- **`/llms-full.txt` (`public/llms-full.txt` and App Router route `src/app/llms-full.txt`):** Comprehensive technical manifest documenting full URL endpoints, math formulas, schemas, and usage specifications.
 - **Discovery Link:** `<link rel="describedby" href="/llms.txt" type="text/plain">` in root layout (`src/app/layout.tsx`).
 
 ### AI Crawler Configuration (`src/app/robots.ts`)
-Explicitly welcomes modern AI indexers alongside standard search bots:
+Explicitly welcomes modern AI indexers alongside standard search bots while disallowing `/api/`:
 - `Googlebot`, `Bingbot`, `Yandex`, `SeznamBot`, `Applebot`
 - `OAI-SearchBot`, `GPTBot` (OpenAI / ChatGPT Search)
 - `ClaudeBot`, `anthropic-ai` (Anthropic)
@@ -160,9 +163,17 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 1. **Investment & Financial Compounding:**
    - Always structure investment contributions as a monthly loop ($12 \times PMT$/year) rather than period-dependent loops.
    - For daily compounding, compound the balance daily ($365/yr$) while keeping contributions strictly monthly ($12/yr$).
-   - Ensure strict monotonic ordering: $Daily > Monthly > Quarterly > Annually$.
+   - Ensure strict monotonic ordering: $Daily > Monthly > Quarterly > Semi-Annually > Annually$.
+   - **5-Target Solver Support:** When implementing financial calculators, support multi-target solving (End Balance, Starting Amount, Regular Contribution, Return Rate, and Horizon) with numerical iteration (binary search / Newton-Raphson) bounded by realistic financial limits.
+   - **Drawdown & Negative Cashflows:** Safely support negative contributions (retirement withdrawals/decumulation) without crashing or infinite loops when the drawdown exceeds growth.
 
-2. **Timezone-Safe Calendar Math:**
+2. **Dynamic Comma Grouping & Input Normalization:**
+   - On input focus: show clean numeric strings without commas for effortless editing.
+   - On input blur: format numbers with localized comma grouping (e.g. `10,000`).
+   - On input change / parse: always strip commas before converting to float: `Number(val.replace(/,/g, ""))`.
+   - Never allow `NaN` to propagate into state or calculations; provide fallback to `0` or validated defaults.
+
+3. **Timezone-Safe Calendar Math:**
    - Never use `new Date("YYYY-MM-DD")` for date calculation, as ISO date strings parse to UTC midnight and shift to the previous day in timezones with negative UTC offsets (US/Americas).
    - Always parse using local midnight:
      ```ts
@@ -173,35 +184,41 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
      ```
    - For calendar day counts, use UTC timestamps (`Date.UTC(y, m, d)`) to eliminate 23-hour or 25-hour Daylight Saving Time (DST) clock-shift discrepancies.
 
-3. **Small-Quantity Precision:**
+4. **Small-Quantity Precision:**
    - When converting measurements (e.g. milligrams to metric tons), avoid blanket `toFixed(6)` which rounds small values to `"0"`. Use `toPrecision(6)` fallback for numbers $< 10^{-6}$ or $\ge 10^{10}$.
 
-4. **Division-by-Zero Safety & Horizon Modeling:**
+5. **Division-by-Zero Safety & Horizon Modeling:**
    - In fluid typography `clamp()`, guard against `baseSize <= 0` and equal viewport boundaries (`clampMaxVw <= clampMinVw`).
    - In retirement calculations (`FireCalculatorClient.tsx`), calculate real returns via the Fisher equation `(1 + return/100) / (1 + inflation/100) - 1` without artificial lower clamping (`Math.max(0.001, ...)`), allowing accurate modeling of zero or negative real returns while capping time horizons $\ge 100$ years as `"100+ Yrs"` via simulation loop guards (`maxMonths = 1200`).
    - For all user-facing milestone date calculations, dynamically resolve date locale from `lang` (`es-ES`, `pt-BR`, `en-US`) to eliminate hardcoded English month formatting.
 
-5. **Template Literal LaTeX Escaping Standards & Control Character Safety:**
+6. **Template Literal LaTeX Escaping Standards & Control Character Safety:**
    - In JavaScript/TypeScript template literals (e.g. `src/lib/blog-data.ts`), **ALWAYS** escape LaTeX command backslashes with double backslashes: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical JS Parser Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, corrupting KaTeX parsing.
    - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before KaTeX compilation.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
 
-6. **Unicode Character Safety in String Tools:**
+7. **Unicode Character Safety in String Tools:**
    - In string manipulation and text analysis tools (e.g. Word Counter, Text Converter), never use ASCII-only ranges `/[^a-z0-9]/g`.
    - Always use Unicode property escapes `/[^\p{L}\p{N}]/gu` (or `/[^\p{L}\p{N}\s_-]/gu` when allowing whitespace and punctuation) with the `u` flag to preserve accented letters (`á`, `é`, `í`, `ó`, `ú`, `ñ`, `ç`, etc.).
    - When specifying hyphens in character classes under the `u` flag, place the hyphen at the end (`[\s_-]`) or escape it (`[\s\-_]`) to avoid syntax error TS1516 ("A character class range must not be bounded by another character class").
+
+8. **Calculator Boundary Handling, Presets & 1-Click Resets:**
+   - Every financial and health calculator must provide quick scenario presets (e.g., "College Fund", "Retirement Nest Egg", "Down Payment") and a 1-click Reset button restoring verified defaults.
 
 ---
 
 ## 7. Interactive Components & Platform Features
 
 - **Global Command Palette (`CommandPalette.tsx`):** `Ctrl+K` / `Cmd+K` instant search modal across all tools, categories, and blog posts.
+- **Multi-Currency Selector (`CurrencySelector.tsx`):** Privacy-first currency selector supporting 36 currencies with flag icons, search filtering, client-side timezone auto-detection, and persistent multi-tab localStorage synchronization.
+- **High-Density 2-Column Tool Layout:** Standardized across all 30 tools to maximize viewport utility on desktop (`grid-cols-1 lg:grid-cols-12`) while keeping inputs and outputs simultaneously visible above the fold.
+- **Recently Visited Tools Tray:** Client-side tracking in `localStorage` (`utilify-recent-tools`, up to 4 tools) embedded across tool navigation.
 - **Tool Workflow Chaining (`ToolWorkflowChaining.tsx`):** Contextual next-action recommendations displayed after a tool output is produced.
 - **Interactive Playground (`HeroPlayground.tsx`):** Live interactive micro-demo tabs on the homepage for instant user engagement.
 - **Before/After Comparison Slider (`BeforeAfterSlider.tsx`):** Interactive split-view comparison slider for image processing tools.
-- **Financial Visualizers (`CalculatorCharts.tsx`):** Interactive canvas/SVG visualizers for wealth projections.
+- **Financial Visualizers (`CalculatorCharts.tsx`):** Interactive canvas/SVG visualizers for wealth projections and compound growth breakdowns.
 - **Embed Engine Modal (`EmbedModal.tsx`):** Shareable responsive iframe snippet generator with live preview and dimension toggles.
 - **Language Switcher (`LanguageSwitcher.tsx`):** Dropdown and inline language switcher with smooth route transition across `en`, `es`, and `pt`.
 - **Authentic Community Rating Widget (`RatingWidget.tsx`):** 5-star interactive rating widget backed by Firestore with client-side localStorage state tracking.
@@ -214,6 +231,7 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 
 - **Transient In-Memory Processing (Zero Retention):** Neither the frontend nor the backend databases store user-uploaded images or PDFs. Files sent to Python microservices are processed purely in RAM streams (`io.BytesIO()`) and released immediately upon streaming binary responses.
 - **Zero Account Barriers:** No user tracking, cookies for logins, or mandatory sign-ups.
+- **Privacy-First Currency Auto-Detection:** Uses `Intl.DateTimeFormat().resolvedOptions().timeZone` and `navigator.language` strictly on the client with zero IP geolocation lookups or third-party tracking calls.
 - **Authentic Community Feedback Policy:** Tool ratings represent 100% genuine user votes. Zero artificial or seeded baseline reviews are permitted. Ratings are stored permanently in Google Cloud Firestore (`ratings` collection), surviving container restarts and redeployments.
 
 ---
@@ -224,7 +242,7 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 | :--- | :--- | :--- |
 | `NEXT_PUBLIC_API_URL` | Base URL of the FastAPI backend microservices | `http://localhost:8000` or Cloud Run URL |
 | `NEXT_PUBLIC_ADS_ENABLED` | Feature flag to render Google AdSense ad banners | `"true"` or `"false"` |
-| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console verification meta token | String token |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console verification meta token | `J4toVdS11NHqtlWUwoDiHulzd2YyK-mYS7HxQzuOurA` |
 | `NEXT_PUBLIC_YANDEX_SITE_VERIFICATION` | Yandex Webmaster verification meta token | `31ab4f299bc6b423` |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | Bing Webmaster Tools verification meta token | String token |
 | `NEXT_PUBLIC_SEZNAM_SITE_VERIFICATION` | Seznam Webmaster verification meta token | `Afze0VQPWz8d0qQD9CcHM15psv794dx0` |
@@ -236,7 +254,18 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
 1. **Creating a New Tool:**
    - Create route directory in `src/app/<tool-slug>/`.
    - `page.tsx`: Server Component defining `metadata` and `<JsonLd data={getSoftwareAppSchema({ name, description, slug })} />`.
-   - `<ToolSlug>Client.tsx`: Client Component wrapping tool UI with `<ToolLayout title="..." description="..." howToUse={...} faqs={...} relatedTools={...} detailedContent={...}>`.
+   - `<ToolSlug>Client.tsx`: Client Component wrapping tool UI with `<ToolLayout title="..." description="..." summaryDefinition="..." howToUse={...} faqs={...} relatedTools={...} detailedContent={...}>`.
+   - Implement the **High-Density 2-Column Layout** inside the client:
+     ```tsx
+     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+       <div className="lg:col-span-5 space-y-6">
+         {/* Configuration / Inputs Card */}
+       </div>
+       <div className="lg:col-span-7 space-y-6 lg:sticky lg:top-24 self-start">
+         {/* Live Output / Preview / Visualizer Card */}
+       </div>
+     </div>
+     ```
    - Add tool route to `src/app/sitemap.ts`, `src/components/ToolsGrid.tsx`, `src/components/Footer.tsx`, and `src/app/embed/[tool]/page.tsx` (if embeddable).
    - If localizing, add translation dictionary in `src/lib/i18n/translations.ts` and add dynamic component in `src/app/[lang]/[tool]/page.tsx`.
 
@@ -245,42 +274,53 @@ Explicitly welcomes modern AI indexers alongside standard search bots:
    - Always retrieve strings via `getUIStrings(currentLang)` from `@/lib/i18n/ui-strings`.
    - When resolving tool links and titles across languages, use `getCanonicalToolSlug(slug)` to ensure language prefixes (`/es/`, `/pt/`) are handled consistently.
 
-3. **Tailwind CSS v4 & Styling Pattern:**
+3. **Multi-Currency Integration Pattern:**
+   - When developing or updating financial calculators, always leverage `useCurrency()` and `<CurrencySelector />` from `@/components/CurrencySelector` and `@/lib/currency`.
+   - Bind currency state via:
+     ```tsx
+     const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
+     ```
+   - Provide `<CurrencySelector value={currency} onChange={setCurrency} size="sm" />` in the inputs header.
+   - Format all output currency figures using `formatCurrency(val)` or `formatNumberWithCurrency(val, currencyInfo)`.
+
+4. **Tailwind CSS v4 & Styling Pattern:**
    - This project uses Tailwind CSS v4 with CSS-first configuration in `src/app/globals.css` (`@import "tailwindcss";`).
    - Do NOT create or look for `tailwind.config.js`. Define custom utilities, `@theme` overrides, and `@custom-variant` rules directly in `src/app/globals.css`.
    - Components use `@base-ui/react` primitives and Radix Primitives configured via `components.json` (`style: "base-nova"`).
 
-4. **Slider Components Typing Pattern:**
+5. **Slider Components Typing Pattern:**
    - When using Base UI Slider (`src/components/ui/slider.tsx`), `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
 
-5. **Cloud Run Container Port Binding:**
+6. **Cloud Run Container Port Binding:**
    - Always run uvicorn with dynamic port binding in `Dockerfile`: `CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]` to prevent Cloud Run health check timeout crashes.
 
-6. **HTTP Header Filename Encoding (RFC 5987 / RFC 6266):**
+7. **HTTP Header Filename Encoding (RFC 5987 / RFC 6266):**
    - Whenever backend endpoints return user-downloadable files, sanitize ASCII filenames and provide `filename*=UTF-8''...` to avoid Starlette `latin-1` codec crashes.
    - Frontend `@/lib/api.ts` parses `filename*` headers to preserve genuine Unicode characters for client downloads.
 
-7. **Verifying Code:**
-   - Always run `npm run build` locally before pushing to verify TypeScript and static generation pass with 0 errors.
+8. **Verifying Code:**
+   - Always run `npx tsc --noEmit` and `npm run build` locally before pushing to verify TypeScript and static generation pass with 0 errors.
 
-8. **Blog Guide Quality & Integrity (`src/lib/blog-data.ts`):**
+9. **Blog Guide Quality & Integrity (`src/lib/blog-data.ts`):**
    - Ensure zero boilerplate leakage: never paste foreign UI widgets (e.g., image-compression HTML or file dropzones) into financial or developer articles.
    - Ensure all mathematical equations use double backslashes (`\\frac{...}{...}`) in template strings.
    - Always run `npx tsc --noEmit` and `npm run build` locally before pushing.
 
-9. **Next.js API Route Handlers & Microservice Proxies:**
-   - When tools communicate with the backend, route client requests through internal Next.js App Router API endpoints (`/api/ratings`, `/api/markdown-to-pdf`) when server-side orchestration, fallback caching, or request transformation is needed.
-   - For direct binary streaming operations (e.g. image background removal, PDF splitting/merging), frontend clients use `@/lib/api` `uploadToBackend()` pointing directly to `NEXT_PUBLIC_API_URL`.
+10. **Next.js API Route Handlers & Microservice Proxies:**
+    - When tools communicate with the backend, route client requests through internal Next.js App Router API endpoints (`/api/ratings`, `/api/markdown-to-pdf`) when server-side orchestration, fallback caching, or request transformation is needed.
+    - For direct binary streaming operations (e.g. image background removal, PDF splitting/merging), frontend clients use `@/lib/api` `uploadToBackend()` pointing directly to `NEXT_PUBLIC_API_URL`.
 
-10. **Unicode Text Processing Pattern:**
+11. **Unicode Text Processing Pattern:**
     - In text processing tools (e.g. Word Counter, Text Converter), never use ASCII-only regex patterns (`/[^a-z0-9]/g`) that strip or mangle international characters.
     - Always use Unicode property escapes with the `u` flag (`/[^\p{L}\p{N}]/gu`). When specifying character classes with hyphens, place the hyphen at the end (`/[^\p{L}\p{N}\s_-]/gu`) to prevent TS1516 syntax errors.
 
-11. **Locale-Aware Date Formatting:**
+12. **Locale-Aware Date Formatting:**
     - In interactive calculators projecting future dates (e.g. FIRE Calculator, Date Calculator), never hardcode `"en-US"` in `toLocaleDateString`.
     - Always derive the locale from the active `lang` prop (`const dateLocale = lang === "es" ? "es-ES" : lang === "pt" ? "pt-BR" : "en-US";`).
 
-12. **Financial Growth & Retirement Modeling:**
+13. **Financial Growth & Retirement Modeling:**
     - In wealth and retirement calculators (e.g. `FireCalculatorClient.tsx`), calculate real returns via the Fisher equation `r_real = (1 + r_nominal) / (1 + i_inflation) - 1` without artificial lower clamping (`Math.max(0.001, ...)`).
     - Safely bound multi-decade simulations using a maximum months horizon cap (e.g. `maxMonths = 1200` for 100 years).
 
+14. **Presets and Boundary Resets:**
+    - Always include sensible preset buttons and a 1-click Reset button to guarantee users can return to working baseline states.

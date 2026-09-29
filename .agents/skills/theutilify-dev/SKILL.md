@@ -13,13 +13,16 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 CSS-first architecture (`@import "tailwindcss";` in `src/app/globals.css`, no `tailwind.config.js`). UI primitives configured via `components.json` (`base-nova`, `@base-ui/react`).
 - **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t` -> `\\t`), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
+- **Privacy-First Multi-Currency Engine:** `src/lib/currency.ts` providing 36 popular world currencies (`POPULAR_CURRENCIES`), client-side timezone/locale auto-detection without server requests or IP lookups, persistent multi-tab synchronized storage (`theutilify_preferred_currency`), formatting helpers (`formatCurrencyValue`, `formatNumberWithCurrency`), and the interactive `<CurrencySelector />` component.
+- **High-Density 2-Column Responsive Layout Architecture:** All 30 tools implement a space-effective 2-column layout (`grid grid-cols-1 lg:grid-cols-12 gap-6`) positioning inputs on the left and sticky live preview/results on the right (`lg:sticky lg:top-24`), maximizing above-the-fold workspace efficiency on desktop and cleanly stacking on mobile.
+- **Recently Visited Tools Tray:** `ToolLayout.tsx` automatically logs visited tools to `localStorage` (`utilify-recent-tools`, maximum 4 items) for fast navigation.
 - **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social sharing cards.
 - **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 123 blog publications.
 - **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks for 15 interactive tools, accompanied by modal snippet generator (`EmbedModal.tsx`).
 - **Internal API Proxies & Utilities:** Dedicated Next.js Route Handlers (`/api/ratings`, `/api/markdown-to-pdf`) proxy client requests to Cloud Run backend microservices with automatic fallback to local memory/temp file caching. Standalone Edge and Node routes provide dynamic OpenGraph card generation (`/api/og`), client image compression fallback (`/api/image-compressor` via Sharp), and on-demand search engine indexing (`/api/indexnow`).
-- **Multilingual (i18n):** Spanish (`/es`) and Portuguese (`/pt`) category hubs and dynamic localized routes `src/app/[lang]/[tool]/page.tsx` with 38 pre-rendered static routes and bidirectional `hreflang` tags. Governed by dual sources of truth: `translations.ts` (SEO & metadata) and `ui-strings.ts` (UI component strings with zero English leakage).
-- **Generative Engine Optimization (GEO):** `public/llms.txt` and `public/llms-full.txt` machine-readable manifests (with App Router route mirrors in `src/app/llms.txt` and `src/app/llms-full.txt`), `<link rel="describedby">`, and AI crawler permissions in `src/app/robots.ts` (`OAI-SearchBot`, `Meta-ExternalAgent`, `cohere-ai`, `ClaudeBot`, `GPTBot`, `PerplexityBot`, `anthropic-ai`, `CCBot`, etc.).
-- **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 212 URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow`) and XML sitemap pings upon build/deploy.
+- **Multilingual (i18n):** Spanish (`/es`) and Portuguese (`/pt`) category hubs and dynamic localized routes `src/app/[lang]/[tool]/page.tsx` with 38 pre-rendered static routes (19 Spanish + 19 Portuguese) and bidirectional `hreflang` tags. Governed by dual sources of truth: `translations.ts` (SEO & metadata) and `ui-strings.ts` (UI component strings with zero English leakage).
+- **Generative Engine Optimization (GEO):** `public/llms.txt` and `public/llms-full.txt` machine-readable manifests (with App Router route mirrors in `src/app/llms.txt` and `src/app/llms-full.txt`), `<link rel="describedby">`, and AI crawler permissions in `src/app/robots.ts` (`OAI-SearchBot`, `Meta-ExternalAgent`, `cohere-ai`, `ClaudeBot`, `GPTBot`, `PerplexityBot`, `anthropic-ai`, `CCBot`, etc., while disallowing `/api/`).
+- **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 212 URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow` with verification key `8e4f1a293c7d4b6e8a0f2c4e6a8d0b2f`) and XML sitemap pings upon build/deploy.
 - **Interactive UI Stack:** Global Command Palette (`Ctrl+K` / `Cmd+K`), Tool Workflow Chaining (`ToolWorkflowChaining.tsx`), Before/After Comparison Slider (`BeforeAfterSlider.tsx`), Homepage Micro-Playground (`HeroPlayground.tsx`), Language Switcher (`LanguageSwitcher.tsx`), and Firestore-backed Rating Widget (`RatingWidget.tsx`).
 - **Monetization & Apps:** Google AdSense (`ca-pub-6366007730203648`, toggled by `NEXT_PUBLIC_ADS_ENABLED`), Google Ads tag (`AW-936767269`), and `CrossPromo.tsx` featuring developer Android apps on Google Play.
 - **Backend:** FastAPI (Python 3.11) with PyMuPDF (`fitz`), Playwright Chromium Headless, and ONNX runtime (`rembg`).
@@ -105,20 +108,25 @@ Create `src/app/<tool-slug>/`:
   ```
 
 - **`<ToolSlug>Client.tsx`** (Client Component):
-  Wrap with `ToolLayout`:
+  Implement the standard **High-Density 2-Column Responsive Layout** inside `<ToolLayout>`:
   ```tsx
   "use client";
 
   import { useState } from "react";
   import { ToolLayout } from "@/components/ToolLayout";
+  import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
   import { triggerConfetti } from "@/lib/confetti";
   import { ToolWorkflowChaining } from "@/components/ToolWorkflowChaining";
+  // If financial tool:
+  // import { useCurrency, formatCurrencyValue } from "@/lib/currency";
+  // import { CurrencySelector } from "@/components/CurrencySelector";
 
   export default function ToolClient() {
     return (
       <ToolLayout
         title="Tool Name"
         description="Short, compelling description of what the tool accomplishes."
+        summaryDefinition="Authoritative, concise 1-2 sentence definition for Generative Engine Optimization (GEO)."
         howToUse={[
           { step: "Step 1", description: "First action user takes." },
           { step: "Step 2", description: "Second action user takes." },
@@ -139,7 +147,33 @@ Create `src/app/<tool-slug>/`:
           </article>
         )}
       >
-        {/* Interactive Tool Widget UI */}
+        {/* High-Density 2-Column Responsive Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Column: Inputs & Configuration */}
+          <div className="lg:col-span-5 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Configuration</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Inputs, Sliders, Preset Buttons */}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column: Live Output, Visualizer & Summary Cards */}
+          <div className="lg:col-span-7 space-y-6 lg:sticky lg:top-24 self-start">
+            <Card>
+              <CardHeader>
+                <CardTitle>Results & Output</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Results, Charts, Preview, Action Buttons */}
+              </CardContent>
+            </Card>
+            <ToolWorkflowChaining currentTool="<tool-slug>" />
+          </div>
+        </div>
       </ToolLayout>
     );
   }
@@ -185,7 +219,7 @@ When localizing tools for global audiences (Spanish & Portuguese):
      - `faqs`: Array of localized FAQ objects (`{ question, answer }`).
 2. **Ensure Zero English UI String Leakage:**
    - Open `src/lib/i18n/ui-strings.ts`.
-   - Verify all shared UI elements (navigation, footer, tool layout headers, file uploader drag-and-drop texts, rating widget labels, cross-promotion banners) are localized for `es` and `pt`.
+   - Verify all shared UI elements (navigation, footer, tool layout headers, file uploader drag-and-drop texts, rating widget labels, cross-promotion banners, currency labels) are localized for `es` and `pt`.
    - For interactive tools with dynamic inputs, selects, table projections, status banners, or result cards (e.g. `sipCalculator`, `fireCalculator`, `investmentCalculator`, `bmiCalculator`), define typed sub-dictionaries in `UIStrings` across `en`, `es`, and `pt`.
    - In components, always bind user-facing strings using `const t = getUIStrings(currentLang);`.
 3. **Register in Localized Route:**
@@ -205,45 +239,55 @@ When localizing tools for global audiences (Spanish & Portuguese):
 
 When adding new capabilities or tools:
 
-1. **Update `public/llms.txt`:**
+1. **Update `public/llms.txt` and `src/app/llms.txt/route.ts`:**
    - Add new tool bullet with URL and 1-sentence capability description.
-2. **Update `public/llms-full.txt`:**
+2. **Update `public/llms-full.txt` and `src/app/llms-full.txt/route.ts`:**
    - Add detailed section documenting endpoints, KaTeX formulas, supported formats, and privacy guarantees.
 3. **Verify AI Crawler Access:**
-   - Check `src/app/robots.ts` to ensure new routes are not inadvertently blocked for `OAI-SearchBot`, `GPTBot`, `ClaudeBot`, `PerplexityBot`, etc.
+   - Check `src/app/robots.ts` to ensure new routes are not inadvertently blocked for `OAI-SearchBot`, `GPTBot`, `ClaudeBot`, `PerplexityBot`, etc. Keep `/api/` disallowed.
 
 ---
 
 ## Runbook 5: Mathematical, Timezone & Core Logic Standards
 
-1. **Investment Growth Math:**
-   - Always model recurring contributions as monthly deposits ($12 \times PMT$/yr).
+1. **Investment Growth Math & 5-Target Solvers:**
+   - Always model recurring contributions as monthly deposits ($12 \times PMT$/yr) regardless of compounding frequency.
    - In daily compounding, compound balance daily ($365/yr$) while adding contributions monthly.
-   - Enforce monotonic ordering: $Daily > Monthly > Quarterly > Annually$.
+   - Enforce monotonic ordering: $Daily > Monthly > Quarterly > Semi-Annually > Annually$.
+   - **5-Target Solving:** When calculating financial parameters (End Balance, Starting Amount, Regular Contribution, Return Rate, Investment Horizon), employ iterative numerical solvers (binary search / Newton-Raphson) with verified bounds.
+   - **Drawdown / Negative Contributions:** Safely support negative deposits (e.g. retirement withdrawals) without crashing or infinite loops when drawdown rate exceeds return rate.
 
-2. **Timezone-Safe Date Arithmetic:**
+2. **Dynamic Comma Grouping & Input Normalization:**
+   - Clean on focus: display plain numeric string for smooth typing without cursor jumping.
+   - Format on blur: format with localized thousands separators (e.g. `10,000`).
+   - Strip on parse: `Number(val.replace(/,/g, ""))`. Guard against `NaN` with fallback to `0` or default state.
+
+3. **Timezone-Safe Date Arithmetic:**
    - Never use `new Date("YYYY-MM-DD")` directly for date calculations because ISO date-only strings parse to UTC midnight and roll back 1 day in negative UTC offsets (Americas).
    - Use `parseLocalDate(str)` and `formatLocalDate(date)` for local midnight dates.
    - Use `Date.UTC(y, m, d)` for day duration math to be 100% immune to 23h/25h Daylight Saving Time (DST) shifts.
 
-3. **Measurement Precision:**
+4. **Measurement Precision:**
    - Use `formatNumber()` with `toPrecision(6)` fallback for small values ($< 10^{-6}$) and large values ($\ge 10^{10}$) to avoid rounding non-zero numbers to `"0"`.
 
-4. **Division-by-Zero Safety & Horizon Modeling:**
+5. **Division-by-Zero Safety & Horizon Modeling:**
    - In `PxToRemClient.tsx`, clamp `baseSize > 0` and equal viewport bounds (`clampMaxVw <= clampMinVw`).
    - In `FireCalculatorClient.tsx`, compute real return via the Fisher equation `(1 + return/100) / (1 + inflation/100) - 1` without artificial lower clamping (`Math.max(0.001, ...)`), clamp inflation denominator `Math.max(0.01, 1 + inflation/100)`, and cap horizons $\ge 100$ years as `"100+ Yrs"` via loop guards (`maxMonths = 1200`). Derive target dates dynamically from `lang` (`es-ES`, `pt-BR`, `en-US`).
 
-5. **LaTeX Template Literal Escaping & Control Character Safety:**
+6. **LaTeX Template Literal Escaping & Control Character Safety:**
    - In JavaScript/TypeScript template literals (`src/lib/blog-data.ts`), **ALWAYS** use double backslashes for LaTeX commands: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, breaking KaTeX parsing.
    - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before KaTeX compilation.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
 
-6. **Unicode Character Safety in String Tools:**
+7. **Unicode Character Safety in String Tools:**
    - In string manipulation and text analysis tools (e.g. Word Counter, Text Converter), never use ASCII-only ranges `/[^a-z0-9]/g`.
    - Always use Unicode property escapes `/[^\p{L}\p{N}]/gu` (or `/[^\p{L}\p{N}\s_-]/gu` when allowing whitespace and punctuation) with the `u` flag to preserve accented letters (`á`, `é`, `í`, `ó`, `ú`, `ñ`, `ç`, etc.).
    - When specifying hyphens in character classes under the `u` flag, place the hyphen at the end (`[\s_-]`) or escape it (`[\s\-_]`) to avoid syntax error TS1516 ("A character class range must not be bounded by another character class").
+
+8. **Calculator Boundary Handling, Presets & 1-Click Resets:**
+   - Every financial and health calculator must provide quick scenario presets (e.g., "College Fund", "Retirement Nest Egg", "Down Payment") and a 1-click Reset button restoring verified defaults.
 
 ---
 
@@ -319,10 +363,10 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
        # ... execute transformation ...
        output_buffer.seek(0)
        
-       return StreamingResponse(
-           output_buffer,
+       return Response(
+           content=output_buffer.getvalue(),
            media_type="application/octet-stream",
-           headers=format_content_disposition("result.ext", as_attachment=True)
+           headers={"Content-Disposition": format_content_disposition("result.ext")}
        )
    ```
 2. In frontend client, call endpoint via `uploadToBackend("/custom-tool/action", [file])` from `@/lib/api`.
@@ -358,8 +402,6 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
 
 ---
 
----
-
 ## Runbook 13: UI Components, Base UI & Tailwind CSS v4 Conventions
 
 1. **Tailwind CSS v4 CSS-First Architecture:**
@@ -368,7 +410,14 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
 2. **Base UI Primitives:**
    - Configured in `components.json` with style `base-nova`.
    - When using Base UI Slider (`src/components/ui/slider.tsx`), `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
-3. **Multilingual Component String Rule:**
+3. **High-Density 2-Column Responsive Layout Pattern:**
+   - All tool interfaces must use `grid grid-cols-1 lg:grid-cols-12 gap-6`.
+   - Controls/inputs in column 1 (`lg:col-span-5` or `lg:col-span-6`), outputs/previews sticky in column 2 (`lg:col-span-7` or `lg:col-span-6` with `lg:sticky lg:top-24 self-start`).
+4. **Multi-Currency System Integration:**
+   - Use `const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();` in financial tools.
+   - Place `<CurrencySelector value={currency} onChange={setCurrency} size="sm" />` in the inputs header.
+   - Format numeric displays using `formatCurrency(val)` or `formatNumberWithCurrency(val, currencyInfo)`.
+5. **Multilingual Component String Rule:**
    - Always extract text via `getUIStrings(lang)` from `@/lib/i18n/ui-strings` rather than writing static strings.
 
 ---
@@ -380,7 +429,7 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
    npx tsc --noEmit
    npm run build
    ```
-   Ensure 0 TypeScript errors, clean static generation for all 227+ pre-rendered SSG routes, and successful execution of `postbuild` search engine pinging (212 URLs).
+   Ensure 0 TypeScript errors, clean static generation for all 227 pre-rendered SSG routes, and successful execution of `postbuild` search engine pinging (212 URLs).
 
 2. **Verify Backend Locally:**
    ```powershell

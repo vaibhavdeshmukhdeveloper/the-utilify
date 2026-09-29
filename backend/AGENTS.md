@@ -25,17 +25,16 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
 
 ## 2. Microservice Endpoints
 
-| Endpoint | Method | Engine | Description |
-| :--- | :--- | :--- | :--- |
-| `/health` or `/` | `GET` | FastAPI | Health check verifying backend status |
-| `/image/remove-bg` | `POST` | `rembg[cpu]` ONNX | Removes image background via deep learning neural networks (`isnet-general-use`, `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) |
-| `/pdf/to-image` | `POST` | PyMuPDF (`fitz`) + `zipfile` | Converts PDF pages into 150 DPI (2x) PNGs packed into a `.zip` archive |
-| `/pdf/split` | `POST` | PyMuPDF (`fitz`) | Extracts selected page ranges (e.g. `1-3, 5, 8-10`) into a new PDF |
-| `/pdf/merge` | `POST` | PyMuPDF (`fitz`) | Combines multiple PDF files sequentially into a single PDF |
-| `/pdf/html-to-pdf` | `POST` | Playwright Chromium | Renders styled HTML/Markdown to pixel-perfect A4 PDF with 1cm print margins (proxied by Next.js `/api/markdown-to-pdf`) |
-| `/api/ratings` | `GET` | Firestore / Cache | Fetches authentic community rating statistics (`ratingValue`, `reviewCount`) for a tool or all tools (proxied by Next.js `/api/ratings`) |
-| `/api/rate` | `POST` | Firestore / Cache | Records genuine user rating (1-5 stars) using atomic increments (`firestore.Increment`) (proxied by Next.js `/api/ratings`) |
-
+| Endpoint | Method | Parameters | Engine | Description | Client Integration |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `/health` or `/` | `GET` | None | FastAPI | Health check verifying backend status | Direct health check / Cloud Run probe |
+| `/image/remove-bg` | `POST` | `file: UploadFile`<br>`post_process: bool = False`<br>`model: str = "isnet-general-use"` | `rembg[cpu]` ONNX | Removes background using deep neural networks (`isnet-general-use`, `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) | Direct via `@/lib/api` `uploadToBackend("/image/remove-bg", [file], { post_process, model })` |
+| `/pdf/to-image` | `POST` | `file: UploadFile` | PyMuPDF (`fitz`) + `zipfile` | Converts PDF pages into 150 DPI (2x) PNGs packed into a `.zip` archive | Direct via `@/lib/api` `uploadToBackend("/pdf/to-image", [file])` |
+| `/pdf/split` | `POST` | `file: UploadFile`<br>`page_ranges: str` (e.g. `"1-3, 5, 8-10"`) | PyMuPDF (`fitz`) | Extracts selected page ranges into a new PDF | Direct via `@/lib/api` `uploadToBackend("/pdf/split", [file], { page_ranges })` |
+| `/pdf/merge` | `POST` | `files: List[UploadFile]` | PyMuPDF (`fitz`) | Combines multiple PDF files sequentially into a single PDF | Direct via `@/lib/api` `uploadToBackend("/pdf/merge", files)` |
+| `/pdf/html-to-pdf` | `POST` | Body JSON: `{ html: str }` | Playwright Chromium | Renders styled HTML/Markdown with KaTeX to pixel-perfect A4 PDF with 1cm print margins | Proxied by Next.js `/api/markdown-to-pdf` route handler |
+| `/api/ratings` | `GET` | Query param: `tool: str = None` | Firestore / Cache | Fetches authentic community rating statistics (`ratingValue`, `reviewCount`) for a specific tool or all tools | Proxied by Next.js `/api/ratings` route handler |
+| `/api/rate` | `POST` | Body JSON: `{ tool: str, rating: int }` (1-5 stars) | Firestore / Cache | Records genuine user rating using atomic increments (`firestore.Increment`) | Proxied by Next.js `/api/ratings` route handler |
 
 ---
 
@@ -55,9 +54,9 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
 1. **Storage Layer:**
    - Ratings are stored in Google Cloud Firestore (Native Mode, Always-Free Tier) in the `ratings` collection with document ID = `tool_slug`.
    - On Google Cloud Run, `firestore.Client()` authenticates seamlessly via Google Application Default Credentials (ADC) without requiring explicit API keys.
-    - In local development or when Firestore is unreachable, falls back to in-memory / local JSON caching (`_resolve_ratings_file()`), which uses `backend/ratings_db.json` with an automatic fallback to the OS temp directory (`tempfile.gettempdir()`) if the container filesystem is read-only.
+   - In local development or when Firestore is unreachable, falls back to in-memory / local JSON caching (`_resolve_ratings_file()`), which checks if `backend/ratings_db.json` is writable and automatically falls back to the OS temp directory (`tempfile.gettempdir()`) if the container filesystem is read-only.
 2. **Concurrency Safety:**
-   - `submit_rating` uses atomic increments (`firestore.Increment(rating)` and `firestore.Increment(1)`) with `merge=True` and `last_updated: firestore.SERVER_TIMESTAMP` to prevent race conditions during high concurrent traffic.
+   - `submit_rating` uses atomic increments (`firestore.Increment(rating)` and `firestore.Increment(1)`) with `merge=True` and `last_updated: firestore.SERVER_TIMESTAMP` to prevent race conditions during concurrent traffic.
 3. **Data Integrity Policy:**
    - Only 100% genuine user votes are stored. Fabricated or pre-seeded baseline reviews are strictly prohibited.
 
@@ -108,4 +107,3 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
   docker build -t utilify-backend ./backend
   docker run -p 8000:8000 utilify-backend
   ```
-

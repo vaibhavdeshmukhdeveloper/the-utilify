@@ -226,10 +226,11 @@ python scripts/shadcn_add.py button card dialog
 ```
 
 ### tailwind_config_gen.py
-Generate tailwind.config.js with custom theme:
+Generate tailwind.config.js with custom theme (generic projects only):
 ```bash
 python scripts/tailwind_config_gen.py --colors brand:blue --fonts display:Inter
 ```
+> **Caution for The Utilify:** The Utilify uses Tailwind CSS v4 CSS-first architecture (`src/app/globals.css`). Do NOT generate or add `tailwind.config.js` in this repository; maintain tokens, custom utilities, and `@theme` definitions directly in `src/app/globals.css`.
 
 ## Best Practices
 
