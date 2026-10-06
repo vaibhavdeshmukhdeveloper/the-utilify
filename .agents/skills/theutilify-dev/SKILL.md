@@ -12,7 +12,7 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 ## Architecture Quick Reference
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + React 19 + TypeScript + Tailwind CSS v4 CSS-first architecture (`@import "tailwindcss";` in `src/app/globals.css`, no `tailwind.config.js`). UI primitives configured via `components.json` (`base-nova`, `@base-ui/react`).
-- **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t` -> `\\t`), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
+- **Client Execution:** Client-side formatters, encoders, calculators, QR generation (`qrcode`), KaTeX formula cards (`katex` + `MathFormula.tsx` with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t(?=[a-zA-Z])` -> `\\t`), server-side KaTeX rendering in blog guides (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t(?=[a-zA-Z])` -> `\\t`), PX to REM fluid generators, and batch image compression (`jszip` + Canvas API).
 - **Privacy-First Multi-Currency Engine:** `src/lib/currency.ts` providing 36 popular world currencies (`POPULAR_CURRENCIES`), client-side timezone/locale auto-detection without server requests or IP lookups, persistent multi-tab synchronized storage (`theutilify_preferred_currency`), formatting helpers (`formatCurrencyValue`, `formatNumberWithCurrency`), and the interactive `<CurrencySelector />` component.
 - **High-Density 2-Column Responsive Layout Architecture:** All 30 tools implement a space-effective 2-column layout (`grid grid-cols-1 lg:grid-cols-12 gap-6`) positioning inputs on the left and sticky live preview/results on the right (`lg:sticky lg:top-24`), maximizing above-the-fold workspace efficiency on desktop and cleanly stacking on mobile.
 - **Recently Visited Tools Tray:** `ToolLayout.tsx` automatically logs visited tools to `localStorage` (`utilify-recent-tools`, maximum 4 items) for fast navigation.
@@ -186,7 +186,7 @@ Create `src/app/<tool-slug>/`:
 4. **Search Ping Engine:** Add to `src/lib/indexnow.ts` and `scripts/ping-search-engines.mjs`.
 5. **Command Palette:** If search keyword additions are needed, verify matching in `src/components/CommandPalette.tsx`.
 6. **Embed Engine:** If client-side embeddable, add slug to `EMBEDDABLE_TOOLS` array in `src/app/embed/[tool]/page.tsx`.
-7. **UI Strings & Canonical Slugs:** If adding custom tool controls or labels, add entries to `src/lib/i18n/ui-strings.ts`. When reading or storing tool state, normalize with `getCanonicalToolSlug(slug)`.
+7. **UI Strings & Canonical Slugs:** If adding custom tool controls, selects, or tables, define a typed sub-dictionary in `src/lib/i18n/ui-strings.ts` across `en`, `es`, and `pt` (following patterns in `investmentCalculator`, `sipCalculator`, `ageCalculator`, etc.). When reading or storing tool state, normalize with `getCanonicalToolSlug(slug)`.
 
 ---
 
@@ -265,7 +265,12 @@ When adding new capabilities or tools:
 3. **Timezone-Safe Date Arithmetic:**
    - Never use `new Date("YYYY-MM-DD")` directly for date calculations because ISO date-only strings parse to UTC midnight and roll back 1 day in negative UTC offsets (Americas).
    - Use `parseLocalDate(str)` and `formatLocalDate(date)` for local midnight dates.
-   - Use `Date.UTC(y, m, d)` for day duration math to be 100% immune to 23h/25h Daylight Saving Time (DST) shifts.
+   - Use `Date.UTC(y, m, d)` for day duration math to be 100% immune to 23h/25h Daylight Saving Time (DST) shifts:
+     ```ts
+     const utcA = Date.UTC(dateA.getFullYear(), dateA.getMonth(), dateA.getDate());
+     const utcB = Date.UTC(dateB.getFullYear(), dateB.getMonth(), dateB.getDate());
+     const calendarDays = Math.max(0, Math.round((utcB - utcA) / (24 * 60 * 60 * 1000)));
+     ```
 
 4. **Measurement Precision:**
    - Use `formatNumber()` with `toPrecision(6)` fallback for small values ($< 10^{-6}$) and large values ($\ge 10^{10}$) to avoid rounding non-zero numbers to `"0"`.
@@ -277,7 +282,7 @@ When adding new capabilities or tools:
 6. **LaTeX Template Literal Escaping & Control Character Safety:**
    - In JavaScript/TypeScript template literals (`src/lib/blog-data.ts`), **ALWAYS** use double backslashes for LaTeX commands: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, breaking KaTeX parsing.
-   - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before KaTeX compilation.
+   - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=[a-zA-Z])/g, "\\t")` before KaTeX compilation. The lookahead `(?=[a-zA-Z])` protects all LaTeX commands starting with `\t` (e.g. `\text`, `\times`, `\theta`, `\to`, `\tau`) from JS parser tab literal degradation.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
 

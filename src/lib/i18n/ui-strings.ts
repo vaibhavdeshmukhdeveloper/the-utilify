@@ -465,8 +465,14 @@ export const uiStrings: Record<Locale, UIStrings> = {
         totalInterest: "Total Interest Earned",
         totalLoss: "Total Loss",
         targetBalance: "Target End Balance",
-        yearsAndMonths: (y: number, m: number) => m > 0 ? `${y} Years and ${m} Months` : `${y} Years`,
-        yearsOnly: (y: number) => `${y} Years`,
+        yearsAndMonths: (y: number, m: number) => {
+          const yStr = y === 1 ? "1 Year" : `${y} Years`;
+          const mStr = m === 1 ? "1 Month" : `${m} Months`;
+          if (y === 0) return mStr;
+          if (m === 0) return yStr;
+          return `${yStr} and ${mStr}`;
+        },
+        yearsOnly: (y: number) => y === 1 ? "1 Year" : `${y} Years`,
         yearlyBreakdownTitle: "Yearly Breakdown",
         projectionFor: (y: string) => `Growth projection for ${y} years`,
         shareLink: "Share Link",
@@ -746,8 +752,14 @@ export const uiStrings: Record<Locale, UIStrings> = {
         totalInterest: "Interés Total Generado",
         totalLoss: "Pérdida Total",
         targetBalance: "Saldo Final Objetivo",
-        yearsAndMonths: (y: number, m: number) => m > 0 ? `${y} Años y ${m} Meses` : `${y} Años`,
-        yearsOnly: (y: number) => `${y} Años`,
+        yearsAndMonths: (y: number, m: number) => {
+          const yStr = y === 1 ? "1 Año" : `${y} Años`;
+          const mStr = m === 1 ? "1 Mes" : `${m} Meses`;
+          if (y === 0) return mStr;
+          if (m === 0) return yStr;
+          return `${yStr} y ${mStr}`;
+        },
+        yearsOnly: (y: number) => y === 1 ? "1 Año" : `${y} Años`,
         yearlyBreakdownTitle: "Desglose Año por Año",
         projectionFor: (y: string) => `Proyección de crecimiento para ${y} años`,
         shareLink: "Compartir Enlace",
@@ -1027,8 +1039,14 @@ export const uiStrings: Record<Locale, UIStrings> = {
         totalInterest: "Total de Juros Acumulados",
         totalLoss: "Perda Total",
         targetBalance: "Saldo Final Alvo",
-        yearsAndMonths: (y: number, m: number) => m > 0 ? `${y} Anos e ${m} Meses` : `${y} Anos`,
-        yearsOnly: (y: number) => `${y} Anos`,
+        yearsAndMonths: (y: number, m: number) => {
+          const yStr = y === 1 ? "1 Ano" : `${y} Anos`;
+          const mStr = m === 1 ? "1 Mês" : `${m} Meses`;
+          if (y === 0) return mStr;
+          if (m === 0) return yStr;
+          return `${yStr} e ${mStr}`;
+        },
+        yearsOnly: (y: number) => y === 1 ? "1 Ano" : `${y} Anos`,
         yearlyBreakdownTitle: "Detalhamento Ano a Ano",
         projectionFor: (y: string) => `Projeção de crescimento para ${y} anos`,
         shareLink: "Compartilhar Link",

@@ -26,7 +26,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 - **Theme:** `next-themes` (Dark/Light mode with glassmorphic navigation and animated theme toggles).
 - **Icons & UI:** `lucide-react`, Base UI / Radix Primitives (`components.json` with style `base-nova`), `sonner` for toast notifications.
 - **Micro-Interactions:** `canvas-confetti` (`src/lib/confetti.ts`) for celebratory feedback on copying, calculations, and downloads.
-- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t` -> `\\t`) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t` -> `\\t`).
+- **Math Rendering:** `katex` + `src/components/MathFormula.tsx` (with automatic double-backslash and control character normalization: `\x0c` -> `\\f`, `\t(?=[a-zA-Z])` -> `\\t`) for LaTeX math formulas in interactive financial/health tools, plus server-side KaTeX rendering in blog articles (`src/app/blog/[slug]/page.tsx`) via custom `marked` extensions with `sanitizeMath()` control character normalization (`\x0c` -> `\\f`, `\t(?=[a-zA-Z])` -> `\\t`).
 - **Client Execution:** Formatters, encoders, calculators, QR generation (`qrcode`), Markdown parsing (`marked`), PX to REM converters, and batch image compression (via `jszip` + Canvas API) execute 100% client-side for zero server latency.
 - **Privacy-First Multi-Currency Engine:** `src/lib/currency.ts` providing 36 popular world currencies (`POPULAR_CURRENCIES`), client-side timezone/locale auto-detection without server requests or IP lookups, persistent multi-tab synchronized storage (`theutilify_preferred_currency`), formatting helpers (`formatCurrencyValue`, `formatNumberWithCurrency`), and the interactive `<CurrencySelector />` component.
 - **High-Density 2-Column Responsive Layout Architecture:** All 30 tools implement a space-effective 2-column layout (`grid grid-cols-1 lg:grid-cols-12 gap-6`) positioning inputs on the left and sticky live preview/results on the right (`lg:sticky lg:top-24`), maximizing above-the-fold workspace efficiency on desktop and cleanly stacking on mobile.
@@ -182,7 +182,12 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
        return new Date(y, m - 1, d);
      }
      ```
-   - For calendar day counts, use UTC timestamps (`Date.UTC(y, m, d)`) to eliminate 23-hour or 25-hour Daylight Saving Time (DST) clock-shift discrepancies.
+   - For calendar day counts, use UTC timestamps (`Date.UTC(y, m, d)`) to eliminate 23-hour or 25-hour Daylight Saving Time (DST) clock-shift discrepancies:
+     ```ts
+     const utcA = Date.UTC(dateA.getFullYear(), dateA.getMonth(), dateA.getDate());
+     const utcB = Date.UTC(dateB.getFullYear(), dateB.getMonth(), dateB.getDate());
+     const calendarDays = Math.max(0, Math.round((utcB - utcA) / (24 * 60 * 60 * 1000)));
+     ```
 
 4. **Small-Quantity Precision:**
    - When converting measurements (e.g. milligrams to metric tons), avoid blanket `toFixed(6)` which rounds small values to `"0"`. Use `toPrecision(6)` fallback for numbers $< 10^{-6}$ or $\ge 10^{10}$.
@@ -195,7 +200,7 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
 6. **Template Literal LaTeX Escaping Standards & Control Character Safety:**
    - In JavaScript/TypeScript template literals (e.g. `src/lib/blog-data.ts`), **ALWAYS** escape LaTeX command backslashes with double backslashes: `\\frac`, `\\text`, `\\times`, `\\log`, `\\approx`, `\\sqrt`, `\\le`, `\\ge`, `\\pm`, `\\cdot`, etc.
    - **Critical JS Parser Pitfall:** In JS template literals, `\f` evaluates to Form Feed (`\x0c`) and `\t` evaluates to Tab (`\x09`). If written with single backslashes (`\frac`, `\text`), the runtime string receives `\x0crac` and `\x09ext`, corrupting KaTeX parsing.
-   - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=ext|imes)/g, "\\t")` before KaTeX compilation.
+   - Both `src/app/blog/[slug]/page.tsx` (`sanitizeMath()`) and client-side `<MathFormula formula="..." />` (`src/components/MathFormula.tsx`) explicitly normalize control characters: `.replace(/\x0c/g, "\\f").replace(/\t(?=[a-zA-Z])/g, "\\t")` before KaTeX compilation. The lookahead `(?=[a-zA-Z])` ensures that any LaTeX command starting with `\t` (e.g. `\text`, `\times`, `\theta`, `\to`, `\tau`) has its escaped backslash restored while preserving legitimate tab formatting elsewhere.
    - In client components, `<MathFormula formula="..." />` defensively normalizes double backslashes via `.replace(/\\\\([a-zA-Z]+)/g, "\\$1")` so formulas render correctly whether passed with single or double backslashes.
    - **Markdown Inline Code in Template Literals:** When writing backtick snippets inside template literals, format carefully (e.g. `(\`\` \`\`\` \`\`)`) to prevent premature termination of template literals.
 
@@ -272,6 +277,8 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
 2. **Multilingual UI String Hygiene (Zero English Leakage):**
    - Never hardcode raw English text inside shared layout components or tool UI wrappers.
    - Always retrieve strings via `getUIStrings(currentLang)` from `@/lib/i18n/ui-strings`.
+   - The typed `UIStrings` interface provides centralized dictionaries for `nav`, `toolLayout`, `fileUploader`, `ratingWidget`, `common` (`currency`, `presets`, `share`), `crossPromo`, `footer`, and dedicated calculator suites (`bmiCalculator`, `dateCalculator`, `ageCalculator`, `investmentCalculator`, `sipCalculator`, `fireCalculator`).
+   - When building a new interactive tool with inputs, selects, calculation breakdowns, or export options, extend `UIStrings` across `en`, `es`, and `pt` dictionaries rather than placing string literals in components.
    - When resolving tool links and titles across languages, use `getCanonicalToolSlug(slug)` to ensure language prefixes (`/es/`, `/pt/`) are handled consistently.
 
 3. **Multi-Currency Integration Pattern:**

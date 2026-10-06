@@ -250,6 +250,36 @@ export default function InvestmentCalculatorClient({
     let mainValue = "";
     let subNote = "";
 
+    const isEs = currentLocale === "es";
+    const isPt = currentLocale === "pt";
+    const yearUnit = strings.results.yearsOnly(1).replace(/^\d+\s*/, "").trim();
+    const monthWord = isEs || isPt ? "Meses" : "Months";
+    const unreachableLabel = isEs ? "Inalcanzable" : isPt ? "Inalcançável" : "Unreachable";
+    const perpetualLabel = isEs ? "Fondo Perpetuo" : isPt ? "Fundo Perpétuo" : "Perpetual Fund";
+
+    const formatHorizon = (t: number) => {
+      if (t > 100) {
+        return {
+          val: `100+ ${yearUnit}`,
+          note: isEs ? "El plazo requerido supera los 100 años al ritmo actual." : isPt ? "O prazo necessário ultrapassa 100 anos no ritmo atual." : "Target horizon exceeds 100 years at current parameters.",
+        };
+      }
+      const isWhole = Math.abs(t - Math.round(t)) < 0.001;
+      if (isWhole) {
+        return {
+          val: strings.results.yearsOnly(Math.round(t)),
+          note: "",
+        };
+      }
+      const decimalYears = t.toFixed(3);
+      const totalMonths = t * 12;
+      const wholeY = Math.floor(t);
+      const remM = Number((totalMonths - wholeY * 12).toFixed(1));
+      const val = strings.results.yearsAndMonths(wholeY, Math.round(remM));
+      const note = `≈ ${decimalYears} ${yearUnit} (${totalMonths.toFixed(1)} ${monthWord})`;
+      return { val, note };
+    };
+
     // Calculation by Target Mode
     if (calculationTarget === "end_amount") {
       if (rawYears <= 0 || (rawInitialAmount === 0 && rawContribution === 0)) {
@@ -260,7 +290,7 @@ export default function InvestmentCalculatorClient({
       mainTitle = strings.results.totalFutureWealth;
       mainValue = formatCurrency(effFV);
       if (effFV < 0) {
-        subNote = "Your portfolio depletes to zero before the end of the duration due to withdrawals exceeding growth.";
+        subNote = isEs ? "Tu cartera se agota a cero antes de finalizar el plazo debido a que los retiros superan el crecimiento." : isPt ? "Sua carteira se esgotará antes de terminar o prazo porque os resgates superam o rendimento." : "Your portfolio depletes to zero before the end of the duration due to withdrawals exceeding growth.";
       }
     } else if (calculationTarget === "contribution") {
       if (rawYears <= 0 || isNaN(rawTargetAmount) || rawTargetAmount < 0) {
@@ -281,7 +311,7 @@ export default function InvestmentCalculatorClient({
       const freqSuffix = contributionFrequency === "annually" ? ` / ${strings.labels.year}` : ` / ${strings.labels.month}`;
       mainValue = formatCurrency(effPMT) + freqSuffix;
       if (effPMT < 0) {
-        subNote = `Your starting deposit exceeds your target. You can withdraw ${formatCurrency(Math.abs(Math.round(effPMT)))}${freqSuffix} while still meeting your target.`;
+        subNote = isEs ? `Tu capital inicial ya supera el objetivo. Puedes retirar ${formatCurrency(Math.abs(Math.round(effPMT)))}${freqSuffix} y aun así alcanzar tu meta.` : isPt ? `Seu investimento inicial já supera o objetivo. Você pode resgatar ${formatCurrency(Math.abs(Math.round(effPMT)))}${freqSuffix} e ainda assim atingir sua meta.` : `Your starting deposit exceeds your target. You can withdraw ${formatCurrency(Math.abs(Math.round(effPMT)))}${freqSuffix} while still meeting your target.`;
       }
     } else if (calculationTarget === "starting_amount") {
       if (rawYears <= 0 || isNaN(rawTargetAmount) || rawTargetAmount < 0) {
@@ -301,7 +331,7 @@ export default function InvestmentCalculatorClient({
       mainTitle = strings.results.neededStartingAmount;
       if (effP <= 0) {
         mainValue = formatCurrency(0);
-        subNote = `No initial capital required! Your regular contributions alone exceed the target by ${formatCurrency(Math.abs(Math.round(effP)))}.`;
+        subNote = isEs ? `¡No se requiere capital inicial! Solo tus aportes periódicos superan el objetivo por ${formatCurrency(Math.abs(Math.round(effP)))}.` : isPt ? `Nenhum investimento inicial necessário! Apenas seus aportes periódicos já superam o objetivo por ${formatCurrency(Math.abs(Math.round(effP)))}.` : `No initial capital required! Your regular contributions alone exceed the target by ${formatCurrency(Math.abs(Math.round(effP)))}.`;
       } else {
         mainValue = formatCurrency(effP);
       }
@@ -321,12 +351,12 @@ export default function InvestmentCalculatorClient({
       if (effFV < testFVLow) {
         mainTitle = strings.results.neededReturnRate;
         mainValue = "<-99%";
-        subNote = "Target requires a capital loss exceeding 99%.";
+        subNote = isEs ? "El objetivo requiere una pérdida de capital superior al 99%." : isPt ? "A meta requer uma perda de capital superior a 99%." : "Target requires a capital loss exceeding 99%.";
         effRate = -0.99;
       } else if (effFV > testFVHigh) {
         mainTitle = strings.results.neededReturnRate;
         mainValue = ">1000%";
-        subNote = "Target requires an annualized return exceeding 1000%.";
+        subNote = isEs ? "El objetivo requiere una rentabilidad anualizada superior al 1000%." : isPt ? "A meta requer uma rentabilidade anualizada superior a 1000%." : "Target requires an annualized return exceeding 1000%.";
         effRate = 10.0;
       } else {
         for (let iter = 0; iter < 100; iter++) {
@@ -342,7 +372,7 @@ export default function InvestmentCalculatorClient({
         mainTitle = strings.results.neededReturnRate;
         mainValue = (effRate * 100).toFixed(2) + "%";
         if (effRate < 0) {
-          subNote = "A negative return (capital drawdown) is required because total deposits exceed your target.";
+          subNote = isEs ? "Se requiere una rentabilidad negativa (reducción de capital) porque tus depósitos totales superan el objetivo." : isPt ? "É necessário um retorno negativo (redução de capital) porque seus depósitos totais superam a meta." : "A negative return (capital drawdown) is required because total deposits exceed your target.";
         }
       }
     } else if (calculationTarget === "length") {
@@ -357,42 +387,33 @@ export default function InvestmentCalculatorClient({
       if (effP >= effFV && effPMT >= 0) {
         effT = 0;
         mainTitle = strings.results.neededLength;
-        mainValue = "0 " + strings.results.yearsOnly(0);
-        subNote = "Your starting capital already meets or exceeds your target amount.";
+        mainValue = strings.results.yearsOnly(0);
+        subNote = isEs ? "Tu capital inicial ya cumple o supera el monto objetivo." : isPt ? "Seu investimento inicial já atinge ou ultrapassa a meta estipulada." : "Your starting capital already meets or exceeds your target amount.";
       } 
       // Scenario 2: Zero interest rate
       else if (effRate === 0 || i === 0) {
         if (effPMT === 0) {
           mainTitle = strings.results.neededLength;
-          mainValue = "Unreachable";
-          subNote = "Without growth or contributions, the target cannot be reached.";
+          mainValue = unreachableLabel;
+          subNote = isEs ? "Sin rentabilidad ni aportes, no es posible alcanzar el objetivo." : isPt ? "Sem rentabilidade nem aportes, a meta não pode ser alcançada." : "Without growth or contributions, the target cannot be reached.";
           effT = 0;
         } else {
           const N = (effFV - effP) / effPMT;
           if (N < 0) {
             mainTitle = strings.results.neededLength;
-            mainValue = "Unreachable";
-            subNote = effPMT < 0
-              ? "Target cannot be reached because withdrawals are depleting the balance."
-              : "Target cannot be reached with the current parameters.";
+            mainValue = unreachableLabel;
+            subNote = isEs
+              ? (effPMT < 0 ? "No se puede alcanzar el objetivo porque los retiros agotan el saldo." : "No se puede alcanzar el objetivo con los parámetros actuales.")
+              : isPt
+              ? (effPMT < 0 ? "O objetivo não pode ser alcançado porque os resgates esgotam o saldo." : "O objetivo não pode ser alcançado com os parâmetros atuais.")
+              : (effPMT < 0 ? "Target cannot be reached because withdrawals are depleting the balance." : "Target cannot be reached with the current parameters.");
             effT = 0;
           } else {
             effT = N / p;
-            const decimalYears = effT.toFixed(3);
-            const totalMonths = effT * 12;
-            const wholeY = Math.floor(effT);
-            const remM = Number((totalMonths - wholeY * 12).toFixed(1));
-            const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
-
             mainTitle = strings.results.neededLength;
-            if (isWholeYear) {
-              mainValue = strings.results.yearsOnly(Math.round(effT));
-            } else {
-              mainValue = `${decimalYears} Years`;
-              const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
-              const mStr = `${remM} Months`;
-              subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
-            }
+            const { val, note } = formatHorizon(effT);
+            mainValue = val;
+            subNote = note;
           }
         }
       } 
@@ -401,29 +422,20 @@ export default function InvestmentCalculatorClient({
         if (effFV > effP) {
           const N = Math.log(effFV / effP) / Math.log(1 + i);
           effT = N / p;
-          const decimalYears = effT.toFixed(3);
-          const totalMonths = effT * 12;
-          const wholeY = Math.floor(effT);
-          const remM = Number((totalMonths - wholeY * 12).toFixed(1));
-          const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
-
           mainTitle = strings.results.neededLength;
           if (effT > 100) {
-            mainValue = "100+ " + strings.results.yearsOnly(100);
-            subNote = "Target horizon exceeds 100 years at the current return rate.";
+            mainValue = `100+ ${yearUnit}`;
+            subNote = isEs ? "El plazo requerido supera los 100 años con el rendimiento actual." : isPt ? "O prazo necessário ultrapassa 100 anos com o retorno atual." : "Target horizon exceeds 100 years at the current return rate.";
             effT = 100;
-          } else if (isWholeYear) {
-            mainValue = strings.results.yearsOnly(Math.round(effT));
           } else {
-            mainValue = `${decimalYears} Years`;
-            const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
-            const mStr = `${remM} Months`;
-            subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+            const { val, note } = formatHorizon(effT);
+            mainValue = val;
+            subNote = note;
           }
         } else {
           mainTitle = strings.results.neededLength;
           mainValue = "N/A";
-          subNote = "With positive returns and no withdrawals, the balance only increases.";
+          subNote = isEs ? "Con rentabilidad positiva y sin retiros, el saldo solo aumenta." : isPt ? "Com retornos positivos e sem resgates, o saldo só aumenta." : "With positive returns and no withdrawals, the balance only increases.";
           effT = 0;
         }
       } 
@@ -436,38 +448,29 @@ export default function InvestmentCalculatorClient({
           // If principal growth exceeds or equals withdrawal rate, fund is perpetual
           if (effP + A >= 0) {
             mainTitle = strings.results.neededLength;
-            mainValue = "Perpetual Fund";
-            subNote = "Your portfolio generates more in investment returns than you withdraw, so the balance will never deplete to your target.";
+            mainValue = perpetualLabel;
+            subNote = isEs ? "Tu cartera genera más rendimientos que los retiros periódicos, por lo que el saldo nunca se agotará hasta el objetivo." : isPt ? "Sua carteira gera mais rendimentos do que os resgates periódicos, portanto o saldo nunca se esgotará até a meta." : "Your portfolio generates more in investment returns than you withdraw, so the balance will never deplete to your target.";
             effT = 0;
           } else {
             // Withdrawals exceed growth; balance steadily draws down to effFV
             const ratio = (effFV + A) / (effP + A);
             if (ratio <= 0) {
               mainTitle = strings.results.neededLength;
-              mainValue = "Unreachable";
-              subNote = "Target cannot be reached under the current withdrawal and return parameters.";
+              mainValue = unreachableLabel;
+              subNote = isEs ? "El objetivo no se puede alcanzar con los parámetros actuales de retiros y rentabilidad." : isPt ? "O objetivo não pode ser alcançado com os parâmetros atuais de resgate e retorno." : "Target cannot be reached under the current withdrawal and return parameters.";
               effT = 0;
             } else {
               const N = Math.log(ratio) / Math.log(1 + i);
               effT = N / p;
-              const decimalYears = effT.toFixed(3);
-              const totalMonths = effT * 12;
-              const wholeY = Math.floor(effT);
-              const remM = Number((totalMonths - wholeY * 12).toFixed(1));
-              const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
-
               mainTitle = strings.results.neededLength;
               if (effT > 100) {
-                mainValue = "100+ " + strings.results.yearsOnly(100);
-                subNote = "Target horizon exceeds 100 years at current withdrawal and return rate.";
+                mainValue = `100+ ${yearUnit}`;
+                subNote = isEs ? "El plazo requerido supera los 100 años con los parámetros actuales de retiro y rentabilidad." : isPt ? "O prazo necessário ultrapassa 100 anos com os parâmetros atuais de resgate e retorno." : "Target horizon exceeds 100 years at current withdrawal and return rate.";
                 effT = 100;
-              } else if (isWholeYear) {
-                mainValue = strings.results.yearsOnly(Math.round(effT));
               } else {
-                mainValue = `${decimalYears} Years`;
-                const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
-                const mStr = `${remM} Months`;
-                subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+                const { val, note } = formatHorizon(effT);
+                mainValue = val;
+                subNote = note;
               }
             }
           }
@@ -476,36 +479,28 @@ export default function InvestmentCalculatorClient({
         else if (effFV > effP && effPMT < 0) {
           if (effP + A <= 0) {
             mainTitle = strings.results.neededLength;
-            mainValue = "Unreachable";
-            subNote = "Target cannot be reached because periodic withdrawals exceed portfolio investment growth.";
+            mainValue = unreachableLabel;
+            subNote = isEs ? "El objetivo no se puede alcanzar porque los retiros periódicos superan el crecimiento de la cartera." : isPt ? "O objetivo não pode ser alcançado porque os resgates periódicos superam o crescimento da carteira." : "Target cannot be reached because periodic withdrawals exceed portfolio investment growth.";
             effT = 0;
           } else {
             const ratio = (effFV + A) / (effP + A);
             if (ratio <= 0) {
               mainTitle = strings.results.neededLength;
-              mainValue = "Unreachable";
+              mainValue = unreachableLabel;
+              subNote = isEs ? "El objetivo no se puede alcanzar con los parámetros actuales." : isPt ? "O objetivo não pode ser alcançado com os parâmetros atuais." : "Target cannot be reached under current parameters.";
               effT = 0;
             } else {
               const N = Math.log(ratio) / Math.log(1 + i);
               effT = N / p;
-              const decimalYears = effT.toFixed(3);
-              const totalMonths = effT * 12;
-              const wholeY = Math.floor(effT);
-              const remM = Number((totalMonths - wholeY * 12).toFixed(1));
-              const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
-
               mainTitle = strings.results.neededLength;
               if (effT > 100) {
-                mainValue = "100+ " + strings.results.yearsOnly(100);
-                subNote = "Target horizon exceeds 100 years.";
+                mainValue = `100+ ${yearUnit}`;
+                subNote = isEs ? "El plazo requerido supera los 100 años." : isPt ? "O prazo necessário ultrapassa 100 anos." : "Target horizon exceeds 100 years.";
                 effT = 100;
-              } else if (isWholeYear) {
-                mainValue = strings.results.yearsOnly(Math.round(effT));
               } else {
-                mainValue = `${decimalYears} Years`;
-                const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
-                const mStr = `${remM} Months`;
-                subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
+                const { val, note } = formatHorizon(effT);
+                mainValue = val;
+                subNote = note;
               }
             }
           }
@@ -519,28 +514,16 @@ export default function InvestmentCalculatorClient({
           }
           const N = Math.log(ratio) / Math.log(1 + i);
           effT = N / p;
+          mainTitle = strings.results.neededLength;
 
           if (effT > 100) {
-            mainTitle = strings.results.neededLength;
-            mainValue = "100+ " + strings.results.yearsOnly(100);
-            subNote = "Target horizon exceeds 100 years at the current contribution and return rate.";
+            mainValue = `100+ ${yearUnit}`;
+            subNote = isEs ? "El plazo requerido supera los 100 años al ritmo actual de aportes y rentabilidad." : isPt ? "O prazo necessário ultrapassa 100 anos no ritmo atual de aportes e rentabilidade." : "Target horizon exceeds 100 years at the current contribution and return rate.";
             effT = 100;
           } else {
-            const decimalYears = effT.toFixed(3);
-            const totalMonths = effT * 12;
-            const wholeY = Math.floor(effT);
-            const remM = Number((totalMonths - wholeY * 12).toFixed(1));
-            const isWholeYear = Math.abs(effT - Math.round(effT)) < 0.001;
-
-            mainTitle = strings.results.neededLength;
-            if (isWholeYear) {
-              mainValue = strings.results.yearsOnly(Math.round(effT));
-            } else {
-              mainValue = `${decimalYears} Years`;
-              const yStr = wholeY === 1 ? "1 Year" : `${wholeY} Years`;
-              const mStr = `${remM} Months`;
-              subNote = `${wholeY > 0 ? `${yStr} and ${mStr}` : mStr} (${totalMonths.toFixed(1)} Months)`;
-            }
+            const { val, note } = formatHorizon(effT);
+            mainValue = val;
+            subNote = note;
           }
         }
       }

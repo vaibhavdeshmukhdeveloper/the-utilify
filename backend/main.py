@@ -7,7 +7,7 @@ import asyncio
 import tempfile
 from urllib.parse import quote
 from contextlib import asynccontextmanager
-from typing import List
+from typing import List, Optional
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
@@ -99,8 +99,12 @@ def format_content_disposition(filename: str) -> str:
 
 def parse_ranges(range_str: str, max_pages: int) -> List[int]:
     """
-    Parses a user page range string (e.g. "1-3, 5, 8-10") into 0-indexed page numbers.
+    Parses a user page range string (e.g. "1-3, 5, 8-10" or "all") into 0-indexed page numbers.
     """
+    if not range_str:
+        return []
+    if range_str.strip().lower() == "all":
+        return list(range(max_pages))
     pages = []
     for part in range_str.split(","):
         part = part.strip()
@@ -220,12 +224,18 @@ async def pdf_to_image(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"PDF to image conversion failed: {str(e)}")
 
 @app.post("/pdf/split")
-async def split_pdf(file: UploadFile = File(...), page_ranges: str = Form(...)):
+async def split_pdf(
+    file: UploadFile = File(...),
+    page_ranges: Optional[str] = Form(None),
+    pages: Optional[str] = Form(None)
+):
     """
-    Splits a PDF by extracting specific page ranges or indexes.
+    Splits a PDF by extracting specific page ranges or packaging all individual pages into a ZIP archive.
     """
     if file.content_type != "application/pdf" and not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF.")
+
+    effective_ranges = (page_ranges or pages or "all").strip()
 
     try:
         pdf_bytes = await file.read()
@@ -233,7 +243,34 @@ async def split_pdf(file: UploadFile = File(...), page_ranges: str = Form(...)):
         src_doc = fitz.open(stream=pdf_bytes, filetype="pdf")
         max_pages = len(src_doc)
         
-        pages_to_extract = parse_ranges(page_ranges, max_pages)
+        if max_pages == 0:
+            raise HTTPException(status_code=400, detail="The uploaded PDF contains no pages.")
+
+        raw_filename = file.filename or "document.pdf"
+        base_name = os.path.splitext(raw_filename)[0]
+
+        # Case 1: Split every page into individual PDF files bundled in a ZIP
+        if effective_ranges.lower() == "all":
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+                for p in range(max_pages):
+                    single_doc = fitz.open()
+                    single_doc.insert_pdf(src_doc, from_page=p, to_page=p)
+                    pdf_buf = io.BytesIO()
+                    single_doc.save(pdf_buf)
+                    single_doc.close()
+                    pdf_buf.seek(0)
+                    zip_file.writestr(f"{base_name}_page_{p + 1}.pdf", pdf_buf.getvalue())
+
+            zip_buffer.seek(0)
+            return Response(
+                content=zip_buffer.getvalue(),
+                media_type="application/zip",
+                headers={"Content-Disposition": format_content_disposition(f"{base_name}_split_pages.zip")}
+            )
+
+        # Case 2: Extract specific page ranges into a single merged PDF
+        pages_to_extract = parse_ranges(effective_ranges, max_pages)
         if not pages_to_extract:
             raise HTTPException(status_code=400, detail="Invalid page ranges provided.")
             
@@ -243,9 +280,9 @@ async def split_pdf(file: UploadFile = File(...), page_ranges: str = Form(...)):
             
         output_buffer = io.BytesIO()
         dest_doc.save(output_buffer)
+        dest_doc.close()
         output_buffer.seek(0)
         
-        raw_filename = file.filename or "document.pdf"
         filename = f"split-{raw_filename}"
         return Response(
             content=output_buffer.getvalue(),

@@ -70,8 +70,10 @@ export default function SplitPdfClient({
     setResult(null);
     
     try {
+      const rangesValue = splitMode === "all" ? "all" : pages;
       const data = await uploadToBackend("/pdf/split", files, { 
-        pages: splitMode === "all" ? "all" : pages 
+        pages: rangesValue,
+        page_ranges: rangesValue,
       });
       setResult(data);
       toast.success(splitMode === "all" ? "PDF split into individual pages!" : "PDF ranges extracted successfully!");
