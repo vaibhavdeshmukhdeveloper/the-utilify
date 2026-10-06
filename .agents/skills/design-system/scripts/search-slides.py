@@ -7,6 +7,10 @@ Slide Search CLI - Search slide design databases for strategies, layouts, copy, 
 import sys
 import json
 import argparse
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 from slide_search_core import (
     search, search_all, AVAILABLE_DOMAINS,
     search_with_context, get_layout_for_goal, get_typography_for_slide,

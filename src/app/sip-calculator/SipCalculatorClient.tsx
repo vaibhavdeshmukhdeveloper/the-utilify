@@ -52,7 +52,8 @@ export default function SipCalculatorClient({
   customFaqs,
   lang,
 }: SipCalculatorClientProps = {}) {
-  const strings = getUIStrings((lang as Locale) || "en").sipCalculator;
+  const ui = getUIStrings((lang as Locale) || "en");
+  const strings = ui.sipCalculator;
   const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
   const [monthlyInvestment, setMonthlyInvestment] = useState("1,000");
   const [years, setYears] = useState("10");
@@ -153,7 +154,7 @@ export default function SipCalculatorClient({
         total: "0",
         invested: "0",
         returns: "0",
-        subNote: "SIP assumes regular positive investments. For drawdown or capital withdrawal, use the Investment Calculator.",
+        subNote: strings.subNoteDrawdown,
         breakdown: [],
       });
       return;
@@ -345,7 +346,7 @@ export default function SipCalculatorClient({
             <span className="sm:hidden">{strings.badge}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground font-semibold hidden sm:inline">Currency:</span>
+            <span className="text-xs text-muted-foreground font-semibold hidden sm:inline">{ui.common.currency}</span>
             <CurrencySelector value={currency} onChange={setCurrency} size="sm" />
           </div>
         </div>

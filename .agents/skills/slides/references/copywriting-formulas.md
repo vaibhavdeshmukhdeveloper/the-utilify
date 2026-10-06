@@ -66,11 +66,12 @@
 
 ```bash
 # Find formula for slide type
-python .claude/skills/design-system/scripts/search-slides.py "problem agitation" -d copy
+python .agents/skills/design-system/scripts/search-slides.py "problem agitation" -d copy
 
 # Get emotion-appropriate formula
-python .claude/skills/design-system/scripts/search-slides.py "urgency cta" -d copy
+python .agents/skills/design-system/scripts/search-slides.py "urgency cta" -d copy
 ```
+
 
 ## Quick Reference
 

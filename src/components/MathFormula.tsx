@@ -15,7 +15,7 @@ let katexInstance: any = null;
 export function MathFormula({ formula, displayMode = true, className }: MathFormulaProps) {
   const sanitizedFormula = (formula || "")
     .replace(/\x0c/g, "\\f")
-    .replace(/\t(?=ext|imes)/g, "\\t")
+    .replace(/\t(?=[a-zA-Z])/g, "\\t")
     .replace(/\\\\([a-zA-Z]+)/g, "\\$1");
   const [renderedHtml, setRenderedHtml] = useState<string | null>(() => {
     if (katexInstance) {

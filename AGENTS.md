@@ -324,3 +324,40 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
 
 14. **Presets and Boundary Resets:**
     - Always include sensible preset buttons and a 1-click Reset button to guarantee users can return to working baseline states.
+
+---
+
+## 11. Workspace Skills Reference (`.agents/skills/`)
+
+Specialized skills are available in `.agents/skills/` to assist with development and design workflows:
+
+| Skill | Purpose | Key Commands / Files |
+| :--- | :--- | :--- |
+| `theutilify-dev` | Step-by-step developer runbooks (14 operational procedures) | `.agents/skills/theutilify-dev/SKILL.md` |
+| `ui-styling` | Base UI / shadcn/ui components with Tailwind CSS v4 | `.agents/skills/ui-styling/SKILL.md` |
+| `ui-ux-pro-max` | UX reasoning, styles, palettes, and design system search | `python .agents/skills/ui-ux-pro-max/scripts/search.py "<query>"` |
+| `brand` | Brand identity extraction and token synchronization | `node .agents/skills/brand/scripts/inject-brand-context.cjs` |
+| `playwright-cli` | Browser automation, visual testing, and high-DPI screenshots | `playwright-cli open`, `playwright-cli screenshot` |
+| `banner-design` | Responsive multi-format social/ad banner design | `.agents/skills/banner-design/SKILL.md` |
+| `design-system` | Token architecture, component specs, and presentations | `python .agents/skills/design-system/scripts/search-slides.py` |
+| `slides` | Strategic HTML slide presentation design with Chart.js | `.agents/skills/slides/SKILL.md` |
+| `design` | Logo, icon, and corporate identity program (CIP) generation | `.agents/skills/design/scripts/` |
+
+---
+
+## 12. Essential Developer Commands
+
+```bash
+# Frontend Development & Verification
+npm run dev               # Start Next.js App Router dev server with Turbopack (http://localhost:3000)
+npx tsc --noEmit          # Verify TypeScript static types (must pass with 0 errors)
+npm run build             # Build production bundle (pre-renders 227 routes + auto-pings 212 URLs)
+npm run ping              # Submit all 212 platform URLs to IndexNow (Bing/Yandex) and search engines
+
+# Backend Development & Microservices
+.\run_backend.ps1         # Start FastAPI microservices backend on http://localhost:8000
+cd backend && uvicorn main:app --reload --port 8000   # Direct Uvicorn startup (with venv active)
+docker build -t utilify-backend ./backend             # Build container image
+docker run -p 8000:8000 utilify-backend               # Run container locally
+```
+

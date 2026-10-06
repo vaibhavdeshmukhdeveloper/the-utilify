@@ -136,16 +136,16 @@ Load `references/slides-create.md` for the creation workflow.
 
 ## Banner Design (Built-in)
 
-22 art direction styles across social, ads, web, print. Uses `frontend-design`, `ai-artist`, `ai-multimodal`, `chrome-devtools` skills.
+22 art direction styles across social, ads, web, print. Uses `ui-ux-pro-max`, `brand`, `banner-design`, and `playwright-cli`.
 
 Load `references/banner-sizes-and-styles.md` for complete sizes and styles reference.
 
 ### Banner: Workflow
 
 1. **Gather requirements** via `AskUserQuestion` — purpose, platform, content, brand, style, quantity
-2. **Research** — Activate `ui-ux-pro-max`, browse Pinterest for references
-3. **Design** — Create HTML/CSS banner with `frontend-design`, generate visuals with `ai-artist`/`ai-multimodal`
-4. **Export** — Screenshot to PNG at exact dimensions via `chrome-devtools`
+2. **Research** — Activate `ui-ux-pro-max`, search styles and color pairings
+3. **Design** — Create HTML/CSS banner with Tailwind CSS, generate visuals with `generate_image` or design scripts
+4. **Export** — Screenshot to PNG at exact dimensions via `playwright-cli`
 5. **Present** — Show all options side-by-side, iterate on feedback
 
 ### Banner: Quick Size Reference
@@ -221,20 +221,19 @@ python .agents/skills/design/scripts/icon/generate.py --prompt "user profile" --
 
 ## Social Photos (Built-in)
 
-Multi-platform social image design: HTML/CSS → screenshot export. Uses `ui-ux-pro-max`, `brand`, `design-system`, `chrome-devtools` skills.
+Multi-platform social image design: HTML/CSS → screenshot export. Uses `ui-ux-pro-max`, `brand`, `design-system`, and `playwright-cli`.
 
 Load `references/social-photos-design.md` for sizes, templates, best practices.
 
 ### Social Photos: Workflow
 
-1. **Orchestrate** — `project-management` skill for TODO tasks; parallel subagents for independent work
-2. **Analyze** — Parse prompt: subject, platforms, style, brand context, content elements
-3. **Ideate** — 3-5 concepts, present via `AskUserQuestion`
-4. **Design** — `/ckm:brand` → `/ckm:design-system` → randomly invoke `/ck:ui-ux-pro-max` OR `/ck:frontend-design`; HTML per idea × size
-5. **Export** — `chrome-devtools` or Playwright screenshot at exact px (2x deviceScaleFactor)
-6. **Verify** — Use Chrome MCP or `chrome-devtools` skill to visually inspect exported designs; fix layout/styling issues and re-export
-7. **Report** — Summary to `plans/reports/` with design decisions
-8. **Organize** — Invoke `assets-organizing` skill to sort output files and reports
+1. **Analyze** — Parse prompt: subject, platforms, style, brand context (`docs/brand-guidelines.md`), content elements
+2. **Ideate** — Formulate 3-5 concepts, verify with user if needed
+3. **Design** — Extract tokens from `brand` and `design-system`, build HTML layout per idea × platform size
+4. **Export** — Capture screenshot at exact px via `playwright-cli` (e.g. `playwright-cli resize <w> <h>`, `playwright-cli screenshot`)
+5. **Verify** — Inspect exported designs using `view_file`; resolve layout or font clipping issues
+6. **Organize** — Output final assets to `assets/social/{platform}/`
+
 
 ### Social Photos: Key Sizes
 
@@ -315,4 +314,4 @@ pip install google-genai pillow
 ## Integration
 
 **External sub-skills:** brand, design-system, ui-styling
-**Related Skills:** frontend-design, ui-ux-pro-max, ai-multimodal, chrome-devtools
+**Related Skills:** banner-design, ui-ux-pro-max, playwright-cli

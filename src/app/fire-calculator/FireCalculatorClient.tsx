@@ -37,7 +37,8 @@ export default function FireCalculatorClient({
   lang,
 }: FireCalculatorClientProps = {}) {
   const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
-  const strings = getUIStrings((lang as Locale) || "en").fireCalculator;
+  const ui = getUIStrings((lang as Locale) || "en");
+  const strings = ui.fireCalculator;
   const [annualExpenses, setAnnualExpenses] = useState<number>(48000);
   const [currentNetWorth, setCurrentNetWorth] = useState<number>(100000);
   const [monthlySavings, setMonthlySavings] = useState<number>(2000);
@@ -81,7 +82,7 @@ export default function FireCalculatorClient({
     targetDate.setMonth(targetDate.getMonth() + months);
     const dateLocale = lang === "es" ? "es-ES" : lang === "pt" ? "pt-BR" : "en-US";
     const targetDateFormatted = months >= maxMonths 
-      ? strings.statusExceeds100 
+      ? strings.horizonExceeds100 
       : targetDate.toLocaleDateString(dateLocale, { month: "short", year: "numeric" });
 
     let statusMessage = "";
@@ -187,13 +188,13 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
         <div className="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-primary/10 border border-orange-500/20 rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xs">
           <div className="space-y-1.5 text-center md:text-left">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 text-[11px] font-black uppercase tracking-wider">
-              <Flame className="w-3.5 h-3.5" /> 4% Safe Withdrawal Rule
+              <Flame className="w-3.5 h-3.5" /> {strings.swrRule}
             </div>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-foreground">
               {formatCurrencyValue(calculations.fireNumber, currency)}
             </h2>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Target portfolio to generate <span className="font-bold text-foreground">{formatCurrencyValue(annualExpenses, currency)}/year</span> in perpetual passive income.
+              {strings.targetPortfolioDesc(formatCurrencyValue(annualExpenses, currency))}
             </p>
             {calculations.statusMessage && (
               <p className="text-xs text-amber-500 dark:text-amber-400 font-bold mt-1">
@@ -221,7 +222,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
         {/* Quick Strategy Presets + Currency Selector */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-2.5 bg-muted/30 border rounded-xl sm:rounded-2xl">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-bold text-muted-foreground px-1.5">Presets:</span>
+            <span className="text-xs font-bold text-muted-foreground px-1.5">{ui.common.presets}</span>
             {(currency === "INR" ? [
               { label: "Lean FIRE (₹6L/yr)", exp: 600000, pmt: 25000 },
               { label: "Standard FIRE (₹12L/yr)", exp: 1200000, pmt: 50000 },
@@ -259,7 +260,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
           </div>
 
           <div className="flex items-center justify-end gap-2 shrink-0">
-            <span className="text-xs text-muted-foreground font-semibold hidden sm:inline">Currency:</span>
+            <span className="text-xs text-muted-foreground font-semibold hidden sm:inline">{ui.common.currency}</span>
             <CurrencySelector value={currency} onChange={setCurrency} size="sm" />
           </div>
         </div>
@@ -271,7 +272,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
             <Card className="p-4 sm:p-5 rounded-2xl border bg-card space-y-4 shadow-xs">
               <div className="flex items-center justify-between border-b pb-3">
                 <h3 className="font-black text-base text-foreground flex items-center gap-1.5">
-                  <Target className="w-4 h-4 text-primary" /> Financial Assumptions
+                  <Target className="w-4 h-4 text-primary" /> {strings.financialAssumptions}
                 </h3>
                 <span className="text-xs text-muted-foreground font-mono">{strings.realReturnRate}: ~{calculations.realReturnRate}%</span>
               </div>
@@ -437,7 +438,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               <div className="flex items-center justify-between">
                 <h4 className="font-bold text-xs text-foreground uppercase tracking-wider">{strings.currentProgress}</h4>
                 <span className="text-[11px] font-black px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                  {calculations.currentProgress}% Funded
+                  {calculations.currentProgress}% {strings.funded}
                 </span>
               </div>
               <div className="w-full bg-muted/60 h-2.5 rounded-full overflow-hidden">
@@ -447,8 +448,8 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                 />
               </div>
               <div className="flex justify-between text-[11px] text-muted-foreground font-medium">
-                <span>Current: {formatCurrencyValue(currentNetWorth, currency)}</span>
-                <span>Target: {formatCurrencyValue(calculations.fireNumber, currency)}</span>
+                <span>{strings.currentLabel}: {formatCurrencyValue(currentNetWorth, currency)}</span>
+                <span>{strings.targetLabel}: {formatCurrencyValue(calculations.fireNumber, currency)}</span>
               </div>
             </Card>
 
@@ -465,7 +466,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     <span className="font-black text-xs sm:text-sm text-foreground">{strings.leanFire}</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Essential living expenses only</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">{strings.tierSubtitles.lean}</p>
                 </div>
                 <div className="text-right">
                   <span className="font-black font-mono text-sm sm:text-base text-foreground">
@@ -484,7 +485,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                     <span className="w-2 h-2 rounded-full bg-orange-500" />
                     <span className="font-black text-xs sm:text-sm text-foreground">{strings.standardFire}</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Current standard of living</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">{strings.tierSubtitles.standard}</p>
                 </div>
                 <div className="text-right">
                   <span className="font-black font-mono text-base sm:text-lg text-orange-600 dark:text-orange-400">
@@ -503,7 +504,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                     <span className="w-2 h-2 rounded-full bg-violet-500" />
                     <span className="font-black text-xs sm:text-sm text-foreground">{strings.fatFire}</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Abundant budget & luxury travel</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">{strings.tierSubtitles.fat}</p>
                 </div>
                 <div className="text-right">
                   <span className="font-black font-mono text-sm sm:text-base text-foreground">

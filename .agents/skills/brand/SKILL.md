@@ -22,7 +22,7 @@ Brand identity, voice, messaging, asset management, and consistency frameworks.
 
 ## Quick Start
 
-> **Note:** Scripts for this skill are located in `.agents/skills/brand/scripts/`. Run from repository root as shown below or cd into `.agents/skills/brand`. The primary application tokens for The Utilify are defined in `src/app/globals.css`.
+> **Note:** Scripts for this skill are located in `.agents/skills/brand/scripts/`. Run from repository root as shown below. The primary application tokens for The Utilify are defined in `src/app/globals.css` and documented in `docs/brand-guidelines.md`.
 
 **Inject brand context into prompts:**
 ```bash
@@ -44,7 +44,7 @@ node .agents/skills/brand/scripts/extract-colors.cjs <image-path>
 ## Brand Sync Workflow
 
 ```bash
-# 1. Edit brand guidelines or template in .agents/skills/brand/templates/
+# 1. Edit brand guidelines in docs/brand-guidelines.md
 # 2. Sync to design tokens
 node .agents/skills/brand/scripts/sync-brand-to-tokens.cjs
 # 3. Verify
@@ -52,9 +52,10 @@ node .agents/skills/brand/scripts/inject-brand-context.cjs --json
 ```
 
 **Files synced:**
-- Brand Guidelines → Source of truth
+- Brand Guidelines (`docs/brand-guidelines.md`) → Source of truth
 - `assets/design-tokens.json` → Token definitions
 - `src/app/globals.css` / `assets/design-tokens.css` → CSS variables
+
 
 ## Subcommands
 

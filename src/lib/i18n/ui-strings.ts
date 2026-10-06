@@ -54,6 +54,11 @@ export interface UIStrings {
     submitting: string;
     labels: Record<number, string>;
   };
+  common: {
+    currency: string;
+    presets: string;
+    share: string;
+  };
   crossPromo: {
     badge: string;
     ctaButton: string;
@@ -101,6 +106,11 @@ export interface UIStrings {
     projectedDate: string;
   };
   ageCalculator: {
+    dateOfBirth: string;
+    targetDate: string;
+    today: string;
+    liveTicking: string;
+    leapDayNote: string;
     exactAge: string;
     years: string;
     months: string;
@@ -110,6 +120,13 @@ export interface UIStrings {
     birthdayIn: (m: number, d: number) => string;
     milestones: string;
     privacyNote: string;
+    shortUnits: {
+      mths: string;
+      days: string;
+      hrs: string;
+      mins: string;
+      secs: string;
+    };
     units: {
       months: string;
       weeks: string;
@@ -141,6 +158,8 @@ export interface UIStrings {
       ofEach: string;
       month: string;
       year: string;
+      deposit: string;
+      withdraw: string;
       frequencies: {
         annually: string;
         semiannually: string;
@@ -159,6 +178,7 @@ export interface UIStrings {
       neededLength: string;
       startingPrincipal: string;
       totalContributions: string;
+      withdrawals: string;
       totalInterest: string;
       totalLoss: string;
       targetBalance: string;
@@ -168,6 +188,13 @@ export interface UIStrings {
       projectionFor: (y: string) => string;
       shareLink: string;
       exportCsv: string;
+      periodHeader: string;
+      principalHeader: string;
+      interestHeader: string;
+      balanceHeader: string;
+      investedPrincipalCsv: string;
+      interestEarnedCsv: string;
+      totalBalanceCsv: string;
       readyToPlanTitle: string;
       readyToPlanDesc: string;
       startPrompt: string;
@@ -207,6 +234,7 @@ export interface UIStrings {
     csvInterest: string;
     csvBalance: string;
     negativeRateWarning: string;
+    subNoteDrawdown: string;
   };
   fireCalculator: {
     annualExpenses: string;
@@ -217,6 +245,12 @@ export interface UIStrings {
     swr: string;
     copyPlan: string;
     copied: string;
+    financialAssumptions: string;
+    swrRule: string;
+    targetPortfolioDesc: (exp: string) => string;
+    funded: string;
+    currentLabel: string;
+    targetLabel: string;
     fireTargetTitle: string;
     estimatedTimeToFire: string;
     years: string;
@@ -229,6 +263,12 @@ export interface UIStrings {
     standardFire: string;
     fatFire: string;
     baristaFire: string;
+    tierSubtitles: {
+      lean: string;
+      standard: string;
+      fat: string;
+    };
+    horizonExceeds100: string;
     resetButton: string;
     statusAlreadyMet: string;
     statusExceeds100: string;
@@ -297,6 +337,11 @@ export const uiStrings: Record<Locale, UIStrings> = {
         5: "5 - Outstanding! ⭐",
       },
     },
+    common: {
+      currency: "Currency:",
+      presets: "Presets:",
+      share: "Share",
+    },
     crossPromo: {
       badge: "Mobile Companion App",
       ctaButton: "Get App for Android",
@@ -344,6 +389,11 @@ export const uiStrings: Record<Locale, UIStrings> = {
       projectedDate: "Projected Date",
     },
     ageCalculator: {
+      dateOfBirth: "Date of Birth",
+      targetDate: "Target Date",
+      today: "Today",
+      liveTicking: "Live Ticking",
+      leapDayNote: "Born on Leap Day (Feb 29): Celebrated on March 1st in common years.",
       exactAge: "Exact Age",
       years: "years",
       months: "months",
@@ -353,6 +403,13 @@ export const uiStrings: Record<Locale, UIStrings> = {
       birthdayIn: (m: number, d: number) => `Your birthday is in ${m} months and ${d} days.`,
       milestones: "Lived Cumulative Milestones",
       privacyNote: "Your privacy is fully protected. All age calculation math, birthdays, and timers run locally on your browser. No details are transmitted.",
+      shortUnits: {
+        mths: "Mths",
+        days: "Days",
+        hrs: "Hrs",
+        mins: "Mins",
+        secs: "Secs",
+      },
       units: {
         months: "Months",
         weeks: "Weeks",
@@ -384,6 +441,8 @@ export const uiStrings: Record<Locale, UIStrings> = {
         ofEach: "of each",
         month: "month",
         year: "year",
+        deposit: "+ Deposit",
+        withdraw: "− Withdraw",
         frequencies: {
           annually: "Annually",
           semiannually: "Semiannually",
@@ -402,6 +461,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
         neededLength: "Required Time Horizon",
         startingPrincipal: "Starting Capital",
         totalContributions: "Total Contributions",
+        withdrawals: "Withdrawals",
         totalInterest: "Total Interest Earned",
         totalLoss: "Total Loss",
         targetBalance: "Target End Balance",
@@ -411,6 +471,13 @@ export const uiStrings: Record<Locale, UIStrings> = {
         projectionFor: (y: string) => `Growth projection for ${y} years`,
         shareLink: "Share Link",
         exportCsv: "Export CSV",
+        periodHeader: "Period",
+        principalHeader: "Principal",
+        interestHeader: "Interest",
+        balanceHeader: "Balance",
+        investedPrincipalCsv: "Invested Principal",
+        interestEarnedCsv: "Interest Earned",
+        totalBalanceCsv: "Total Balance",
         readyToPlanTitle: "Ready to plan?",
         readyToPlanDesc: "Enter your investment parameters and click Calculate Projection to see your wealth trajectory.",
         startPrompt: "Start by entering an amount",
@@ -450,6 +517,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
       csvInterest: "Interest Earned",
       csvBalance: "Total Balance",
       negativeRateWarning: "A negative return rate simulates portfolio capital loss / market downturn.",
+      subNoteDrawdown: "SIP assumes regular positive investments. For drawdown or capital withdrawal, use the Investment Calculator.",
     },
     fireCalculator: {
       annualExpenses: "Annual Living Expenses",
@@ -460,6 +528,12 @@ export const uiStrings: Record<Locale, UIStrings> = {
       swr: "Safe Withdrawal Rate (SWR %)",
       copyPlan: "Share / Copy FIRE Plan",
       copied: "FIRE Plan Copied!",
+      financialAssumptions: "Financial Assumptions",
+      swrRule: "4% Safe Withdrawal Rule",
+      targetPortfolioDesc: (exp: string) => `Target portfolio to generate ${exp}/year in perpetual passive income.`,
+      funded: "Funded",
+      currentLabel: "Current",
+      targetLabel: "Target",
       fireTargetTitle: "Target FIRE Number",
       estimatedTimeToFire: "Estimated Time to FIRE",
       years: "Years",
@@ -472,6 +546,12 @@ export const uiStrings: Record<Locale, UIStrings> = {
       standardFire: "Standard FIRE (100% Spending)",
       fatFire: "Fat FIRE (125% Spending)",
       baristaFire: "Barista FIRE (50% Spending)",
+      tierSubtitles: {
+        lean: "Essential living expenses only",
+        standard: "Current standard of living",
+        fat: "Abundant budget & luxury travel",
+      },
+      horizonExceeds100: "100+ Yrs",
       resetButton: "Reset to Default",
       statusAlreadyMet: "🎉 Congratulations! Your current portfolio already meets or exceeds your FIRE target.",
       statusExceeds100: "Target horizon exceeds 100 years at your current contribution and growth rate.",
@@ -538,6 +618,11 @@ export const uiStrings: Record<Locale, UIStrings> = {
         5: "5 - ¡Sobresaliente! ⭐",
       },
     },
+    common: {
+      currency: "Moneda:",
+      presets: "Preajustes:",
+      share: "Compartir",
+    },
     crossPromo: {
       badge: "App Móvil Complementaria",
       ctaButton: "Descargar para Android",
@@ -585,6 +670,11 @@ export const uiStrings: Record<Locale, UIStrings> = {
       projectedDate: "Fecha proyectada",
     },
     ageCalculator: {
+      dateOfBirth: "Fecha de Nacimiento",
+      targetDate: "Fecha de Cálculo",
+      today: "Hoy",
+      liveTicking: "En Tiempo Real",
+      leapDayNote: "Nacido en año bisiesto (29 de febrero): Se celebra el 1 de marzo en años no bisiestos.",
       exactAge: "Edad Exacta",
       years: "años",
       months: "meses",
@@ -594,6 +684,13 @@ export const uiStrings: Record<Locale, UIStrings> = {
       birthdayIn: (m: number, d: number) => `Tu cumpleaños es en ${m} meses y ${d} días.`,
       milestones: "Hitos Acumulados Vividos",
       privacyNote: "Tu privacidad está totalmente protegida. Todo el cálculo de edad, cumpleaños y cronómetros se ejecutan localmente en tu navegador. No se transmite ningún dato.",
+      shortUnits: {
+        mths: "Meses",
+        days: "Días",
+        hrs: "Hrs",
+        mins: "Mins",
+        secs: "Segs",
+      },
       units: {
         months: "Meses",
         weeks: "Semanas",
@@ -625,6 +722,8 @@ export const uiStrings: Record<Locale, UIStrings> = {
         ofEach: "de cada",
         month: "mes",
         year: "año",
+        deposit: "+ Aporte",
+        withdraw: "− Retiro",
         frequencies: {
           annually: "Anual",
           semiannually: "Semestral",
@@ -643,6 +742,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
         neededLength: "Plazo de Inversión Necesario",
         startingPrincipal: "Capital Inicial",
         totalContributions: "Aportes Totales",
+        withdrawals: "Retiros Totales",
         totalInterest: "Interés Total Generado",
         totalLoss: "Pérdida Total",
         targetBalance: "Saldo Final Objetivo",
@@ -652,6 +752,13 @@ export const uiStrings: Record<Locale, UIStrings> = {
         projectionFor: (y: string) => `Proyección de crecimiento para ${y} años`,
         shareLink: "Compartir Enlace",
         exportCsv: "Exportar CSV",
+        periodHeader: "Período",
+        principalHeader: "Capital Invertido",
+        interestHeader: "Interés",
+        balanceHeader: "Saldo Final",
+        investedPrincipalCsv: "Capital Invertido",
+        interestEarnedCsv: "Interés Generado",
+        totalBalanceCsv: "Saldo Total",
         readyToPlanTitle: "¿Listo para planificar?",
         readyToPlanDesc: "Ingresa los parámetros de tu inversión y haz clic en Calcular Proyección para ver la trayectoria.",
         startPrompt: "Comienza ingresando un monto",
@@ -691,6 +798,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
       csvInterest: "Interés Generado",
       csvBalance: "Saldo Total",
       negativeRateWarning: "Una tasa de rentabilidad negativa simula pérdida de capital o caída del mercado.",
+      subNoteDrawdown: "El plan SIP asume aportes positivos periódicos. Para retiros o desacumulación, usa la Calculadora de Inversión.",
     },
     fireCalculator: {
       annualExpenses: "Gastos Anuales de Vida",
@@ -701,6 +809,12 @@ export const uiStrings: Record<Locale, UIStrings> = {
       swr: "Tasa de Retiro Seguro (SWR %)",
       copyPlan: "Compartir / Copiar Plan FIRE",
       copied: "¡Plan FIRE Copiado!",
+      financialAssumptions: "Supuestos Financieros",
+      swrRule: "Regla del 4% de Retiro Seguro",
+      targetPortfolioDesc: (exp: string) => `Patrimonio objetivo para generar ${exp}/año en ingresos pasivos perpetuos.`,
+      funded: "Financiado",
+      currentLabel: "Actual",
+      targetLabel: "Objetivo",
       fireTargetTitle: "Monto Objetivo FIRE",
       estimatedTimeToFire: "Tiempo Estimado para FIRE",
       years: "Años",
@@ -713,6 +827,12 @@ export const uiStrings: Record<Locale, UIStrings> = {
       standardFire: "Standard FIRE (100% de Gasto)",
       fatFire: "Fat FIRE (125% de Gasto)",
       baristaFire: "Barista FIRE (50% de Gasto)",
+      tierSubtitles: {
+        lean: "Solo gastos básicos esenciales",
+        standard: "Estilo de vida actual",
+        fat: "Presupuesto abundante y viajes",
+      },
+      horizonExceeds100: "100+ años",
       resetButton: "Restablecer Valores",
       statusAlreadyMet: "🎉 ¡Felicitaciones! Tu patrimonio actual ya alcanza o supera tu objetivo FIRE.",
       statusExceeds100: "El horizonte estimado supera los 100 años con el ritmo de ahorro y rendimiento actual.",
@@ -779,6 +899,11 @@ export const uiStrings: Record<Locale, UIStrings> = {
         5: "5 - Excelente! ⭐",
       },
     },
+    common: {
+      currency: "Moeda:",
+      presets: "Predefinições:",
+      share: "Compartilhar",
+    },
     crossPromo: {
       badge: "App Móvel Complementar",
       ctaButton: "Baixar para Android",
@@ -826,6 +951,11 @@ export const uiStrings: Record<Locale, UIStrings> = {
       projectedDate: "Data projetada",
     },
     ageCalculator: {
+      dateOfBirth: "Data de Nascimento",
+      targetDate: "Data Alvo",
+      today: "Hoje",
+      liveTicking: "Tempo Real",
+      leapDayNote: "Nascido em ano bissexto (29 de fevereiro): Celebrado em 1º de março em anos comuns.",
       exactAge: "Idade Exata",
       years: "anos",
       months: "meses",
@@ -835,6 +965,13 @@ export const uiStrings: Record<Locale, UIStrings> = {
       birthdayIn: (m: number, d: number) => `Seu aniversário é em ${m} meses e ${d} dias.`,
       milestones: "Marcos Cumulativos Vividos",
       privacyNote: "Sua privacidade está totalmente protegida. Todos os cálculos de idade, aniversários e cronômetros são executados localmente no seu navegador. Nenhum detalhe é transmitido.",
+      shortUnits: {
+        mths: "Meses",
+        days: "Dias",
+        hrs: "Hrs",
+        mins: "Mins",
+        secs: "Segs",
+      },
       units: {
         months: "Meses",
         weeks: "Semanas",
@@ -866,6 +1003,8 @@ export const uiStrings: Record<Locale, UIStrings> = {
         ofEach: "de cada",
         month: "mês",
         year: "ano",
+        deposit: "+ Aporte",
+        withdraw: "− Resgate",
         frequencies: {
           annually: "Anual",
           semiannually: "Semestral",
@@ -884,6 +1023,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
         neededLength: "Prazo de Investimento Necessário",
         startingPrincipal: "Capital Inicial",
         totalContributions: "Contribuições Totais",
+        withdrawals: "Resgates Totais",
         totalInterest: "Total de Juros Acumulados",
         totalLoss: "Perda Total",
         targetBalance: "Saldo Final Alvo",
@@ -893,6 +1033,13 @@ export const uiStrings: Record<Locale, UIStrings> = {
         projectionFor: (y: string) => `Projeção de crescimento para ${y} anos`,
         shareLink: "Compartilhar Link",
         exportCsv: "Exportar CSV",
+        periodHeader: "Período",
+        principalHeader: "Capital Investido",
+        interestHeader: "Juros",
+        balanceHeader: "Saldo Final",
+        investedPrincipalCsv: "Capital Investido",
+        interestEarnedCsv: "Juros Acumulados",
+        totalBalanceCsv: "Saldo Total",
         readyToPlanTitle: "Pronto para planejar?",
         readyToPlanDesc: "Insira os parâmetros do seu investimento e clique em Calcular Projeção para ver a evolução.",
         startPrompt: "Comece inserindo um valor",
@@ -932,6 +1079,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
       csvInterest: "Juros Acumulados",
       csvBalance: "Saldo Total",
       negativeRateWarning: "Uma taxa de retorno negativa simula perda de capital ou desvalorização de mercado.",
+      subNoteDrawdown: "O plano SIP assume aportes regulares positivos. Para resgates ou desacumulação de capital, use a Calculadora de Investimentos.",
     },
     fireCalculator: {
       annualExpenses: "Despesas Anuais de Custo de Vida",
@@ -942,6 +1090,12 @@ export const uiStrings: Record<Locale, UIStrings> = {
       swr: "Taxa Segura de Retirada (SWR %)",
       copyPlan: "Compartilhar / Copiar Plano FIRE",
       copied: "Plano FIRE Copiado!",
+      financialAssumptions: "Premissas Financeiras",
+      swrRule: "Regra dos 4% de Retirada Segura",
+      targetPortfolioDesc: (exp: string) => `Patrimônio alvo para gerar ${exp}/ano em renda passiva perpétua.`,
+      funded: "Atingido",
+      currentLabel: "Atual",
+      targetLabel: "Meta",
       fireTargetTitle: "Meta de Patrimônio FIRE",
       estimatedTimeToFire: "Tempo Estimado até o FIRE",
       years: "Anos",
@@ -954,6 +1108,12 @@ export const uiStrings: Record<Locale, UIStrings> = {
       standardFire: "Standard FIRE (100% dos Gastos)",
       fatFire: "Fat FIRE (125% dos Gastos)",
       baristaFire: "Barista FIRE (50% dos Gastos)",
+      tierSubtitles: {
+        lean: "Apenas despesas básicas essenciais",
+        standard: "Padrão de vida atual",
+        fat: "Orçamento abundante e conforto",
+      },
+      horizonExceeds100: "100+ anos",
       resetButton: "Restaurar Padrão",
       statusAlreadyMet: "🎉 Parabéns! Seu patrimônio atual já atinge ou supera a sua meta FIRE.",
       statusExceeds100: "O horizonte estimado ultrapassa 100 anos com seu ritmo de poupança e rentabilidade atual.",

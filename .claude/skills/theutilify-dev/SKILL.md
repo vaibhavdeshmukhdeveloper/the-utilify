@@ -424,12 +424,14 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
 
 ## Runbook 14: Verification & Deployment
 
-1. **Verify Frontend Locally:**
+1. **Development & Verification:**
    ```bash
-   npx tsc --noEmit
-   npm run build
+   npm run dev       # Start Turbopack local dev server (http://localhost:3000)
+   npx tsc --noEmit  # Verify TypeScript static types (must pass with 0 errors)
+   npm run build     # Build production bundle (pre-renders 227 routes + auto-pings 212 URLs)
    ```
    Ensure 0 TypeScript errors, clean static generation for all 227 pre-rendered SSG routes, and successful execution of `postbuild` search engine pinging (212 URLs).
+
 
 2. **Verify Backend Locally:**
    ```powershell

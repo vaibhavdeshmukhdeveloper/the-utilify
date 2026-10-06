@@ -1,6 +1,6 @@
 ---
 name: banner-design
-description: "Design banners for social media, ads, website heroes, creative assets, and print. Multiple art direction options with AI-generated visuals. Actions: design, create, generate banner. Platforms: Facebook, Twitter/X, LinkedIn, YouTube, Instagram, Google Display, website hero, print. Styles: minimalist, gradient, bold typography, photo-based, illustrated, geometric, retro, glassmorphism, 3D, neon, duotone, editorial, collage. Uses ui-ux-pro-max, frontend-design, ai-artist, ai-multimodal skills."
+description: "Design banners for social media, ads, website heroes, creative assets, and print. Multiple art direction options with AI-generated visuals. Actions: design, create, generate banner. Platforms: Facebook, Twitter/X, LinkedIn, YouTube, Instagram, Google Display, website hero, print. Styles: minimalist, gradient, bold typography, photo-based, illustrated, geometric, retro, glassmorphism, 3D, neon, duotone, editorial, collage. Uses ui-ux-pro-max, brand, and design skills."
 argument-hint: "[platform] [style] [dimensions]"
 license: MIT
 metadata:
@@ -23,7 +23,7 @@ Design banners across social, ads, web, and print formats. Generates multiple ar
 
 ## Prerequisites
 
-**Python:** This skill uses Python scripts. On Windows, use `python` instead of `python3` (e.g., `python scripts/search.py` instead of `python3 scripts/search.py`).
+**Environment:** Windows PowerShell / pwsh. Run scripts from repository root using `python` and `node`.
 
 ## Workflow
 
@@ -33,20 +33,19 @@ Collect via AskUserQuestion:
 1. **Purpose** — social cover, ad banner, website hero, print, or creative asset?
 2. **Platform/size** — which platform or custom dimensions?
 3. **Content** — headline, subtext, CTA, logo placement?
-4. **Brand** — existing brand guidelines or tokens? (check `src/app/globals.css` or `.agents/skills/brand/`)
+4. **Brand** — existing brand guidelines or tokens? (check `docs/brand-guidelines.md`, `src/app/globals.css`, or `.agents/skills/brand/`)
 5. **Style preference** — any art direction? (show style options if unsure)
 6. **Quantity** — how many options to generate? (default: 3)
 
 ### Step 2: Research & Art Direction
 
-1. Activate `ui-ux-pro-max` skill for design intelligence
-2. Use Chrome browser to research Pinterest for design references:
+1. Activate `ui-ux-pro-max` skill for design intelligence:
+   ```bash
+   python .agents/skills/ui-ux-pro-max/scripts/search.py "<purpose> banner <style>" --domain style
    ```
-   Navigate to pinterest.com → search "[purpose] banner design [style]"
-   Screenshot 3-5 reference pins for art direction inspiration
-   ```
-3. Select 2-3 complementary art direction styles from references:
+2. Research design references or look at:
    `.agents/skills/banner-design/references/banner-sizes-and-styles.md`
+3. Select 2-3 complementary art direction styles.
 
 ### Step 3: Design & Generate Options
 
@@ -56,37 +55,25 @@ For each art direction option:
    - Use exact platform dimensions from size reference
    - Apply safe zone rules (critical content in central 70-80%)
    - Max 2 typefaces, single CTA, 4.5:1 contrast ratio
-   - Inject brand context via `.agents/skills/brand/scripts/inject-brand-context.cjs`
+   - Inject brand context via `node .agents/skills/brand/scripts/inject-brand-context.cjs`
 
-2. **Generate visual elements** with image generation tools
-   - Use built-in AI image generation or Python scripts using Windows `python`:
-   ```bash
-   python scripts/generate_visual.py --prompt "<banner visual prompt>" --aspect-ratio <ratio>
-   ```
-
-   **When to use which model:**
-   | Use Case | Model | Quality |
-   |----------|-------|---------|
-   | Backgrounds, gradients, patterns | Standard (Flash) | 2K, fast |
-   | Hero illustrations, product shots | Pro | 4K, detailed |
-   | Photorealistic scenes, complex art | Pro | 4K, best quality |
-   | Quick iterations, A/B variants | Standard (Flash) | 2K, fast |
+2. **Generate visual elements** with `generate_image` tool or design scripts
+   - When generating visuals, use the `generate_image` tool:
+     - Prompt tips: Be descriptive (style, lighting, mood, composition, color palette)
+     - Include art direction: "minimalist flat design", "cyberpunk neon", "editorial photography"
+     - Specify no text: "no text, no letters, no words" (text is overlaid via HTML/CSS)
+   - Or use logo/CIP scripts in `.agents/skills/design/scripts/` for logos/icons.
 
    **Aspect ratios:** `1:1`, `16:9`, `9:16`, `3:4`, `4:3`, `2:3`, `3:2`
-   Match to platform - e.g., Twitter header = `3:1` (use `3:2` closest), Instagram story = `9:16`
+   Match to platform - e.g., Twitter header = `3:1` (use `3:2` closest), Instagram story = `9:16`.
 
-   **Pro model prompt tips** (see `ai-artist` references/nano-banana-pro-examples.md):
-   - Be descriptive: style, lighting, mood, composition, color palette
-   - Include art direction: "minimalist flat design", "cyberpunk neon", "editorial photography"
-   - Specify no-text: "no text, no letters, no words" (text overlaid in HTML step)
-
-3. **Compose final banner** — overlay text, CTA, logo on generated visual in HTML/CSS
+3. **Compose final banner** — overlay text, CTA, logo on generated visual in HTML/CSS.
 
 ### Step 4: Export Banners to Images
 
 After designing HTML banners, export each to PNG using `playwright-cli` (or Playwright script):
 
-1. **Serve HTML files** via local server (python http.server or similar)
+1. **Serve HTML files** via local server (`python -m http.server 8765` or similar)
 2. **Screenshot each banner** at exact platform dimensions:
    ```bash
    # Open browser and resize to exact platform dimensions
@@ -101,7 +88,7 @@ After designing HTML banners, export each to PNG using `playwright-cli` (or Play
    node -e "const sharp = require('sharp'); sharp('input.png').png({ quality: 85 }).toFile('output.png');"
    ```
 
-**Output path convention** (per `assets-organizing` skill):
+**Output path convention:**
 ```
 assets/banners/{campaign}/
 ├── minimalist-1500x500.png
@@ -119,11 +106,12 @@ assets/banners/{campaign}/
 
 Present all exported images side-by-side. For each option show:
 - Art direction style name
-- Exported PNG preview (use `ai-multimodal` skill to display if needed)
+- Exported PNG preview (view using `view_file`)
 - Key design rationale
 - File path & dimensions
 
 Iterate based on user feedback until approved.
+
 
 ## Banner Size Quick Reference
 

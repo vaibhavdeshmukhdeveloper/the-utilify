@@ -116,11 +116,19 @@ export default function AgeCalculatorClient({
     }
 
     // Cumulative stats
-    const diffMs = comparisonDate.getTime() - dobDate.getTime();
-    const totalSeconds = Math.max(0, Math.floor(diffMs / 1000));
-    const totalMinutes = Math.floor(totalSeconds / 60);
-    const totalHours = Math.floor(totalMinutes / 60);
-    const totalDays = Math.floor(totalHours / 24);
+    // Use UTC timestamps for calendar day calculation to eliminate Daylight Saving Time (DST) 23/25 hour skew
+    const utcDcb = Date.UTC(dobDate.getFullYear(), dobDate.getMonth(), dobDate.getDate());
+    const utcComp = Date.UTC(comparisonDate.getFullYear(), comparisonDate.getMonth(), comparisonDate.getDate());
+    const calendarDays = Math.max(0, Math.round((utcComp - utcDcb) / (24 * 60 * 60 * 1000)));
+
+    const intraDaySec = isToday 
+      ? comparisonDate.getHours() * 3600 + comparisonDate.getMinutes() * 60 + comparisonDate.getSeconds()
+      : 0;
+
+    const totalDays = calendarDays;
+    const totalHours = totalDays * 24 + Math.floor(intraDaySec / 3600);
+    const totalMinutes = totalHours * 60 + (isToday ? comparisonDate.getMinutes() : 0);
+    const totalSeconds = totalDays * 86400 + intraDaySec;
     const totalWeeks = parseFloat((totalDays / 7).toFixed(1));
     
     // Total months estimation
@@ -318,7 +326,7 @@ export default function AgeCalculatorClient({
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                  <Calendar className="h-3.5 w-3.5" /> Date of Birth
+                  <Calendar className="h-3.5 w-3.5" /> {t.ageCalculator.dateOfBirth}
                 </label>
                 <Input
                   type="date"
@@ -351,14 +359,14 @@ export default function AgeCalculatorClient({
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5" /> Target Date
+                    <Clock className="h-3.5 w-3.5" /> {t.ageCalculator.targetDate}
                   </label>
                   <button
                     type="button"
                     onClick={() => setTargetDate(formatLocalDate(new Date()))}
                     className="text-xs font-semibold text-primary hover:underline cursor-pointer"
                   >
-                    Today
+                    {t.ageCalculator.today}
                   </button>
                 </div>
                 <Input
@@ -433,7 +441,7 @@ export default function AgeCalculatorClient({
               {result.isLeapDayBaby && (
                 <div className="p-2.5 bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-300 rounded-xl text-xs flex items-center gap-2">
                   <Sparkles className="h-3.5 w-3.5 shrink-0 text-purple-500" />
-                  <span>Born on Leap Day (Feb 29): Celebrated on March 1st in common years.</span>
+                  <span>{t.ageCalculator.leapDayNote}</span>
                 </div>
               )}
 
@@ -452,7 +460,7 @@ export default function AgeCalculatorClient({
                   </div>
                   {liveMode && (
                     <span className="text-[10px] text-emerald-500 font-bold tracking-wider uppercase flex items-center justify-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Live Ticking
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> {t.ageCalculator.liveTicking}
                     </span>
                   )}
                 </Card>
@@ -465,27 +473,27 @@ export default function AgeCalculatorClient({
                   <div className="flex justify-center items-center gap-1.5 sm:gap-2.5">
                     <div className="text-center min-w-[28px] sm:min-w-[32px]">
                       <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.months}</div>
-                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Mths</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">{t.ageCalculator.shortUnits.mths}</div>
                     </div>
                     <div className="text-muted-foreground font-bold tabular-nums">:</div>
                     <div className="text-center min-w-[28px] sm:min-w-[32px]">
                       <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.days}</div>
-                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Days</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">{t.ageCalculator.shortUnits.days}</div>
                     </div>
                     <div className="text-muted-foreground font-bold tabular-nums">:</div>
                     <div className="text-center min-w-[28px] sm:min-w-[32px]">
                       <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.hours.toString().padStart(2, "0")}</div>
-                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Hrs</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">{t.ageCalculator.shortUnits.hrs}</div>
                     </div>
                     <div className="text-muted-foreground font-bold tabular-nums">:</div>
                     <div className="text-center min-w-[28px] sm:min-w-[32px]">
                       <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.minutes.toString().padStart(2, "0")}</div>
-                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Mins</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">{t.ageCalculator.shortUnits.mins}</div>
                     </div>
                     <div className="text-muted-foreground font-bold tabular-nums">:</div>
                     <div className="text-center min-w-[28px] sm:min-w-[32px]">
                       <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.seconds.toString().padStart(2, "0")}</div>
-                      <div className="text-[9px] uppercase font-bold text-muted-foreground">Secs</div>
+                      <div className="text-[9px] uppercase font-bold text-muted-foreground">{t.ageCalculator.shortUnits.secs}</div>
                     </div>
                   </div>
                   <p className="text-[11px] text-muted-foreground leading-tight font-medium">
@@ -510,7 +518,7 @@ export default function AgeCalculatorClient({
                     size="sm"
                     className="rounded-lg border font-bold h-8 text-xs text-primary border-primary/30 hover:bg-primary/5 cursor-pointer"
                   >
-                    <Share2 className="h-3.5 w-3.5 mr-1.5" /> Share
+                    <Share2 className="h-3.5 w-3.5 mr-1.5" /> {t.common.share}
                   </Button>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">

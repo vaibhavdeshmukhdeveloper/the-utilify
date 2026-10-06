@@ -106,7 +106,8 @@ export default function InvestmentCalculatorClient({
   lang,
 }: InvestmentCalculatorClientProps = {}) {
   const currentLocale = (lang as Locale) || "en";
-  const strings = getUIStrings(currentLocale).investmentCalculator;
+  const ui = getUIStrings(currentLocale);
+  const strings = ui.investmentCalculator;
   const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
 
   // Calculation target tab
@@ -642,7 +643,12 @@ export default function InvestmentCalculatorClient({
   const exportToCsv = () => {
     if (!result || result.breakdown.length === 0) return;
     const sym = currencyInfo.symbol;
-    const headers = ["Period", `Invested Principal (${sym})`, `Interest Earned (${sym})`, `Total Balance (${sym})`];
+    const headers = [
+      strings.results.periodHeader,
+      `${strings.results.investedPrincipalCsv} (${sym})`,
+      `${strings.results.interestEarnedCsv} (${sym})`,
+      `${strings.results.totalBalanceCsv} (${sym})`
+    ];
     const rows = result.breakdown.map((row) => [
       row.label || `Year ${row.year}`,
       Math.round(row.principal),
@@ -801,7 +807,7 @@ export default function InvestmentCalculatorClient({
           </div>
 
           <div className="flex items-center justify-between md:justify-end shrink-0 gap-2">
-            <span className="text-xs text-muted-foreground font-bold">Currency:</span>
+            <span className="text-xs text-muted-foreground font-bold">{ui.common.currency}</span>
             <CurrencySelector value={currency} onChange={setCurrency} size="default" />
           </div>
         </div>
@@ -874,7 +880,7 @@ export default function InvestmentCalculatorClient({
                               : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
                           }`}
                         >
-                          + Deposit
+                          {strings.labels.deposit}
                         </button>
                         <button
                           type="button"
@@ -892,7 +898,7 @@ export default function InvestmentCalculatorClient({
                               : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
                           }`}
                         >
-                          − Withdraw
+                          {strings.labels.withdraw}
                         </button>
                       </div>
                     </div>
@@ -1101,7 +1107,7 @@ export default function InvestmentCalculatorClient({
 
                       <div>
                         <div className="text-[10px] font-black uppercase tracking-wider text-zinc-500 mb-0.5">
-                          {parseFloat(result.totalContributions.replace(/,/g, "")) < 0 ? "Withdrawals" : strings.results.totalContributions}
+                          {parseFloat(result.totalContributions.replace(/,/g, "")) < 0 ? strings.results.withdrawals : strings.results.totalContributions}
                         </div>
                         <div className="text-base sm:text-lg font-bold text-white">
                           {currencyInfo.symbol}{result.totalContributions.replace("-", "")}
@@ -1174,10 +1180,10 @@ export default function InvestmentCalculatorClient({
                     <table className="w-full text-left border-collapse">
                       <thead className="sticky top-0 bg-background/95 backdrop-blur z-20">
                         <tr className="bg-zinc-100/50 dark:bg-zinc-800/50">
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">Period</th>
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">Principal</th>
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">Interest</th>
-                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b text-right">Balance</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">{strings.results.periodHeader}</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">{strings.results.principalHeader}</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b">{strings.results.interestHeader}</th>
+                          <th className="p-3.5 text-xs font-black uppercase tracking-wider text-muted-foreground border-b text-right">{strings.results.balanceHeader}</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
