@@ -263,7 +263,7 @@ export default function PxToRemClient({
                     </Button>
                   </div>
                   <p className="text-2xl font-black font-mono text-foreground">{calculatedPx}px</p>
-                  <div className="flex gap-2 text-[11px] text-muted-foreground font-mono pt-1.5 border-t truncate">
+                  <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground font-mono pt-1.5 border-t">
                     <span>{remInput}rem × {baseSize}px = {calculatedPx}px</span>
                   </div>
                 </div>

@@ -485,22 +485,22 @@ export default function DateCalculatorClient({
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                       <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
                         <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.businessDays}</span>
-                        <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono mt-1">{diffResult.businessDays.toLocaleString()}</span>
+                        <span className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 font-mono tabular-nums tracking-tight mt-1">{diffResult.businessDays.toLocaleString()}</span>
                         <span className="text-[9px] text-muted-foreground">Mon–Fri</span>
                       </Card>
                       <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
                         <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weekendDays}</span>
-                        <span className="text-2xl font-black text-zinc-500 font-mono mt-1">{diffResult.weekendDays.toLocaleString()}</span>
+                        <span className="text-xl sm:text-2xl font-black text-zinc-500 font-mono tabular-nums tracking-tight mt-1">{diffResult.weekendDays.toLocaleString()}</span>
                         <span className="text-[9px] text-muted-foreground">Sat &amp; Sun</span>
                       </Card>
                       <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
                         <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.totalDays}</span>
-                        <span className="text-2xl font-black text-primary font-mono mt-1">{diffResult.totalDays.toLocaleString()}</span>
+                        <span className="text-xl sm:text-2xl font-black text-primary font-mono tabular-nums tracking-tight mt-1">{diffResult.totalDays.toLocaleString()}</span>
                         <span className="text-[9px] text-muted-foreground">Calendar</span>
                       </Card>
                       <Card className="p-3.5 border-2 rounded-xl flex flex-col justify-center items-center text-center shadow-xs">
                         <span className="text-[10px] uppercase font-black text-muted-foreground tracking-wider">{t.dateCalculator.weeks}</span>
-                        <span className="text-2xl font-black text-primary font-mono mt-1">{diffResult.totalWeeks.toLocaleString()}</span>
+                        <span className="text-xl sm:text-2xl font-black text-primary font-mono tabular-nums tracking-tight mt-1">{diffResult.totalWeeks.toLocaleString()}</span>
                         <span className="text-[9px] text-muted-foreground">Weeks</span>
                       </Card>
                     </div>
@@ -691,7 +691,7 @@ export default function DateCalculatorClient({
           </TabsContent>
         </Tabs>
         
-        <div className="p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10 flex gap-3">
+        <div className="p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10 flex items-start gap-3 shadow-2xs">
           <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
           <p className="text-xs text-muted-foreground leading-normal">
             <strong>Timezone Note:</strong> This calculator computes differences purely based on calendar dates (local time zone). Hours are not incremented to ensure clean full day integers.

@@ -109,6 +109,15 @@ export interface UIStrings {
     happyBirthday: string;
     birthdayIn: (m: number, d: number) => string;
     milestones: string;
+    privacyNote: string;
+    units: {
+      months: string;
+      weeks: string;
+      days: string;
+      hours: string;
+      minutes: string;
+      seconds: string;
+    };
   };
   investmentCalculator: {
     tabs: {
@@ -343,6 +352,15 @@ export const uiStrings: Record<Locale, UIStrings> = {
       happyBirthday: "🎉 Happy Birthday! today is the day!",
       birthdayIn: (m: number, d: number) => `Your birthday is in ${m} months and ${d} days.`,
       milestones: "Lived Cumulative Milestones",
+      privacyNote: "Your privacy is fully protected. All age calculation math, birthdays, and timers run locally on your browser. No details are transmitted.",
+      units: {
+        months: "Months",
+        weeks: "Weeks",
+        days: "Days",
+        hours: "Hours",
+        minutes: "Minutes",
+        seconds: "Seconds",
+      },
     },
     investmentCalculator: {
       tabs: {
@@ -575,6 +593,15 @@ export const uiStrings: Record<Locale, UIStrings> = {
       happyBirthday: "🎉 ¡Feliz Cumpleaños! ¡Hoy es el día!",
       birthdayIn: (m: number, d: number) => `Tu cumpleaños es en ${m} meses y ${d} días.`,
       milestones: "Hitos Acumulados Vividos",
+      privacyNote: "Tu privacidad está totalmente protegida. Todo el cálculo de edad, cumpleaños y cronómetros se ejecutan localmente en tu navegador. No se transmite ningún dato.",
+      units: {
+        months: "Meses",
+        weeks: "Semanas",
+        days: "Días",
+        hours: "Horas",
+        minutes: "Minutos",
+        seconds: "Segundos",
+      },
     },
     investmentCalculator: {
       tabs: {
@@ -807,6 +834,15 @@ export const uiStrings: Record<Locale, UIStrings> = {
       happyBirthday: "🎉 Feliz Aniversário! Hoje é o dia!",
       birthdayIn: (m: number, d: number) => `Seu aniversário é em ${m} meses e ${d} dias.`,
       milestones: "Marcos Cumulativos Vividos",
+      privacyNote: "Sua privacidade está totalmente protegida. Todos os cálculos de idade, aniversários e cronômetros são executados localmente no seu navegador. Nenhum detalhe é transmitido.",
+      units: {
+        months: "Meses",
+        weeks: "Semanas",
+        days: "Dias",
+        hours: "Horas",
+        minutes: "Minutos",
+        seconds: "Segundos",
+      },
     },
     investmentCalculator: {
       tabs: {

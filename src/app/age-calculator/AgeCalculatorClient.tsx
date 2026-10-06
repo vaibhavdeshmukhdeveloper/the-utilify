@@ -416,6 +416,14 @@ export default function AgeCalculatorClient({
               <p className="font-semibold">{validationError}</p>
             </div>
           )}
+
+          {/* Privacy Notice Pill - Placed in the left column for proper layout alignment */}
+          <div className="p-3.5 sm:p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10 flex items-start gap-3 shadow-2xs">
+            <Info className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 shrink-0 mt-0.5" />
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {t.ageCalculator.privacyNote || "Your privacy is fully protected. All age calculation math, birthdays, and timers run locally on your browser. No details are transmitted."}
+            </p>
+          </div>
         </div>
 
         {/* Right Column: Live Results */}
@@ -436,7 +444,7 @@ export default function AgeCalculatorClient({
                   <div className="text-xs text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
                     <Hourglass className="h-3.5 w-3.5 text-primary" /> {t.ageCalculator.exactAge}
                   </div>
-                  <div className="text-4xl sm:text-5xl font-black text-primary tracking-tight font-mono">
+                  <div className="text-4xl sm:text-5xl font-black text-primary tracking-tight font-mono tabular-nums">
                     {result.years} <span className="text-base text-muted-foreground font-normal">{t.ageCalculator.years}</span>
                   </div>
                   <div className="text-sm font-bold text-muted-foreground">
@@ -454,29 +462,29 @@ export default function AgeCalculatorClient({
                   <div className="text-xs text-muted-foreground font-black uppercase tracking-wider flex items-center justify-center gap-1.5">
                     <Gift className="h-3.5 w-3.5 text-primary" /> {t.ageCalculator.nextBirthday}
                   </div>
-                  <div className="flex justify-center items-center gap-2.5">
-                    <div className="text-center">
-                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.months}</div>
+                  <div className="flex justify-center items-center gap-1.5 sm:gap-2.5">
+                    <div className="text-center min-w-[28px] sm:min-w-[32px]">
+                      <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.months}</div>
                       <div className="text-[9px] uppercase font-bold text-muted-foreground">Mths</div>
                     </div>
-                    <div className="text-muted-foreground font-bold">:</div>
-                    <div className="text-center">
-                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.days}</div>
+                    <div className="text-muted-foreground font-bold tabular-nums">:</div>
+                    <div className="text-center min-w-[28px] sm:min-w-[32px]">
+                      <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.days}</div>
                       <div className="text-[9px] uppercase font-bold text-muted-foreground">Days</div>
                     </div>
-                    <div className="text-muted-foreground font-bold">:</div>
-                    <div className="text-center">
-                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.hours.toString().padStart(2, "0")}</div>
+                    <div className="text-muted-foreground font-bold tabular-nums">:</div>
+                    <div className="text-center min-w-[28px] sm:min-w-[32px]">
+                      <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.hours.toString().padStart(2, "0")}</div>
                       <div className="text-[9px] uppercase font-bold text-muted-foreground">Hrs</div>
                     </div>
-                    <div className="text-muted-foreground font-bold">:</div>
-                    <div className="text-center">
-                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.minutes.toString().padStart(2, "0")}</div>
+                    <div className="text-muted-foreground font-bold tabular-nums">:</div>
+                    <div className="text-center min-w-[28px] sm:min-w-[32px]">
+                      <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.minutes.toString().padStart(2, "0")}</div>
                       <div className="text-[9px] uppercase font-bold text-muted-foreground">Mins</div>
                     </div>
-                    <div className="text-muted-foreground font-bold">:</div>
-                    <div className="text-center">
-                      <div className="text-xl font-black text-primary font-mono">{result.nextBirthday.seconds.toString().padStart(2, "0")}</div>
+                    <div className="text-muted-foreground font-bold tabular-nums">:</div>
+                    <div className="text-center min-w-[28px] sm:min-w-[32px]">
+                      <div className="text-xl font-black text-primary font-mono tabular-nums">{result.nextBirthday.seconds.toString().padStart(2, "0")}</div>
                       <div className="text-[9px] uppercase font-bold text-muted-foreground">Secs</div>
                     </div>
                   </div>
@@ -488,8 +496,8 @@ export default function AgeCalculatorClient({
                 </Card>
               </div>
 
-              {/* Cumulative stats */}
-              <Card className="p-4 border-2 rounded-2xl space-y-3 shadow-xs">
+              {/* Cumulative stats - 2x3 Grid to guarantee zero truncation for large numbers */}
+              <Card className="p-4 sm:p-5 border-2 rounded-2xl space-y-3.5 shadow-xs">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-black text-muted-foreground uppercase tracking-wider">{t.ageCalculator.milestones}</h3>
                   <Button
@@ -505,42 +513,59 @@ export default function AgeCalculatorClient({
                     <Share2 className="h-3.5 w-3.5 mr-1.5" /> Share
                   </Button>
                 </div>
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
-                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalMonths.toLocaleString()}</div>
-                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Months</div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
+                  <div className="p-3 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 hover:border-primary/30 transition-colors" title={`${result.totalMonths.toLocaleString()} ${t.ageCalculator.units?.months || "Months"}`}>
+                    <div className="text-sm sm:text-base md:text-lg font-black text-primary font-mono tabular-nums tracking-tight">
+                      {result.totalMonths.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-muted-foreground mt-0.5 tracking-wider">
+                      {t.ageCalculator.units?.months || "Months"}
+                    </div>
                   </div>
-                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalWeeks.toLocaleString()}</div>
-                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Weeks</div>
+                  <div className="p-3 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 hover:border-primary/30 transition-colors" title={`${result.totalWeeks.toLocaleString()} ${t.ageCalculator.units?.weeks || "Weeks"}`}>
+                    <div className="text-sm sm:text-base md:text-lg font-black text-primary font-mono tabular-nums tracking-tight">
+                      {result.totalWeeks.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-muted-foreground mt-0.5 tracking-wider">
+                      {t.ageCalculator.units?.weeks || "Weeks"}
+                    </div>
                   </div>
-                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalDays.toLocaleString()}</div>
-                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Days</div>
+                  <div className="p-3 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 hover:border-primary/30 transition-colors" title={`${result.totalDays.toLocaleString()} ${t.ageCalculator.units?.days || "Days"}`}>
+                    <div className="text-sm sm:text-base md:text-lg font-black text-primary font-mono tabular-nums tracking-tight">
+                      {result.totalDays.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-muted-foreground mt-0.5 tracking-wider">
+                      {t.ageCalculator.units?.days || "Days"}
+                    </div>
                   </div>
-                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalHours.toLocaleString()}</div>
-                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Hours</div>
+                  <div className="p-3 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 hover:border-primary/30 transition-colors" title={`${result.totalHours.toLocaleString()} ${t.ageCalculator.units?.hours || "Hours"}`}>
+                    <div className="text-sm sm:text-base md:text-lg font-black text-primary font-mono tabular-nums tracking-tight">
+                      {result.totalHours.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-muted-foreground mt-0.5 tracking-wider">
+                      {t.ageCalculator.units?.hours || "Hours"}
+                    </div>
                   </div>
-                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalMinutes.toLocaleString()}</div>
-                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Minutes</div>
+                  <div className="p-3 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 hover:border-primary/30 transition-colors" title={`${result.totalMinutes.toLocaleString()} ${t.ageCalculator.units?.minutes || "Minutes"}`}>
+                    <div className="text-sm sm:text-base md:text-lg font-black text-primary font-mono tabular-nums tracking-tight">
+                      {result.totalMinutes.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-muted-foreground mt-0.5 tracking-wider">
+                      {t.ageCalculator.units?.minutes || "Minutes"}
+                    </div>
                   </div>
-                  <div className="p-2 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl">
-                    <div className="text-sm font-black text-primary font-mono truncate">{result.totalSeconds.toLocaleString()}</div>
-                    <div className="text-[9px] uppercase font-bold text-muted-foreground mt-0.5">Seconds</div>
+                  <div className="p-3 text-center bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 hover:border-primary/30 transition-colors" title={`${result.totalSeconds.toLocaleString()} ${t.ageCalculator.units?.seconds || "Seconds"}`}>
+                    <div className="text-sm sm:text-base md:text-lg font-black text-primary font-mono tabular-nums tracking-tight">
+                      {result.totalSeconds.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] uppercase font-bold text-muted-foreground mt-0.5 tracking-wider">
+                      {t.ageCalculator.units?.seconds || "Seconds"}
+                    </div>
                   </div>
                 </div>
               </Card>
             </div>
           )}
-        </div>
-
-        <div className="p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10 flex gap-3">
-          <Info className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
-          <p className="text-xs text-muted-foreground leading-normal">
-            Your privacy is fully protected. All age calculation math, birthdays, and timers run locally on your browser. No details are transmitted.
-          </p>
         </div>
       </div>
     </ToolLayout>
