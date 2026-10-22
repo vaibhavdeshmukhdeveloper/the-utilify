@@ -61,11 +61,12 @@ export async function submitUrlsToIndexNow(urls: string[]): Promise<IndexNowResp
       submittedCount: formattedUrls.length,
       urls: formattedUrls,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as Error;
     return {
       success: false,
       status: 500,
-      message: `IndexNow connection failed: ${error?.message || "Network error"}`,
+      message: `IndexNow connection failed: ${err?.message || "Network error"}`,
       submittedCount: 0,
       urls: formattedUrls,
     };
@@ -177,6 +178,7 @@ export async function submitAllPlatformUrls(): Promise<IndexNowResponse> {
     "/privacy",
     "/terms",
     "/llms.txt",
+    "/llms-full.txt",
   ];
 
   const blogUrls = blogPosts.map((p) => `/blog/${p.slug}`);

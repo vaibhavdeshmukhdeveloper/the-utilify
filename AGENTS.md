@@ -50,7 +50,7 @@ Welcome to **The Utilify** — a professional-grade, privacy-first, free suite o
 ### PDF Tools (5)
 1. **PDF to Image (`/pdf-to-image`):** Converts multi-page PDF documents into high-DPI (150 DPI) PNGs packaged into a ZIP archive in RAM.
 2. **PDF to JPG (`/pdf-to-jpg`):** Dedicated high-volume programmatic landing page converting multi-page PDFs to JPG images for rapid sharing.
-3. **Split PDF (`/split-pdf`):** Extracts custom page numbers or ranges (e.g. `1-3, 5, 8-10`) into an isolated PDF.
+3. **Split PDF (`/split-pdf`):** Extracts custom page numbers or ranges (e.g. `1-3, 5, 8-10`) into an isolated PDF, or splits every individual page into separate PDFs bundled in a ZIP archive.
 4. **Merge PDF (`/merge-pdf`):** Combines multiple uploaded PDF files sequentially into a single unified document.
 5. **Markdown to PDF (`/markdown-to-pdf`):** Compiles GitHub-flavored Markdown with KaTeX equations into a pixel-perfect A4 PDF via headless Chromium.
 
@@ -142,19 +142,19 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
 - **IndexNow Protocol:** Automatically submits all **212 platform URLs** to `api.indexnow.org` and `yandex.com/indexnow` with domain verification key `8e4f1a293c7d4b6e8a0f2c4e6a8d0b2f`.
 - **On-Demand Endpoints:** `npm run ping` CLI command and `GET /api/indexnow?action=submit-all`.
 
-### Dynamic OpenGraph & Meta Engine (`src/app/api/og/route.tsx`)
-- Edge runtime dynamic 1200x630 OG image generator accepting `title`, `description`, `category`, and `badge`.
-- Auto-linked across tool pages, blog articles, category hubs, and root layout.
+### Dynamic OpenGraph & Meta Engine (`src/app/api/og/route.tsx` & File-Based OG)
+- **API Route:** Edge runtime dynamic 1200x630 OG image generator (`/api/og`) accepting `title`, `description`, `category`, and `badge`. Auto-linked across tool pages, category hubs, and root layout.
+- **File-Based Blog OG:** Dedicated Next.js Edge metadata generator `src/app/blog/[slug]/opengraph-image.tsx` rendering customized, branded cards for each of the 129 articles.
 
 ### Dynamic RSS 2.0 Feed (`src/app/feed.xml/route.ts`)
-- Automated XML feed generated from 123 in-depth articles in `src/lib/blog-data.ts`.
+- Automated XML feed generated from 129 in-depth articles in `src/lib/blog-data.ts`.
 
-### Structured Data (Schema.org JSON-LD)
+### Structured Data (Schema.org JSON-LD) & Article Headings
 - **Tool Pages:** `src/lib/seo-helpers.ts` provides `getSoftwareAppSchema()` with `SoftwareApplication`, `AggregateRating`, and `offers: { price: "0.00" }`.
 - **Tool Layout:** `src/components/ToolLayout.tsx` automatically injects `FAQPage`, `HowTo`, and `BreadcrumbList` JSON-LD schemas.
-- **Blog Pages:** `src/app/blog/[slug]/page.tsx` injects `Article` and `BreadcrumbList` JSON-LD.
+- **Blog Pages:** `src/app/blog/[slug]/page.tsx` injects `Article` and `BreadcrumbList` JSON-LD. In addition, the custom `marked` heading renderer automatically extracts kebab-case anchor IDs for `h2` and `h3` headings (`scroll-mt-24`), driving both the interactive `<TableOfContents />` and search sitelinks.
 - **Comparison Pages:** `src/components/ComparisonLayout.tsx` injects `FAQPage` and `BreadcrumbList` JSON-LD.
-- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all 51 static base routes, 38 localized routes, and 123 blog posts (212 indexed URLs total). Embedded widgets (`/embed/[tool]`) specify `robots: { index: false, follow: true }` and are excluded from sitemaps by design.
+- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all 51 static base routes, 38 localized routes, and 129 blog posts (218 indexed URLs total). Embedded widgets (`/embed/[tool]`) specify `robots: { index: false, follow: true }` and are excluded from sitemaps by design.
 
 ---
 
@@ -256,10 +256,23 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
 
 ## 10. Code & Component Guidelines
 
-1. **Creating a New Tool:**
+1. **Creating a New Primary Tool:**
    - Create route directory in `src/app/<tool-slug>/`.
    - `page.tsx`: Server Component defining `metadata` and `<JsonLd data={getSoftwareAppSchema({ name, description, slug })} />`.
    - `<ToolSlug>Client.tsx`: Client Component wrapping tool UI with `<ToolLayout title="..." description="..." summaryDefinition="..." howToUse={...} faqs={...} relatedTools={...} detailedContent={...}>`.
+   - **Props Interface:** Always define standard override props on `<ToolSlug>Client` so the tool is immediately reusable in localized routes (`/[lang]/[tool]`) and programmatic landing pages:
+     ```tsx
+     export interface ToolClientProps {
+       lang?: Language;
+       customTitle?: string;
+       customDescription?: string;
+       customSummaryDefinition?: string;
+       customHowToUse?: { step: string; description: string }[];
+       customFaqs?: { question: string; answer: string }[];
+       initialTab?: string;
+       defaultFormat?: string;
+     }
+     ```
    - Implement the **High-Density 2-Column Layout** inside the client:
      ```tsx
      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -274,14 +287,21 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
    - Add tool route to `src/app/sitemap.ts`, `src/components/ToolsGrid.tsx`, `src/components/Footer.tsx`, and `src/app/embed/[tool]/page.tsx` (if embeddable).
    - If localizing, add translation dictionary in `src/lib/i18n/translations.ts` and add dynamic component in `src/app/[lang]/[tool]/page.tsx`.
 
-2. **Multilingual UI String Hygiene (Zero English Leakage):**
+2. **Creating Programmatic Long-Tail Landing Pages:**
+   - For high-volume specialized search intents (e.g. `/pdf-to-jpg`, `/compress-png`, `/compress-jpeg`, `/compress-webp`, `/business-days-calculator`, `/make-signature-transparent`, `/white-background-product-photos`), do **NOT** create duplicate client components or redundant wrapper files.
+   - Simply create `src/app/<slug>/page.tsx` (Server Component). It defines targeted `Metadata` and `SoftwareApplication` JSON-LD schema, and directly renders the existing parent client component with custom props:
+     - Example (`/pdf-to-jpg`): `<PdfToImageClient customTitle="PDF to JPG Converter" customDescription="..." customHowToUse={...} customFaqs={...} />`
+     - Example (`/business-days-calculator`): `<DateCalculatorClient initialTab="diff" customTitle="Business Days Calculator" ... />`
+     - Example (`/compress-png`): `<ImageCompressorClient defaultFormat="png" customTitle="Compress PNG" ... />`
+
+3. **Multilingual UI String Hygiene (Zero English Leakage):**
    - Never hardcode raw English text inside shared layout components or tool UI wrappers.
    - Always retrieve strings via `getUIStrings(currentLang)` from `@/lib/i18n/ui-strings`.
    - The typed `UIStrings` interface provides centralized dictionaries for `nav`, `toolLayout`, `fileUploader`, `ratingWidget`, `common` (`currency`, `presets`, `share`), `crossPromo`, `footer`, and dedicated calculator suites (`bmiCalculator`, `dateCalculator`, `ageCalculator`, `investmentCalculator`, `sipCalculator`, `fireCalculator`).
    - When building a new interactive tool with inputs, selects, calculation breakdowns, or export options, extend `UIStrings` across `en`, `es`, and `pt` dictionaries rather than placing string literals in components.
    - When resolving tool links and titles across languages, use `getCanonicalToolSlug(slug)` to ensure language prefixes (`/es/`, `/pt/`) are handled consistently.
 
-3. **Multi-Currency Integration Pattern:**
+4. **Multi-Currency Integration Pattern:**
    - When developing or updating financial calculators, always leverage `useCurrency()` and `<CurrencySelector />` from `@/components/CurrencySelector` and `@/lib/currency`.
    - Bind currency state via:
      ```tsx
@@ -290,46 +310,46 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
    - Provide `<CurrencySelector value={currency} onChange={setCurrency} size="sm" />` in the inputs header.
    - Format all output currency figures using `formatCurrency(val)` or `formatNumberWithCurrency(val, currencyInfo)`.
 
-4. **Tailwind CSS v4 & Styling Pattern:**
+5. **Tailwind CSS v4 & Styling Pattern:**
    - This project uses Tailwind CSS v4 with CSS-first configuration in `src/app/globals.css` (`@import "tailwindcss";`).
    - Do NOT create or look for `tailwind.config.js`. Define custom utilities, `@theme` overrides, and `@custom-variant` rules directly in `src/app/globals.css`.
    - Components use `@base-ui/react` primitives and Radix Primitives configured via `components.json` (`style: "base-nova"`).
 
-5. **Slider Components Typing Pattern:**
+6. **Slider Components Typing Pattern:**
    - When using Base UI Slider (`src/components/ui/slider.tsx`), `onValueChange` passes `number | readonly number[]`. Always handle as `(val) => setField(Array.isArray(val) ? val[0] : val)`.
 
-6. **Cloud Run Container Port Binding:**
+7. **Cloud Run Container Port Binding:**
    - Always run uvicorn with dynamic port binding in `Dockerfile`: `CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]` to prevent Cloud Run health check timeout crashes.
 
-7. **HTTP Header Filename Encoding (RFC 5987 / RFC 6266):**
+8. **HTTP Header Filename Encoding (RFC 5987 / RFC 6266):**
    - Whenever backend endpoints return user-downloadable files, sanitize ASCII filenames and provide `filename*=UTF-8''...` to avoid Starlette `latin-1` codec crashes.
    - Frontend `@/lib/api.ts` parses `filename*` headers to preserve genuine Unicode characters for client downloads.
 
-8. **Verifying Code:**
+9. **Verifying Code:**
    - Always run `npx tsc --noEmit` and `npm run build` locally before pushing to verify TypeScript and static generation pass with 0 errors.
 
-9. **Blog Guide Quality & Integrity (`src/lib/blog-data.ts`):**
-   - Ensure zero boilerplate leakage: never paste foreign UI widgets (e.g., image-compression HTML or file dropzones) into financial or developer articles.
-   - Ensure all mathematical equations use double backslashes (`\\frac{...}{...}`) in template strings.
-   - Always run `npx tsc --noEmit` and `npm run build` locally before pushing.
+10. **Blog Guide Quality & Integrity (`src/lib/blog-data.ts`):**
+    - Ensure zero boilerplate leakage: never paste foreign UI widgets (e.g., image-compression HTML or file dropzones) into financial or developer articles.
+    - Ensure all mathematical equations use double backslashes (`\\frac{...}{...}`) in template strings.
+    - Always run `npx tsc --noEmit` and `npm run build` locally before pushing.
 
-10. **Next.js API Route Handlers & Microservice Proxies:**
+11. **Next.js API Route Handlers & Microservice Proxies:**
     - When tools communicate with the backend, route client requests through internal Next.js App Router API endpoints (`/api/ratings`, `/api/markdown-to-pdf`) when server-side orchestration, fallback caching, or request transformation is needed.
     - For direct binary streaming operations (e.g. image background removal, PDF splitting/merging), frontend clients use `@/lib/api` `uploadToBackend()` pointing directly to `NEXT_PUBLIC_API_URL`.
 
-11. **Unicode Text Processing Pattern:**
+12. **Unicode Text Processing Pattern:**
     - In text processing tools (e.g. Word Counter, Text Converter), never use ASCII-only regex patterns (`/[^a-z0-9]/g`) that strip or mangle international characters.
     - Always use Unicode property escapes with the `u` flag (`/[^\p{L}\p{N}]/gu`). When specifying character classes with hyphens, place the hyphen at the end (`/[^\p{L}\p{N}\s_-]/gu`) to prevent TS1516 syntax errors.
 
-12. **Locale-Aware Date Formatting:**
+13. **Locale-Aware Date Formatting:**
     - In interactive calculators projecting future dates (e.g. FIRE Calculator, Date Calculator), never hardcode `"en-US"` in `toLocaleDateString`.
     - Always derive the locale from the active `lang` prop (`const dateLocale = lang === "es" ? "es-ES" : lang === "pt" ? "pt-BR" : "en-US";`).
 
-13. **Financial Growth & Retirement Modeling:**
+14. **Financial Growth & Retirement Modeling:**
     - In wealth and retirement calculators (e.g. `FireCalculatorClient.tsx`), calculate real returns via the Fisher equation `r_real = (1 + r_nominal) / (1 + i_inflation) - 1` without artificial lower clamping (`Math.max(0.001, ...)`).
     - Safely bound multi-decade simulations using a maximum months horizon cap (e.g. `maxMonths = 1200` for 100 years).
 
-14. **Presets and Boundary Resets:**
+15. **Presets and Boundary Resets:**
     - Always include sensible preset buttons and a 1-click Reset button to guarantee users can return to working baseline states.
 
 ---
@@ -358,11 +378,13 @@ Specialized skills are available in `.agents/skills/` to assist with development
 # Frontend Development & Verification
 npm run dev               # Start Next.js App Router dev server with Turbopack (http://localhost:3000)
 npx tsc --noEmit          # Verify TypeScript static types (must pass with 0 errors)
+npm run lint              # Run ESLint across Next.js codebase
 npm run build             # Build production bundle (pre-renders 227 routes + auto-pings 212 URLs)
 npm run ping              # Submit all 212 platform URLs to IndexNow (Bing/Yandex) and search engines
+npm run indexnow          # Alias for npm run ping (submits to IndexNow protocol)
 
 # Backend Development & Microservices
-.\run_backend.ps1         # Start FastAPI microservices backend on http://localhost:8000
+.\run_backend.ps1         # Start FastAPI microservices backend on http://localhost:8000 (via python with venv)
 cd backend && uvicorn main:app --reload --port 8000   # Direct Uvicorn startup (with venv active)
 docker build -t utilify-backend ./backend             # Build container image
 docker run -p 8000:8000 utilify-backend               # Run container locally

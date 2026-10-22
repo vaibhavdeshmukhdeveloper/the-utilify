@@ -29,8 +29,8 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `/health` or `/` | `GET` | None | FastAPI | Health check verifying backend status | Direct health check / Cloud Run probe |
 | `/image/remove-bg` | `POST` | `file: UploadFile`<br>`post_process: bool = False`<br>`model: str = "isnet-general-use"` | `rembg[cpu]` ONNX | Removes background using deep neural networks (`isnet-general-use`, `silueta`, `u2net`, `u2net_human_seg`, `u2net_cloth_seg`) | Direct via `@/lib/api` `uploadToBackend("/image/remove-bg", [file], { post_process, model })` |
-| `/pdf/to-image` | `POST` | `file: UploadFile` | PyMuPDF (`fitz`) + `zipfile` | Converts PDF pages into 150 DPI (2x) PNGs packed into a `.zip` archive | Direct via `@/lib/api` `uploadToBackend("/pdf/to-image", [file])` |
-| `/pdf/split` | `POST` | `file: UploadFile`<br>`page_ranges: str` (e.g. `"1-3, 5, 8-10"`) | PyMuPDF (`fitz`) | Extracts selected page ranges into a new PDF | Direct via `@/lib/api` `uploadToBackend("/pdf/split", [file], { page_ranges })` |
+| `/pdf/to-image` | `POST` | `file: UploadFile` | PyMuPDF (`fitz`) + `zipfile` | Converts PDF pages into 150 DPI (2x density) PNGs packed into `images.zip` archive | Direct via `@/lib/api` `uploadToBackend("/pdf/to-image", [file])` |
+| `/pdf/split` | `POST` | `file: UploadFile`<br>`page_ranges: Optional[str] = None`<br>`pages: Optional[str] = None` | PyMuPDF (`fitz`) + `zipfile` | Splits PDF: extracts specified page ranges (e.g. `"1-3, 5"`) into a single PDF (`split-{name}.pdf`), OR bundles all individual pages into a ZIP (`{name}_split_pages.zip`) when ranges is `"all"` or omitted | Direct via `@/lib/api` `uploadToBackend("/pdf/split", [file], { pages: rangesValue, page_ranges: rangesValue })` |
 | `/pdf/merge` | `POST` | `files: List[UploadFile]` | PyMuPDF (`fitz`) | Combines multiple PDF files sequentially into a single PDF | Direct via `@/lib/api` `uploadToBackend("/pdf/merge", files)` |
 | `/pdf/html-to-pdf` | `POST` | Body JSON: `{ html: str }` | Playwright Chromium | Renders styled HTML/Markdown with KaTeX to pixel-perfect A4 PDF with 1cm print margins | Proxied by Next.js `/api/markdown-to-pdf` route handler |
 | `/api/ratings` | `GET` | Query param: `tool: str = None` | Firestore / Cache | Fetches authentic community rating statistics (`ratingValue`, `reviewCount`) for a specific tool or all tools | Proxied by Next.js `/api/ratings` route handler |
@@ -100,7 +100,7 @@ This directory contains the FastAPI microservices backend for **The Utilify**, c
   playwright install chromium
   uvicorn main:app --reload --port 8000
   ```
-  *(Or execute `.\run_backend.ps1` from the repository root to start via python directly)*
+  *(Or execute `.\run_backend.ps1` from the repository root to start via python directly with venv)*
 
 - **Docker Build & Local Testing:**
   ```bash

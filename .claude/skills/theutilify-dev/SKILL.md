@@ -16,13 +16,13 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 - **Privacy-First Multi-Currency Engine:** `src/lib/currency.ts` providing 36 popular world currencies (`POPULAR_CURRENCIES`), client-side timezone/locale auto-detection without server requests or IP lookups, persistent multi-tab synchronized storage (`theutilify_preferred_currency`), formatting helpers (`formatCurrencyValue`, `formatNumberWithCurrency`), and the interactive `<CurrencySelector />` component.
 - **High-Density 2-Column Responsive Layout Architecture:** All 30 tools implement a space-effective 2-column layout (`grid grid-cols-1 lg:grid-cols-12 gap-6`) positioning inputs on the left and sticky live preview/results on the right (`lg:sticky lg:top-24`), maximizing above-the-fold workspace efficiency on desktop and cleanly stacking on mobile.
 - **Recently Visited Tools Tray:** `ToolLayout.tsx` automatically logs visited tools to `localStorage` (`utilify-recent-tools`, maximum 4 items) for fast navigation.
-- **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social sharing cards.
-- **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 123 blog publications.
+- **Dynamic OG Engine:** `/api/og` route built on `@vercel/og` Edge runtime for rich 1200x630 social sharing cards, complemented by Next.js file-based Edge OG metadata generators (`src/app/blog/[slug]/opengraph-image.tsx`).
+- **Dynamic RSS Feed:** `/feed.xml` route delivering automated RSS 2.0 channel updates for all 129 blog publications.
 - **Embed Engine:** `/embed/[tool]` route rendering responsive iframe widgets with canonical backlinks for 15 interactive tools, accompanied by modal snippet generator (`EmbedModal.tsx`).
 - **Internal API Proxies & Utilities:** Dedicated Next.js Route Handlers (`/api/ratings`, `/api/markdown-to-pdf`) proxy client requests to Cloud Run backend microservices with automatic fallback to local memory/temp file caching. Standalone Edge and Node routes provide dynamic OpenGraph card generation (`/api/og`), client image compression fallback (`/api/image-compressor` via Sharp), and on-demand search engine indexing (`/api/indexnow`).
 - **Multilingual (i18n):** Spanish (`/es`) and Portuguese (`/pt`) category hubs and dynamic localized routes `src/app/[lang]/[tool]/page.tsx` with 38 pre-rendered static routes (19 Spanish + 19 Portuguese) and bidirectional `hreflang` tags. Governed by dual sources of truth: `translations.ts` (SEO & metadata) and `ui-strings.ts` (UI component strings with zero English leakage).
 - **Generative Engine Optimization (GEO):** `public/llms.txt` and `public/llms-full.txt` machine-readable manifests (with App Router route mirrors in `src/app/llms.txt` and `src/app/llms-full.txt`), `<link rel="describedby">`, and AI crawler permissions in `src/app/robots.ts` (`OAI-SearchBot`, `Meta-ExternalAgent`, `cohere-ai`, `ClaudeBot`, `GPTBot`, `PerplexityBot`, `anthropic-ai`, `CCBot`, etc., while disallowing `/api/`).
-- **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 212 URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow` with verification key `8e4f1a293c7d4b6e8a0f2c4e6a8d0b2f`) and XML sitemap pings upon build/deploy.
+- **Search Engine Automation:** `postbuild` script in `package.json` triggers `scripts/ping-search-engines.mjs` to dispatch 218 URLs to IndexNow (`api.indexnow.org`, `yandex.com/indexnow` with verification key `8e4f1a293c7d4b6e8a0f2c4e6a8d0b2f`) and XML sitemap pings upon build/deploy.
 - **Interactive UI Stack:** Global Command Palette (`Ctrl+K` / `Cmd+K`), Tool Workflow Chaining (`ToolWorkflowChaining.tsx`), Before/After Comparison Slider (`BeforeAfterSlider.tsx`), Homepage Micro-Playground (`HeroPlayground.tsx`), Language Switcher (`LanguageSwitcher.tsx`), and Firestore-backed Rating Widget (`RatingWidget.tsx`).
 - **Monetization & Apps:** Google AdSense (`ca-pub-6366007730203648`, toggled by `NEXT_PUBLIC_ADS_ENABLED`), Google Ads tag (`AW-936767269`), and `CrossPromo.tsx` featuring developer Android apps on Google Play.
 - **Backend:** FastAPI (Python 3.11) with PyMuPDF (`fitz`), Playwright Chromium Headless, and ONNX runtime (`rembg`).
@@ -36,7 +36,7 @@ This skill provides step-by-step procedures for building, maintaining, and scali
 
 | Category | Tools & Slugs |
 | :--- | :--- |
-| **PDF Operations (5)** | `/pdf-to-image`, `/pdf-to-jpg`, `/split-pdf`, `/merge-pdf`, `/markdown-to-pdf` |
+| **PDF Operations (5)** | `/pdf-to-image`, `/pdf-to-jpg`, `/split-pdf` (extract ranges or split all to ZIP), `/merge-pdf`, `/markdown-to-pdf` |
 | **Image Processing (8)** | `/background-remover`, `/image-compressor`, `/color-palette`, `/compress-png`, `/compress-jpeg`, `/compress-webp`, `/make-signature-transparent`, `/white-background-product-photos` |
 | **Calculators & Math (7)** | `/sip-calculator`, `/investment-calculator`, `/fire-calculator`, `/bmi-calculator`, `/date-calculator`, `/business-days-calculator`, `/age-calculator` |
 | **Developer & Text (10)** | `/json-formatter`, `/password-generator`, `/qr-generator`, `/word-counter`, `/text-converter`, `/base64`, `/diff-checker`, `/lorem-ipsum`, `/unit-converter`, `/px-to-rem` |
@@ -117,16 +117,35 @@ Create `src/app/<tool-slug>/`:
   import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
   import { triggerConfetti } from "@/lib/confetti";
   import { ToolWorkflowChaining } from "@/components/ToolWorkflowChaining";
+  import { Language } from "@/lib/i18n/translations";
   // If financial tool:
   // import { useCurrency, formatCurrencyValue } from "@/lib/currency";
   // import { CurrencySelector } from "@/components/CurrencySelector";
 
-  export default function ToolClient() {
+  export interface ToolClientProps {
+    lang?: Language;
+    customTitle?: string;
+    customDescription?: string;
+    customSummaryDefinition?: string;
+    customHowToUse?: { step: string; description: string }[];
+    customFaqs?: { question: string; answer: string }[];
+    initialTab?: string;
+    defaultFormat?: string;
+  }
+
+  export default function ToolClient({
+    lang = "en",
+    customTitle,
+    customDescription,
+    customSummaryDefinition,
+    customHowToUse,
+    customFaqs,
+  }: ToolClientProps = {}) {
     return (
       <ToolLayout
-        title="Tool Name"
-        description="Short, compelling description of what the tool accomplishes."
-        summaryDefinition="Authoritative, concise 1-2 sentence definition for Generative Engine Optimization (GEO)."
+        title={customTitle || "Tool Name"}
+        description={customDescription || "Short, compelling description of what the tool accomplishes."}
+        summaryDefinition={customSummaryDefinition || "Authoritative, concise 1-2 sentence definition for Generative Engine Optimization (GEO)."}
         howToUse={[
           { step: "Step 1", description: "First action user takes." },
           { step: "Step 2", description: "Second action user takes." },
@@ -192,15 +211,43 @@ Create `src/app/<tool-slug>/`:
 
 ## Runbook 2: Creating a Programmatic Long-Tail Landing Page
 
-When targeting high-volume specific search intent (e.g. `/pdf-to-jpg`, `/compress-webp`, `/business-days-calculator`):
+When targeting high-volume specific search intent (e.g. `/pdf-to-jpg`, `/compress-png`, `/compress-jpeg`, `/compress-webp`, `/business-days-calculator`, `/make-signature-transparent`, `/white-background-product-photos`):
 
-1. **Re-use existing engine:** Instead of duplicating complex UI code, pass custom props to existing clients:
-   - Example: `src/app/pdf-to-jpg/PdfToJpgClient.tsx` wraps `PdfToImageClient` with `defaultFormat="jpg"`, `customTitle="PDF to JPG Converter"`.
-   - Example: `src/app/business-days-calculator/BusinessDaysClient.tsx` wraps `DateCalculatorClient` with `initialTab="diff"`.
-2. **Dedicated Metadata & Schema:**
-   - Define custom page title, meta description, and `SoftwareApplication` JSON-LD schema focused on the specific keyword.
-3. **Internal Linking:**
-   - Ensure the parent tool page links to this programmatic page, and this programmatic page links back to the parent and category hub.
+1. **Single File Server Component Architecture:** Do **NOT** create a separate `*Client.tsx` wrapper file. Programmatic pages are implemented purely via a single Server Component: `src/app/<slug>/page.tsx`.
+2. **Direct Client Component Reuse:** Directly import and render the parent tool's existing client component, passing specialized override props:
+   - Example (`src/app/pdf-to-jpg/page.tsx`):
+     ```tsx
+     import { Metadata } from "next";
+     import PdfToImageClient from "../pdf-to-image/PdfToImageClient";
+     import { JsonLd } from "@/components/JsonLd";
+
+     export const metadata: Metadata = {
+       title: "PDF to JPG Online - Free PDF to JPEG Converter | Utilify",
+       description: "Convert PDF documents to high-resolution JPG images online for free...",
+       alternates: { canonical: "/pdf-to-jpg" },
+     };
+
+     export default function PdfToJpgPage() {
+       return (
+         <>
+           <JsonLd data={schema} />
+           <PdfToImageClient
+             customTitle="PDF to JPG Converter"
+             customDescription="Convert every page of your PDF into high-quality JPG images instantly..."
+             customHowToUse={customHowToUse}
+             customFaqs={customFaqs}
+           />
+         </>
+       );
+     }
+     ```
+   - Example (`src/app/business-days-calculator/page.tsx`): Directly renders `<DateCalculatorClient initialTab="diff" customTitle="Business Days Calculator" ... />`.
+   - Example (`src/app/compress-png/page.tsx`): Directly renders `<ImageCompressorClient defaultFormat="png" customTitle="Compress PNG" ... />`.
+3. **Dedicated Metadata & Schema:** Define keyword-optimized title, description, OpenGraph tags, and `SoftwareApplication` JSON-LD schema focused on the specific keyword.
+4. **Registration:**
+   - Add slug to `tools` in `src/app/sitemap.ts`.
+   - Add route to `scripts/ping-search-engines.mjs` and `src/lib/indexnow.ts`.
+   - Add entry to `public/llms.txt` and `src/app/llms.txt/route.ts`.
 
 ---
 
@@ -325,9 +372,11 @@ When adding new capabilities or tools:
    - `category`: `"Productivity" | "Design" | "Finance" | "Development" | "PDF"`.
    - `content`: 800+ words of markdown structured with `###` headings, comparison tables, step-by-step instructions, KaTeX equations, and internal links.
 
-3. **Editorial & Math Formatting Rules:**
+3. **Editorial, Math & Heading Formatting Rules:**
    - **Zero Foreign Boilerplate:** Never paste UI widgets, file dropzone HTML, or filler text from other tools into articles.
    - **LaTeX Formulas:** Always use double backslashes (`\\frac{A}{B}`, `\\text{Years}`) for block math `$$...$$` and inline math `\(...\)` or `$..$`.
+   - **Automatic Headings & Table of Contents:** The custom `marked` renderer in `src/app/blog/[slug]/page.tsx` automatically converts `##` and `###` headings into kebab-case anchor IDs (`scroll-mt-24`), populating the interactive `<TableOfContents />` and search sitelinks.
+   - **Edge OpenGraph Cards:** Each blog article automatically generates a custom, branded social card via Next.js file-based Edge metadata (`src/app/blog/[slug]/opengraph-image.tsx`).
    - **Code Blocks in Template Strings:** Escape inline backticks carefully to avoid breaking the surrounding TypeScript template literal.
 
 4. **Verify Build:**
@@ -433,7 +482,10 @@ When a tool requires heavy server-side computation (ONNX AI inference, PyMuPDF, 
    ```bash
    npm run dev       # Start Turbopack local dev server (http://localhost:3000)
    npx tsc --noEmit  # Verify TypeScript static types (must pass with 0 errors)
+   npm run lint      # Run ESLint validation
    npm run build     # Build production bundle (pre-renders 227 routes + auto-pings 212 URLs)
+   npm run ping      # Submit all 212 platform URLs to IndexNow (Bing/Yandex) and search engines
+   npm run indexnow  # Alias for npm run ping
    ```
    Ensure 0 TypeScript errors, clean static generation for all 227 pre-rendered SSG routes, and successful execution of `postbuild` search engine pinging (212 URLs).
 
