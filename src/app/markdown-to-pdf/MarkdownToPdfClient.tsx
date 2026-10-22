@@ -82,6 +82,7 @@ type ViewMode = "split" | "editor" | "preview";
 export default function MarkdownToPdfClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string } | null>(null);
+  const [uploaderKey, setUploaderKey] = useState(0);
   const [markdown, setMarkdown] = useState(SAMPLE_MARKDOWN);
   const [htmlContent, setHtmlContent] = useState("");
   const [activeTheme, setActiveTheme] = useState<ThemeType>("default");
@@ -143,9 +144,18 @@ export default function MarkdownToPdfClient() {
       toast.success("Markdown converted to PDF successfully!");
     } catch (error: any) {
       toast.error(error.message || "Failed to convert Markdown file");
+      throw error;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    if (result?.url && result.url.startsWith("blob:")) {
+      URL.revokeObjectURL(result.url);
+    }
+    setResult(null);
+    setUploaderKey((prev) => prev + 1);
   };
 
   const handleTextConvert = async () => {
@@ -450,7 +460,7 @@ export default function MarkdownToPdfClient() {
                   </a>
                   <Button 
                     variant="outline" 
-                    onClick={() => setResult(null)} 
+                    onClick={handleReset} 
                     className="h-11 px-5 text-xs font-bold rounded-xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                   >
                     Modify Document
@@ -474,6 +484,7 @@ export default function MarkdownToPdfClient() {
               
               <Card className="p-4 sm:p-5 border-2 border-dashed bg-card rounded-2xl">
                 <FileUploader
+                  key={uploaderKey}
                   label="Or Upload .md / .markdown file"
                   accept={{ "text/markdown": [".md", ".markdown"] }}
                   onUpload={handleUpload}

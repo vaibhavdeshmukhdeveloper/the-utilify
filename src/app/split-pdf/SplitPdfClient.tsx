@@ -39,6 +39,7 @@ export default function SplitPdfClient({
   const [pages, setPages] = useState("1-2");
   const [splitMode, setSplitMode] = useState("range"); // "range" or "all"
   const [fileInfo, setFileInfo] = useState<{ name: string; size: string } | null>(null);
+  const [uploaderKey, setUploaderKey] = useState(0);
 
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -80,9 +81,19 @@ export default function SplitPdfClient({
     } catch (error: any) {
       console.error("Split error:", error);
       toast.error(error.message || "Failed to split PDF. Ensure the backend is running.");
+      throw error;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    if (result?.url && result.url.startsWith("blob:")) {
+      URL.revokeObjectURL(result.url);
+    }
+    setResult(null);
+    setFileInfo(null);
+    setUploaderKey((prev) => prev + 1);
   };
 
   const howToUse = [
@@ -246,6 +257,7 @@ export default function SplitPdfClient({
 
             <div className="pt-3 border-t">
               <FileUploader
+                key={uploaderKey}
                 label={text.uploaderLabel}
                 lang={currentLang}
                 accept={{ "application/pdf": [".pdf"] }}
@@ -307,7 +319,7 @@ export default function SplitPdfClient({
                     </a>
                     <Button 
                       variant="outline" 
-                      onClick={() => {setResult(null); setFileInfo(null);}} 
+                      onClick={handleReset} 
                       className="h-12 px-5 text-sm font-bold rounded-xl border-zinc-800 text-zinc-400 hover:text-white bg-transparent hover:bg-zinc-900"
                     >
                       {text.restartBtn}

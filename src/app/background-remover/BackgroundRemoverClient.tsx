@@ -367,6 +367,7 @@ export default function BackgroundRemoverClient({
     } catch (error: any) {
       console.error("BG Removal error:", error);
       toast.error(error.message || "Failed to remove background. Ensure the backend is running.");
+      throw error;
     } finally {
       setIsLoading(false);
     }

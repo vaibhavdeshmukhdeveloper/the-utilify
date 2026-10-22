@@ -36,6 +36,7 @@ export default function PdfToImageClient({
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<{ url: string; filename: string; pages?: number } | null>(null);
   const [fileInfo, setFileInfo] = useState<{ name: string; size: string } | null>(null);
+  const [uploaderKey, setUploaderKey] = useState(0);
 
   const resultsRef = useRef<HTMLDivElement>(null);
 
@@ -69,9 +70,19 @@ export default function PdfToImageClient({
       const err = error as Error;
       console.error("Conversion error:", err);
       toast.error(err.message || "Failed to convert PDF. Please ensure the backend is running.");
+      throw err;
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    if (result?.url && result.url.startsWith("blob:")) {
+      URL.revokeObjectURL(result.url);
+    }
+    setResult(null);
+    setFileInfo(null);
+    setUploaderKey((prev) => prev + 1);
   };
 
   const howToUse = [
@@ -179,7 +190,9 @@ export default function PdfToImageClient({
         <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-4">
           <Card className="p-4 sm:p-5 border-2 border-dashed bg-card rounded-2xl">
             <FileUploader
+              key={uploaderKey}
               label={isEs ? "Subir PDF" : isPt ? "Enviar PDF" : "Upload PDF"}
+              lang={currentLang}
               accept={{ "application/pdf": [".pdf"] }}
               onUpload={handleUpload}
               isLoading={isLoading}
@@ -234,7 +247,7 @@ export default function PdfToImageClient({
                     </a>
                     <Button
                       variant="outline"
-                      onClick={() => { setResult(null); setFileInfo(null); }}
+                      onClick={handleReset}
                       className="h-12 px-5 text-sm font-bold rounded-xl border-primary-foreground/20 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
                     >
                       {t.convertAnother}

@@ -76,6 +76,7 @@ export function FileUploader({
         toast.success(t.fileUploader.pasteSuccess);
         if (autoUpload) {
           onUpload(pastedFiles);
+          setFiles([]);
         } else {
           setFiles(pastedFiles);
         }
@@ -104,7 +105,12 @@ export function FileUploader({
       toast.error(t.fileUploader.selectFileError);
       return;
     }
-    await onUpload(files);
+    try {
+      await onUpload(files);
+      setFiles([]);
+    } catch {
+      // Retain files on error so user can retry or adjust
+    }
   };
 
   if (downloadUrl && !hideDownload) {

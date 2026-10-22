@@ -73,6 +73,7 @@ export default function ImageCompressorClient({
   const [quality, setQuality] = useState([80]);
   const [format, setFormat] = useState<"original" | "png" | "jpeg" | "webp">(initialFormat);
   const [isZipping, setIsZipping] = useState(false);
+  const [uploaderKey, setUploaderKey] = useState(0);
 
   const resultsRef = useRef<HTMLDivElement>(null);
   const selectedItem = items.find((it) => it.id === selectedItemId) || items[0];
@@ -251,6 +252,7 @@ export default function ImageCompressorClient({
     });
     setItems([]);
     setSelectedItemId(null);
+    setUploaderKey((prev) => prev + 1);
   };
 
   const totalOriginalSize = items.reduce((acc, it) => acc + it.originalSize, 0);
@@ -411,7 +413,9 @@ export default function ImageCompressorClient({
             </div>
 
             <FileUploader
+              key={uploaderKey}
               label={isEs ? "Arrastra una o varias imágenes aquí" : isPt ? "Arraste uma ou mais imagens aqui" : "Drop single or multiple images"}
+              lang={currentLang}
               accept={{ "image/*": [".png", ".jpg", ".jpeg", ".webp"] }}
               multiple={true}
               maxFiles={20}
