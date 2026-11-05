@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Compress image file sizes by up to 80% with zero quality loss. Optimize JPG, PNG, and WebP files locally in your browser with custom quality controls.",
   alternates: {
     canonical: "/image-compressor",
+    languages: {
+      en: "https://www.theutilify.com/image-compressor",
+      es: "https://www.theutilify.com/es/image-compressor",
+      pt: "https://www.theutilify.com/pt/image-compressor",
+      "x-default": "https://www.theutilify.com/image-compressor",
+    },
   },
   openGraph: {
     title: "Image Compressor - Free Lossless & Lossy Compression | Utilify",

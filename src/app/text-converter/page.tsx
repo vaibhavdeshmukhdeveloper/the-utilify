@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Convert text cases online instantly: UPPERCASE, lowercase, Title Case, Sentence case, camelCase, snake_case, and kebab-case. Fast and private.",
   alternates: {
     canonical: "/text-converter",
+    languages: {
+      en: "https://www.theutilify.com/text-converter",
+      es: "https://www.theutilify.com/es/text-converter",
+      pt: "https://www.theutilify.com/pt/text-converter",
+      "x-default": "https://www.theutilify.com/text-converter",
+    },
   },
   openGraph: {
     title: "Text Case Converter - Free Online Text Formatter | Utilify",

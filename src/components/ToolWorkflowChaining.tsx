@@ -73,10 +73,26 @@ export function ToolWorkflowChaining() {
         case "investment-calculator":
           return {
             badge: "Planificación Financiera",
-            title: "¿Buscas calcular aportaciones mensuales SIP con Step-Up anual?",
-            description: "Aprovecha el interés compuesto con incrementos automáticos de ahorro.",
-            actionText: "Calculadora SIP",
-            targetHref: "/es/sip-calculator",
+            title: "¿Buscas calcular tu meta de retiro anticipado e independencia financiera?",
+            description: "Proyecta tu número FIRE con la regla del 4% y retorno real ajustado por inflación.",
+            actionText: "Calculadora FIRE",
+            targetHref: "/es/fire-calculator",
+          };
+        case "fire-calculator":
+          return {
+            badge: "Planificación Financiera",
+            title: "¿Deseas modelar distintos objetivos de ahorro y frecuencias de capitalización?",
+            description: "Resuelve monto final, aportes necesarios, tasa de retorno o plazo en años.",
+            actionText: "Calculadora de Inversiones",
+            targetHref: "/es/investment-calculator",
+          };
+        case "bmi-calculator":
+          return {
+            badge: "Salud y Tiempo",
+            title: "¿Quieres conocer tu edad cronológica exacta en años, meses y días?",
+            description: "Calcula el tiempo exacto vivido y los días para tu próximo cumpleaños.",
+            actionText: "Calculadora de Edad",
+            targetHref: "/es/age-calculator",
           };
         case "password-generator":
           return {
@@ -84,6 +100,62 @@ export function ToolWorkflowChaining() {
             title: "¿Quieres compartir contraseñas o enlaces Wi-Fi con código QR?",
             description: "Genera códigos QR de alta resolución con colores y corrección de error.",
             actionText: "Generar Código QR",
+            targetHref: "/es/qr-generator",
+          };
+        case "qr-generator":
+          return {
+            badge: "Flujo de Diseño",
+            title: "¿Quieres elegir colores de marca con contraste accesible WCAG?",
+            description: "Genera paletas armónicas y comprueba la legibilidad AA y AAA.",
+            actionText: "Generador de Paleta de Colores",
+            targetHref: "/es/color-palette",
+          };
+        case "color-palette":
+          return {
+            badge: "Flujo de Diseño",
+            title: "¿Listo para usar tus colores personalizados en un código QR?",
+            description: "Crea códigos QR en PNG y SVG con tus colores HEX.",
+            actionText: "Generar Código QR",
+            targetHref: "/es/qr-generator",
+          };
+        case "json-formatter":
+          return {
+            badge: "Flujo de Desarrollo",
+            title: "¿Necesitas codificar o decodificar cadenas Base64 en tus payloads?",
+            description: "Convierte texto UTF-8 y archivos binarios a Base64 en el navegador.",
+            actionText: "Codificador Base64",
+            targetHref: "/es/base64",
+          };
+        case "base64":
+          return {
+            badge: "Flujo de Desarrollo",
+            title: "¿Necesitas validar y formatear cadenas JSON decodificadas?",
+            description: "Embellece, minimiza e inspecciona estructuras JSON al instante.",
+            actionText: "Formateador de JSON",
+            targetHref: "/es/json-formatter",
+          };
+        case "unit-converter":
+          return {
+            badge: "Diseño y Desarrollo",
+            title: "¿Trabajas con CSS? Convierte píxeles a REM y genera clamp() fluido.",
+            description: "Calcula escalas tipográficas responsive y consulta tokens de Tailwind.",
+            actionText: "Conversor PX a REM",
+            targetHref: "/es/px-to-rem",
+          };
+        case "px-to-rem":
+          return {
+            badge: "Utilidad de Medición",
+            title: "¿Necesitas convertir unidades de longitud, peso, temperatura o volumen?",
+            description: "Convierte entre el sistema métrico e imperial con alta precisión.",
+            actionText: "Conversor de Unidades",
+            targetHref: "/es/unit-converter",
+          };
+        case "word-counter":
+          return {
+            badge: "Flujo de Contenido",
+            title: "¿Deseas convertir tu texto o compartirlo mediante un código QR?",
+            description: "Crea un código QR instantáneo para compartir enlaces o textos.",
+            actionText: "Generador de Código QR",
             targetHref: "/es/qr-generator",
           };
         case "date-calculator":
@@ -161,10 +233,26 @@ export function ToolWorkflowChaining() {
         case "investment-calculator":
           return {
             badge: "Planejamento Financeiro",
-            title: "Quer calcular investimentos mensais SIP com Step-Up anual?",
-            description: "Potencialize juros compostos com aumentos automáticos anuais.",
-            actionText: "Calculadora SIP",
-            targetHref: "/pt/sip-calculator",
+            title: "Quer calcular sua meta de independência financeira e aposentadoria antecipada?",
+            description: "Projete seu número FIRE pela regra dos 4% com retorno real descontando a inflação.",
+            actionText: "Calculadora FIRE",
+            targetHref: "/pt/fire-calculator",
+          };
+        case "fire-calculator":
+          return {
+            badge: "Planejamento Financeiro",
+            title: "Deseja simular diferentes metas de investimento e frequências de juros?",
+            description: "Calcule montante final, aportes necessários, taxa de retorno ou prazo.",
+            actionText: "Calculadora de Investimentos",
+            targetHref: "/pt/investment-calculator",
+          };
+        case "bmi-calculator":
+          return {
+            badge: "Saúde e Tempo",
+            title: "Deseja descobrir sua idade cronológica exata em anos, meses e dias?",
+            description: "Veja o tempo exato vivido e a contagem regressiva para o próximo aniversário.",
+            actionText: "Calculadora de Idade",
+            targetHref: "/pt/age-calculator",
           };
         case "password-generator":
           return {
@@ -172,6 +260,62 @@ export function ToolWorkflowChaining() {
             title: "Precisa compartilhar credenciais ou links Wi-Fi via QR Code?",
             description: "Crie códigos QR em alta resolução com cores personalizadas.",
             actionText: "Criar Código QR",
+            targetHref: "/pt/qr-generator",
+          };
+        case "qr-generator":
+          return {
+            badge: "Fluxo de Design",
+            title: "Quer criar paletas de cores com alto contraste WCAG?",
+            description: "Gere harmonias cromáticas e valide a legibilidade AA e AAA.",
+            actionText: "Gerador de Paleta de Cores",
+            targetHref: "/pt/color-palette",
+          };
+        case "color-palette":
+          return {
+            badge: "Fluxo de Design",
+            title: "Pronto para aplicar suas cores personalizadas em um QR Code?",
+            description: "Crie códigos QR em PNG e SVG com seus códigos HEX.",
+            actionText: "Criar Código QR",
+            targetHref: "/pt/qr-generator",
+          };
+        case "json-formatter":
+          return {
+            badge: "Fluxo de Desenvolvimento",
+            title: "Precisa codificar ou decodificar strings Base64 nos seus dados?",
+            description: "Converta textos UTF-8 e arquivos binários em Base64 no navegador.",
+            actionText: "Codificador Base64",
+            targetHref: "/pt/base64",
+          };
+        case "base64":
+          return {
+            badge: "Fluxo de Desenvolvimento",
+            title: "Precisa validar e formatar strings JSON decodificadas?",
+            description: "Formate, minifique e inspecione objetos JSON instantaneamente.",
+            actionText: "Formatador de JSON",
+            targetHref: "/pt/json-formatter",
+          };
+        case "unit-converter":
+          return {
+            badge: "Design e Front-End",
+            title: "Trabalhando com CSS? Converta pixels em REM e gere clamp() fluido.",
+            description: "Crie escalas tipográficas responsivas e consulte a tabela do Tailwind.",
+            actionText: "Conversor PX para REM",
+            targetHref: "/pt/px-to-rem",
+          };
+        case "px-to-rem":
+          return {
+            badge: "Utilitário de Medição",
+            title: "Precisa converter unidades de comprimento, peso, temperatura ou volume?",
+            description: "Converta entre medidas métricas e imperiais com precisão científica.",
+            actionText: "Conversor de Unidades",
+            targetHref: "/pt/unit-converter",
+          };
+        case "word-counter":
+          return {
+            badge: "Fluxo de Conteúdo",
+            title: "Deseja transformar seu texto ou compartilhá-lo via QR Code?",
+            description: "Gere um código QR instantâneo para compartilhar links ou textos.",
+            actionText: "Gerador de Código QR",
             targetHref: "/pt/qr-generator",
           };
         case "date-calculator":
@@ -280,10 +424,77 @@ export function ToolWorkflowChaining() {
       case "investment-calculator":
         return {
           badge: "Financial Planning",
-          title: "Want to calculate monthly SIP investments with annual Step-Up increments?",
-          description: "Harness compound interest with automated yearly investment increases.",
-          actionText: "Launch SIP Calculator",
-          targetHref: "/sip-calculator",
+          title: "Want to calculate your early retirement target and Financial Independence number?",
+          description: "Model your FIRE number using the 4% Safe Withdrawal Rule and inflation-adjusted returns.",
+          actionText: "Launch FIRE Calculator",
+          targetHref: "/fire-calculator",
+        };
+      case "fire-calculator":
+        return {
+          badge: "Financial Planning",
+          title: "Want to solve for required monthly savings, return rate, or investment horizon?",
+          description: "Use our 5-target Investment Calculator with daily, monthly, and annual compounding.",
+          actionText: "Launch Investment Calculator",
+          targetHref: "/investment-calculator",
+        };
+      case "bmi-calculator":
+        return {
+          badge: "Health & Milestones",
+          title: "Want to calculate your exact chronological age down to the second?",
+          description: "Track your lived milestones in weeks, days, and hours plus next birthday countdown.",
+          actionText: "Open Age Calculator",
+          targetHref: "/age-calculator",
+        };
+      case "px-to-rem":
+        return {
+          badge: "Design Workflow",
+          title: "Need to generate accessible color palettes and test WCAG contrast ratios?",
+          description: "Create harmonic palettes and verify AA/AAA text contrast compliance.",
+          actionText: "Open Color Palette Generator",
+          targetHref: "/color-palette",
+        };
+      case "lorem-ipsum":
+        return {
+          badge: "Writing Utility",
+          title: "Want to check word count, character limits, and reading time on your copy?",
+          description: "Analyze keyword density, reading duration, and social post limits in real time.",
+          actionText: "Open Word Counter",
+          targetHref: "/word-counter",
+        };
+      case "pdf-to-jpg":
+        return {
+          badge: "Step 2: Asset Optimization",
+          title: "Want to compress your extracted JPG images for faster sharing?",
+          description: "Reduce JPEG file size by up to 80% while preserving visual sharpness.",
+          actionText: "Open Compress JPEG",
+          targetHref: "/compress-jpeg",
+        };
+      case "compress-png":
+      case "compress-jpeg":
+      case "compress-webp":
+        return {
+          badge: "Complementary Tool",
+          title: "Need to remove the background from your product or portrait image?",
+          description: "Isolate subjects into transparent PNGs or pure white studio backdrops with AI.",
+          actionText: "Try AI Background Remover",
+          targetHref: "/background-remover",
+        };
+      case "make-signature-transparent":
+      case "white-background-product-photos":
+        return {
+          badge: "Step 2: Optimize File Size",
+          title: "Want to compress your processed image for fast web or document use?",
+          description: "Shrink PNG, JPEG, and WebP file sizes without losing visual quality.",
+          actionText: "Open Image Compressor",
+          targetHref: "/image-compressor",
+        };
+      case "business-days-calculator":
+        return {
+          badge: "Calendar Utility",
+          title: "Need full calendar date intervals or exact chronological age calculations?",
+          description: "Calculate exact years, months, weeks, and days between any two dates.",
+          actionText: "Open Date Calculator",
+          targetHref: "/date-calculator",
         };
       case "password-generator":
         return {

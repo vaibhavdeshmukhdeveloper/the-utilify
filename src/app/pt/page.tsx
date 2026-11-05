@@ -67,14 +67,14 @@ export default function PortugueseHubPage() {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-muted-foreground">
               <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-green-500" /> Zero armazenamento</span>
-              <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-500" /> 100% no seu navegador</span>
+              <span className="flex items-center gap-1.5"><Zap className="h-4 w-4 text-amber-500" /> Processamento instantâneo</span>
               <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4 text-primary" /> Sem marcas d&apos;água</span>
             </div>
           </div>
         </section>
 
         {/* Tools Grid */}
-        <section className="py-16 container max-w-6xl mx-auto px-4">
+        <section id="tools" className="py-16 container max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tools.map((tool) => (
               <Card

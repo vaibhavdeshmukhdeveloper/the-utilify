@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Extract specific pages or custom page ranges from your PDF files online. Fast, secure, in-memory processing with zero file storage.",
   alternates: {
     canonical: "/split-pdf",
+    languages: {
+      en: "https://www.theutilify.com/split-pdf",
+      es: "https://www.theutilify.com/es/split-pdf",
+      pt: "https://www.theutilify.com/pt/split-pdf",
+      "x-default": "https://www.theutilify.com/split-pdf",
+    },
   },
   openGraph: {
     title: "Split PDF Online - Extract Pages from PDF for Free | Utilify",

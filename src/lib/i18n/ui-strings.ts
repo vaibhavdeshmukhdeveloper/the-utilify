@@ -595,7 +595,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
       relatedToolsTitle: "Herramientas Relacionadas",
       breadcrumbHome: "Inicio",
       defaultSummaryTemplate: (title, description) =>
-        `${title} es una herramienta en línea gratuita y privada diseñada para ${description.toLowerCase().replace(/^(un|una|el|la)\s+/, "")}. Procesa archivos con cero retención de datos, velocidad instantánea, sin marcas de agua y sin necesidad de registro.`,
+        `${title}: ${description.replace(/\.$/, "")}. Herramienta en línea 100% gratuita, privada y con cero retención de datos.`,
     },
     fileUploader: {
       dragAndDrop: "Arrastra y suelta tus archivos aquí, o haz clic para buscar",
@@ -882,7 +882,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
       relatedToolsTitle: "Ferramentas Relacionadas",
       breadcrumbHome: "Início",
       defaultSummaryTemplate: (title, description) =>
-        `${title} é um utilitário online gratuito e privado projetado para ${description.toLowerCase().replace(/^(um|uma|o|a)\s+/, "")}. Processa arquivos com zero retenção de dados, velocidade instantânea, sem marcas d'água e sem necessidade de cadastro.`,
+        `${title}: ${description.replace(/\.$/, "")}. Utilitário online 100% gratuito, privado e com zero retenção de dados.`,
     },
     fileUploader: {
       dragAndDrop: "Arraste e solte seus arquivos aqui, ou clique para navegar",

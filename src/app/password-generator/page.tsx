@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Generate cryptographically secure, random passwords with custom symbols, numbers, and entropy strength scoring. 100% client-side with zero server storage.",
   alternates: {
     canonical: "/password-generator",
+    languages: {
+      en: "https://www.theutilify.com/password-generator",
+      es: "https://www.theutilify.com/es/password-generator",
+      pt: "https://www.theutilify.com/pt/password-generator",
+      "x-default": "https://www.theutilify.com/password-generator",
+    },
   },
   openGraph: {
     title: "Password Generator - Secure Random Password Generator | Utilify",

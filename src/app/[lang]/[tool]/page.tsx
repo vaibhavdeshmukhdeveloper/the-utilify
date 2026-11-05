@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "website",
       images: [
         {
-          url: `${baseUrl}/api/og?title=${encodeURIComponent(translation.name)}&category=${encodeURIComponent(translation.category)}&badge=100%25%20Gratis`,
+          url: `${baseUrl}/api/og?title=${encodeURIComponent(translation.name)}&category=${encodeURIComponent(translation.category)}&badge=${encodeURIComponent(lang === "pt" ? "100% Grátis" : "100% Gratis")}`,
           width: 1200,
           height: 630,
           alt: translation.name,

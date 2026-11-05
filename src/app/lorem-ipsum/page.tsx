@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Generate customized dummy placeholder text in paragraphs, sentences, words, or lists. One-click plain text and HTML tag formatting copy.",
   alternates: {
     canonical: "/lorem-ipsum",
+    languages: {
+      en: "https://www.theutilify.com/lorem-ipsum",
+      es: "https://www.theutilify.com/es/lorem-ipsum",
+      pt: "https://www.theutilify.com/pt/lorem-ipsum",
+      "x-default": "https://www.theutilify.com/lorem-ipsum",
+    },
   },
   openGraph: {
     title: "Lorem Ipsum Generator - Free Placeholder Text Generator | Utilify",

@@ -89,8 +89,8 @@ export default function PxToRemClient({
 
   // Standard token lookup table
   const tokenTable = [
-    { px: 8, tailwind: "text-xs / p-2", name: "Extra Small" },
-    { px: 12, tailwind: "text-xs / p-3", name: "Caption" },
+    { px: 8, tailwind: "p-2 / space-2", name: "Extra Small (0.5rem)" },
+    { px: 12, tailwind: "text-xs / p-3", name: "Caption (0.75rem)" },
     { px: 14, tailwind: "text-sm / p-3.5", name: "Small Body" },
     { px: 16, tailwind: "text-base / p-4", name: "Standard Body (1rem)" },
     { px: 18, tailwind: "text-lg / p-4.5", name: "Large Body" },

@@ -11,6 +11,7 @@ interface BeforeAfterSliderProps {
   afterLabel?: string;
   className?: string;
   alt?: string;
+  afterStyle?: React.CSSProperties;
 }
 
 export function BeforeAfterSlider({
@@ -20,6 +21,7 @@ export function BeforeAfterSlider({
   afterLabel = "Processed",
   className,
   alt = "Comparison",
+  afterStyle,
 }: BeforeAfterSliderProps) {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
@@ -105,11 +107,16 @@ export function BeforeAfterSlider({
         className
       )}
     >
+      {/* Background layer for processed image */}
+      {afterStyle && (
+        <div className="absolute inset-0 pointer-events-none" style={afterStyle} />
+      )}
+
       {/* "After" / Processed Image (Full Background) */}
       <img
         src={afterImage}
         alt={`${alt} - ${afterLabel}`}
-        className="block w-full h-auto max-h-[500px] object-contain pointer-events-none mx-auto"
+        className="relative z-10 block w-full h-auto max-h-[500px] object-contain pointer-events-none mx-auto"
         draggable={false}
       />
 

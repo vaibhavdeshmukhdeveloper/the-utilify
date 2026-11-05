@@ -86,6 +86,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   function sanitizeMath(text: string): string {
     return (text || "")
       .replace(/\x0c/g, "\\f")
+      .replace(/\x08/g, "\\b")
+      .replace(/\r(?=[a-zA-Z])/g, "\\r")
       .replace(/\t(?=[a-zA-Z])/g, "\\t");
   }
 

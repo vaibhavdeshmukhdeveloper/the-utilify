@@ -63,9 +63,34 @@ export function ToolLayout({
     "white-background-product-photos",
   ].includes(canonicalSlug);
 
+  const isEmbeddableTool = [
+    "sip-calculator",
+    "investment-calculator",
+    "fire-calculator",
+    "bmi-calculator",
+    "password-generator",
+    "qr-generator",
+    "word-counter",
+    "json-formatter",
+    "unit-converter",
+    "px-to-rem",
+    "diff-checker",
+    "base64",
+    "text-converter",
+    "color-palette",
+    "lorem-ipsum",
+    "date-calculator",
+    "business-days-calculator",
+    "age-calculator",
+    "image-compressor",
+    "compress-png",
+    "compress-jpeg",
+    "compress-webp",
+  ].includes(canonicalSlug);
+
   // Automatically record visited tool in localStorage for Recently Used tray
   React.useEffect(() => {
-    if (!pathname || pathname === "/" || pathname === "/es" || pathname === "/pt") return;
+    if (!pathname || pathname === "/" || pathname === "/es" || pathname === "/pt" || pathname.startsWith("/embed")) return;
     try {
       const stored = localStorage.getItem("utilify-recent-tools");
       const currentList: string[] = stored ? JSON.parse(stored) : [];
@@ -122,6 +147,35 @@ export function ToolLayout({
     ]
   };
 
+  const fallbackRelatedToolNames: Record<string, Record<string, string>> = {
+    es: {
+      "pdf-to-jpg": "PDF a JPG",
+      "markdown-to-pdf": "Markdown a PDF",
+      "compress-png": "Comprimir PNG",
+      "compress-jpeg": "Comprimir JPEG",
+      "compress-webp": "Comprimir WebP",
+      "make-signature-transparent": "Firma Transparente",
+      "white-background-product-photos": "Fotos con Fondo Blanco",
+      "business-days-calculator": "Calculadora de Días Hábiles",
+      "text-converter": "Conversor de Texto",
+      "diff-checker": "Comparador de Texto",
+      "lorem-ipsum": "Generador Lorem Ipsum",
+    },
+    pt: {
+      "pdf-to-jpg": "PDF para JPG",
+      "markdown-to-pdf": "Markdown para PDF",
+      "compress-png": "Comprimir PNG",
+      "compress-jpeg": "Comprimir JPEG",
+      "compress-webp": "Comprimir WebP",
+      "make-signature-transparent": "Assinatura Transparente",
+      "white-background-product-photos": "Fotos com Fundo Branco",
+      "business-days-calculator": "Calculadora de Dias Úteis",
+      "text-converter": "Conversor de Texto",
+      "diff-checker": "Comparador de Texto",
+      "lorem-ipsum": "Gerador Lorem Ipsum",
+    },
+  };
+
   // Localize related tools: preserve language path prefix and translate name if available
   const localizedRelatedTools = relatedTools.map((tool) => {
     const rtSlug = getCanonicalToolSlug(tool.href);
@@ -129,6 +183,12 @@ export function ToolLayout({
       return {
         name: toolTranslations[currentLang][rtSlug].name,
         href: `/${currentLang}/${rtSlug}`,
+      };
+    }
+    if (currentLang !== "en" && fallbackRelatedToolNames[currentLang]?.[rtSlug]) {
+      return {
+        name: fallbackRelatedToolNames[currentLang][rtSlug],
+        href: tool.href,
       };
     }
     return tool;
@@ -148,21 +208,22 @@ export function ToolLayout({
   const relatedGuides = blogPosts.filter(post => {
     const postSlug = post.slug.toLowerCase();
     const tool = canonicalSlug.toLowerCase();
-    if (tool.includes("background") && postSlug.includes("background")) return true;
-    if (tool.includes("image") && (postSlug.includes("image") || postSlug.includes("compression") || postSlug.includes("png") || postSlug.includes("jpg"))) return true;
+    if ((tool.includes("background") || tool.includes("signature") || tool.includes("white")) && (postSlug.includes("background") || postSlug.includes("signature") || postSlug.includes("product"))) return true;
+    if ((tool.includes("image") || tool.includes("compress")) && (postSlug.includes("image") || postSlug.includes("compression") || postSlug.includes("png") || postSlug.includes("jpg") || postSlug.includes("webp"))) return true;
     if (tool.includes("palette") && (postSlug.includes("palette") || postSlug.includes("color") || postSlug.includes("contrast"))) return true;
     if (tool.includes("markdown") && postSlug.includes("markdown")) return true;
     if (tool.includes("pdf") && postSlug.includes("pdf")) return true;
+    if (tool.includes("fire") && (postSlug.includes("fire") || postSlug.includes("retirement") || postSlug.includes("4-percent"))) return true;
     if ((tool.includes("sip") || tool.includes("investment")) && (postSlug.includes("investing") || postSlug.includes("compound") || postSlug.includes("sip") || postSlug.includes("72"))) return true;
     if (tool.includes("bmi") && (postSlug.includes("bmi") || postSlug.includes("bmr") || postSlug.includes("health") || postSlug.includes("metabolic"))) return true;
-    if ((tool.includes("date") || tool.includes("age")) && (postSlug.includes("date") || postSlug.includes("age") || postSlug.includes("calendar") || postSlug.includes("time"))) return true;
+    if ((tool.includes("date") || tool.includes("age") || tool.includes("business-days")) && (postSlug.includes("date") || postSlug.includes("age") || postSlug.includes("calendar") || postSlug.includes("time") || postSlug.includes("business-days"))) return true;
     if (tool.includes("qr") && postSlug.includes("qr")) return true;
     if (tool.includes("password") && (postSlug.includes("password") || postSlug.includes("entropy") || postSlug.includes("security"))) return true;
     if (tool.includes("json") && (postSlug.includes("json") || postSlug.includes("payload"))) return true;
     if (tool.includes("diff") && (postSlug.includes("diff") || postSlug.includes("audit"))) return true;
     if (tool.includes("base64") && postSlug.includes("base64")) return true;
     if ((tool.includes("word") || tool.includes("text") || tool.includes("lorem")) && (postSlug.includes("word") || postSlug.includes("text") || postSlug.includes("lorem") || postSlug.includes("case") || postSlug.includes("typography"))) return true;
-    if (tool.includes("unit") && (postSlug.includes("unit") || postSlug.includes("conversion") || postSlug.includes("rem") || postSlug.includes("px"))) return true;
+    if ((tool.includes("unit") || tool.includes("px") || tool.includes("rem")) && (postSlug.includes("unit") || postSlug.includes("conversion") || postSlug.includes("rem") || postSlug.includes("px") || postSlug.includes("clamp"))) return true;
     return false;
   }).slice(0, 3);
 
@@ -221,15 +282,17 @@ export function ToolLayout({
         {/* Tool Header */}
         <section className="py-12 bg-card border-b flex flex-col items-center justify-center text-center relative overflow-hidden">
           <div className="container max-w-4xl flex flex-col items-center justify-center text-center mx-auto px-4 relative z-10">
-            <div className="flex items-center gap-2 mb-3">
-              <button
-                onClick={() => setIsEmbedModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary text-xs font-bold transition-colors cursor-pointer"
-                title={t.toolLayout.embedWidget}
-              >
-                <span>&lt;/&gt;</span> {t.toolLayout.embedWidget}
-              </button>
-            </div>
+            {isEmbeddableTool && (
+              <div className="flex items-center gap-2 mb-3">
+                <button
+                  onClick={() => setIsEmbedModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 hover:bg-primary/10 text-primary text-xs font-bold transition-colors cursor-pointer"
+                  title={t.toolLayout.embedWidget}
+                >
+                  <span>&lt;/&gt;</span> {t.toolLayout.embedWidget}
+                </button>
+              </div>
+            )}
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl mb-4 text-foreground text-center">
               {title}
             </h1>
@@ -289,12 +352,14 @@ export function ToolLayout({
           </div>
         </section>
 
-        <EmbedModal
-          isOpen={isEmbedModalOpen}
-          onClose={() => setIsEmbedModalOpen(false)}
-          toolSlug={canonicalSlug}
-          toolTitle={title}
-        />
+        {isEmbeddableTool && (
+          <EmbedModal
+            isOpen={isEmbedModalOpen}
+            onClose={() => setIsEmbedModalOpen(false)}
+            toolSlug={canonicalSlug}
+            toolTitle={title}
+          />
+        )}
 
         {/* Detailed Guide Content */}
         {activeDetailedContent && (

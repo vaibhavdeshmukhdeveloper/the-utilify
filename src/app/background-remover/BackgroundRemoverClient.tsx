@@ -323,7 +323,8 @@ export default function BackgroundRemoverClient({
     setOriginalFile(null);
     setOriginalUrl(null);
     setUploaderKey(prev => prev + 1);
-    setBgPreviewMode("transparent");
+    setBgPreviewMode(initialBgMode);
+    setModelMode(initialModel);
     setApplyShadow(false);
   };
 
@@ -874,6 +875,19 @@ export default function BackgroundRemoverClient({
                     beforeLabel={t.originalImageLabel}
                     afterLabel={t.cutoutAiLabel}
                     alt={originalFile?.name || "Removed Background"}
+                    afterStyle={
+                      bgPreviewMode === "white"
+                        ? { backgroundColor: "#ffffff" }
+                        : bgPreviewMode === "black"
+                        ? { backgroundColor: "#000000" }
+                        : bgPreviewMode === "blue"
+                        ? { backgroundImage: "linear-gradient(135deg, #60a5fa, #2563eb)" }
+                        : bgPreviewMode === "sunset"
+                        ? { backgroundImage: "linear-gradient(135deg, #fb923c, #db2777)" }
+                        : bgPreviewMode === "neon"
+                        ? { backgroundImage: "linear-gradient(135deg, #34d399, #059669)" }
+                        : undefined
+                    }
                   />
                 </div>
               ) : (

@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Encode text and files to Base64 data strings, or decode Base64 back to raw text and binary files instantly. 100% private in-browser decoding.",
   alternates: {
     canonical: "/base64",
+    languages: {
+      en: "https://www.theutilify.com/base64",
+      es: "https://www.theutilify.com/es/base64",
+      pt: "https://www.theutilify.com/pt/base64",
+      "x-default": "https://www.theutilify.com/base64",
+    },
   },
   openGraph: {
     title: "Base64 Encoder & Decoder - Free Online Tool | Utilify",

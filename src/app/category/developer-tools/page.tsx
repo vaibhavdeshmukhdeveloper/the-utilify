@@ -143,7 +143,7 @@ export default function DeveloperToolsCategoryPage() {
     <CategoryHubLayout
       categoryName="Developer Utilities"
       categorySlug="developer-tools"
-      headline="Free Web Developer Utilities &amp; Formatters"
+      headline="Free Web Developer Utilities & Formatters"
       subheadline="Client-side JSON formatters, security generators, diff checkers, and encoding utilities for modern engineers."
       description="The ultimate free suite of client-side developer utilities: JSON validator, password generator, Base64 converter, diff checker, and QR generator."
       tools={devTools}

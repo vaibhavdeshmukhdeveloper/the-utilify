@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Convert units of measurement instantly: metric to imperial, length, weight, area, volume, and temperature with high decimal precision.",
   alternates: {
     canonical: "/unit-converter",
+    languages: {
+      en: "https://www.theutilify.com/unit-converter",
+      es: "https://www.theutilify.com/es/unit-converter",
+      pt: "https://www.theutilify.com/pt/unit-converter",
+      "x-default": "https://www.theutilify.com/unit-converter",
+    },
   },
   openGraph: {
     title: "Unit Converter - Free Measurement Converter | Utilify",

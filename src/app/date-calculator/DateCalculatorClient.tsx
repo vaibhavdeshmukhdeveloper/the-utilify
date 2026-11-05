@@ -144,36 +144,26 @@ export default function DateCalculatorClient({
     const totalDays = Math.round((utc2 - utc1) / (24 * 60 * 60 * 1000)) + (includeEndDate ? 1 : 0);
     const totalWeeks = parseFloat((totalDays / 7).toFixed(1));
 
-    // Y-M-D breakdown
-    let years = end.getFullYear() - start.getFullYear();
-    let months = end.getMonth() - start.getMonth();
-    let days = end.getDate() - start.getDate();
+    // Y-M-D breakdown: anchored calendar-step progression
+    const targetEnd = includeEndDate
+      ? new Date(end.getFullYear(), end.getMonth(), end.getDate() + 1)
+      : new Date(end.getFullYear(), end.getMonth(), end.getDate());
 
-    if (includeEndDate) {
-      days += 1;
-    }
-
-    if (days < 0) {
-      months -= 1;
-      // get days in previous month
-      const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
-      days += prevMonth.getDate();
-    }
-    if (months < 0) {
-      years -= 1;
-      months += 12;
+    let years = 0;
+    while (addCalendarMonths(start, (years + 1) * 12) <= targetEnd) {
+      years++;
     }
 
-    // Handle edge case where includeEndDate rolls over to a full month
-    const currentMonthDays = new Date(start.getFullYear() + years, start.getMonth() + months + 1, 0).getDate();
-    if (days >= currentMonthDays) {
-      days -= currentMonthDays;
-      months += 1;
-      if (months >= 12) {
-        years += 1;
-        months -= 12;
-      }
+    let months = 0;
+    const yearAnchor = addCalendarMonths(start, years * 12);
+    while (addCalendarMonths(yearAnchor, months + 1) <= targetEnd) {
+      months++;
     }
+
+    const monthAnchor = addCalendarMonths(yearAnchor, months);
+    const utcAnchor = Date.UTC(monthAnchor.getFullYear(), monthAnchor.getMonth(), monthAnchor.getDate());
+    const utcTarget = Date.UTC(targetEnd.getFullYear(), targetEnd.getMonth(), targetEnd.getDate());
+    const days = Math.max(0, Math.round((utcTarget - utcAnchor) / (24 * 60 * 60 * 1000)));
 
     // Calculate Business Days (Mon-Fri) and Weekend Days (Sat-Sun)
     let businessDays = 0;

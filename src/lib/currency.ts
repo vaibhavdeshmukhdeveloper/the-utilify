@@ -43,6 +43,8 @@ export const POPULAR_CURRENCIES: CurrencyInfo[] = [
   { code: "VND", symbol: "₫", name: "Vietnamese Dong", locale: "vi-VN", flag: "🇻🇳" },
   { code: "PKR", symbol: "Rs", name: "Pakistani Rupee", locale: "ur-PK", flag: "🇵🇰" },
   { code: "BDT", symbol: "৳", name: "Bangladeshi Taka", locale: "bn-BD", flag: "🇧🇩" },
+  { code: "NPR", symbol: "₨", name: "Nepalese Rupee", locale: "en-NP", flag: "🇳🇵" },
+  { code: "LKR", symbol: "Rs", name: "Sri Lankan Rupee", locale: "en-LK", flag: "🇱🇰" },
   { code: "NGN", symbol: "₦", name: "Nigerian Naira", locale: "en-NG", flag: "🇳🇬" },
   { code: "EGP", symbol: "E£", name: "Egyptian Pound", locale: "ar-EG", flag: "🇪🇬" },
   { code: "CLP", symbol: "$", name: "Chilean Peso", locale: "es-CL", flag: "🇨🇱" },
@@ -240,7 +242,7 @@ export function formatNumberWithCurrency(numStr: string, currencyCode: string = 
   const isNeg = numStr.startsWith("-");
   const clean = numStr.replace(/[^0-9.]/g, "");
   const parts = clean.split(".");
-  let intPart = parts[0];
+  let intPart = parts[0].replace(/^0+(?=\d)/, "");
 
   if (currencyCode.toUpperCase() === "INR") {
     if (intPart.length > 3) {

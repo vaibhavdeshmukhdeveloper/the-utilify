@@ -24,6 +24,20 @@ function formatLocalDate(d: Date = new Date()): string {
   return `${y}-${m}-${day}`;
 }
 
+/**
+ * Calendar-month addition with month-end day clamping.
+ * Prevents Jan 31 + 1 month rolling over to March in JavaScript Date.
+ */
+function addCalendarMonths(date: Date, months: number): Date {
+  const totalMonths = date.getFullYear() * 12 + date.getMonth() + months;
+  const targetYear = Math.floor(totalMonths / 12);
+  const targetMonth = ((totalMonths % 12) + 12) % 12;
+  const originalDay = date.getDate();
+  const maxDaysInTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+  const clampedDay = Math.min(originalDay, maxDaysInTargetMonth);
+  return new Date(targetYear, targetMonth, clampedDay);
+}
+
 export interface AgeCalculatorClientProps {
   customTitle?: string;
   customDescription?: string;
@@ -57,6 +71,7 @@ export default function AgeCalculatorClient({
     totalMinutes: number;
     totalSeconds: number;
     isLeapDayBaby?: boolean;
+    dayOfWeekBorn?: string;
   } | null>(null);
 
   const [liveMode, setLiveMode] = useState(true);
@@ -100,20 +115,22 @@ export default function AgeCalculatorClient({
     }
     setValidationError(null);
 
-    // Years, Months, Days calculation
-    let years = comparisonDate.getFullYear() - dobDate.getFullYear();
-    let months = comparisonDate.getMonth() - dobDate.getMonth();
-    let days = comparisonDate.getDate() - dobDate.getDate();
+    // Exact Age calculation via anchored calendar-stepping:
+    let years = 0;
+    while (addCalendarMonths(dobDate, (years + 1) * 12) <= comparisonDate) {
+      years++;
+    }
 
-    if (days < 0) {
-      months -= 1;
-      const prevMonth = new Date(comparisonDate.getFullYear(), comparisonDate.getMonth(), 0);
-      days += prevMonth.getDate();
+    let months = 0;
+    const yearAnchor = addCalendarMonths(dobDate, years * 12);
+    while (addCalendarMonths(yearAnchor, months + 1) <= comparisonDate) {
+      months++;
     }
-    if (months < 0) {
-      years -= 1;
-      months += 12;
-    }
+
+    const monthAnchor = addCalendarMonths(yearAnchor, months);
+    const utcAnchor = Date.UTC(monthAnchor.getFullYear(), monthAnchor.getMonth(), monthAnchor.getDate());
+    const utcCompDay = Date.UTC(comparisonDate.getFullYear(), comparisonDate.getMonth(), comparisonDate.getDate());
+    const days = Math.max(0, Math.round((utcCompDay - utcAnchor) / (24 * 60 * 60 * 1000)));
 
     // Cumulative stats
     // Use UTC timestamps for calendar day calculation to eliminate Daylight Saving Time (DST) 23/25 hour skew
@@ -177,19 +194,20 @@ export default function AgeCalculatorClient({
       bdayMin = Math.floor(bdayTotalSec / 60) % 60;
       bdayHrs = Math.floor(bdayTotalSec / 3600) % 24;
 
-      // Estimate months and remaining days for next birthday
-      bdayMonths = nextBday.getMonth() - comparisonDate.getMonth();
-      bdayDays = nextBday.getDate() - comparisonDate.getDate();
-
-      if (bdayDays < 0) {
-        bdayMonths -= 1;
-        const prev = new Date(nextBday.getFullYear(), nextBday.getMonth(), 0);
-        bdayDays += prev.getDate();
+      // Months and days for next birthday via calendar stepping
+      const compDateStart = new Date(comparisonDate.getFullYear(), comparisonDate.getMonth(), comparisonDate.getDate());
+      bdayMonths = 0;
+      while (addCalendarMonths(compDateStart, bdayMonths + 1) <= nextBday) {
+        bdayMonths++;
       }
-      if (bdayMonths < 0) {
-        bdayMonths += 12;
-      }
+      const bdayMonthAnchor = addCalendarMonths(compDateStart, bdayMonths);
+      const utcBdayAnchor = Date.UTC(bdayMonthAnchor.getFullYear(), bdayMonthAnchor.getMonth(), bdayMonthAnchor.getDate());
+      const utcBdayTarget = Date.UTC(nextBday.getFullYear(), nextBday.getMonth(), nextBday.getDate());
+      bdayDays = Math.max(0, Math.round((utcBdayTarget - utcBdayAnchor) / (24 * 60 * 60 * 1000)));
     }
+
+    const dateLocale = lang === "es" ? "es-ES" : lang === "pt" ? "pt-BR" : "en-US";
+    const dayOfWeekBorn = dobDate.toLocaleDateString(dateLocale, { weekday: "long" });
 
     setResult({
       years,
@@ -209,6 +227,7 @@ export default function AgeCalculatorClient({
       totalMinutes,
       totalSeconds,
       isLeapDayBaby: isLeapDayDob,
+      dayOfWeekBorn,
     });
   }, [dob, targetDate]);
 

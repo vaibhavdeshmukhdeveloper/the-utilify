@@ -65,6 +65,9 @@ export default function SipCalculatorClient({
     total: string;
     invested: string;
     returns: string;
+    rawTotal: number;
+    rawInvested: number;
+    rawReturns: number;
     subNote?: string;
     breakdown: YearlyBreakdown[];
   } | null>(null);
@@ -84,17 +87,18 @@ export default function SipCalculatorClient({
     setMonthlyInvestment((prev) => formatNumberWithCurrency(parseNumber(prev), currency));
   }, [currency]);
 
-  const handleInputChange = (setter: (v: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (setter: (v: string) => void, allowNegative: boolean = false) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^-?[0-9,.]*$/.test(value)) {
+    const pattern = allowNegative ? /^-?[0-9,.]*$/ : /^[0-9,.]*$/;
+    if (pattern.test(value)) {
       const rawValue = parseNumber(value);
-      if (rawValue === "" || rawValue === "-" || !isNaN(Number(rawValue)) || rawValue === "." || rawValue === "-.") {
+      if (rawValue === "" || (allowNegative && rawValue === "-") || !isNaN(Number(rawValue)) || rawValue === "." || (allowNegative && rawValue === "-.")) {
         setter(formatNumber(rawValue));
       }
     }
   };
 
-  // Parse deep link query parameters on mount & save to recently used
+  // Parse deep link query parameters on mount
   useEffect(() => {
     try {
       if (typeof window !== "undefined") {
@@ -126,15 +130,8 @@ export default function SipCalculatorClient({
           setContributionTiming(timing);
         }
       }
-
-      const stored = localStorage.getItem("utilify-recent-tools");
-      const currentList: string[] = stored ? JSON.parse(stored) : [];
-      const href = "/sip-calculator";
-      
-      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
-      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
     } catch (e) {
-      console.error("Error setting recently used tools", e);
+      console.error("Error parsing SIP parameters", e);
     }
   }, []);
 
@@ -142,7 +139,7 @@ export default function SipCalculatorClient({
   useEffect(() => {
     const P = parseFloat(parseNumber(monthlyInvestment)) || 0;
     const t = parseFloat(parseNumber(years));
-    const annualRate = (parseFloat(parseNumber(returnRate)) || 0) / 100;
+    const annualRate = Math.max(-1, (parseFloat(parseNumber(returnRate)) || 0) / 100);
     
     if (isNaN(t) || t <= 0 || t > 100 || !monthlyInvestment.trim()) {
       setResult(null);
@@ -154,6 +151,9 @@ export default function SipCalculatorClient({
         total: "0",
         invested: "0",
         returns: "0",
+        rawTotal: 0,
+        rawInvested: 0,
+        rawReturns: 0,
         subNote: strings.subNoteDrawdown,
         breakdown: [],
       });
@@ -164,41 +164,37 @@ export default function SipCalculatorClient({
     let currentBalance = 0;
     let totalInvested = 0;
 
-    const periodsPerYear = compoundFrequency === "annually" ? 1 : 12;
-    const ratePerPeriod = annualRate / periodsPerYear;
-    const monthsPerPeriod = 12 / periodsPerYear;
+    const m = compoundFrequency === "annually" ? 1 : 12;
+    const base = Math.max(0, 1 + annualRate / m);
+    const monthlyRate = annualRate === 0 ? 0 : m === 12 ? annualRate / 12 : Math.pow(base, 1 / 12) - 1;
+    const totalMonths = Math.max(1, Math.round(t * 12));
 
-    for (let year = 1; year <= t; year++) {
-      for (let p = 0; p < periodsPerYear; p++) {
-        const balanceAtStartOfPeriod = currentBalance;
-        let interestForPeriod = balanceAtStartOfPeriod * ratePerPeriod;
-        
-        for (let m = 0; m < monthsPerPeriod; m++) {
-          if (contributionTiming === "beginning") {
-            const monthsRemainingInPeriod = monthsPerPeriod - m;
-            const interestOnContribution = P * (ratePerPeriod * (monthsRemainingInPeriod / monthsPerPeriod));
-            interestForPeriod += interestOnContribution;
-            currentBalance += P;
-            totalInvested += P;
-          } else {
-            const monthsRemainingInPeriod = monthsPerPeriod - m - 1;
-            if (monthsRemainingInPeriod > 0) {
-              const interestOnContribution = P * (ratePerPeriod * (monthsRemainingInPeriod / monthsPerPeriod));
-              interestForPeriod += interestOnContribution;
-            }
-            currentBalance += P;
-            totalInvested += P;
-          }
-        }
-        currentBalance += interestForPeriod;
+    for (let month = 1; month <= totalMonths; month++) {
+      if (contributionTiming === "beginning") {
+        currentBalance += P;
+        totalInvested += P;
+        currentBalance = Math.max(0, currentBalance * (1 + monthlyRate));
+      } else {
+        currentBalance = Math.max(0, currentBalance * (1 + monthlyRate));
+        currentBalance += P;
+        totalInvested += P;
       }
 
-      breakdown.push({
-        year,
-        principal: totalInvested,
-        interest: currentBalance - totalInvested,
-        balance: currentBalance,
-      });
+      if (month % 12 === 0) {
+        breakdown.push({
+          year: month / 12,
+          principal: totalInvested,
+          interest: currentBalance - totalInvested,
+          balance: currentBalance,
+        });
+      } else if (month === totalMonths) {
+        breakdown.push({
+          year: Number((totalMonths / 12).toFixed(2)),
+          principal: totalInvested,
+          interest: currentBalance - totalInvested,
+          balance: currentBalance,
+        });
+      }
     }
 
     let subNote = undefined;
@@ -206,14 +202,19 @@ export default function SipCalculatorClient({
       subNote = strings.negativeRateWarning;
     }
 
+    const rawReturns = currentBalance - totalInvested;
+
     setResult({
       total: formatCurrencyValue(currentBalance, currency, { showSymbol: false }),
       invested: formatCurrencyValue(totalInvested, currency, { showSymbol: false }),
-      returns: formatCurrencyValue(currentBalance - totalInvested, currency, { showSymbol: false }),
+      returns: formatCurrencyValue(rawReturns, currency, { showSymbol: false }),
+      rawTotal: currentBalance,
+      rawInvested: totalInvested,
+      rawReturns,
       subNote,
       breakdown,
     });
-  }, [monthlyInvestment, years, returnRate, compoundFrequency, contributionTiming, currency]);
+  }, [monthlyInvestment, years, returnRate, compoundFrequency, contributionTiming, currency, strings]);
 
   const calculateSip = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -222,7 +223,13 @@ export default function SipCalculatorClient({
     if (resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    toast.success("SIP Projection Ready!");
+    toast.success(
+      lang === "es"
+        ? "¡Proyección SIP lista!"
+        : lang === "pt"
+        ? "Projeção SIP pronta!"
+        : "SIP Projection Ready!"
+    );
   };
 
   const reset = () => {
@@ -253,14 +260,21 @@ export default function SipCalculatorClient({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success("Exported yearly projection to CSV!");
+    toast.success(
+      lang === "es"
+        ? "¡Proyección anual exportada a CSV!"
+        : lang === "pt"
+        ? "Projeção anual exportada para CSV!"
+        : "Exported yearly projection to CSV!"
+    );
   };
 
   return (
     <ToolLayout
       title={customTitle || "SIP Calculator"}
       description={customDescription || "Calculate the potential growth of your monthly savings with a Systematic Investment Plan (SIP)."}
-      summaryDefinition={customSummaryDefinition || "A Systematic Investment Plan (SIP) calculator models the future value of recurring monthly mutual fund investments compounding over time. It calculates total invested capital, estimated wealth gain, and future maturity corpus based on expected annual return rates and investment duration."}
+      summaryDefinition="A Systematic Investment Plan (SIP) calculator models the future value of recurring monthly mutual fund investments compounding over time. It calculates total invested capital, estimated wealth gain, and future maturity corpus based on expected annual return rates and investment duration."
+      customSummaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || [
         { step: "Monthly Amount", description: "How much you plan to save every month." },
         { step: "Investment Term", description: "The number of years you plan to stay invested." },
@@ -273,7 +287,7 @@ export default function SipCalculatorClient({
         },
         {
           question: "What is the mathematical formula used to calculate SIP returns?",
-          answer: "The future value of an ordinary annuity formula is: M = P × [((1 + i)^n - 1) / i] × (1 + i), where M is the maturity corpus, P is the periodic investment, i is the periodic interest rate (annual rate / 12), and n is the total number of monthly payments."
+          answer: "The future value of an annuity due (contributions at the beginning of each month) is: M = P × [((1 + i)^n - 1) / i] × (1 + i), while an ordinary annuity (contributions at the end of each month) is M = P × [((1 + i)^n - 1) / i], where M is the maturity corpus, P is the periodic investment, i is the effective monthly interest rate, and n is the total number of monthly payments."
         },
         {
           question: "What is a Step-Up (Top-Up) SIP and why is it important?",
@@ -316,10 +330,16 @@ export default function SipCalculatorClient({
           </p>
           <h4>The Math Behind SIP Growth</h4>
           <p>
-            When you invest a flat monthly amount, the portfolio compounds continuously. The future value is calculated using the following mathematical formula:
+            When you invest a flat monthly amount, the portfolio compounds continuously. Depending on whether contributions occur at the beginning of each month (annuity due) or at the end (ordinary annuity), the future value is calculated using the following mathematical formula:
           </p>
           <div className="my-4 p-5 rounded-2xl bg-zinc-950 text-white border border-zinc-800 shadow-inner flex flex-col items-center justify-center overflow-x-auto">
-            <MathFormula formula="FV = P \times \left[ \frac{(1 + r)^n - 1}{r} \right] \times (1 + r)" />
+            <MathFormula
+              formula={
+                contributionTiming === "beginning"
+                  ? "FV = P \\times \\left[ \\frac{(1 + r)^n - 1}{r} \\right] \\times (1 + r)"
+                  : "FV = P \\times \\left[ \\frac{(1 + r)^n - 1}{r} \\right]"
+              }
+            />
           </div>
           <p>
             Where:
@@ -417,10 +437,10 @@ export default function SipCalculatorClient({
                     />
                     <div className="flex flex-wrap gap-1 pt-0.5">
                       {[
-                        { label: "5Y", val: "5" },
-                        { label: "10Y", val: "10" },
-                        { label: "15Y", val: "15" },
-                        { label: "20Y", val: "20" },
+                        { label: lang === "es" || lang === "pt" ? "5A" : "5Y", val: "5" },
+                        { label: lang === "es" || lang === "pt" ? "10A" : "10Y", val: "10" },
+                        { label: lang === "es" || lang === "pt" ? "15A" : "15Y", val: "15" },
+                        { label: lang === "es" || lang === "pt" ? "20A" : "20Y", val: "20" },
                       ].map((chip) => (
                         <button
                           key={chip.val}
@@ -447,7 +467,7 @@ export default function SipCalculatorClient({
                       inputMode="decimal"
                       className="h-11 text-lg font-bold rounded-xl border-2 focus:border-primary transition-all bg-zinc-50/50 dark:bg-zinc-900/50"
                       value={returnRate} 
-                      onChange={handleInputChange(setReturnRate)} 
+                      onChange={handleInputChange(setReturnRate, true)} 
                     />
                     <div className="flex flex-wrap gap-1 pt-0.5">
                       {[
@@ -482,7 +502,7 @@ export default function SipCalculatorClient({
                     <Label className="text-[11px] font-bold uppercase text-muted-foreground">{strings.compoundFrequency}</Label>
                     <Select value={compoundFrequency} onValueChange={(val) => val && setCompoundFrequency(val)}>
                       <SelectTrigger className="h-10 rounded-xl border-2 font-medium text-xs sm:text-sm">
-                        <SelectValue placeholder="Select frequency" />
+                        <SelectValue placeholder={lang === "es" ? "Seleccionar frecuencia" : lang === "pt" ? "Selecionar frequência" : "Select frequency"} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="annually">{strings.annually}</SelectItem>
@@ -548,10 +568,10 @@ export default function SipCalculatorClient({
                       </div>
                       <div>
                         <div className="text-[10px] font-black uppercase tracking-wider text-zinc-500 mb-0.5">
-                          {result.returns.startsWith("-") ? strings.totalLoss : strings.wealthGain}
+                          {result.rawReturns < 0 ? strings.totalLoss : strings.wealthGain}
                         </div>
-                        <div className={`text-lg sm:text-xl font-bold ${result.returns.startsWith("-") ? "text-red-500" : "text-emerald-400"}`}>
-                          {result.returns.startsWith("-") ? `-${currencyInfo.symbol}${result.returns.slice(1)}` : `+${currencyInfo.symbol}${result.returns}`}
+                        <div className={`text-lg sm:text-xl font-bold ${result.rawReturns < 0 ? "text-red-500" : "text-emerald-400"}`}>
+                          {result.rawReturns < 0 ? `-${currencyInfo.symbol}${result.returns.replace(/^-/, "")}` : `+${currencyInfo.symbol}${result.returns}`}
                         </div>
                       </div>
                     </div>
@@ -563,10 +583,11 @@ export default function SipCalculatorClient({
                   <div className="flex flex-col gap-4 w-full">
                     <DonutChart 
                       currencyCode={currency}
-                      invested={parseFloat(parseNumber(result.invested)) || 0} 
-                      returns={parseFloat(parseNumber(result.returns)) || 0} 
+                      lang={lang}
+                      invested={result.rawInvested} 
+                      returns={result.rawReturns} 
                     />
-                    <GrowthChart currencyCode={currency} breakdown={result.breakdown} />
+                    <GrowthChart currencyCode={currency} lang={lang} breakdown={result.breakdown} />
                   </div>
                 )}
 

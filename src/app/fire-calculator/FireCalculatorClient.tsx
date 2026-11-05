@@ -39,13 +39,45 @@ export default function FireCalculatorClient({
   const { currency, setCurrency, info: currencyInfo, format: formatCurrency } = useCurrency();
   const ui = getUIStrings((lang as Locale) || "en");
   const strings = ui.fireCalculator;
-  const [annualExpenses, setAnnualExpenses] = useState<number>(48000);
-  const [currentNetWorth, setCurrentNetWorth] = useState<number>(100000);
-  const [monthlySavings, setMonthlySavings] = useState<number>(2000);
+  const isEs = lang === "es";
+  const isPt = lang === "pt";
+
+  const [annualExpensesStr, setAnnualExpensesStr] = useState<string>("48,000");
+  const [currentNetWorthStr, setCurrentNetWorthStr] = useState<string>("100,000");
+  const [monthlySavingsStr, setMonthlySavingsStr] = useState<string>("2,000");
   const [expectedReturn, setExpectedReturn] = useState<number>(10);
   const [expectedInflation, setExpectedInflation] = useState<number>(3.5);
   const [swr, setSwr] = useState<number>(4.0);
   const [copied, setCopied] = useState<boolean>(false);
+
+  const annualExpenses = useMemo(() => {
+    return Math.max(0, parseFloat(annualExpensesStr.replace(/,/g, "")) || 0);
+  }, [annualExpensesStr]);
+
+  const currentNetWorth = useMemo(() => {
+    return Math.max(0, parseFloat(currentNetWorthStr.replace(/,/g, "")) || 0);
+  }, [currentNetWorthStr]);
+
+  const monthlySavings = useMemo(() => {
+    return parseFloat(monthlySavingsStr.replace(/,/g, "")) || 0;
+  }, [monthlySavingsStr]);
+
+  const handleStringInput = (setter: (v: string) => void, allowNegative = false) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    const pattern = allowNegative ? /^-?[0-9,.]*$/ : /^[0-9,.]*$/;
+    if (pattern.test(val)) {
+      setter(val);
+    }
+  };
+
+  const handleInputBlur = (value: string, setter: (v: string) => void) => () => {
+    const raw = value.replace(/,/g, "").trim();
+    if (raw === "" || isNaN(Number(raw))) {
+      setter("0");
+    } else {
+      setter(formatNumberWithCurrency(raw, currency));
+    }
+  };
 
   // Computations
   const calculations = useMemo(() => {
@@ -113,13 +145,13 @@ export default function FireCalculatorClient({
 
   const reset = () => {
     if (currency === "INR") {
-      setAnnualExpenses(1200000);
-      setCurrentNetWorth(2500000);
-      setMonthlySavings(50000);
+      setAnnualExpensesStr("1,200,000");
+      setCurrentNetWorthStr("2,500,000");
+      setMonthlySavingsStr("50,000");
     } else {
-      setAnnualExpenses(48000);
-      setCurrentNetWorth(100000);
-      setMonthlySavings(2000);
+      setAnnualExpensesStr("48,000");
+      setCurrentNetWorthStr("100,000");
+      setMonthlySavingsStr("2,000");
     }
     setExpectedReturn(10);
     setExpectedInflation(3.5);
@@ -174,6 +206,19 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
     { name: "Age Calculator", href: "/age-calculator" },
   ];
 
+  const yearSuffix = isEs ? "año" : isPt ? "ano" : "yr";
+  const presets = currency === "INR" ? [
+    { label: `Lean FIRE (₹6L/${yearSuffix})`, exp: 600000, pmt: 25000 },
+    { label: `Standard FIRE (₹12L/${yearSuffix})`, exp: 1200000, pmt: 50000 },
+    { label: `Fat FIRE (₹25L/${yearSuffix})`, exp: 2500000, pmt: 100000 },
+  ] : [
+    { label: `Lean (${currencyInfo.symbol}36k/${yearSuffix})`, exp: 36000, pmt: 1500 },
+    { label: `Standard (${currencyInfo.symbol}60k/${yearSuffix})`, exp: 60000, pmt: 2500 },
+    { label: `Fat (${currencyInfo.symbol}120k/${yearSuffix})`, exp: 120000, pmt: 5000 },
+  ];
+
+  const swrMultiplier = swr > 0 ? (100 / swr).toFixed(swr % 1 === 0 ? 0 : 1) : "25";
+
   return (
     <ToolLayout
       title={customTitle || "FIRE Calculator"}
@@ -188,7 +233,7 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
         <div className="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-primary/10 border border-orange-500/20 rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xs">
           <div className="space-y-1.5 text-center md:text-left">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 text-[11px] font-black uppercase tracking-wider">
-              <Flame className="w-3.5 h-3.5" /> {strings.swrRule}
+              <Flame className="w-3.5 h-3.5" /> {isEs ? `Regla del ${swr.toFixed(1)}% de Retiro Seguro` : isPt ? `Regra dos ${swr.toFixed(1)}% de Retirada Segura` : `${swr.toFixed(1)}% Safe Withdrawal Rule`}
             </div>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-foreground">
               {formatCurrencyValue(calculations.fireNumber, currency)}
@@ -223,21 +268,13 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-2.5 bg-muted/30 border rounded-xl sm:rounded-2xl">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-xs font-bold text-muted-foreground px-1.5">{ui.common.presets}</span>
-            {(currency === "INR" ? [
-              { label: "Lean FIRE (₹6L/yr)", exp: 600000, pmt: 25000 },
-              { label: "Standard FIRE (₹12L/yr)", exp: 1200000, pmt: 50000 },
-              { label: "Fat FIRE (₹25L/yr)", exp: 2500000, pmt: 100000 },
-            ] : [
-              { label: `Lean (${currencyInfo.symbol}36k/yr)`, exp: 36000, pmt: 1500 },
-              { label: `Standard (${currencyInfo.symbol}60k/yr)`, exp: 60000, pmt: 2500 },
-              { label: `Fat (${currencyInfo.symbol}120k/yr)`, exp: 120000, pmt: 5000 },
-            ]).map((preset) => (
+            {presets.map((preset) => (
               <button
                 key={preset.label}
                 type="button"
                 onClick={() => {
-                  setAnnualExpenses(preset.exp);
-                  setMonthlySavings(preset.pmt);
+                  setAnnualExpensesStr(formatNumberWithCurrency(String(preset.exp), currency));
+                  setMonthlySavingsStr(formatNumberWithCurrency(String(preset.pmt), currency));
                 }}
                 className={`text-xs px-2.5 py-1 rounded-lg border font-bold transition-all cursor-pointer ${
                   annualExpenses === preset.exp
@@ -288,18 +325,19 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                     <Input
                       type="text"
                       inputMode="numeric"
-                      value={formatNumberWithCurrency(String(annualExpenses), currency)}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
-                        setAnnualExpenses(Math.max(0, val));
-                      }}
+                      value={annualExpensesStr}
+                      onChange={handleStringInput(setAnnualExpensesStr)}
+                      onBlur={handleInputBlur(annualExpensesStr, setAnnualExpensesStr)}
                       className="h-8 pl-6 pr-2 font-mono font-bold text-right rounded-lg text-xs bg-background border"
                     />
                   </div>
                 </div>
                 <Slider
                   value={[Math.min(currency === "INR" ? 10000000 : 250000, Math.max(currency === "INR" ? 100000 : 12000, annualExpenses))]}
-                  onValueChange={(val) => setAnnualExpenses(Array.isArray(val) ? val[0] : val)}
+                  onValueChange={(val) => {
+                    const num = Array.isArray(val) ? val[0] : val;
+                    setAnnualExpensesStr(formatNumberWithCurrency(String(num), currency));
+                  }}
                   min={currency === "INR" ? 100000 : 12000}
                   max={currency === "INR" ? 10000000 : 250000}
                   step={currency === "INR" ? 25000 : 1000}
@@ -322,18 +360,19 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                     <Input
                       type="text"
                       inputMode="numeric"
-                      value={formatNumberWithCurrency(String(currentNetWorth), currency)}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
-                        setCurrentNetWorth(Math.max(0, val));
-                      }}
+                      value={currentNetWorthStr}
+                      onChange={handleStringInput(setCurrentNetWorthStr)}
+                      onBlur={handleInputBlur(currentNetWorthStr, setCurrentNetWorthStr)}
                       className="h-8 pl-6 pr-2 font-mono font-bold text-right rounded-lg text-xs bg-background border"
                     />
                   </div>
                 </div>
                 <Slider
                   value={[Math.min(currency === "INR" ? 50000000 : 1000000, Math.max(0, currentNetWorth))]}
-                  onValueChange={(val) => setCurrentNetWorth(Array.isArray(val) ? val[0] : val)}
+                  onValueChange={(val) => {
+                    const num = Array.isArray(val) ? val[0] : val;
+                    setCurrentNetWorthStr(formatNumberWithCurrency(String(num), currency));
+                  }}
                   min={0}
                   max={currency === "INR" ? 50000000 : 1000000}
                   step={currency === "INR" ? 100000 : 5000}
@@ -356,25 +395,26 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
                     <Input
                       type="text"
                       inputMode="numeric"
-                      value={formatNumberWithCurrency(String(monthlySavings), currency)}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value.replace(/,/g, "")) || 0;
-                        setMonthlySavings(val);
-                      }}
+                      value={monthlySavingsStr}
+                      onChange={handleStringInput(setMonthlySavingsStr, true)}
+                      onBlur={handleInputBlur(monthlySavingsStr, setMonthlySavingsStr)}
                       className="h-8 pl-6 pr-2 font-mono font-bold text-right rounded-lg text-xs bg-background border"
                     />
                   </div>
                 </div>
                 <Slider
-                  value={[Math.min(currency === "INR" ? 500000 : 20000, Math.max(currency === "INR" ? 1000 : 100, monthlySavings))]}
-                  onValueChange={(val) => setMonthlySavings(Array.isArray(val) ? val[0] : val)}
-                  min={currency === "INR" ? 1000 : 100}
+                  value={[Math.min(currency === "INR" ? 500000 : 20000, Math.max(currency === "INR" ? -500000 : -20000, monthlySavings))]}
+                  onValueChange={(val) => {
+                    const num = Array.isArray(val) ? val[0] : val;
+                    setMonthlySavingsStr(formatNumberWithCurrency(String(num), currency));
+                  }}
+                  min={currency === "INR" ? -100000 : -5000}
                   max={currency === "INR" ? 500000 : 20000}
                   step={currency === "INR" ? 1000 : 100}
                   className="py-1"
                 />
                 <div className="flex justify-between text-[11px] text-muted-foreground">
-                  <span>{formatCurrencyValue(currency === "INR" ? 1000 : 100, currency)}/mo</span>
+                  <span>{formatCurrencyValue(currency === "INR" ? -100000 : -5000, currency)}/mo</span>
                   <span>{formatCurrencyValue(currency === "INR" ? 500000 : 20000, currency)}/mo</span>
                 </div>
               </div>
@@ -526,25 +566,41 @@ Calculate yours: https://www.theutilify.com/fire-calculator`;
               <Flame className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-black text-lg text-foreground">FIRE Mathematical Proof & Formula Breakdown</h3>
-              <p className="text-xs text-muted-foreground">Governed by the 4% Rule and Compound Annuity Growth</p>
+              <h3 className="font-black text-lg text-foreground">
+                {isEs ? "Demostración Matemática y Fórmulas de FIRE" : isPt ? "Demonstração Matemática e Fórmulas FIRE" : "FIRE Mathematical Proof & Formula Breakdown"}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                {isEs ? "Gobernado por la Regla de Retiro Seguro y Crecimiento Compuesto" : isPt ? "Regido pela Regra de Retirada Segura e Crescimento Composto" : "Governed by the Safe Withdrawal Rule and Compound Annuity Growth"}
+              </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-5 rounded-2xl bg-muted/40 border space-y-3">
-              <h4 className="font-bold text-sm text-foreground">1. The Standard FIRE Target Equation</h4>
-              <MathFormula formula="\text{FIRE Number} = \frac{\text{Annual Expenses}}{\text{SWR}} = \text{Annual Expenses} \times 25" />
+              <h4 className="font-bold text-sm text-foreground">
+                {isEs ? "1. Ecuación del Objetivo Estándar FIRE" : isPt ? "1. Equação do Objetivo Padrão FIRE" : "1. The Standard FIRE Target Equation"}
+              </h4>
+              <MathFormula formula={`\\text{FIRE Number} = \\frac{\\text{Annual Expenses}}{\\text{SWR}} = \\text{Annual Expenses} \\times ${swrMultiplier}`} />
               <p className="text-xs text-muted-foreground">
-                With a 4% Safe Withdrawal Rate (SWR), your target corpus is exactly 25 times your annual living expenses.
+                {isEs
+                  ? `Con una Tasa de Retiro Seguro (SWR) del ${swr.toFixed(1)}%, tu patrimonio objetivo equivale exactamente a ${swrMultiplier} veces tus gastos anuales de vida.`
+                  : isPt
+                  ? `Com uma Taxa de Retirada Segura (SWR) de ${swr.toFixed(1)}%, seu patrimônio objetivo equivale exatamente a ${swrMultiplier} vezes seus gastos anuais de vida.`
+                  : `With a ${swr.toFixed(1)}% Safe Withdrawal Rate (SWR), your target corpus is exactly ${swrMultiplier} times your annual living expenses.`}
               </p>
             </div>
 
             <div className="p-5 rounded-2xl bg-muted/40 border space-y-3">
-              <h4 className="font-bold text-sm text-foreground">2. Fisher Equation (Real Compound Growth)</h4>
+              <h4 className="font-bold text-sm text-foreground">
+                {isEs ? "2. Ecuación de Fisher (Crecimiento Real Compuesto)" : isPt ? "2. Equação de Fisher (Crescimento Real Composto)" : "2. Fisher Equation (Real Compound Growth)"}
+              </h4>
               <MathFormula formula="r_{\text{real}} = \frac{1 + r_{\text{nominal}}}{1 + i_{\text{inflation}}} - 1" />
               <p className="text-xs text-muted-foreground">
-                Accurately discounts nominal investment gains against consumer price inflation to maintain purchasing power.
+                {isEs
+                  ? "Descuenta con precisión las ganancias nominales de la inversión frente a la inflación para mantener el poder adquisitivo."
+                  : isPt
+                  ? "Desconta com precisão os ganhos nominais dos investimentos contra a inflação para manter o poder de compra."
+                  : "Accurately discounts nominal investment gains against consumer price inflation to maintain purchasing power."}
               </p>
             </div>
           </div>

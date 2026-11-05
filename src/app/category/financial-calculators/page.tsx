@@ -130,16 +130,16 @@ const calcFaqs: CategoryFaqItem[] = [
 export default function FinancialCalculatorsCategoryPage() {
   return (
     <CategoryHubLayout
-      categoryName="Financial Calculators &amp; Math Tools"
+      categoryName="Financial Calculators & Math Tools"
       categorySlug="financial-calculators"
-      headline="Free Financial Calculators &amp; Math Suite"
+      headline="Free Financial Calculators & Math Suite"
       subheadline="Model compound interest, calculate SIP mutual fund returns, check BMI, and convert units with interactive visual charts."
       description="Calculate compound wealth, SIP mutual fund returns, BMI, dates, and unit conversions with free client-side interactive calculators."
       tools={calcTools}
       faqs={calcFaqs}
       detailedContent={
         <div>
-          <h2>Precision Financial Modeling &amp; Daily Mathematical Utilities</h2>
+          <h2>Precision Financial Modeling & Daily Mathematical Utilities</h2>
           <p>
             Understanding compound growth is the single most important factor in long-term wealth creation. Our financial calculators provide transparent mathematical formulas, dynamic sliders, and compounding schedules to help you plan your financial independence.
           </p>

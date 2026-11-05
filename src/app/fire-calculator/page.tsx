@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Calculate your Financial Independence Retire Early (FIRE) number, annual retirement spending target, and portfolio milestone years using the 4% safe withdrawal rule.",
   alternates: {
     canonical: "/fire-calculator",
+    languages: {
+      en: "https://www.theutilify.com/fire-calculator",
+      es: "https://www.theutilify.com/es/fire-calculator",
+      pt: "https://www.theutilify.com/pt/fire-calculator",
+      "x-default": "https://www.theutilify.com/fire-calculator",
+    },
   },
   openGraph: {
     title: "FIRE Calculator - Financial Independence & 4% Rule | Utilify",

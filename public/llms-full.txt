@@ -3,7 +3,7 @@ Domain: https://www.theutilify.com
 Repository: https://github.com/vaibhavdeshmukhdeveloper/the-utilify
 License: Free to Use, Zero-Storage Architecture
 
-The Utilify is a privacy-first web utility suite providing 21+ tools designed for fast execution, zero sign-up barriers, and high-fidelity output. All tools run 100% client-side in the browser or via transient in-memory Python microservices (RAM-only streams).
+The Utilify is a privacy-first web utility suite providing 30 production tools and programmatic landing pages designed for fast execution, zero sign-up barriers, and high-fidelity output. All tools run 100% client-side in the browser or via transient in-memory Python microservices (RAM-only streams).
 
 ---
 

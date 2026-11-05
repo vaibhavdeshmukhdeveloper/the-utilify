@@ -39,7 +39,7 @@ const unitsConfig: Record<UnitType, { base: string; list: Unit[] }> = {
       { value: "g", label: "Grams (g)", factor: 0.001 },
       { value: "kg", label: "Kilograms (kg)", factor: 1 },
       { value: "lbs", label: "Pounds (lbs)", factor: 0.45359237 },
-      { value: "oz", label: "Ounces (oz)", factor: 0.028349523 },
+      { value: "oz", label: "Ounces (oz)", factor: 0.028349523125 },
       { value: "ton", label: "Metric Tons (t)", factor: 1000 },
     ],
   },
@@ -59,7 +59,7 @@ const unitsConfig: Record<UnitType, { base: string; list: Unit[] }> = {
       { value: "km2", label: "Square Kilometers (km²)", factor: 1000000 },
       { value: "in2", label: "Square Inches (in²)", factor: 0.00064516 },
       { value: "ft2", label: "Square Feet (ft²)", factor: 0.09290304 },
-      { value: "ac", label: "Acres (ac)", factor: 4046.8564 },
+      { value: "ac", label: "Acres (ac)", factor: 4046.8564224 },
       { value: "ha", label: "Hectares (ha)", factor: 10000 },
     ],
   },
@@ -69,11 +69,11 @@ const unitsConfig: Record<UnitType, { base: string; list: Unit[] }> = {
       { value: "ml", label: "Milliliters (ml)", factor: 0.001 },
       { value: "l", label: "Liters (L)", factor: 1 },
       { value: "m3", label: "Cubic Meters (m³)", factor: 1000 },
-      { value: "fl_oz", label: "Fluid Ounces (fl oz)", factor: 0.029573529 },
-      { value: "cup", label: "Cups", factor: 0.236588236 },
+      { value: "fl_oz", label: "Fluid Ounces (fl oz)", factor: 0.0295735295625 },
+      { value: "cup", label: "Cups", factor: 0.2365882365 },
       { value: "pt", label: "Pints (pt)", factor: 0.473176473 },
       { value: "qt", label: "Quarts (qt)", factor: 0.946352946 },
-      { value: "gal", label: "Gallons (gal)", factor: 3.78541178 },
+      { value: "gal", label: "Gallons (gal)", factor: 3.785411784 },
     ],
   },
 };
@@ -130,16 +130,24 @@ export default function UnitConverterClient({
     }
   }, []);
 
+  // Sensible default unit pairs per category
+  const defaultUnits: Record<UnitType, { from: string; to: string }> = {
+    length: { from: "m", to: "ft" },
+    weight: { from: "kg", to: "lbs" },
+    temperature: { from: "c", to: "f" },
+    area: { from: "m2", to: "ft2" },
+    volume: { from: "l", to: "gal" },
+  };
+
   // Update default units on category change
   useEffect(() => {
     const config = unitsConfig[category];
     const hasFrom = config.list.some(u => u.value === fromUnit);
     const hasTo = config.list.some(u => u.value === toUnit);
-    if (!hasFrom) {
-      setFromUnit(config.list[2]?.value || config.list[0].value);
-    }
-    if (!hasTo) {
-      setToUnit(config.list[3]?.value || config.list[1].value);
+    if (!hasFrom || !hasTo) {
+      const def = defaultUnits[category];
+      setFromUnit(def.from);
+      setToUnit(def.to);
     }
   }, [category]);
 
@@ -183,6 +191,9 @@ export default function UnitConverterClient({
 
     const formatNumber = (num: number): string => {
       if (num === 0) return "0";
+      // Snap floating point epsilon noise (e.g., 0.9999999999999998 -> 1)
+      const rounded = Math.round(num);
+      if (Math.abs(num - rounded) < 1e-11) return rounded.toString();
       if (num % 1 === 0) return num.toString();
       if (Math.abs(num) < 0.000001 || Math.abs(num) >= 1e10) {
         return Number(num.toPrecision(6)).toString();

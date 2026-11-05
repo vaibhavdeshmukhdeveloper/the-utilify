@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Globe, Check, ChevronDown } from "lucide-react";
 import { getLanguageFromPathname, getLocalizedPath, Language } from "@/lib/i18n/translations";
+import { getUIStrings } from "@/lib/i18n/ui-strings";
 import { cn } from "@/lib/utils";
 
 interface LanguageOption {
@@ -28,6 +29,7 @@ interface LanguageSwitcherProps {
 export function LanguageSwitcher({ variant = "dropdown", className }: LanguageSwitcherProps) {
   const pathname = usePathname() || "/";
   const currentLang = getLanguageFromPathname(pathname);
+  const t = getUIStrings(currentLang);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -76,7 +78,7 @@ export function LanguageSwitcher({ variant = "dropdown", className }: LanguageSw
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-muted/30 hover:bg-muted text-sm font-semibold text-muted-foreground hover:text-foreground transition-all cursor-pointer shadow-sm select-none"
-        aria-label="Change language"
+        aria-label={t.nav.switchLanguage}
         aria-expanded={isOpen}
       >
         <span className="text-base leading-none">{currentOption.flag}</span>
@@ -87,7 +89,7 @@ export function LanguageSwitcher({ variant = "dropdown", className }: LanguageSw
       {isOpen && (
         <div className="absolute right-0 mt-2 w-48 rounded-2xl border bg-card/95 backdrop-blur-md shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
           <div className="px-3 py-1.5 border-b border-border/50 text-[10px] uppercase font-black tracking-wider text-muted-foreground">
-            Select Language
+            {t.nav.switchLanguage}
           </div>
           {LANGUAGES.map((lang) => {
             const isActive = lang.code === currentLang;

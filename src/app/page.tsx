@@ -18,6 +18,12 @@ export const metadata = {
   description: "A professional-grade, privacy-first suite of free online utilities. Split, merge, and convert PDFs, remove background with AI, compress images, and calculate financials in seconds.",
   alternates: {
     canonical: "/",
+    languages: {
+      en: "https://www.theutilify.com",
+      es: "https://www.theutilify.com/es",
+      pt: "https://www.theutilify.com/pt",
+      "x-default": "https://www.theutilify.com",
+    },
   },
   openGraph: {
     title: "Utilify - Free Online Utility & Productivity Tools Suite",

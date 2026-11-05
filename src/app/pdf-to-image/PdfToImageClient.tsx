@@ -7,12 +7,14 @@ import { FileUploader } from "@/components/FileUploader";
 import { uploadToBackend } from "@/lib/api";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
-import { FileImage, Download, Layers, CheckCircle2, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
+import { FileImage, Download, Layers, CheckCircle2, AlertCircle, ArrowRight, Loader2, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getLanguageFromPathname } from "@/lib/i18n/translations";
 import { getUIStrings } from "@/lib/i18n/ui-strings";
 
 export interface PdfToImageClientProps {
+  defaultFormat?: "png" | "jpg";
   customTitle?: string;
   customDescription?: string;
   customSummaryDefinition?: string;
@@ -22,6 +24,7 @@ export interface PdfToImageClientProps {
 }
 
 export default function PdfToImageClient({
+  defaultFormat = "png",
   customTitle,
   customDescription,
   customSummaryDefinition,
@@ -32,13 +35,24 @@ export default function PdfToImageClient({
   const pathname = usePathname();
   const currentLang = (lang || getLanguageFromPathname(pathname)) as "en" | "es" | "pt";
   const ui = getUIStrings(currentLang);
+  const isEs = currentLang === "es";
+  const isPt = currentLang === "pt";
 
   const [isLoading, setIsLoading] = useState(false);
+  const [outputFormat, setOutputFormat] = useState<"png" | "jpg">(defaultFormat);
   const [result, setResult] = useState<{ url: string; filename: string; pages?: number } | null>(null);
   const [fileInfo, setFileInfo] = useState<{ name: string; size: string } | null>(null);
   const [uploaderKey, setUploaderKey] = useState(0);
 
   const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (result?.url && result.url.startsWith("blob:")) {
+        URL.revokeObjectURL(result.url);
+      }
+    };
+  }, [result]);
 
   useEffect(() => {
     if (result && resultsRef.current) {
@@ -59,17 +73,33 @@ export default function PdfToImageClient({
       size: (file.size / (1024 * 1024)).toFixed(2) + " MB"
     });
 
+    if (result?.url && result.url.startsWith("blob:")) {
+      URL.revokeObjectURL(result.url);
+    }
     setIsLoading(true);
     setResult(null);
 
     try {
-      const data = await uploadToBackend("/pdf/to-image", files);
+      const data = await uploadToBackend("/pdf/to-image", files, { format: outputFormat });
       setResult(data);
-      toast.success("PDF converted to images successfully!");
+      toast.success(
+        isEs
+          ? "¡PDF convertido a imágenes con éxito!"
+          : isPt
+          ? "PDF convertido em imagens com sucesso!"
+          : "PDF converted to images successfully!"
+      );
     } catch (error) {
       const err = error as Error;
       console.error("Conversion error:", err);
-      toast.error(err.message || "Failed to convert PDF. Please ensure the backend is running.");
+      toast.error(
+        err.message ||
+          (isEs
+            ? "Error al convertir PDF. Asegúrate de que el servidor esté activo."
+            : isPt
+            ? "Falha ao converter PDF. Certifique-se de que o servidor esteja ativo."
+            : "Failed to convert PDF. Please ensure the backend is running.")
+      );
       throw err;
     } finally {
       setIsLoading(false);
@@ -87,14 +117,14 @@ export default function PdfToImageClient({
 
   const howToUse = [
     { step: "Upload PDF", description: "Select the PDF file you want to convert into images." },
-    { step: "AI Processing", description: "Our engine extracts every page as a high-quality PNG." },
+    { step: "AI Processing", description: "Our engine extracts every page as a high-quality PNG or JPG." },
     { step: "Instant Download", description: "Get a ZIP archive containing all your images in seconds." },
   ];
 
   const faqs = [
     {
       question: "What is the output image quality?",
-      answer: "We render PDF pages at 2x pixel density (300 DPI equivalent) to ensure that small typography, numerical tables, and vector lines remain perfectly sharp and readable."
+      answer: "We render PDF pages at 2x pixel density (150 DPI) to ensure that small typography, numerical tables, and vector lines remain sharp and readable."
     },
     {
       question: "How are multi-page PDFs handled?",
@@ -110,7 +140,7 @@ export default function PdfToImageClient({
     },
     {
       question: "Which image format is generated?",
-      answer: "Our converter defaults to PNG (Portable Network Graphics) to support transparent layers and avoid lossy compression artifacts, ensuring exact replicas of your PDF pages."
+      answer: "You can choose between lossless PNG (Portable Network Graphics) for crisp transparency and graphics, or JPG (JPEG) for smaller file sizes and rapid sharing."
     },
     {
       question: "Does this require software installation?",
@@ -143,10 +173,10 @@ export default function PdfToImageClient({
     </article>
   );
 
-  const isEs = currentLang === "es";
-  const isPt = currentLang === "pt";
+  const fmtUpper = outputFormat.toUpperCase();
 
   const t = {
+    outputFormatLabel: isEs ? "Formato de Salida" : isPt ? "Formato de Saída" : "Output Format",
     convertingTitle: isEs ? "Convirtiendo PDF..." : isPt ? "Convertendo PDF..." : "Converting PDF...",
     convertingDesc: isEs
       ? "Estamos extrayendo imágenes de alta calidad de cada página. Suele tardar de 3 a 10 segundos según el tamaño."
@@ -158,7 +188,7 @@ export default function PdfToImageClient({
     downloadZip: isEs ? "Descargar todo (ZIP)" : isPt ? "Baixar tudo (ZIP)" : "Download All (ZIP)",
     convertAnother: isEs ? "Convertir otro" : isPt ? "Converter outro" : "Convert Another",
     formatLabel: isEs ? "Formato" : isPt ? "Formato" : "Format",
-    formatVal: isEs ? "PNG (Alta resolución)" : isPt ? "PNG (Alta resolução)" : "PNG (High-Res)",
+    formatVal: isEs ? `${fmtUpper} (150 DPI)` : isPt ? `${fmtUpper} (150 DPI)` : `${fmtUpper} (150 DPI)`,
     statusLabel: isEs ? "Estado" : isPt ? "Status" : "Status",
     statusVal: isEs ? "Listo para guardar" : isPt ? "Pronto para salvar" : "Ready to Save",
     emptyTitle: isEs ? "Aún no se ha subido ningún archivo" : isPt ? "Nenhum arquivo enviado ainda" : "No file uploaded yet",
@@ -178,8 +208,9 @@ export default function PdfToImageClient({
   return (
     <ToolLayout
       title={customTitle || "PDF to Image"}
-      description={customDescription || "Convert every page of your PDF into high-quality PNG images instantly. Perfect for presentations and social media."}
-      summaryDefinition={customSummaryDefinition}
+      description={customDescription || "Convert every page of your PDF into high-quality PNG or JPG images instantly. Perfect for presentations and social media."}
+      summaryDefinition={customSummaryDefinition || "A PDF to image converter extracts every page of a multi-page PDF document into high-resolution (150 DPI) PNG or JPG graphics bundled in a single ZIP archive using RAM-only processing."}
+      customSummaryDefinition={customSummaryDefinition}
       howToUse={customHowToUse || howToUse}
       faqs={customFaqs || faqs}
       relatedTools={relatedTools}
@@ -188,16 +219,31 @@ export default function PdfToImageClient({
       <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start text-left">
         {/* Left Column: Upload */}
         <div className="lg:col-span-5 lg:sticky lg:top-4 space-y-4">
-          <Card className="p-4 sm:p-5 border-2 border-dashed bg-card rounded-2xl">
-            <FileUploader
-              key={uploaderKey}
-              label={isEs ? "Subir PDF" : isPt ? "Enviar PDF" : "Upload PDF"}
-              lang={currentLang}
-              accept={{ "application/pdf": [".pdf"] }}
-              onUpload={handleUpload}
-              isLoading={isLoading}
-              hideDownload={true}
-            />
+          <Card className="p-4 sm:p-5 border-2 bg-card rounded-2xl space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-muted-foreground">
+                <Settings className="w-3.5 h-3.5 text-primary" />
+                {t.outputFormatLabel}
+              </label>
+              <Tabs value={outputFormat} onValueChange={(v) => setOutputFormat(v as "png" | "jpg")} className="w-full">
+                <TabsList className="grid grid-cols-2 w-full h-10 rounded-xl">
+                  <TabsTrigger value="png" className="text-xs font-bold rounded-lg">PNG (Lossless)</TabsTrigger>
+                  <TabsTrigger value="jpg" className="text-xs font-bold rounded-lg">JPG (Compact)</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+
+            <div className="pt-2 border-t">
+              <FileUploader
+                key={uploaderKey}
+                label={isEs ? "Subir PDF" : isPt ? "Enviar PDF" : "Upload PDF"}
+                lang={currentLang}
+                accept={{ "application/pdf": [".pdf"] }}
+                onUpload={handleUpload}
+                isLoading={isLoading}
+                hideDownload={true}
+              />
+            </div>
           </Card>
 
           {fileInfo && (

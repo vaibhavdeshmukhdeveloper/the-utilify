@@ -30,6 +30,7 @@ import { getUIStrings } from "@/lib/i18n/ui-strings";
 
 interface CompressedItem {
   id: string;
+  originalFile: File;
   name: string;
   originalSize: number;
   originalSizeFormatted: string;
@@ -66,6 +67,8 @@ export default function ImageCompressorClient({
   const pathname = usePathname();
   const currentLang = (lang || getLanguageFromPathname(pathname)) as "en" | "es" | "pt";
   const ui = getUIStrings(currentLang);
+  const isEs = currentLang === "es";
+  const isPt = currentLang === "pt";
 
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<CompressedItem[]>([]);
@@ -76,7 +79,19 @@ export default function ImageCompressorClient({
   const [uploaderKey, setUploaderKey] = useState(0);
 
   const resultsRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<CompressedItem[]>([]);
+  itemsRef.current = items;
+
   const selectedItem = items.find((it) => it.id === selectedItemId) || items[0];
+
+  useEffect(() => {
+    return () => {
+      itemsRef.current.forEach((it) => {
+        if (it.originalUrl) URL.revokeObjectURL(it.originalUrl);
+        if (it.compressedUrl) URL.revokeObjectURL(it.compressedUrl);
+      });
+    };
+  }, []);
 
   useEffect(() => {
     if (items.length > 0 && resultsRef.current) {
@@ -85,6 +100,37 @@ export default function ImageCompressorClient({
   }, [items.length]);
 
   const compressSingleFile = async (file: File, qValue: number, fmt: string): Promise<{ blob: Blob; filename: string }> => {
+    let mimeType = file.type || "image/jpeg";
+    if (fmt === "png") mimeType = "image/png";
+    else if (fmt === "jpeg") mimeType = "image/jpeg";
+    else if (fmt === "webp") mimeType = "image/webp";
+    else mimeType = file.type || "image/jpeg";
+
+    const baseName = file.name.replace(/\.[^/.]+$/, "") || "image";
+
+    if (mimeType === "image/png") {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("quality", String(qValue));
+        formData.append("format", "png");
+        const res = await fetch("/api/image-compressor", {
+          method: "POST",
+          body: formData,
+        });
+        if (res.ok) {
+          const sharpBlob = await res.blob();
+          const outputFilename = `compressed_${baseName}.png`;
+          if (sharpBlob.size > file.size && mimeType === file.type) {
+            return { blob: file, filename: outputFilename };
+          }
+          return { blob: sharpBlob, filename: outputFilename };
+        }
+      } catch {
+        // Fallback to client-side Canvas if offline or API fails
+      }
+    }
+
     return new Promise<{ blob: Blob; filename: string }>((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -101,15 +147,13 @@ export default function ImageCompressorClient({
 
           canvas.width = img.naturalWidth;
           canvas.height = img.naturalHeight;
+          if (mimeType === "image/jpeg") {
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
           ctx.drawImage(img, 0, 0);
 
           const q = qValue / 100;
-          let mimeType = file.type || "image/jpeg";
-
-          if (fmt === "png") mimeType = "image/png";
-          else if (fmt === "jpeg") mimeType = "image/jpeg";
-          else if (fmt === "webp") mimeType = "image/webp";
-          else mimeType = file.type || "image/jpeg";
 
           canvas.toBlob(
             (blob) => {
@@ -120,7 +164,6 @@ export default function ImageCompressorClient({
                 else if (blob.type === "image/webp") extension = "webp";
                 else if (blob.type === "image/jpeg") extension = "jpg";
 
-                const baseName = file.name.replace(/\.[^/.]+$/, "");
                 const outputFilename = `compressed_${baseName}.${extension}`;
 
                 if (blob.size > file.size && mimeType === file.type) {
@@ -142,6 +185,58 @@ export default function ImageCompressorClient({
     });
   };
 
+  // Re-compress automatically when quality or format changes after upload
+  const currentQualityVal = quality[0];
+  useEffect(() => {
+    if (itemsRef.current.length === 0 || isLoading) return;
+    let isCancelled = false;
+    const timer = setTimeout(async () => {
+      const currentItems = itemsRef.current;
+      if (currentItems.length === 0 || isCancelled) return;
+
+      const updated: CompressedItem[] = [];
+      for (const item of currentItems) {
+        if (isCancelled) return;
+        try {
+          const { blob, filename } = await compressSingleFile(item.originalFile, currentQualityVal, format);
+          if (isCancelled) return;
+          if (item.compressedUrl) {
+            URL.revokeObjectURL(item.compressedUrl);
+          }
+          const compressedSize = blob.size;
+          const compressedSizeFormatted = (compressedSize / (1024 * 1024)).toFixed(2) + " MB";
+          const compressedUrl = URL.createObjectURL(blob);
+          const savingsPercent = Math.max(0, Math.round(((item.originalSize - compressedSize) / item.originalSize) * 100));
+          updated.push({
+            ...item,
+            compressedBlob: blob,
+            compressedUrl,
+            compressedSize,
+            compressedSizeFormatted,
+            savingsPercent,
+            filename,
+            status: "done",
+          });
+        } catch (err: any) {
+          updated.push({
+            ...item,
+            status: "error",
+            errorMsg: err.message || "Failed to compress",
+          });
+        }
+      }
+      if (!isCancelled) {
+        setItems(updated);
+      }
+    }, 200);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQualityVal, format]);
+
   const handleUpload = async (files: File[]) => {
     if (files.length === 0) return;
 
@@ -149,7 +244,13 @@ export default function ImageCompressorClient({
     const validFiles: File[] = [];
     for (const f of files) {
       if (f.size > 25 * 1024 * 1024) {
-        toast.error(`${f.name} is too large (>25MB)! Skipped.`);
+        toast.error(
+          isEs
+            ? `¡${f.name} es demasiado grande (>25MB)! Omitido.`
+            : isPt
+            ? `${f.name} é muito grande (>25MB)! Ignorado.`
+            : `${f.name} is too large (>25MB)! Skipped.`
+        );
       } else {
         validFiles.push(f);
       }
@@ -157,10 +258,17 @@ export default function ImageCompressorClient({
 
     if (validFiles.length === 0) return;
 
+    // Revoke previous Blob URLs before replacing items
+    itemsRef.current.forEach((it) => {
+      if (it.originalUrl) URL.revokeObjectURL(it.originalUrl);
+      if (it.compressedUrl) URL.revokeObjectURL(it.compressedUrl);
+    });
+
     setIsLoading(true);
 
     const newItems: CompressedItem[] = validFiles.map((file, idx) => ({
-      id: `${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 5)}`,
+      id: `${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 7)}`,
+      originalFile: file,
       name: file.name,
       originalSize: file.size,
       originalSizeFormatted: (file.size / (1024 * 1024)).toFixed(2) + " MB",
@@ -175,11 +283,8 @@ export default function ImageCompressorClient({
     const processedItems: CompressedItem[] = [];
 
     for (const item of newItems) {
-      const originalFile = validFiles.find((f) => f.name === item.name);
-      if (!originalFile) continue;
-
       try {
-        const { blob, filename } = await compressSingleFile(originalFile, quality[0], format);
+        const { blob, filename } = await compressSingleFile(item.originalFile, quality[0], format);
         const compressedSize = blob.size;
         const compressedSizeFormatted = (compressedSize / (1024 * 1024)).toFixed(2) + " MB";
         const compressedUrl = URL.createObjectURL(blob);
@@ -207,7 +312,14 @@ export default function ImageCompressorClient({
     setItems(processedItems);
     setIsLoading(false);
     triggerCelebration();
-    toast.success(`Successfully compressed ${processedItems.filter((i) => i.status === "done").length} images!`);
+    const doneCount = processedItems.filter((i) => i.status === "done").length;
+    toast.success(
+      isEs
+        ? `¡Se comprimieron ${doneCount} imágenes con éxito!`
+        : isPt
+        ? `${doneCount} imagens comprimidas com sucesso!`
+        : `Successfully compressed ${doneCount} images!`
+    );
   };
 
   const handleDownloadAllZip = async () => {
@@ -219,9 +331,19 @@ export default function ImageCompressorClient({
       const JSZipModule = await import("jszip");
       const JSZip = JSZipModule.default || JSZipModule;
       const zip = new JSZip();
+      const usedNames = new Map<string, number>();
       doneItems.forEach((item) => {
         if (item.compressedBlob) {
-          zip.file(item.filename, item.compressedBlob);
+          let zipName = item.filename;
+          const count = usedNames.get(zipName) || 0;
+          if (count > 0) {
+            const dotIdx = zipName.lastIndexOf(".");
+            zipName = dotIdx !== -1
+              ? `${zipName.slice(0, dotIdx)}_${count}${zipName.slice(dotIdx)}`
+              : `${zipName}_${count}`;
+          }
+          usedNames.set(item.filename, count + 1);
+          zip.file(zipName, item.compressedBlob);
         }
       });
 
@@ -236,10 +358,22 @@ export default function ImageCompressorClient({
       URL.revokeObjectURL(url);
 
       triggerCelebration();
-      toast.success("ZIP archive downloaded successfully!");
+      toast.success(
+        isEs
+          ? "¡Archivo ZIP descargado con éxito!"
+          : isPt
+          ? "Arquivo ZIP baixado com sucesso!"
+          : "ZIP archive downloaded successfully!"
+      );
     } catch (err) {
       console.error(err);
-      toast.error("Failed to generate ZIP archive");
+      toast.error(
+        isEs
+          ? "Error al generar el archivo ZIP"
+          : isPt
+          ? "Falha ao gerar o arquivo ZIP"
+          : "Failed to generate ZIP archive"
+      );
     } finally {
       setIsZipping(false);
     }
@@ -317,9 +451,6 @@ export default function ImageCompressorClient({
       </p>
     </article>
   );
-
-  const isEs = currentLang === "es";
-  const isPt = currentLang === "pt";
 
   const t = {
     quality: isEs ? "Calidad" : isPt ? "Qualidade" : "Quality",

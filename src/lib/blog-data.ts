@@ -84,13 +84,13 @@ To understand how PDF splitting functions without degrading quality, one must un
 #### The Page Tree Hierarchy:
 The document root dictionary contains an indirect reference to the **\`/Pages\`** dictionary, which acts as the root node of an object tree:
 
-$\text{Root} \longrightarrow \text{Pages (Root Node)} \longrightarrow \{\text{Kids: } [\text{Obj } 4, \text{Obj } 9, \text{Obj } 14], \quad \text{Count: } 3\}$
+$\\text{Root} \\longrightarrow \\text{Pages (Root Node)} \\longrightarrow \\{\\text{Kids: } [\\text{Obj } 4, \\text{Obj } 9, \\text{Obj } 14], \\quad \\text{Count: } 3\\}$
 
 Each terminal leaf node represents a single physical page (\`/Type /Page\`) containing:
 * **\`/Contents\`:** Streams containing PostScript-like vector draw operators (e.g., \`BT\` begin text, \`ET\` end text, \`re\` rectangle).
 * **\`/Resources\`:** Font dictionaries, color spaces, and XObject image dictionaries referenced by the content stream.
 * **\`/MediaBox\`:** An array of four numbers defining the physical boundaries of the page in typographical points ($1/72$ inch):
-  $\text{MediaBox} = [x_{\text{min}}, y_{\text{min}}, x_{\text{max}}, y_{\text{max}}]$
+  $\\text{MediaBox} = [x_{\\text{min}}, y_{\\text{min}}, x_{\\text{max}}, y_{\\text{max}}]$
 
 #### Why Naive Deletion Fails:
 If an application merely unlinks a page reference from the \`/Kids\` array without rebuilding the cross-reference table and pruning unreferenced child objects, two severe issues arise:
@@ -115,10 +115,10 @@ In range slicing, specific pages or continuous sequences are extracted and compi
 
 Let $S$ represent the ordered sequence of extracted page indices. The output page count is given by:
 
-$N_{\text{output}} = \sum_{r \in R} \text{Count}(r) \quad \text{where } \text{Count}(a-b) = b - a + 1$
+$N_{\\text{output}} = \\sum_{r \\in R} \\text{Count}(r) \\quad \\text{where } \\text{Count}(a-b) = b - a + 1$
 
 #### 2. Page Bursting (Single-Page Archival)
-In document bursting, every individual page in the uploaded document is detached into its own independent single-page PDF document ($1.pdf, 2.pdf, \dots, N.pdf$). These $N$ discrete files are subsequently packaged into an in-memory Deflate \`.zip\` archive:
+In document bursting, every individual page in the uploaded document is detached into its own independent single-page PDF document ($1.pdf, 2.pdf, \\dots, N.pdf$). These $N$ discrete files are subsequently packaged into an in-memory Deflate \`.zip\` archive:
 
 $\\text{Original ( } N \\text{ Pages)} \\xrightarrow{\\text{Burst Engine}} \\{P_1.pdf, P_2.pdf, \\dots, P_N.pdf\\} \\xrightarrow{\\text{ZIP Packing}} \\text{Document\\_Pages.zip}$
 
@@ -193,21 +193,21 @@ Choosing the appropriate counting convention prevents costly compliance disputes
 In naive programming implementations, developers frequently calculate working days by executing an iterative \`while\` loop that advances day by day, checking whether each day is a Saturday or Sunday. While functional for short spans, iterative loops exhibit $O(N)$ computational complexity and fail to provide closed-form analytical insight.
 
 #### The Closed-Form Formula:
-Let $D_1$ be the start date and $D_2$ be the end date, where $D_2 \ge D_1$. Let the total calendar day difference be:
+Let $D_1$ be the start date and $D_2$ be the end date, where $D_2 \\ge D_1$. Let the total calendar day difference be:
 
-$\Delta_{\text{days}} = \text{CalendarDays}(D_1, D_2)$
+$\\Delta_{\\text{days}} = \\text{CalendarDays}(D_1, D_2)$
 
 Because a standard Gregorian calendar week repeats every 7 days with exactly 5 working days (Monday through Friday) and 2 weekend days (Saturday and Sunday), we partition the elapsed time into full weeks and residual days:
 
-$W_{\text{full}} = \left\lfloor \frac{\Delta_{\text{days}}}{7} \right\rfloor \times 5$
+$W_{\\text{full}} = \\left\\lfloor \\frac{\\Delta_{\\text{days}}}{7} \\right\\rfloor \\times 5$
 
-The residual interval spans $r = \Delta_{\text{days}} \pmod 7$ days. We evaluate the contribution of the remaining $r$ days using the indicator function $\mathbb{I}$:
+The residual interval spans $r = \\Delta_{\\text{days}} \\pmod 7$ days. We evaluate the contribution of the remaining $r$ days using the indicator function $\\mathbb{I}$:
 
-$W_{\text{residual}} = \sum_{k=0}^{r} \mathbb{I}\big(\text{DayOfWeek}(D_1 + k) \notin \{\text{Saturday}, \text{Sunday}\}\big)$
+$W_{\\text{residual}} = \\sum_{k=0}^{r} \\mathbb{I}\\big(\\text{DayOfWeek}(D_1 + k) \\notin \\{\\text{Saturday}, \\text{Sunday}\\}\\big)$
 
 The total working days between the two dates evaluates to:
 
-$D_{\text{business}} = W_{\text{full}} + W_{\text{residual}}$
+$D_{\\text{business}} = W_{\\text{full}} + W_{\\text{residual}}$
 
 This closed-form formulation delivers $O(1)$ constant-time execution, whether computing working days across a 10-day sprint or an 80-year corporate lease duration.
 
@@ -221,21 +221,21 @@ In business-to-business (B2B) commerce, trade credit is an essential liquidity m
 * **Net 15:** Payment due within 15 calendar days.
 * **Net 30:** Standard commercial term; payment due within 30 calendar days.
 * **Net 60:** Extended enterprise credit; payment due within 60 calendar days.
-* **2/10 Net 30:** A cash discount incentive structure. The buyer receives a $2\%$ invoice discount if paid within 10 days; otherwise, the full balance is due within 30 days.
+* **2/10 Net 30:** A cash discount incentive structure. The buyer receives a $2\\%$ invoice discount if paid within 10 days; otherwise, the full balance is due within 30 days.
 
 #### The Cost of Forgoing Cash Discounts:
 Financial controllers must understand that failing to take advantage of early payment discount terms represents an extraordinarily expensive form of short-term borrowing. The **Effective Annualized Percentage Rate (APR)** of forgoing a 2/10 Net 30 discount is calculated as:
 
-$\text{APR} = \frac{d}{100 - d} \times \frac{365}{t_{\text{net}} - t_{\text{discount}}}$
+$\\text{APR} = \\frac{d}{100 - d} \\times \\frac{365}{t_{\\text{net}} - t_{\\text{discount}}}$
 
-Substituting $d = 2\%$, $t_{\text{net}} = 30$, and $t_{\text{discount}} = 10$:
+Substituting $d = 2\\%$, $t_{\\text{net}} = 30$, and $t_{\\text{discount}} = 10$:
 
-$\text{APR} = \frac{2}{98} \times \frac{365}{20} = 0.020408 \times 18.25 \approx \mathbf{37.24\%}$
+$\\text{APR} = \\frac{2}{98} \\times \\frac{365}{20} = 0.020408 \\times 18.25 \\approx \\mathbf{37.24\\%}$
 
-Passing on a $2\%$ ten-day discount is equivalent to taking out an annualized credit facility at an exorbitant **$37.24\%$ interest rate**.
+Passing on a $2\\%$ ten-day discount is equivalent to taking out an annualized credit facility at an exorbitant **$37.24\\%$ interest rate**.
 
 #### The Weekend Rollover Rule (Modified Following Convention):
-When an invoice maturity date ($T_{\text{invoice}} + 30$) falls on a Saturday or Sunday, international trade conventions dictate how the payment deadline rolls:
+When an invoice maturity date ($T_{\\text{invoice}} + 30$) falls on a Saturday or Sunday, international trade conventions dictate how the payment deadline rolls:
 1. **Following Business Day:** The due date shifts forward to the immediate next business day (Monday).
 2. **Modified Following Business Day:** The due date shifts forward to Monday unless Monday falls into the subsequent calendar month, in which case the due date rolls backward to the preceding Friday to preserve monthly revenue recognition boundaries.
 
@@ -252,7 +252,7 @@ const days = Math.round((dateB.getTime() - dateA.getTime()) / (1000 * 60 * 60 * 
 
 #### Why This Fails:
 In regions observing Daylight Saving Time (such as North America and Europe), clocks shift forward 1 hour in spring (creating a **23-hour day**) and backward 1 hour in autumn (creating a **25-hour day**).
-* Dividing a 23-hour duration ($82,800,000\text{ ms}$) by $86,400,000\text{ ms}$ yields **$0.9583$ days**.
+* Dividing a 23-hour duration ($82,800,000\\text{ ms}$) by $86,400,000\\text{ ms}$ yields **$0.9583$ days**.
 * If an engineer uses \`Math.floor()\`, the entire day is discarded, resulting in an off-by-one scheduling error.
 * Furthermore, parsing ISO date strings like \`new Date("2026-11-05")\` defaults to UTC midnight. In timezones with negative UTC offsets (such as EST \`UTC-5\` or PST \`UTC-8\`), the local date shifts back to \`2026-11-04 19:00:00\`, immediately corrupting milestone calculations.
 
@@ -305,7 +305,7 @@ However, generating an optimal, human-readable diff is not a trivial operation. 
 
 | Diff Granularity | Input Token Unit | Primary Strengths | Inherent Limitations | Ideal Practical Use Case |
 | :--- | :--- | :--- | :--- | :--- |
-| **Line-Level Diff** | Continuous strings bounded by \`\n\` | Fast execution; maps directly to source code lines | Overly broad for prose; flags entire line for a single typo | Git commits, compiler logs, shell configuration scripts |
+| **Line-Level Diff** | Continuous strings bounded by \`\\n\` | Fast execution; maps directly to source code lines | Overly broad for prose; flags entire line for a single typo | Git commits, compiler logs, shell configuration scripts |
 | **Word-Level Diff** | Word tokens bounded by whitespace | Highly readable; highlights exact phrasing tweaks | Can scramble code syntax if punctuation is stripped | Legal contract redlines, executive speech drafts, blog editing |
 | **Character-Level Diff** | Individual Unicode code points | Granular precision down to the exact letter or comma | High visual noise if large text blocks are rearranged | Cryptographic hash auditing, password/token audits, typos |
 | **Semantic AST Diff** | Abstract Syntax Tree language nodes | Understands variable renames and scope changes | Language-specific; high computational overhead | Automated refactoring engines, static code analyzers |
@@ -321,8 +321,8 @@ Modern version control systems and visual diff tools rely predominantly on the *
 Myers recognized that finding the minimum set of edits to transform sequence $A$ of length $N$ into sequence $B$ of length $M$ is mathematically equivalent to finding the **Shortest Edit Script (SES)** or finding the **Longest Common Subsequence (LCS)** on an **Edit Graph**.
 
 #### The Edit Graph Coordinate System:
-* Let sequence $A = (a_1, a_2, \dots, a_N)$ represent horizontal movements on the $x$-axis.
-* Let sequence $B = (b_1, b_2, \dots, b_M)$ represent vertical movements on the $y$-axis.
+* Let sequence $A = (a_1, a_2, \\dots, a_N)$ represent horizontal movements on the $x$-axis.
+* Let sequence $B = (b_1, b_2, \\dots, b_M)$ represent vertical movements on the $y$-axis.
 * An edit path begins at coordinate $(0, 0)$ (top-left) and terminates at $(N, M)$ (bottom-right).
 
 Every step along the grid represents an edit operation:
@@ -331,20 +331,20 @@ Every step along the grid represents an edit operation:
 3. **Diagonal Move $(x+1, y+1)$:** Permitted if and only if $a_{x+1} == b_{y+1}$. A diagonal step incurs **zero cost** because the token is unchanged.
 
 #### The Diagonal Search Formula:
-Myers defined a diagonal identifier $k = x - y$, where $-D \le k \le D$. Because each non-diagonal edit step shifts $k$ by $\pm 1$, the search space progresses through discrete edit distances $D = 0, 1, 2, \dots, N+M$.
+Myers defined a diagonal identifier $k = x - y$, where $-D \\le k \\le D$. Because each non-diagonal edit step shifts $k$ by $\\pm 1$, the search space progresses through discrete edit distances $D = 0, 1, 2, \\dots, N+M$.
 
 At edit step $D$, the furthest reaching path on diagonal $k$ is calculated recurrence:
 
-$x = \begin{cases} 
-V[k+1] & \text{if } k == -D \text{ or } (k \ne D \text{ and } V[k-1] < V[k+1]) \\ 
-V[k-1] + 1 & \text{otherwise} 
-\end{cases}$
+$x = \\begin{cases} 
+V[k+1] & \\text{if } k == -D \\text{ or } (k \\ne D \\text{ and } V[k-1] < V[k+1]) \\ 
+V[k-1] + 1 & \\text{otherwise} 
+\\end{cases}$
 
 $y = x - k$
 
 Following the assignment of $(x, y)$, the algorithm traverses along any possible diagonal "snakes" where tokens match ($a_{x+1} == b_{y+1}$) until a mismatch occurs.
 
-The time complexity of the Myers algorithm is $O(ND)$, where $N$ is the total length and $D$ is the edit distance. In practical document revisions where differences between drafts are small ($D \ll N$), Myers runs in near-linear time $O(N)$.
+The time complexity of the Myers algorithm is $O(ND)$, where $N$ is the total length and $D$ is the edit distance. In practical document revisions where differences between drafts are small ($D \\ll N$), Myers runs in near-linear time $O(N)$.
 
 You can instantly compare text and code files side by side with the **[Diff Checker](/diff-checker)**.
 
@@ -432,20 +432,20 @@ Psycholinguistic studies indicate that average literate adults read silently at 
 
 The industry-standard formula for estimated reading time evaluates to:
 
-$T_{\text{reading}} = \frac{\text{Total Word Count}}{225 \text{ WPM}}$
+$T_{\\text{reading}} = \\frac{\\text{Total Word Count}}{225 \\text{ WPM}}$
 
 For example, an in-depth 1,800-word technical guide requires:
 
-$T_{\text{reading}} = \frac{1800}{225} = 8.0 \text{ minutes of focused reading}$
+$T_{\\text{reading}} = \\frac{1800}{225} = 8.0 \\text{ minutes of focused reading}$
 
 #### 2. Spoken Presentation Pacing:
 Spoken delivery is considerably slower than silent reading because human vocalization requires breathing intervals, consonant articulation, and strategic pauses for rhetorical emphasis. Professional speech coaches recommend a pacing rate of **130 to 150 words per minute**.
 
-$T_{\text{speaking}} = \frac{\text{Total Word Count}}{140 \text{ WPM}}$
+$T_{\\text{speaking}} = \\frac{\\text{Total Word Count}}{140 \\text{ WPM}}$
 
 A 20-minute keynote address requires a script of approximately:
 
-$\text{Words} = 20 \times 140 = \mathbf{2{,}800\text{ words}}$
+$\\text{Words} = 20 \\times 140 = \\mathbf{2{,}800\\text{ words}}$
 
 Exceeding this boundary inevitably causes speakers to rush through slides or truncate audience Q&A sessions.
 
@@ -460,14 +460,14 @@ In the early days of web search, search engines relied heavily on raw string mat
 #### The Keyword Density Equation:
 Keyword density measures the percentage frequency of a specific word or phrase relative to the total word count of a document:
 
-$\text{Density}(\%) = \left( \frac{f_{\text{keyword}}}{N_{\text{total}}} \right) \times 100$
+$\\text{Density}(\\%) = \\left( \\frac{f_{\\text{keyword}}}{N_{\\text{total}}} \\right) \\times 100$
 
-Where $f_{\text{keyword}}$ is the occurrence count of the keyword phrase and $N_{\text{total}}$ is the total number of words in the article.
+Where $f_{\\text{keyword}}$ is the occurrence count of the keyword phrase and $N_{\\text{total}}$ is the total number of words in the article.
 
 #### Modern Semantic Standards:
 Modern search engines (employing neural architectures like BERT and Gemini) evaluate topical authority, helpfulness, and natural language semantics rather than raw keyword repetition:
-* **Natural Optimal Density:** **$1.0\% - 2.5\%$**. The primary query appears naturally in title tags, initial paragraphs, headers, and concluding summaries.
-* **Warning Threshold:** **$> 3.5\%$**. Triggers search engine quality filters for unnatural keyword stuffing, reducing overall search visibility.
+* **Natural Optimal Density:** **$1.0\\% - 2.5\\%$**. The primary query appears naturally in title tags, initial paragraphs, headers, and concluding summaries.
+* **Warning Threshold:** **$> 3.5\\%$**. Triggers search engine quality filters for unnatural keyword stuffing, reducing overall search visibility.
 
 Rather than obsessively repeating a single phrase, content strategists now incorporate Latent Semantic Indexing (LSI) synonyms and related sub-topics to demonstrate topical depth.
 
@@ -477,19 +477,19 @@ Rather than obsessively repeating a single phrase, content strategists now incor
 
 In naive software implementations, developers count words using basic whitespace splitting: \`text.split(" ").length\`. In production environments, this naive approach fails across multiple real-world scenarios:
 1. **Multiple Consecutive Spaces:** Two spaces between sentences generate artificial empty string tokens (\`""\`), inflating word counts.
-2. **Non-Breaking Spaces (\`&nbsp;\` / \`\u00A0\`):** Standard ASCII regex \`\s\` may fail to match non-standard Unicode whitespace characters.
+2. **Non-Breaking Spaces (\`&nbsp;\` / \`\\u00A0\`):** Standard ASCII regex \`\\s\` may fail to match non-standard Unicode whitespace characters.
 3. **Accented Characters & Diacritics:** Words with accented letters (such as *résumé*, *crème*, or *año*) are frequently corrupted if non-Unicode ranges (\`/[^a-zA-Z]/\`) are applied.
 4. **Hyphens and Em-Dashes:** A phrase like "state-of-the-art" should evaluate as one or three words depending on style guides, while em-dashes ("features—such as speed—matter") must cleanly partition clauses.
 
 #### Production-Grade Text Tokenization:
-Modern text analysis engines leverage ECMAScript Unicode property escapes (\`\p{L}\` for any Unicode letter and \`\p{N}\` for any numeric character) to guarantee multilingual accuracy:
+Modern text analysis engines leverage ECMAScript Unicode property escapes (\`\\p{L}\` for any Unicode letter and \`\\p{N}\` for any numeric character) to guarantee multilingual accuracy:
 
 \`\`\`typescript
 function getCleanWordCount(text: string): number {
   const normalized = text.trim();
   if (!normalized) return 0;
   // Match words consisting of Unicode letters, numbers, and intra-word apostrophes/hyphens
-  const words = normalized.match(/\p{L}+([\'-]\p{L}+)*/gu);
+  const words = normalized.match(/\\p{L}+([\\'-]\\p{L}+)*/gu);
   return words ? words.length : 0;
 }
 \`\`\`
@@ -520,7 +520,7 @@ function getCleanWordCount(text: string): number {
     author: "The Utilify Editorial Team",
     readTime: "9 min read",
     category: "Design",
-    content: `Images account for over **$60\%$** of the total byte weight transferred during average web page loads. When web developers, e-commerce managers, and digital marketers upload raw, uncompressed camera photographs or high-resolution PNG exports to websites, the results are immediate and damaging:
+    content: `Images account for over **$60\\%$** of the total byte weight transferred during average web page loads. When web developers, e-commerce managers, and digital marketers upload raw, uncompressed camera photographs or high-resolution PNG exports to websites, the results are immediate and damaging:
 * Sluggish page loads that fail Google's Core Web Vitals (specifically **Largest Contentful Paint - LCP**).
 * Higher bounce rates on mobile cellular connections.
 * Increased CDN bandwidth costs.
@@ -538,7 +538,7 @@ In this technical guide, we break down the mathematics of entropy coding and per
 | **Bit-for-Bit Reconstruction** | 100% Identical to original raw pixel array | Irreversible; high-frequency data discarded |
 | **Primary Mathematics** | Shannon entropy coding (LZ77 & Huffman / VP8L) | Discrete Cosine Transform (DCT) & Quantization |
 | **Alpha Transparency** | Full 8-bit Alpha channel support (256 opacity levels) | Unsupported in JPEG; Supported in Lossy WebP |
-| **Typical Size Reduction** | $20\% - 40\%$ reduction from uncompressed bitmap | **$70\% - 85\%$ reduction** with negligible visual loss |
+| **Typical Size Reduction** | $20\\% - 40\\%$ reduction from uncompressed bitmap | **$70\\% - 85\\%$ reduction** with negligible visual loss |
 | **Visual Artifacts** | Zero artifacts; razor-sharp edges and vector lines | Ringing around high-contrast edges at high compression |
 | **Ideal Asset Class** | Logos, UI icons, screenshots, product cutouts | E-commerce product photos, hero banners, scenery |
 
@@ -553,27 +553,27 @@ All digital image compression techniques fall into one of two foundational mathe
 #### 1. Lossless Compression & Shannon's Source Coding Theorem
 Lossless compression treats an image as a 2D matrix of discrete symbol values. The theoretical lower bound for lossless compression is governed by **Claude Shannon's Source Coding Theorem** (1948). The minimum average number of bits required to encode an image without loss is defined by its information entropy $H(X)$:
 
-$H(X) = -\sum_{i=1}^{n} P(x_i) \log_2 P(x_i)$
+$H(X) = -\\sum_{i=1}^{n} P(x_i) \\log_2 P(x_i)$
 
 Where $P(x_i)$ represents the probability of occurrence of color state $x_i$.
 * In flat graphics (such as an icon with only 4 solid colors), entropy is very low, allowing algorithms like **Deflate (LZ77 + Huffman)** to compress the payload dramatically.
-* In photographic images with random noise, entropy approaches 8 bits per channel, making pure lossless compression ineffective (yielding only $10\% - 25\%$ savings).
+* In photographic images with random noise, entropy approaches 8 bits per channel, making pure lossless compression ineffective (yielding only $10\\% - 25\\%$ savings).
 
 #### 2. Lossy Compression & Psycho-Visual Quantization
 Lossy compression acknowledges that the human eye is incapable of distinguishing subtle high-frequency variations in color and luminescence. By transforming pixel matrices into the frequency domain via the **Discrete Cosine Transform (DCT)**, high frequencies can be scaled down:
 
-$F_{\text{quantized}}(u, v) = \text{round}\left( \frac{F(u, v)}{Q(u, v)} \right)$
+$F_{\\text{quantized}}(u, v) = \\text{round}\\left( \\frac{F(u, v)}{Q(u, v)} \\right)$
 
-Where $Q(u, v)$ is the quantization matrix. High-frequency coordinates in $Q$ contain larger integer divisors, rounding subtle gradients to zero. Subsequent entropy encoding packs long runs of zeros into tiny bit sequences, shedding up to **$85\%$ of raw payload**.
+Where $Q(u, v)$ is the quantization matrix. High-frequency coordinates in $Q$ contain larger integer divisors, rounding subtle gradients to zero. Subsequent entropy encoding packs long runs of zeros into tiny bit sequences, shedding up to **$85\\%$ of raw payload**.
 
 #### Objective Quality Evaluation (PSNR & SSIM):
 Engineers measure compression quality loss using **Peak Signal-to-Noise Ratio (PSNR)** and **Structural Similarity Index (SSIM)**:
 
-$\text{MSE} = \frac{1}{M N} \sum_{x=0}^{M-1} \sum_{y=0}^{N-1} [I(x, y) - K(x, y)]^2$
+$\\text{MSE} = \\frac{1}{M N} \\sum_{x=0}^{M-1} \\sum_{y=0}^{N-1} [I(x, y) - K(x, y)]^2$
 
-$\text{PSNR} = 10 \cdot \log_{10} \left( \frac{\text{MAX}_I^2}{\text{MSE}} \right)$
+$\\text{PSNR} = 10 \\cdot \\log_{10} \\left( \\frac{\\text{MAX}_I^2}{\\text{MSE}} \\right)$
 
-A PSNR value exceeding **$35\text{ dB} - 40\text{ dB}$** indicates that the compressed image is virtually indistinguishable from the uncompressed original to the human eye.
+A PSNR value exceeding **$35\\text{ dB} - 40\\text{ dB}$** indicates that the compressed image is virtually indistinguishable from the uncompressed original to the human eye.
 
 You can compress PNG graphics while preserving transparency using the **[Compress PNG](/compress-png)** tool.
 
@@ -585,7 +585,7 @@ One of the most frequent technical dilemmas faced by web designers involves **tr
 
 An image with transparency contains four 8-bit channels: **RGBA** (Red, Green, Blue, and Alpha). The alpha channel specifies the opacity of each individual pixel on a scale from $0$ (completely invisible) to $255$ (completely opaque):
 
-$\text{Pixel Color} = [R, G, B, \alpha] \quad \text{where } \alpha \in [0, 255]$
+$\\text{Pixel Color} = [R, G, B, \\alpha] \\quad \\text{where } \\alpha \\in [0, 255]$
 
 #### The JPEG Limitation:
 Standard JPEG is strictly an RGB format ($24$-bit). It possesses **zero alpha channel capability**. If an e-commerce merchant attempts to convert a transparent product photo to JPEG to reduce file size, the converter must composite the transparent pixels over a solid color (typically solid black \`#000000\` or solid white \`#FFFFFF\`).
@@ -593,7 +593,7 @@ Standard JPEG is strictly an RGB format ($24$-bit). It possesses **zero alpha ch
 If placed on a webpage with a gray, dark, or gradient background, that JPEG displays an ugly, amateurish rectangular box around the product.
 
 #### The WebP Solution:
-Modern **WebP** resolves this historical compromise by supporting full 8-bit alpha transparency alongside lossy VP8 compression. By separating the luminance/chrominance streams from the alpha channel, WebP delivers **transparent cutouts at up to $70\%$ smaller file sizes than traditional PNGs**.
+Modern **WebP** resolves this historical compromise by supporting full 8-bit alpha transparency alongside lossy VP8 compression. By separating the luminance/chrominance streams from the alpha channel, WebP delivers **transparent cutouts at up to $70\\%$ smaller file sizes than traditional PNGs**.
 
 You can optimize next-gen WebP assets with full alpha support using the **[Compress WebP](/compress-webp)** tool.
 
@@ -603,7 +603,7 @@ You can optimize next-gen WebP assets with full alpha support using the **[Compr
 
 To achieve superior Core Web Vitals while maintaining high aesthetic fidelity, apply this decision framework:
 
-1. **Photographic Hero Banners & Blog Headers:** Use **[Compress JPEG](/compress-jpeg)** or **[Compress WebP](/compress-webp)** with a quality threshold of $75\% - 82\%$. This reduces file sizes by $75\%$ while remaining well above the $38\text{ dB}$ PSNR threshold.
+1. **Photographic Hero Banners & Blog Headers:** Use **[Compress JPEG](/compress-jpeg)** or **[Compress WebP](/compress-webp)** with a quality threshold of $75\\% - 82\\%$. This reduces file sizes by $75\\%$ while remaining well above the $38\\text{ dB}$ PSNR threshold.
 2. **Transparent UI Icons & Tech Schematics:** Use **[Compress PNG](/compress-png)** to maintain pixel-perfect vector lines and razor-sharp typographic edges.
 3. **E-Commerce Product Catalogs:** Remove messy real-world backgrounds using the **[AI Background Remover](/background-remover)**, replace backdrops with compliant white using **[White Background Product Photos](/white-background-product-photos)**, and compress the resulting cutouts with **[Compress WebP](/compress-webp)**.
 
@@ -638,7 +638,7 @@ To achieve superior Core Web Vitals while maintaining high aesthetic fidelity, a
     category: "Finance",
     content: `Albert Einstein reportedly referred to compound interest as the "eighth wonder of the world," noting that "he who understands it, earns it; he who doesn't, pays it."
 
-While simple interest grows linearly ($I = P \times r \times t$), compound interest grows exponentially because returns generated in period $k$ are reinvested to generate their own returns in period $k+1$. Over multi-decade investment horizons, compounding transforms modest regular contributions into substantial wealth.
+While simple interest grows linearly ($I = P \\times r \\times t$), compound interest grows exponentially because returns generated in period $k$ are reinvested to generate their own returns in period $k+1$. Over multi-decade investment horizons, compounding transforms modest regular contributions into substantial wealth.
 
 However, financial calculators across the internet frequently apply oversimplified or mathematically inconsistent formulas. Many ignore the critical distinction between compounding frequency and deposit frequency, while others fail entirely when modeling retirement decumulation (negative cashflows).
 
@@ -648,20 +648,20 @@ In this comprehensive mathematical guide, we derive the unified formula for comp
 
 ### Comparison: Compounding Frequency Hierarchy & Effective Annual Yield
 
-To visualize how compounding frequency affects returns, consider a nominal annual interest rate $r = 10\%$ on an initial deposit $P = 10{,}000\text{ USD}$ over an investment horizon $t = 20\text{ years}$ (without ongoing contributions):
+To visualize how compounding frequency affects returns, consider a nominal annual interest rate $r = 10\\%$ on an initial deposit $P = 10{,}000\\text{ USD}$ over an investment horizon $t = 20\\text{ years}$ (without ongoing contributions):
 
-| Compounding Interval | Periods per Year ($k$) | Effective Annual Rate (EAR) | End Balance ($P = 10{,}000$, $20\text{ Yrs}$) | Total Interest Earned |
+| Compounding Interval | Periods per Year ($k$) | Effective Annual Rate (EAR) | End Balance ($P = 10{,}000$, $20\\text{ Yrs}$) | Total Interest Earned |
 | :--- | :--- | :--- | :--- | :--- |
-| **Annually** | $k = 1$ | $10.0000\%$ | $67{,}275.00 | $57{,}275.00 |
-| **Semi-Annually** | $k = 2$ | $10.2500\%$ | $70{,}399.89 | $60{,}399.89 |
-| **Quarterly** | $k = 4$ | $10.3813\%$ | $72{,}095.68 | $62{,}095.68 |
-| **Monthly** | $k = 12$ | $10.4713\%$ | $73{,}280.74 | $63{,}280.74 |
-| **Daily** | $k = 365$ | $10.5156\%$ | $73{,}870.32 | $63{,}870.32 |
-| **Continuous** | $k \to \infty$ | $10.5171\%$ | $73{,}890.56 | $63{,}890.56 |
+| **Annually** | $k = 1$ | $10.0000\\%$ | $67{,}275.00 | $57{,}275.00 |
+| **Semi-Annually** | $k = 2$ | $10.2500\\%$ | $70{,}399.89 | $60{,}399.89 |
+| **Quarterly** | $k = 4$ | $10.3813\\%$ | $72{,}095.68 | $62{,}095.68 |
+| **Monthly** | $k = 12$ | $10.4713\\%$ | $73{,}280.74 | $63{,}280.74 |
+| **Daily** | $k = 365$ | $10.5156\\%$ | $73{,}870.32 | $63{,}870.32 |
+| **Continuous** | $k \\to \\infty$ | $10.5171\\%$ | $73{,}890.56 | $63{,}890.56 |
 
 The mathematics guarantees a **strict monotonic ordering**:
 
-$\text{Daily} > \text{Monthly} > \text{Quarterly} > \text{Semi-Annually} > \text{Annually}$
+$\\text{Daily} > \\text{Monthly} > \\text{Quarterly} > \\text{Semi-Annually} > \\text{Annually}$
 
 Increasing the frequency of compounding from annually to daily adds an extra **$6{,}595.32** in pure passive interest on a single $10,000 investment.
 
@@ -674,20 +674,20 @@ In the real world, investors rarely deposit a single lump sum and walk away. Ins
 #### The Classic Ordinary Annuity Formula (Monthly Compounding, $k = 12$):
 When deposits occur monthly and compounding occurs monthly, the Future Value ($FV$) is evaluated by combining the compound growth of the principal with the Future Value of an Ordinary Annuity:
 
-$FV = P \left( 1 + \frac{r}{12} \right)^{12t} + PMT \left[ \frac{\left( 1 + \frac{r}{12} \right)^{12t} - 1}{\frac{r}{12}} \right]$
+$FV = P \\left( 1 + \\frac{r}{12} \\right)^{12t} + PMT \\left[ \\frac{\\left( 1 + \\frac{r}{12} \\right)^{12t} - 1}{\\frac{r}{12}} \\right]$
 
 Where:
 * $P$ = Initial starting principal.
-* $r$ = Nominal annual interest rate (in decimal format, e.g., $0.08$ for $8\%$).
+* $r$ = Nominal annual interest rate (in decimal format, e.g., $0.08$ for $8\\%$).
 * $t$ = Investment duration in years ($12t$ total compounding months).
 * $PMT$ = Regular contribution deposited at the end of each monthly period.
 
 #### The Generalized Multi-Frequency Compounding Model:
-When interest compounds at an arbitrary frequency $k$ (such as daily, $k = 365$) while contributions occur strictly on a monthly schedule ($12$ deposits per year), the balance is updated iteratively across each month $m \in [1, 12t]$:
+When interest compounds at an arbitrary frequency $k$ (such as daily, $k = 365$) while contributions occur strictly on a monthly schedule ($12$ deposits per year), the balance is updated iteratively across each month $m \\in [1, 12t]$:
 
-$FV = P \left( 1 + \frac{r}{k} \right)^{kt} + \sum_{m=1}^{12t} PMT \times \left( 1 + \frac{r}{k} \right)^{k \cdot \left(t - \frac{m}{12}\right)}$
+$FV = P \\left( 1 + \\frac{r}{k} \\right)^{kt} + \\sum_{m=1}^{12t} PMT \\times \\left( 1 + \\frac{r}{k} \\right)^{k \\cdot \\left(t - \\frac{m}{12}\\right)}$
 
-Maintaining deposits on a strictly monthly basis ($12 \times PMT$ per year) ensures financial realism, reflecting real-world salary paychecks and automated bank debits.
+Maintaining deposits on a strictly monthly basis ($12 \\times PMT$ per year) ensures financial realism, reflecting real-world salary paychecks and automated bank debits.
 
 You can simulate multi-frequency investment scenarios and solve for financial targets using the **[Investment Calculator](/investment-calculator)**.
 
@@ -698,26 +698,26 @@ You can simulate multi-frequency investment scenarios and solve for financial ta
 Wealth accumulation is only half of the financial journey. Upon reaching retirement, investors transition from the accumulation phase to the **decumulation phase**, withdrawing regular monthly sums to cover living expenses ($PMT < 0$).
 
 #### The Depletion Threshold:
-Let $P_0$ represent the nest egg balance at retirement date. In any given period, the portfolio grows by interest $P \times \frac{r}{12}$ and decreases by the monthly withdrawal $|PMT|$.
+Let $P_0$ represent the nest egg balance at retirement date. In any given period, the portfolio grows by interest $P \\times \\frac{r}{12}$ and decreases by the monthly withdrawal $|PMT|$.
 
 Three distinct mathematical regimes emerge:
-1. **Perpetual Endowment ($|PMT| < P_0 \times \frac{r}{12}$):** The monthly withdrawal is smaller than the monthly interest generated. The portfolio balance continues to grow indefinitely.
-2. **Critical Equilibrium ($|PMT| = P_0 \times \frac{r}{12}$):** The monthly withdrawal equals exact interest yield. The principal remains static forever.
-3. **Finite Depletion ($|PMT| > P_0 \times \frac{r}{12}$):** The withdrawal exceeds interest generation. The portfolio is drawn down and eventually hits zero.
+1. **Perpetual Endowment ($|PMT| < P_0 \\times \\frac{r}{12}$):** The monthly withdrawal is smaller than the monthly interest generated. The portfolio balance continues to grow indefinitely.
+2. **Critical Equilibrium ($|PMT| = P_0 \\times \\frac{r}{12}$):** The monthly withdrawal equals exact interest yield. The principal remains static forever.
+3. **Finite Depletion ($|PMT| > P_0 \\times \\frac{r}{12}$):** The withdrawal exceeds interest generation. The portfolio is drawn down and eventually hits zero.
 
 #### The Closed-Form Portfolio Longevity Formula:
-When $|PMT| > P_0 \times \frac{r}{12}$, the time in years until the portfolio hits zero balance ($T_{\text{deplete}}$) is calculated analytically:
+When $|PMT| > P_0 \\times \\frac{r}{12}$, the time in years until the portfolio hits zero balance ($T_{\\text{deplete}}$) is calculated analytically:
 
-$T_{\text{deplete}} = \frac{\ln\left( \frac{|PMT|}{|PMT| - P_0 \cdot \frac{r}{12}} \right)}{12 \cdot \ln\left( 1 + \frac{r}{12} \right)}$
+$T_{\\text{deplete}} = \\frac{\\ln\\left( \\frac{|PMT|}{|PMT| - P_0 \\cdot \\frac{r}{12}} \\right)}{12 \\cdot \\ln\\left( 1 + \\frac{r}{12} \\right)}$
 
-For example, consider an investor retiring with a **$1,000,000 portfolio** invested at a conservative $6\%$ annual return ($r = 0.06$). If they withdraw **$7,000 per month** ($PMT = -7{,}000$):
+For example, consider an investor retiring with a **$1,000,000 portfolio** invested at a conservative $6\\%$ annual return ($r = 0.06$). If they withdraw **$7,000 per month** ($PMT = -7{,}000$):
 * Initial monthly interest at retirement:
-  $\text{Monthly Interest} = 1{,}000{,}000 \times \frac{0.06}{12} = 5{,}000$
+  $\\text{Monthly Interest} = 1{,}000{,}000 \\times \\frac{0.06}{12} = 5{,}000$
 * Net monthly principal reduction: $7{,}000 - 5{,}000 = 2{,}000$.
 
 Applying the depletion formula:
 
-$T_{\text{deplete}} = \frac{\ln\left( \frac{7000}{7000 - 5000} \right)}{12 \cdot \ln(1.005)} = \frac{\ln(3.5)}{12 \cdot 0.0049875} = \frac{1.25276}{0.05985} \approx \mathbf{20.93\text{ Years}}$
+$T_{\\text{deplete}} = \\frac{\\ln\\left( \\frac{7000}{7000 - 5000} \\right)}{12 \\cdot \\ln(1.005)} = \\frac{\\ln(3.5)}{12 \\cdot 0.0049875} = \\frac{1.25276}{0.05985} \\approx \\mathbf{20.93\\text{ Years}}$
 
 The portfolio will support living expenses for exactly **$20.9$ years** before total exhaustion.
 
@@ -731,9 +731,9 @@ A standard financial calculator only solves for End Balance ($FV$). In contrast,
 
 1. **Target 1: End Balance ($FV$):** Given $P, PMT, r, t$, solve for wealth at horizon.
 2. **Target 2: Starting Principal ($P$):** "How much lump-sum do I need today to reach $1M in 15 years?"
-   $P = \frac{FV - PMT \cdot \left[ \frac{(1 + r/12)^{12t} - 1}{r/12} \right]}{(1 + r/12)^{12t}}$
+   $P = \\frac{FV - PMT \\cdot \\left[ \\frac{(1 + r/12)^{12t} - 1}{r/12} \\right]}{(1 + r/12)^{12t}}$
 3. **Target 3: Regular Contribution ($PMT$):** "How much must I save monthly to fund my child's college education?"
-   $PMT = \frac{FV - P(1 + r/12)^{12t}}{\left[ \frac{(1 + r/12)^{12t} - 1}{r/12} \right]}$
+   $PMT = \\frac{FV - P(1 + r/12)^{12t}}{\\left[ \\frac{(1 + r/12)^{12t} - 1}{r/12} \\right]}$
 4. **Target 4: Required Return Rate ($r$):** "What annual return rate is needed to turn $50,000 into $200,000 in 10 years?" (Solved via numerical Newton-Raphson iteration).
 5. **Target 5: Investment Horizon ($t$):** "How many years until my savings hit financial independence?"
 
@@ -1841,7 +1841,7 @@ By identifying the longest sequence of characters or lines that appear in both v
 
 Subtle formatting differences often produce "false positive" noise in visual comparisons:
 
-* **Inconsistent Line Endings:** Windows uses Carriage Return + Line Feed (\`\r\n\`), while Unix and macOS use Line Feed (\`\n\`). Standardize line breaks before diffing.
+* **Inconsistent Line Endings:** Windows uses Carriage Return + Line Feed (\`\\r\\n\`), while Unix and macOS use Line Feed (\`\\n\`). Standardize line breaks before diffing.
 * **Unformatted JSON:** A minified JSON payload cannot be compared effectively against a formatted file. Always run payloads through the **[JSON Formatter & Validator](/json-formatter)** to sort keys and apply identical 2-space indentation.
 * **Casing Discrepancies:** When comparing case-insensitive lists or identifiers, normalize casing with the **[Case & Text Converter](/text-converter)**.
 
@@ -4930,7 +4930,7 @@ Formatting sensitive GraphQL payloads on public formatting websites raises data 
   },
   {
     slug: "router-security-passwords-wpa3",
-    title: "Hardening Home Router Security: Router Credentials and WPA3",
+    title: "Securing Wi-Fi Gateways: Router Passwords, WPA3 Encryption, and Network Hardening",
     excerpt: "Learn how to secure your home Wi-Fi network, update default admin passwords, configure WPA3, and protect your network gateway.",
     date: "February 07, 2026",
     author: "The Utilify Editorial Team",
@@ -4969,7 +4969,7 @@ To ensure network passwords resist brute-force attacks, users should generate cr
   },
   {
     slug: "digital-cards-vcard-qr-codes",
-    title: "Digital Business Cards: Encoding vCards in Static QR Codes",
+    title: "Digital Business Cards: How to Encode vCards into Contactless QR Codes",
     excerpt: "Learn how to create digital business cards by encoding contact metadata into static QR codes, enabling contactless sharing.",
     date: "February 04, 2026",
     author: "The Utilify Editorial Team",

@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Combine multiple PDF documents, receipts, and invoices into a single organized master PDF. Drag-and-drop reordering with zero file retention.",
   alternates: {
     canonical: "/merge-pdf",
+    languages: {
+      en: "https://www.theutilify.com/merge-pdf",
+      es: "https://www.theutilify.com/es/merge-pdf",
+      pt: "https://www.theutilify.com/pt/merge-pdf",
+      "x-default": "https://www.theutilify.com/merge-pdf",
+    },
   },
   openGraph: {
     title: "Merge PDF Online - Combine Multiple PDF Files Free | Utilify",

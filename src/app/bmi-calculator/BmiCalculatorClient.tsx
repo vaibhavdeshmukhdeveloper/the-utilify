@@ -133,23 +133,24 @@ export default function BmiCalculatorClient({
       healthyWeightRange = `${minLbs.toFixed(1)} lbs – ${maxLbs.toFixed(1)} lbs (${minKg.toFixed(1)} – ${maxKg.toFixed(1)} kg)`;
     }
 
-    const bmiStr = bmiValue.toFixed(1);
+    const roundedBmi = parseFloat(bmiValue.toFixed(1));
+    const bmiStr = roundedBmi.toFixed(1);
     let category = "";
     let color = "";
 
-    if (bmiValue < 18.5) {
+    if (roundedBmi < 18.5) {
       category = t.bmiCalculator.categories.underweight;
       color = "text-blue-500";
-    } else if (bmiValue < 25) {
+    } else if (roundedBmi < 25.0) {
       category = t.bmiCalculator.categories.normal;
       color = "text-green-500";
-    } else if (bmiValue < 30) {
+    } else if (roundedBmi < 30.0) {
       category = t.bmiCalculator.categories.overweight;
       color = "text-yellow-500";
-    } else if (bmiValue < 35) {
+    } else if (roundedBmi < 35.0) {
       category = t.bmiCalculator.categories.obese1;
       color = "text-orange-500";
-    } else if (bmiValue < 40) {
+    } else if (roundedBmi < 40.0) {
       category = t.bmiCalculator.categories.obese2;
       color = "text-red-500";
     } else {
@@ -182,9 +183,9 @@ export default function BmiCalculatorClient({
         setWeightLbs(parseFloat(lbs.toFixed(1)).toString());
       }
       if (h && h > 0) {
-        const totalInches = h / 2.54;
-        const ft = Math.floor(totalInches / 12);
-        const inch = Math.round(totalInches % 12);
+        const roundedInches = Math.round(h / 2.54);
+        const ft = Math.floor(roundedInches / 12);
+        const inch = roundedInches % 12;
         setHeightFt(ft.toString());
         setHeightIn(inch.toString());
       }

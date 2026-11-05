@@ -5,7 +5,9 @@ import json
 import zipfile
 import asyncio
 import tempfile
-from urllib.parse import quote
+import threading
+import ipaddress
+from urllib.parse import quote, urlparse
 from contextlib import asynccontextmanager
 from typing import List, Optional
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
@@ -29,24 +31,26 @@ if "OMP_WAIT_POLICY" not in os.environ:
 
 # Global dictionary to cache loaded model sessions for low latency
 rembg_sessions = {}
+rembg_lock = threading.Lock()
 
 def get_rembg_session(model_name: str):
     global rembg_sessions
-    if model_name not in rembg_sessions:
-        from rembg import new_session
-        print(f"Loading AI background removal model ({model_name})...")
-        
-        # To avoid OOM in memory-constrained environments (e.g. Cloud Run),
-        # keep at most one model session loaded in RAM at a time.
-        if len(rembg_sessions) >= 1:
-            print("Clearing cached sessions from memory...")
-            rembg_sessions.clear()
-            import gc
-            gc.collect()
+    with rembg_lock:
+        if model_name not in rembg_sessions:
+            from rembg import new_session
+            print(f"Loading AI background removal model ({model_name})...")
             
-        rembg_sessions[model_name] = new_session(model_name)
-        print(f"Model {model_name} loaded successfully!")
-    return rembg_sessions[model_name]
+            # To avoid OOM in memory-constrained environments (e.g. Cloud Run),
+            # keep at most one model session loaded in RAM at a time.
+            if len(rembg_sessions) >= 1:
+                print("Clearing cached sessions from memory...")
+                rembg_sessions.clear()
+                import gc
+                gc.collect()
+                
+            rembg_sessions[model_name] = new_session(model_name)
+            print(f"Model {model_name} loaded successfully!")
+        return rembg_sessions[model_name]
 
 # Asynchronously pre-load default high-fidelity model in the background so it doesn't block startup
 async def preload_models():
@@ -115,7 +119,10 @@ def parse_ranges(range_str: str, max_pages: int) -> List[int]:
                 start_str, end_str = part.split("-", 1)
                 start = int(start_str.strip()) - 1
                 end = int(end_str.strip()) - 1
-                # Clip bounds
+                # Reject completely out-of-bounds ranges instead of clamping onto final/first page
+                if start >= max_pages or end < 0 or min(start, end) >= max_pages or max(start, end) < 0:
+                    continue
+                # Clip partial overlap bounds
                 start = max(0, min(start, max_pages - 1))
                 end = max(0, min(end, max_pages - 1))
                 if start <= end:
@@ -131,7 +138,15 @@ def parse_ranges(range_str: str, max_pages: int) -> List[int]:
                     pages.append(p)
             except ValueError:
                 continue
-    return pages
+
+    # Deduplicate page indices while preserving order
+    seen = set()
+    unique_pages = []
+    for p in pages:
+        if p not in seen:
+            seen.add(p)
+            unique_pages.append(p)
+    return unique_pages
 
 @app.get("/")
 @app.get("/health")
@@ -148,40 +163,41 @@ async def remove_background(
     Removes the background from an uploaded image using deep learning neural network models.
     Supports isnet-general-use (default high-fidelity), silueta, u2net, u2net_human_seg, and u2net_cloth_seg.
     """
-    if not file.content_type.startswith("image/"):
+    if not (file.content_type or "").lower().startswith("image/"):
         raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
 
     try:
         # Read uploaded image bytes
         file_bytes = await file.read()
         
-        # Keep original format if possible, otherwise save as transparent PNG
-        output_buffer = io.BytesIO()
-        
-        # AI-based neural network model for full fidelity background removal
         valid_models = ["isnet-general-use", "silueta", "u2net", "u2net_human_seg", "u2net_cloth_seg"]
         target_model = model if model in valid_models else "isnet-general-use"
         
         print(f"Utilizing AI background removal model ({target_model}, post_process={post_process}).")
-        session = get_rembg_session(target_model)
-        from rembg import remove
-        output_bytes = remove(
-            file_bytes,
-            session=session,
-            alpha_matting=False,
-            post_process_mask=post_process
-        )
-        output_image = Image.open(io.BytesIO(output_bytes))
-        output_image.save(output_buffer, format="PNG")
-        output_buffer.seek(0)
+
+        def _process_remove_bg() -> bytes:
+            session = get_rembg_session(target_model)
+            from rembg import remove
+            output_bytes = remove(
+                file_bytes,
+                session=session,
+                alpha_matting=False,
+                post_process_mask=post_process
+            )
+            output_buffer = io.BytesIO()
+            with Image.open(io.BytesIO(output_bytes)) as output_image:
+                output_image.save(output_buffer, format="PNG")
+            return output_buffer.getvalue()
+
+        png_bytes = await asyncio.to_thread(_process_remove_bg)
         
         raw_filename = file.filename or "image.png"
         filename = f"no-bg-{raw_filename}"
-        if not filename.endswith(".png"):
+        if not filename.lower().endswith(".png"):
             filename = filename.rsplit(".", 1)[0] + ".png"
 
         return Response(
-            content=output_buffer.getvalue(),
+            content=png_bytes,
             media_type="image/png",
             headers={"Content-Disposition": format_content_disposition(filename)}
         )
@@ -190,32 +206,42 @@ async def remove_background(
         raise HTTPException(status_code=500, detail=f"Background removal failed: {str(e)}")
 
 @app.post("/pdf/to-image")
-async def pdf_to_image(file: UploadFile = File(...)):
+async def pdf_to_image(
+    file: UploadFile = File(...),
+    format: str = Form("png")
+):
     """
-    Converts PDF pages into individual high-resolution PNG images packed inside a ZIP.
+    Converts PDF pages into individual high-resolution PNG or JPG images packed inside a ZIP.
     """
-    if file.content_type != "application/pdf" and not file.filename.endswith(".pdf"):
+    if (file.content_type or "").lower() != "application/pdf" and not (file.filename or "").lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF.")
 
     try:
         pdf_bytes = await file.read()
-        import fitz
-        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-        
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-            for page_num in range(len(doc)):
-                page = doc[page_num]
-                # Render page at 2x resolution (150 DPI approx) for clear text
-                pix = page.get_pixmap(dpi=150)
-                img_data = pix.tobytes("png")
-                
-                img_filename = f"page_{page_num + 1}.png"
-                zip_file.writestr(img_filename, img_data)
-        
-        zip_buffer.seek(0)
+        is_jpg = (format or "png").strip().lower() in ("jpg", "jpeg")
+        pymupdf_fmt = "jpeg" if is_jpg else "png"
+        ext = "jpg" if is_jpg else "png"
+
+        def _process_pdf_to_image() -> bytes:
+            import fitz
+            doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            try:
+                zip_buffer = io.BytesIO()
+                with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+                    for page_num in range(len(doc)):
+                        page = doc[page_num]
+                        # Render page at 2x resolution (150 DPI approx) for clear text
+                        pix = page.get_pixmap(dpi=150)
+                        img_data = pix.tobytes(pymupdf_fmt)
+                        img_filename = f"page_{page_num + 1}.{ext}"
+                        zip_file.writestr(img_filename, img_data)
+                return zip_buffer.getvalue()
+            finally:
+                doc.close()
+
+        zip_bytes = await asyncio.to_thread(_process_pdf_to_image)
         return Response(
-            content=zip_buffer.getvalue(),
+            content=zip_bytes,
             media_type="application/zip",
             headers={"Content-Disposition": format_content_disposition("images.zip")}
         )
@@ -232,62 +258,71 @@ async def split_pdf(
     """
     Splits a PDF by extracting specific page ranges or packaging all individual pages into a ZIP archive.
     """
-    if file.content_type != "application/pdf" and not file.filename.endswith(".pdf"):
+    if (file.content_type or "").lower() != "application/pdf" and not (file.filename or "").lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Uploaded file must be a PDF.")
 
     effective_ranges = (page_ranges or pages or "all").strip()
 
     try:
         pdf_bytes = await file.read()
-        import fitz
-        src_doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-        max_pages = len(src_doc)
-        
-        if max_pages == 0:
-            raise HTTPException(status_code=400, detail="The uploaded PDF contains no pages.")
-
         raw_filename = file.filename or "document.pdf"
         base_name = os.path.splitext(raw_filename)[0]
 
-        # Case 1: Split every page into individual PDF files bundled in a ZIP
-        if effective_ranges.lower() == "all":
-            zip_buffer = io.BytesIO()
-            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-                for p in range(max_pages):
-                    single_doc = fitz.open()
-                    single_doc.insert_pdf(src_doc, from_page=p, to_page=p)
-                    pdf_buf = io.BytesIO()
-                    single_doc.save(pdf_buf)
-                    single_doc.close()
-                    pdf_buf.seek(0)
-                    zip_file.writestr(f"{base_name}_page_{p + 1}.pdf", pdf_buf.getvalue())
+        def _process_split_pdf():
+            import fitz
+            src_doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+            try:
+                max_pages = len(src_doc)
+                if max_pages == 0:
+                    raise HTTPException(status_code=400, detail="The uploaded PDF contains no pages.")
 
-            zip_buffer.seek(0)
-            return Response(
-                content=zip_buffer.getvalue(),
-                media_type="application/zip",
-                headers={"Content-Disposition": format_content_disposition(f"{base_name}_split_pages.zip")}
-            )
+                # Case 1: Split every page into individual PDF files bundled in a ZIP
+                if effective_ranges.lower() == "all":
+                    zip_buffer = io.BytesIO()
+                    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+                        for p in range(max_pages):
+                            single_doc = fitz.open()
+                            try:
+                                single_doc.insert_pdf(src_doc, from_page=p, to_page=p)
+                                pdf_buf = io.BytesIO()
+                                single_doc.save(pdf_buf)
+                                zip_file.writestr(f"{base_name}_page_{p + 1}.pdf", pdf_buf.getvalue())
+                            finally:
+                                single_doc.close()
 
-        # Case 2: Extract specific page ranges into a single merged PDF
-        pages_to_extract = parse_ranges(effective_ranges, max_pages)
-        if not pages_to_extract:
-            raise HTTPException(status_code=400, detail="Invalid page ranges provided.")
-            
-        dest_doc = fitz.open()
-        for p in pages_to_extract:
-            dest_doc.insert_pdf(src_doc, from_page=p, to_page=p)
-            
-        output_buffer = io.BytesIO()
-        dest_doc.save(output_buffer)
-        dest_doc.close()
-        output_buffer.seek(0)
-        
-        filename = f"split-{raw_filename}"
+                    return (
+                        zip_buffer.getvalue(),
+                        "application/zip",
+                        f"{base_name}_split_pages.zip",
+                    )
+
+                # Case 2: Extract specific page ranges into a single merged PDF
+                pages_to_extract = parse_ranges(effective_ranges, max_pages)
+                if not pages_to_extract:
+                    raise HTTPException(status_code=400, detail="Invalid page ranges provided.")
+                    
+                dest_doc = fitz.open()
+                try:
+                    for p in pages_to_extract:
+                        dest_doc.insert_pdf(src_doc, from_page=p, to_page=p)
+                        
+                    output_buffer = io.BytesIO()
+                    dest_doc.save(output_buffer)
+                    return (
+                        output_buffer.getvalue(),
+                        "application/pdf",
+                        f"split-{raw_filename}",
+                    )
+                finally:
+                    dest_doc.close()
+            finally:
+                src_doc.close()
+
+        content_bytes, media_type, disp_filename = await asyncio.to_thread(_process_split_pdf)
         return Response(
-            content=output_buffer.getvalue(),
-            media_type="application/pdf",
-            headers={"Content-Disposition": format_content_disposition(filename)}
+            content=content_bytes,
+            media_type=media_type,
+            headers={"Content-Disposition": format_content_disposition(disp_filename)}
         )
     except HTTPException:
         raise
@@ -304,23 +339,33 @@ async def merge_pdf(files: List[UploadFile] = File(...)):
         raise HTTPException(status_code=400, detail="No files uploaded.")
         
     for file in files:
-        if file.content_type != "application/pdf" and not file.filename.endswith(".pdf"):
-            raise HTTPException(status_code=400, detail=f"File {file.filename} is not a PDF.")
+        if (file.content_type or "").lower() != "application/pdf" and not (file.filename or "").lower().endswith(".pdf"):
+            raise HTTPException(status_code=400, detail=f"File {file.filename or 'unknown'} is not a PDF.")
 
     try:
-        import fitz
-        dest_doc = fitz.open()
+        file_payloads = []
         for file in files:
-            file_bytes = await file.read()
-            src_doc = fitz.open(stream=file_bytes, filetype="pdf")
-            dest_doc.insert_pdf(src_doc)
-            
-        output_buffer = io.BytesIO()
-        dest_doc.save(output_buffer)
-        output_buffer.seek(0)
-        
+            file_payloads.append(await file.read())
+
+        def _process_merge_pdf() -> bytes:
+            import fitz
+            dest_doc = fitz.open()
+            try:
+                for file_bytes in file_payloads:
+                    src_doc = fitz.open(stream=file_bytes, filetype="pdf")
+                    try:
+                        dest_doc.insert_pdf(src_doc)
+                    finally:
+                        src_doc.close()
+                output_buffer = io.BytesIO()
+                dest_doc.save(output_buffer)
+                return output_buffer.getvalue()
+            finally:
+                dest_doc.close()
+
+        merged_bytes = await asyncio.to_thread(_process_merge_pdf)
         return Response(
-            content=output_buffer.getvalue(),
+            content=merged_bytes,
             media_type="application/pdf",
             headers={"Content-Disposition": format_content_disposition("merged.pdf")}
         )
@@ -330,6 +375,56 @@ async def merge_pdf(files: List[UploadFile] = File(...)):
 
 class HtmlRequest(BaseModel):
     html: str
+
+def _is_blocked_url(url: str, resource_type: str = "", is_navigation: bool = False) -> bool:
+    """
+    Blocks SSRF, local file access, data: frame navigations, and cloud metadata endpoints.
+    """
+    if not url:
+        return True
+    lower_url = url.strip().lower()
+    if lower_url.startswith("about:blank"):
+        return False
+    if lower_url.startswith("data:"):
+        if is_navigation or resource_type in ("document", "iframe", "sub_frame", "frame"):
+            return True
+        return False
+    if not (lower_url.startswith("http://") or lower_url.startswith("https://")):
+        return True
+
+    try:
+        parsed = urlparse(lower_url)
+        host = (parsed.hostname or "").strip("[]").lower()
+        if not host:
+            return True
+        if host in (
+            "localhost",
+            "metadata.google.internal",
+            "metadata",
+            "169.254.169.254",
+            "0.0.0.0",
+            "127.0.0.1",
+            "::1",
+            "::",
+        ) or host.endswith(".internal") or host.endswith(".local"):
+            return True
+        try:
+            ip = ipaddress.ip_address(host)
+            if (
+                ip.is_private
+                or ip.is_loopback
+                or ip.is_link_local
+                or ip.is_multicast
+                or ip.is_reserved
+                or ip.is_unspecified
+            ):
+                return True
+        except ValueError:
+            pass
+    except Exception:
+        return True
+
+    return False
 
 @app.post("/pdf/html-to-pdf")
 async def html_to_pdf(request: HtmlRequest):
@@ -345,19 +440,29 @@ async def html_to_pdf(request: HtmlRequest):
                 headless=True,
                 args=["--no-sandbox", "--disable-setuid-sandbox"]
             )
-            page = await browser.new_page()
-            
-            # Load the styled HTML content and wait for it to be parsed completely
-            await page.set_content(request.html, wait_until="networkidle")
-            
-            # Print to A4 PDF with exact 1cm margins matching Puppeteer style
-            pdf_bytes = await page.pdf(
-                format="A4",
-                print_background=True,
-                margin={"top": "1cm", "right": "1cm", "bottom": "1cm", "left": "1cm"}
-            )
-            
-            await browser.close()
+            try:
+                page = await browser.new_page()
+
+                async def _intercept_route(route):
+                    req = route.request
+                    if _is_blocked_url(req.url, req.resource_type, req.is_navigation_request()):
+                        await route.abort("accessdenied")
+                    else:
+                        await route.continue_()
+
+                await page.route("**/*", _intercept_route)
+                
+                # Load the styled HTML content and wait for it to be parsed completely
+                await page.set_content(request.html, wait_until="networkidle")
+                
+                # Print to A4 PDF with exact 1cm margins matching Puppeteer style
+                pdf_bytes = await page.pdf(
+                    format="A4",
+                    print_background=True,
+                    margin={"top": "1cm", "right": "1cm", "bottom": "1cm", "left": "1cm"}
+                )
+            finally:
+                await browser.close()
             
         return Response(
             content=pdf_bytes,

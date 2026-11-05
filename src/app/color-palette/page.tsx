@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Generate harmonic color palettes (monochromatic, analogous, complementary, triadic) and test WCAG 2.1 accessibility contrast ratios in real-time.",
   alternates: {
     canonical: "/color-palette",
+    languages: {
+      en: "https://www.theutilify.com/color-palette",
+      es: "https://www.theutilify.com/es/color-palette",
+      pt: "https://www.theutilify.com/pt/color-palette",
+      "x-default": "https://www.theutilify.com/color-palette",
+    },
   },
   openGraph: {
     title: "Color Palette Generator & WCAG Contrast Checker | Utilify",

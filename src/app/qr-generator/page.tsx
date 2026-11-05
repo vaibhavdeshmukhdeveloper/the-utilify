@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Generate high-resolution custom QR codes for URLs, Wi-Fi networks, text, contacts, and emails. Customize colors and error correction with instant PNG download.",
   alternates: {
     canonical: "/qr-generator",
+    languages: {
+      en: "https://www.theutilify.com/qr-generator",
+      es: "https://www.theutilify.com/es/qr-generator",
+      pt: "https://www.theutilify.com/pt/qr-generator",
+      "x-default": "https://www.theutilify.com/qr-generator",
+    },
   },
   openGraph: {
     title: "QR Code Generator - Free Custom QR Codes | Utilify",

@@ -92,7 +92,9 @@ export default function QrGeneratorClient({
       case "text":
         return text || " ";
       case "wifi":
-        // Format: WIFI:S:SSID;T:WPA;P:PASSWORD;; (with special characters escaped)
+        if (wifiSecurity === "nopass") {
+          return `WIFI:S:${escapeWifi(wifiSsid)};T:nopass;;;`;
+        }
         return `WIFI:S:${escapeWifi(wifiSsid)};T:${wifiSecurity};P:${escapeWifi(wifiPassword)};;`;
       case "email":
         return `mailto:${emailTo}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
@@ -146,9 +148,34 @@ export default function QrGeneratorClient({
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      toast.success("QR Code downloaded successfully");
+      toast.success("QR Code downloaded as PNG");
     } catch {
       toast.error("Failed to download QR Code");
+    }
+  };
+
+  const downloadSvg = async () => {
+    try {
+      const QRCodeModule = await import("qrcode");
+      const QRCode = QRCodeModule.default || QRCodeModule;
+      const svgString = await QRCode.toString(getQrData(), {
+        type: "svg",
+        margin,
+        color: { dark: fgColor, light: bgColor },
+        errorCorrectionLevel: errorCorrection,
+      });
+      const blob = new Blob([svgString], { type: "image/svg+xml" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `utilify-qrcode-${activeTab}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success("Vector SVG downloaded successfully");
+    } catch {
+      toast.error("Failed to download SVG");
     }
   };
 
@@ -458,9 +485,14 @@ export default function QrGeneratorClient({
             </div>
 
             <div className="w-full mt-4 space-y-2.5">
-              <Button onClick={downloadQr} className="w-full h-11 rounded-xl shadow-xs font-bold flex items-center justify-center gap-2">
-                <Download className="h-4 w-4" /> Download QR Code Image
-              </Button>
+              <div className="grid grid-cols-2 gap-2">
+                <Button onClick={downloadQr} className="h-11 rounded-xl shadow-xs font-bold flex items-center justify-center gap-1.5 text-xs">
+                  <Download className="h-4 w-4" /> PNG Image
+                </Button>
+                <Button onClick={downloadSvg} variant="secondary" className="h-11 rounded-xl shadow-xs font-bold flex items-center justify-center gap-1.5 text-xs">
+                  <Download className="h-4 w-4" /> Vector SVG
+                </Button>
+              </div>
               <Button
                 type="button"
                 onClick={() => copyShareUrl({

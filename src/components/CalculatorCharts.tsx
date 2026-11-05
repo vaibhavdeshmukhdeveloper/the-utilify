@@ -9,6 +9,63 @@ interface YearlyBreakdown {
   principal: number;
   interest: number;
   balance: number;
+  label?: string;
+}
+
+const CHART_STRINGS = {
+  en: {
+    totalValue: "Total Value",
+    invested: "Invested",
+    estLoss: "Est. Loss",
+    wealthGain: "Wealth Gain",
+    breakdown: "Breakdown",
+    investedCapital: "Invested Capital",
+    ratio: (pct: number) => `${pct}% ratio`,
+    estWealthLoss: "Est. Wealth Loss",
+    estWealthGain: "Est. Wealth Gain",
+    growthOverTime: "Growth Over Time",
+    yearProjection: (n: number | string) => `${n} Year Projection`,
+    timeline: "Timeline",
+    maturity: "Maturity",
+    yearLabel: (n: number | string) => `Year ${n}`,
+  },
+  es: {
+    totalValue: "Valor Total",
+    invested: "Invertido",
+    estLoss: "Pérdida Est.",
+    wealthGain: "Ganancia",
+    breakdown: "Desglose",
+    investedCapital: "Capital Invertido",
+    ratio: (pct: number) => `${pct}% proporción`,
+    estWealthLoss: "Pérdida Patrimonial Est.",
+    estWealthGain: "Ganancia Patrimonial Est.",
+    growthOverTime: "Crecimiento en el Tiempo",
+    yearProjection: (n: number | string) => `Proyección a ${n} ${Number(n) === 1 ? "Año" : "Años"}`,
+    timeline: "Plazo",
+    maturity: "Valor Final",
+    yearLabel: (n: number | string) => `Año ${n}`,
+  },
+  pt: {
+    totalValue: "Valor Total",
+    invested: "Investido",
+    estLoss: "Perda Est.",
+    wealthGain: "Rendimento",
+    breakdown: "Detalhamento",
+    investedCapital: "Capital Investido",
+    ratio: (pct: number) => `${pct}% proporção`,
+    estWealthLoss: "Perda Patrimonial Est.",
+    estWealthGain: "Ganho Patrimonial Est.",
+    growthOverTime: "Crescimento no Tempo",
+    yearProjection: (n: number | string) => `Projeção de ${n} ${Number(n) === 1 ? "Ano" : "Anos"}`,
+    timeline: "Prazo",
+    maturity: "Montante",
+    yearLabel: (n: number | string) => `Ano ${n}`,
+  },
+} as const;
+
+function getChartStrings(lang?: string) {
+  if (lang === "es" || lang === "pt") return CHART_STRINGS[lang];
+  return CHART_STRINGS.en;
 }
 
 // ----------------------------------------------------
@@ -18,11 +75,14 @@ export function DonutChart({
   invested, 
   returns,
   currencyCode = "USD",
+  lang = "en",
 }: { 
   invested: number; 
   returns: number; 
   currencyCode?: string;
+  lang?: string;
 }) {
+  const s = getChartStrings(lang);
   const absInvested = Math.abs(invested);
   const absReturns = Math.abs(returns);
   const totalMagnitude = absInvested + absReturns;
@@ -67,56 +127,60 @@ export function DonutChart({
             strokeWidth={strokeWidth}
           />
           {/* Invested Capital segment */}
-          <circle
-            cx={center}
-            cy={center}
-            r={radius}
-            fill="transparent"
-            stroke="var(--primary)"
-            strokeWidth={strokeWidth + (hovered === "invested" ? 3 : 0)}
-            strokeDasharray={circ}
-            strokeDashoffset={investedOffset}
-            transform={`rotate(${rotationInvested} ${center} ${center})`}
-            strokeLinecap="round"
-            className="transition-all duration-300 cursor-pointer"
-            onMouseEnter={() => setHovered("invested")}
-            onMouseLeave={() => setHovered("none")}
-          />
+          {investedPct > 0 && (
+            <circle
+              cx={center}
+              cy={center}
+              r={radius}
+              fill="transparent"
+              stroke="var(--primary)"
+              strokeWidth={strokeWidth + (hovered === "invested" ? 3 : 0)}
+              strokeDasharray={circ}
+              strokeDashoffset={investedOffset}
+              transform={`rotate(${rotationInvested} ${center} ${center})`}
+              strokeLinecap={investedPct < 100 ? "round" : "butt"}
+              className="transition-all duration-300 cursor-pointer"
+              onMouseEnter={() => setHovered("invested")}
+              onMouseLeave={() => setHovered("none")}
+            />
+          )}
           {/* Wealth Gain / Loss segment */}
-          <circle
-            cx={center}
-            cy={center}
-            r={radius}
-            fill="transparent"
-            stroke={returnsColor}
-            strokeWidth={strokeWidth + (hovered === "returns" ? 3 : 0)}
-            strokeDasharray={circ}
-            strokeDashoffset={returnsOffset}
-            transform={`rotate(${rotationReturns} ${center} ${center})`}
-            strokeLinecap="round"
-            className="transition-all duration-300 cursor-pointer"
-            onMouseEnter={() => setHovered("returns")}
-            onMouseLeave={() => setHovered("none")}
-          />
+          {returnsPct > 0 && (
+            <circle
+              cx={center}
+              cy={center}
+              r={radius}
+              fill="transparent"
+              stroke={returnsColor}
+              strokeWidth={strokeWidth + (hovered === "returns" ? 3 : 0)}
+              strokeDasharray={circ}
+              strokeDashoffset={returnsOffset}
+              transform={`rotate(${rotationReturns} ${center} ${center})`}
+              strokeLinecap={returnsPct < 100 ? "round" : "butt"}
+              className="transition-all duration-300 cursor-pointer"
+              onMouseEnter={() => setHovered("returns")}
+              onMouseLeave={() => setHovered("none")}
+            />
+          )}
         </svg>
 
         {/* Center label */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 pointer-events-none select-none">
           {hovered === "none" ? (
             <>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Total Value</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">{s.totalValue}</span>
               <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrencyValue(netTotal, currencyCode)}</span>
             </>
           ) : hovered === "invested" ? (
             <>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Invested</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">{s.invested}</span>
               <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrencyValue(invested, currencyCode)}</span>
               <span className="text-[10px] font-bold text-muted-foreground mt-0.5">{Math.round(investedPct)}%</span>
             </>
           ) : (
             <>
               <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isReturnsNegative ? "text-red-500" : "text-green-500"}`}>
-                {isReturnsNegative ? "Est. Loss" : "Wealth Gain"}
+                {isReturnsNegative ? s.estLoss : s.wealthGain}
               </span>
               <span className="text-xl font-black tracking-tight text-foreground mt-0.5">{formatCurrencyValue(returns, currencyCode)}</span>
               <span className="text-[10px] font-bold text-muted-foreground mt-0.5">{Math.round(returnsPct)}%</span>
@@ -127,7 +191,7 @@ export function DonutChart({
 
       {/* Legend Column */}
       <div className="flex flex-col gap-4 text-left">
-        <h4 className="font-bold text-foreground text-sm uppercase tracking-widest text-muted-foreground">Breakdown</h4>
+        <h4 className="font-bold text-foreground text-sm uppercase tracking-widest text-muted-foreground">{s.breakdown}</h4>
         
         {/* Principal Legend Item */}
         <div 
@@ -139,9 +203,9 @@ export function DonutChart({
         >
           <div className="w-4 h-4 rounded bg-primary shrink-0 mt-0.5" />
           <div>
-            <div className="text-xs font-black text-muted-foreground uppercase tracking-wider">Invested Capital</div>
+            <div className="text-xs font-black text-muted-foreground uppercase tracking-wider">{s.investedCapital}</div>
             <div className="text-base font-bold text-foreground">{formatCurrencyValue(invested, currencyCode)}</div>
-            <div className="text-xs font-semibold text-muted-foreground">{Math.round(investedPct)}% ratio</div>
+            <div className="text-xs font-semibold text-muted-foreground">{s.ratio(Math.round(investedPct))}</div>
           </div>
         </div>
 
@@ -156,12 +220,12 @@ export function DonutChart({
           <div className={`w-4 h-4 rounded ${isReturnsNegative ? "bg-red-500" : "bg-green-500"} shrink-0 mt-0.5`} />
           <div>
             <div className="text-xs font-black text-muted-foreground uppercase tracking-wider">
-              {isReturnsNegative ? "Est. Wealth Loss" : "Est. Wealth Gain"}
+              {isReturnsNegative ? s.estWealthLoss : s.estWealthGain}
             </div>
             <div className={`text-base font-bold ${isReturnsNegative ? "text-red-500" : "text-green-500"}`}>
               {formatCurrencyValue(returns, currencyCode)}
             </div>
-            <div className="text-xs font-semibold text-muted-foreground">{Math.round(returnsPct)}% ratio</div>
+            <div className="text-xs font-semibold text-muted-foreground">{s.ratio(Math.round(returnsPct))}</div>
           </div>
         </div>
       </div>
@@ -175,16 +239,20 @@ export function DonutChart({
 export function GrowthChart({ 
   breakdown,
   currencyCode = "USD",
+  lang = "en",
 }: { 
   breakdown: YearlyBreakdown[];
   currencyCode?: string;
+  lang?: string;
 }) {
+  const s = getChartStrings(lang);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   if (!breakdown || breakdown.length === 0) return null;
 
   const totalYears = breakdown.length;
+  const projectionDuration = breakdown[breakdown.length - 1]?.year ?? totalYears;
 
   // Find min and max across all breakdown data points (principal and balance)
   let rawMin = 0;
@@ -300,10 +368,10 @@ export function GrowthChart({
     <div ref={containerRef} className="flex flex-col gap-6 p-6 bg-card border border-border/80 rounded-[2.5rem] shadow-sm w-full relative overflow-hidden">
       <div className="flex justify-between items-center px-2">
         <h4 className="font-bold text-foreground text-sm uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-          <TrendingUp className="h-4.5 w-4.5 text-primary" /> Growth Over Time
+          <TrendingUp className="h-4.5 w-4.5 text-primary" /> {s.growthOverTime}
         </h4>
         <span className="text-[11px] font-black text-muted-foreground uppercase">
-          {totalYears} Year Projection
+          {s.yearProjection(projectionDuration)}
         </span>
       </div>
 
@@ -377,14 +445,14 @@ export function GrowthChart({
             const anchor = idx === 0 ? "start" : idx === labelIndices.length - 1 ? "end" : "middle";
             return (
               <text
-                key={`year-label-${yearItem.year}`}
+                key={`year-label-${yearIdx}-${yearItem.year}`}
                 x={coord.x}
                 y={height - 8}
                 textAnchor={anchor}
                 fill="var(--muted-foreground)"
                 className="font-black text-[10px] uppercase tracking-wider"
               >
-                Year {yearItem.year}
+                {yearItem.label || s.yearLabel(yearItem.year)}
               </text>
             );
           })}
@@ -472,15 +540,15 @@ export function GrowthChart({
         {activeIdx !== null && activeData && (
           <div className="absolute top-2 left-[65px] right-2 bg-zinc-950/90 dark:bg-zinc-950 text-white rounded-2xl border border-zinc-800 p-3 shadow-xl backdrop-blur-md grid grid-cols-3 gap-2 text-left pointer-events-none animate-in fade-in slide-in-from-top-1 duration-150">
             <div>
-              <div className="text-[9px] font-black uppercase text-zinc-500 tracking-wider">Timeline</div>
-              <div className="text-sm font-black">Year {activeData.year}</div>
+              <div className="text-[9px] font-black uppercase text-zinc-500 tracking-wider">{s.timeline}</div>
+              <div className="text-sm font-black">{activeData.label || s.yearLabel(activeData.year)}</div>
             </div>
             <div>
-              <div className="text-[9px] font-black uppercase text-primary tracking-wider">Invested</div>
+              <div className="text-[9px] font-black uppercase text-primary tracking-wider">{s.invested}</div>
               <div className="text-sm font-bold">{formatCurrencyValue(activeData.principal, currencyCode)}</div>
             </div>
             <div>
-              <div className="text-[9px] font-black uppercase text-green-400 tracking-wider">Maturity</div>
+              <div className="text-[9px] font-black uppercase text-green-400 tracking-wider">{s.maturity}</div>
               <div className="text-sm font-black text-green-400">{formatCurrencyValue(activeData.balance, currencyCode)}</div>
             </div>
           </div>

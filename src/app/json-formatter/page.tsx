@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Free online JSON formatter, prettifier, and syntax validator. Clean nested JSON structures, fix syntax errors with line numbers, and minify payloads locally.",
   alternates: {
     canonical: "/json-formatter",
+    languages: {
+      en: "https://www.theutilify.com/json-formatter",
+      es: "https://www.theutilify.com/es/json-formatter",
+      pt: "https://www.theutilify.com/pt/json-formatter",
+      "x-default": "https://www.theutilify.com/json-formatter",
+    },
   },
   openGraph: {
     title: "JSON Formatter & Validator - Free Online Developer Tool | Utilify",

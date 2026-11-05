@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Calculate exact duration between two dates in years, months, weeks, and days, or add/subtract time from any calendar date. Free and instant.",
   alternates: {
     canonical: "/date-calculator",
+    languages: {
+      en: "https://www.theutilify.com/date-calculator",
+      es: "https://www.theutilify.com/es/date-calculator",
+      pt: "https://www.theutilify.com/pt/date-calculator",
+      "x-default": "https://www.theutilify.com/date-calculator",
+    },
   },
   openGraph: {
     title: "Date Calculator - Difference & Date Math Online | Utilify",

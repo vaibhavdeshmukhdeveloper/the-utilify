@@ -24,7 +24,11 @@ function hslToHex(h: number, s: number, l: number): string {
 
 // Convert Hex to RGB
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  let clean = hex.replace(/^#/, "");
+  if (clean.length === 3) {
+    clean = clean.split("").map((c) => c + c).join("");
+  }
+  const result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(clean);
   return result
     ? {
         r: parseInt(result[1], 16),
@@ -148,9 +152,9 @@ export default function ColorPaletteClient({
         prev.map((c) => (c.locked ? c : { ...c, hex: generateRandomHex() }))
       );
     } else {
-      // Find the first unlocked color, or use the first color as the base
+      // Find the first locked color as the anchor, or generate a fresh base if nothing is locked
       const baseIndex = colors.findIndex((c) => c.locked);
-      const baseHex = baseIndex !== -1 ? colors[baseIndex].hex : colors[0].hex;
+      const baseHex = baseIndex !== -1 ? colors[baseIndex].hex : generateRandomHex();
 
       // Simple HSL harmonics based on baseHex
       const rgb = hexToRgb(baseHex) || { r: 99, g: 102, b: 241 };

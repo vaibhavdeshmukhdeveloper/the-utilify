@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Free multi-target investment calculator: calculate End Amount, Additional Contributions, Starting Capital, Return Rate, or Investment Length. Interactive charts and yearly breakdown.",
   alternates: {
     canonical: "/investment-calculator",
+    languages: {
+      en: "https://www.theutilify.com/investment-calculator",
+      es: "https://www.theutilify.com/es/investment-calculator",
+      pt: "https://www.theutilify.com/pt/investment-calculator",
+      "x-default": "https://www.theutilify.com/investment-calculator",
+    },
   },
   openGraph: {
     title: "Investment Calculator - 5-in-1 Wealth & Compound Growth Planner | Utilify",

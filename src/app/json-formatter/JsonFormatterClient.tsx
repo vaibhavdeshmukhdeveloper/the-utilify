@@ -281,6 +281,7 @@ export default function JsonFormatterClient({
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [activeTab, setActiveTab] = useState<"pretty" | "tree" | "minified">("pretty");
+  const [indentSize, setIndentSize] = useState<number | "tab">(2);
 
   const [fontSize, setFontSize] = useState(14);
   const [parsedJson, setParsedJson] = useState<any>(null);
@@ -371,7 +372,7 @@ export default function JsonFormatterClient({
         if (activeTab === "minified") {
           setOutput(JSON.stringify(parsed));
         } else {
-          setOutput(JSON.stringify(parsed, null, 2));
+          setOutput(JSON.stringify(parsed, null, indentSize === "tab" ? "\t" : indentSize));
         }
       } catch (err: any) {
         // Parse error locations
@@ -393,7 +394,7 @@ export default function JsonFormatterClient({
     }, 250);
 
     return () => clearTimeout(delayDebounce);
-  }, [input, activeTab]);
+  }, [input, activeTab, indentSize]);
 
   // Adjust font sizes
   const zoomIn = () => setFontSize(prev => Math.min(20, prev + 1));
@@ -462,7 +463,7 @@ export default function JsonFormatterClient({
     try {
       const sorted = sortObjectKeys(parsedJson);
       setParsedJson(sorted);
-      const formatted = activeTab === "minified" ? JSON.stringify(sorted) : JSON.stringify(sorted, null, 2);
+      const formatted = activeTab === "minified" ? JSON.stringify(sorted) : JSON.stringify(sorted, null, indentSize === "tab" ? "\t" : indentSize);
       setOutput(formatted);
       setInput(formatted);
       toast.success("JSON keys sorted alphabetically!");
@@ -661,6 +662,16 @@ export default function JsonFormatterClient({
                 >
                   <ArrowDownAZ className="h-3.5 w-3.5" /> Sort Keys
                 </Button>
+                <select
+                  value={indentSize}
+                  onChange={(e) => setIndentSize(e.target.value === "tab" ? "tab" : Number(e.target.value))}
+                  className="h-8 px-2 text-xs font-bold rounded-lg border bg-background text-foreground"
+                  title="Indentation spacing"
+                >
+                  <option value={2}>2 Spaces</option>
+                  <option value={4}>4 Spaces</option>
+                  <option value="tab">Tabs</option>
+                </select>
                 <Button 
                   variant="ghost" 
                   size="sm" 

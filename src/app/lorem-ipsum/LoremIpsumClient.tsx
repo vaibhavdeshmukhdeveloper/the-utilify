@@ -107,7 +107,10 @@ export default function LoremIpsumClient() {
     } else if (type === "lists") {
       const items: string[] = [];
       for (let i = 0; i < count; i++) {
-        const phrase = generateSentence().slice(0, -1); // remove period
+        const phrase = (i === 0 && startWithLorem
+          ? generateSentence("Lorem ipsum dolor sit amet")
+          : generateSentence()
+        ).slice(0, -1); // remove period
         items.push(includeHtml ? `  <li>${phrase}</li>` : `• ${phrase}`);
       }
       if (includeHtml) {

@@ -71,7 +71,8 @@ function getPeriodicRate(annualRate: number, compoundFreq: string, contribFreq: 
   else if (compoundFreq === "annually") m = 1;
 
   if (annualRate === 0) return 0;
-  return Math.pow(1 + annualRate / m, m / p) - 1;
+  const base = Math.max(0.000001, 1 + annualRate / m);
+  return Math.pow(base, m / p) - 1;
 }
 
 function calcEndAmount(
@@ -132,6 +133,9 @@ export default function InvestmentCalculatorClient({
     startingAmount: string;
     totalContributions: string;
     totalInterest: string;
+    rawStartingAmount: number;
+    rawTotalContributions: number;
+    rawTotalInterest: number;
     isLoss: boolean;
     breakdown: YearlyBreakdown[];
     displayYears: string;
@@ -159,17 +163,18 @@ export default function InvestmentCalculatorClient({
     });
   }, [currency]);
 
-  const handleInputChange = (setter: (v: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (setter: (v: string) => void, allowNegative: boolean = false) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^-?[0-9,.]*$/.test(value)) {
+    const pattern = allowNegative ? /^-?[0-9,.]*$/ : /^[0-9,.]*$/;
+    if (pattern.test(value)) {
       const rawValue = parseNumber(value);
-      if (rawValue === "" || rawValue === "-" || !isNaN(Number(rawValue)) || rawValue === "." || rawValue === "-.") {
+      if (rawValue === "" || (allowNegative && rawValue === "-") || !isNaN(Number(rawValue)) || rawValue === "." || (allowNegative && rawValue === "-.")) {
         setter(formatNumber(rawValue));
       }
     }
   };
 
-  // Parse deep link query parameters on mount & save to recently used
+  // Parse deep link query parameters on mount
   useEffect(() => {
     try {
       if (typeof window !== "undefined") {
@@ -217,25 +222,19 @@ export default function InvestmentCalculatorClient({
           setContributionFrequency(contribFreq);
         }
       }
-
-      const stored = localStorage.getItem("utilify-recent-tools");
-      const currentList: string[] = stored ? JSON.parse(stored) : [];
-      const href = "/investment-calculator";
-      
-      const updatedList = [href, ...currentList.filter((x) => x !== href)].slice(0, 4);
-      localStorage.setItem("utilify-recent-tools", JSON.stringify(updatedList));
     } catch (e) {
-      console.error("Error setting recently used tools", e);
+      console.error("Error parsing investment parameters", e);
     }
   }, []);
 
   // Reactive Multi-Target Calculation Engine
   useEffect(() => {
     const rawTargetAmount = parseFloat(parseNumber(targetAmount));
-    const rawInitialAmount = parseFloat(parseNumber(initialAmount)) || 0;
+    const rawInitialAmount = Math.max(0, parseFloat(parseNumber(initialAmount)) || 0);
     const rawContribution = parseFloat(parseNumber(additionalContribution)) || 0;
-    const rawYears = parseFloat(parseNumber(years)) || 0;
-    const rawRate = (parseFloat(parseNumber(interestRate)) || 0) / 100;
+    const parsedYears = parseFloat(parseNumber(years)) || 0;
+    const rawYears = parsedYears > 0 ? Math.min(100, Math.max(0.1, parsedYears)) : 0;
+    const rawRate = Math.max(-0.9999, (parseFloat(parseNumber(interestRate)) || 0) / 100);
 
     const p = contributionFrequency === "annually" ? 1 : 12;
     const timingFactor = contributionTiming === "beginning" ? 1 : 0;
@@ -264,19 +263,18 @@ export default function InvestmentCalculatorClient({
           note: isEs ? "El plazo requerido supera los 100 años al ritmo actual." : isPt ? "O prazo necessário ultrapassa 100 anos no ritmo atual." : "Target horizon exceeds 100 years at current parameters.",
         };
       }
-      const isWhole = Math.abs(t - Math.round(t)) < 0.001;
-      if (isWhole) {
+      const totalMonths = Math.round(t * 12);
+      const wholeY = Math.floor(totalMonths / 12);
+      const remM = totalMonths % 12;
+      if (remM === 0) {
         return {
-          val: strings.results.yearsOnly(Math.round(t)),
+          val: strings.results.yearsOnly(wholeY),
           note: "",
         };
       }
       const decimalYears = t.toFixed(3);
-      const totalMonths = t * 12;
-      const wholeY = Math.floor(t);
-      const remM = Number((totalMonths - wholeY * 12).toFixed(1));
-      const val = strings.results.yearsAndMonths(wholeY, Math.round(remM));
-      const note = `≈ ${decimalYears} ${yearUnit} (${totalMonths.toFixed(1)} ${monthWord})`;
+      const val = strings.results.yearsAndMonths(wholeY, remM);
+      const note = `≈ ${decimalYears} ${yearUnit} (${(t * 12).toFixed(1)} ${monthWord})`;
       return { val, note };
     };
 
@@ -305,7 +303,7 @@ export default function InvestmentCalculatorClient({
       } else {
         const F = Math.pow(1 + i, N);
         const S = ((F - 1) / i) * (1 + i * timingFactor);
-        effPMT = (effFV - effP * F) / S;
+        effPMT = S !== 0 ? (effFV - effP * F) / S : 0;
       }
       mainTitle = strings.results.neededContribution;
       const freqSuffix = contributionFrequency === "annually" ? ` / ${strings.labels.year}` : ` / ${strings.labels.month}`;
@@ -326,7 +324,7 @@ export default function InvestmentCalculatorClient({
       } else {
         const F = Math.pow(1 + i, N);
         const S = ((F - 1) / i) * (1 + i * timingFactor);
-        effP = (effFV - effPMT * S) / F;
+        effP = F !== 0 ? (effFV - effPMT * S) / F : 0;
       }
       mainTitle = strings.results.neededStartingAmount;
       if (effP <= 0) {
@@ -341,38 +339,48 @@ export default function InvestmentCalculatorClient({
         return;
       }
       effFV = rawTargetAmount;
-      // Bisection numerical solver for annual return rate
-      let low = -0.99; // -99% minimum return
-      let high = 10.0;  // 1000% maximum return
-
-      const testFVLow = calcEndAmount(effP, effPMT, effT, low, compoundFrequency, contributionTiming, contributionFrequency);
-      const testFVHigh = calcEndAmount(effP, effPMT, effT, high, compoundFrequency, contributionTiming, contributionFrequency);
-
-      if (effFV < testFVLow) {
+      if (effP <= 0 && effPMT <= 0 && effFV > 0) {
         mainTitle = strings.results.neededReturnRate;
-        mainValue = "<-99%";
-        subNote = isEs ? "El objetivo requiere una pérdida de capital superior al 99%." : isPt ? "A meta requer uma perda de capital superior a 99%." : "Target requires a capital loss exceeding 99%.";
-        effRate = -0.99;
-      } else if (effFV > testFVHigh) {
-        mainTitle = strings.results.neededReturnRate;
-        mainValue = ">1000%";
-        subNote = isEs ? "El objetivo requiere una rentabilidad anualizada superior al 1000%." : isPt ? "A meta requer uma rentabilidade anualizada superior a 1000%." : "Target requires an annualized return exceeding 1000%.";
-        effRate = 10.0;
+        mainValue = unreachableLabel;
+        subNote = isEs ? "No es posible alcanzar un objetivo positivo sin capital inicial ni depósitos." : isPt ? "Não é possível atingir uma meta positiva sem capital inicial nem depósitos." : "Cannot reach a positive target without starting capital or deposits.";
+        effRate = 0;
       } else {
-        for (let iter = 0; iter < 100; iter++) {
-          const mid = (low + high) / 2;
-          const testFV = calcEndAmount(effP, effPMT, effT, mid, compoundFrequency, contributionTiming, contributionFrequency);
-          if (testFV < effFV) {
-            low = mid;
-          } else {
-            high = mid;
+        // Bisection numerical solver for annual return rate
+        let low = -0.99; // -99% minimum return
+        let high = 10.0;  // 1000% maximum return
+
+        const testFVLow = calcEndAmount(effP, effPMT, effT, low, compoundFrequency, contributionTiming, contributionFrequency);
+        const testFVHigh = calcEndAmount(effP, effPMT, effT, high, compoundFrequency, contributionTiming, contributionFrequency);
+        const minFV = Math.min(testFVLow, testFVHigh);
+        const maxFV = Math.max(testFVLow, testFVHigh);
+        const isIncreasing = testFVHigh >= testFVLow;
+
+        if (effFV < minFV) {
+          mainTitle = strings.results.neededReturnRate;
+          mainValue = "<-99%";
+          subNote = isEs ? "El objetivo requiere una pérdida de capital superior al 99%." : isPt ? "A meta requer uma perda de capital superior a 99%." : "Target requires a capital loss exceeding 99%.";
+          effRate = isIncreasing ? -0.99 : 10.0;
+        } else if (effFV > maxFV) {
+          mainTitle = strings.results.neededReturnRate;
+          mainValue = ">1000%";
+          subNote = isEs ? "El objetivo requiere una rentabilidad anualizada superior al 1000%." : isPt ? "A meta requer uma rentabilidade anualizada superior a 1000%." : "Target requires an annualized return exceeding 1000%.";
+          effRate = isIncreasing ? 10.0 : -0.99;
+        } else {
+          for (let iter = 0; iter < 100; iter++) {
+            const mid = (low + high) / 2;
+            const testFV = calcEndAmount(effP, effPMT, effT, mid, compoundFrequency, contributionTiming, contributionFrequency);
+            if (isIncreasing ? testFV < effFV : testFV > effFV) {
+              low = mid;
+            } else {
+              high = mid;
+            }
           }
-        }
-        effRate = (low + high) / 2;
-        mainTitle = strings.results.neededReturnRate;
-        mainValue = (effRate * 100).toFixed(2) + "%";
-        if (effRate < 0) {
-          subNote = isEs ? "Se requiere una rentabilidad negativa (reducción de capital) porque tus depósitos totales superan el objetivo." : isPt ? "É necessário um retorno negativo (redução de capital) porque seus depósitos totais superam a meta." : "A negative return (capital drawdown) is required because total deposits exceed your target.";
+          effRate = (low + high) / 2;
+          mainTitle = strings.results.neededReturnRate;
+          mainValue = (effRate * 100).toFixed(2) + "%";
+          if (effRate < 0) {
+            subNote = isEs ? "Se requiere una rentabilidad negativa (reducción de capital) porque tus depósitos totales superan el objetivo." : isPt ? "É necessário um retorno negativo (redução de capital) porque seus depósitos totais superam a meta." : "A negative return (capital drawdown) is required because total deposits exceed your target.";
+          }
         }
       }
     } else if (calculationTarget === "length") {
@@ -383,8 +391,8 @@ export default function InvestmentCalculatorClient({
       effFV = rawTargetAmount;
       const i = getPeriodicRate(effRate, compoundFrequency, contributionFrequency);
 
-      // Scenario 1: Target already met and not withdrawing
-      if (effP >= effFV && effPMT >= 0) {
+      // Scenario 1: Target already met and not withdrawing / losing value
+      if (effP >= effFV && effPMT >= 0 && (effP === effFV || effRate >= 0)) {
         effT = 0;
         mainTitle = strings.results.neededLength;
         mainValue = strings.results.yearsOnly(0);
@@ -414,29 +422,52 @@ export default function InvestmentCalculatorClient({
             const { val, note } = formatHorizon(effT);
             mainValue = val;
             subNote = note;
+            if (effT > 100) effT = 100;
           }
         }
       } 
       // Scenario 3: Lump sum only (no periodic additions/withdrawals)
       else if (effPMT === 0) {
         if (effFV > effP) {
-          const N = Math.log(effFV / effP) / Math.log(1 + i);
-          effT = N / p;
-          mainTitle = strings.results.neededLength;
-          if (effT > 100) {
-            mainValue = `100+ ${yearUnit}`;
-            subNote = isEs ? "El plazo requerido supera los 100 años con el rendimiento actual." : isPt ? "O prazo necessário ultrapassa 100 anos com o retorno atual." : "Target horizon exceeds 100 years at the current return rate.";
-            effT = 100;
+          if (i <= 0 || effP <= 0) {
+            mainTitle = strings.results.neededLength;
+            mainValue = "N/A";
+            subNote = isEs ? "Con rentabilidad negativa y sin aportes, el saldo disminuye y no puede alcanzar un objetivo mayor." : isPt ? "Com retorno negativo e sem aportes, o saldo diminui e não pode atingir uma meta maior." : "With negative returns and no contributions, the balance decreases and cannot reach a higher target.";
+            effT = 0;
           } else {
-            const { val, note } = formatHorizon(effT);
-            mainValue = val;
-            subNote = note;
+            const N = Math.log(effFV / effP) / Math.log(1 + i);
+            effT = N / p;
+            mainTitle = strings.results.neededLength;
+            if (effT > 100) {
+              mainValue = `100+ ${yearUnit}`;
+              subNote = isEs ? "El plazo requerido supera los 100 años con el rendimiento actual." : isPt ? "O prazo necessário ultrapassa 100 anos com o retorno atual." : "Target horizon exceeds 100 years at the current return rate.";
+              effT = 100;
+            } else {
+              const { val, note } = formatHorizon(effT);
+              mainValue = val;
+              subNote = note;
+            }
           }
         } else {
-          mainTitle = strings.results.neededLength;
-          mainValue = "N/A";
-          subNote = isEs ? "Con rentabilidad positiva y sin retiros, el saldo solo aumenta." : isPt ? "Com retornos positivos e sem resgates, o saldo só aumenta." : "With positive returns and no withdrawals, the balance only increases.";
-          effT = 0;
+          if (i < 0 && effFV > 0 && effP > 0) {
+            const N = Math.log(effFV / effP) / Math.log(1 + i);
+            effT = N / p;
+            mainTitle = strings.results.neededLength;
+            if (effT > 100) {
+              mainValue = `100+ ${yearUnit}`;
+              subNote = isEs ? "El plazo requerido supera los 100 años con el rendimiento actual." : isPt ? "O prazo necessário ultrapassa 100 anos com o retorno atual." : "Target horizon exceeds 100 years at the current return rate.";
+              effT = 100;
+            } else {
+              const { val, note } = formatHorizon(effT);
+              mainValue = val;
+              subNote = note;
+            }
+          } else {
+            mainTitle = strings.results.neededLength;
+            mainValue = "N/A";
+            subNote = isEs ? "Con rentabilidad positiva y sin retiros, el saldo solo aumenta." : isPt ? "Com retornos positivos e sem resgates, o saldo só aumenta." : "With positive returns and no withdrawals, the balance only increases.";
+            effT = 0;
+          }
         }
       } 
       // Scenario 4: Periodic contribution or withdrawal with compounding
@@ -446,21 +477,21 @@ export default function InvestmentCalculatorClient({
         // Subcase 4A: Depletion / Drawdown (effFV < effP and effPMT < 0)
         if (effFV < effP && effPMT < 0) {
           // If principal growth exceeds or equals withdrawal rate, fund is perpetual
-          if (effP + A >= 0) {
+          if (i > 0 && effP + A >= 0) {
             mainTitle = strings.results.neededLength;
             mainValue = perpetualLabel;
             subNote = isEs ? "Tu cartera genera más rendimientos que los retiros periódicos, por lo que el saldo nunca se agotará hasta el objetivo." : isPt ? "Sua carteira gera mais rendimentos do que os resgates periódicos, portanto o saldo nunca se esgotará até a meta." : "Your portfolio generates more in investment returns than you withdraw, so the balance will never deplete to your target.";
             effT = 0;
           } else {
             // Withdrawals exceed growth; balance steadily draws down to effFV
-            const ratio = (effFV + A) / (effP + A);
-            if (ratio <= 0) {
+            const ratio = effP + A !== 0 ? (effFV + A) / (effP + A) : -1;
+            const N = ratio > 0 && 1 + i > 0 ? Math.log(ratio) / Math.log(1 + i) : -1;
+            if (ratio <= 0 || N <= 0) {
               mainTitle = strings.results.neededLength;
               mainValue = unreachableLabel;
               subNote = isEs ? "El objetivo no se puede alcanzar con los parámetros actuales de retiros y rentabilidad." : isPt ? "O objetivo não pode ser alcançado com os parâmetros atuais de resgate e retorno." : "Target cannot be reached under the current withdrawal and return parameters.";
               effT = 0;
             } else {
-              const N = Math.log(ratio) / Math.log(1 + i);
               effT = N / p;
               mainTitle = strings.results.neededLength;
               if (effT > 100) {
@@ -477,20 +508,20 @@ export default function InvestmentCalculatorClient({
         } 
         // Subcase 4B: Attempting to grow with withdrawals (effFV > effP and effPMT < 0)
         else if (effFV > effP && effPMT < 0) {
-          if (effP + A <= 0) {
+          if (i <= 0 || effP + A <= 0) {
             mainTitle = strings.results.neededLength;
             mainValue = unreachableLabel;
             subNote = isEs ? "El objetivo no se puede alcanzar porque los retiros periódicos superan el crecimiento de la cartera." : isPt ? "O objetivo não pode ser alcançado porque os resgates periódicos superam o crescimento da carteira." : "Target cannot be reached because periodic withdrawals exceed portfolio investment growth.";
             effT = 0;
           } else {
             const ratio = (effFV + A) / (effP + A);
-            if (ratio <= 0) {
+            const N = ratio > 0 && 1 + i > 0 ? Math.log(ratio) / Math.log(1 + i) : -1;
+            if (ratio <= 0 || N <= 0) {
               mainTitle = strings.results.neededLength;
               mainValue = unreachableLabel;
               subNote = isEs ? "El objetivo no se puede alcanzar con los parámetros actuales." : isPt ? "O objetivo não pode ser alcançado com os parâmetros atuais." : "Target cannot be reached under current parameters.";
               effT = 0;
             } else {
-              const N = Math.log(ratio) / Math.log(1 + i);
               effT = N / p;
               mainTitle = strings.results.neededLength;
               if (effT > 100) {
@@ -505,25 +536,30 @@ export default function InvestmentCalculatorClient({
             }
           }
         }
-        // Subcase 4C: Standard accumulation (effFV > effP and effPMT > 0)
+        // Subcase 4C: Standard accumulation or negative-rate drawdown with positive contributions
         else {
-          const ratio = (effFV + A) / (effP + A);
-          if (ratio <= 0) {
-            setResult(null);
-            return;
-          }
-          const N = Math.log(ratio) / Math.log(1 + i);
-          effT = N / p;
+          const ratio = effP + A !== 0 ? (effFV + A) / (effP + A) : -1;
+          const N = ratio > 0 && 1 + i > 0 ? Math.log(ratio) / Math.log(1 + i) : -1;
           mainTitle = strings.results.neededLength;
-
-          if (effT > 100) {
-            mainValue = `100+ ${yearUnit}`;
-            subNote = isEs ? "El plazo requerido supera los 100 años al ritmo actual de aportes y rentabilidad." : isPt ? "O prazo necessário ultrapassa 100 anos no ritmo atual de aportes e rentabilidade." : "Target horizon exceeds 100 years at the current contribution and return rate.";
-            effT = 100;
+          if (ratio <= 0 || 1 + i <= 0 || N <= 0) {
+            mainValue = "N/A";
+            subNote = isEs
+              ? "El objetivo no se puede alcanzar porque las pérdidas por rentabilidad negativa superan tus aportes periódicos."
+              : isPt
+              ? "O objetivo não pode ser alcançado porque as perdas por rentabilidade negativa superam seus aportes periódicos."
+              : "Target cannot be reached because negative investment returns outweigh your periodic contributions.";
+            effT = 0;
           } else {
-            const { val, note } = formatHorizon(effT);
-            mainValue = val;
-            subNote = note;
+            effT = N / p;
+            if (effT > 100) {
+              mainValue = `100+ ${yearUnit}`;
+              subNote = isEs ? "El plazo requerido supera los 100 años al ritmo actual de aportes y rentabilidad." : isPt ? "O prazo necessário ultrapassa 100 anos no ritmo atual de aportes e rentabilidade." : "Target horizon exceeds 100 years at the current contribution and return rate.";
+              effT = 100;
+            } else {
+              const { val, note } = formatHorizon(effT);
+              mainValue = val;
+              subNote = note;
+            }
           }
         }
       }
@@ -531,6 +567,7 @@ export default function InvestmentCalculatorClient({
 
     // Build accumulation schedule and breakdown
     const breakdown: YearlyBreakdown[] = [];
+    const formatYearRowLabel = (y: number) => (isEs ? `Año ${y}` : isPt ? `Ano ${y}` : `Year ${y}`);
 
     if (effT <= 0) {
       breakdown.push({
@@ -538,7 +575,7 @@ export default function InvestmentCalculatorClient({
         principal: effP,
         interest: 0,
         balance: effP,
-        label: "Starting Capital",
+        label: isEs ? "Capital Inicial" : isPt ? "Capital Inicial" : "Starting Capital",
       });
     } else {
       for (let year = 1; year <= Math.floor(effT); year++) {
@@ -549,17 +586,24 @@ export default function InvestmentCalculatorClient({
           principal: principalAtYear,
           interest: balanceAtYear - principalAtYear,
           balance: balanceAtYear,
-          label: `Year ${year}`,
+          label: formatYearRowLabel(year),
         });
       }
 
       // If fractional year exists in length mode or custom duration
       const hasFractionalYear = effT > Math.floor(effT) && effT <= 100;
       if (hasFractionalYear) {
-        const finalMonths = Math.round(effT * 12 * 10) / 10;
-        const finalY = Math.floor(effT);
-        const finalM = Number((finalMonths - finalY * 12).toFixed(1));
-        const finalLabel = finalM > 0 ? `Yr ${finalY} (Mo ${finalM})` : `Year ${finalY}`;
+        const totalMonths = Math.round(effT * 12);
+        const wholeY = Math.floor(totalMonths / 12);
+        const remM = totalMonths % 12;
+        const finalLabel =
+          remM > 0
+            ? isEs
+              ? `Año ${wholeY} (Mes ${remM})`
+              : isPt
+              ? `Ano ${wholeY} (Mês ${remM})`
+              : `Yr ${wholeY} (Mo ${remM})`
+            : formatYearRowLabel(wholeY);
         const finalPrincipal = effP + effPMT * (effT * p);
         breakdown.push({
           year: Number(effT.toFixed(2)),
@@ -571,7 +615,8 @@ export default function InvestmentCalculatorClient({
       }
     }
 
-    const totalPrincipalDeposited = effP + effPMT * (effT * p);
+    const rawTotalContributions = effPMT * (effT * p);
+    const totalPrincipalDeposited = effP + rawTotalContributions;
     const totalInterestEarned = effFV - totalPrincipalDeposited;
 
     setResult({
@@ -581,8 +626,11 @@ export default function InvestmentCalculatorClient({
       subNote,
       targetBalance: formatCurrencyValue(effFV, currency, { showSymbol: false }),
       startingAmount: formatCurrencyValue(effP, currency, { showSymbol: false }),
-      totalContributions: formatCurrencyValue(effPMT * (effT * p), currency, { showSymbol: false }),
+      totalContributions: formatCurrencyValue(rawTotalContributions, currency, { showSymbol: false }),
       totalInterest: formatCurrencyValue(totalInterestEarned, currency, { showSymbol: false }),
+      rawStartingAmount: effP,
+      rawTotalContributions,
+      rawTotalInterest: totalInterestEarned,
       isLoss: totalInterestEarned < 0,
       breakdown,
       displayYears: effT.toFixed(1),
@@ -600,6 +648,7 @@ export default function InvestmentCalculatorClient({
     currency,
     formatCurrency,
     strings,
+    currentLocale,
   ]);
 
   const calculateInvestment = (e?: React.FormEvent) => {
@@ -609,7 +658,13 @@ export default function InvestmentCalculatorClient({
     if (resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    toast.success("Investment Plan Projected!");
+    toast.success(
+      currentLocale === "es"
+        ? "¡Plan de inversión proyectado!"
+        : currentLocale === "pt"
+        ? "Plano de investimento projetado!"
+        : "Investment Plan Projected!"
+    );
   };
 
   const reset = () => {
@@ -648,7 +703,13 @@ export default function InvestmentCalculatorClient({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success("Exported accumulation schedule to CSV!");
+    toast.success(
+      currentLocale === "es"
+        ? "¡Tabla de acumulación exportada a CSV!"
+        : currentLocale === "pt"
+        ? "Tabela de acumulação exportada para CSV!"
+        : "Exported accumulation schedule to CSV!"
+    );
   };
 
   const currentMathFormula = useMemo(() => {

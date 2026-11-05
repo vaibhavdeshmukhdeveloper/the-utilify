@@ -84,9 +84,11 @@ export default function TextConverterClient({
   const toTitleCase = () => {
     const smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|vs|via)$/i;
     const words = text.toLowerCase().split(/(\s+)/);
-    const capWords = words.map((word, index) => {
+    let isFirstWord = true;
+    const capWords = words.map((word) => {
       if (word.trim().length === 0) return word;
-      if (index > 0 && word.match(smallWords)) return word;
+      if (!isFirstWord && word.match(smallWords)) return word;
+      isFirstWord = false;
       return word.charAt(0).toUpperCase() + word.slice(1);
     });
     setText(capWords.join(""));
@@ -104,7 +106,11 @@ export default function TextConverterClient({
   };
 
   const toCamelCase = () => {
-    const words = text.replace(/[^\p{L}\p{N}\s_-]/gu, "").split(/[\s_-]+/);
+    const cleaned = text
+      .replace(/([a-z\d])([A-Z])/g, "$1 $2")
+      .replace(/[^\p{L}\p{N}\s_-]/gu, "")
+      .trim();
+    const words = cleaned ? cleaned.split(/[\s_-]+/) : [];
     if (words.length === 0) return;
     const res = words
       .map((word, index) => {
@@ -114,6 +120,20 @@ export default function TextConverterClient({
       .join("");
     setText(res);
     toast.success("Converted to camelCase");
+  };
+
+  const toPascalCase = () => {
+    const cleaned = text
+      .replace(/([a-z\d])([A-Z])/g, "$1 $2")
+      .replace(/[^\p{L}\p{N}\s_-]/gu, "")
+      .trim();
+    const words = cleaned ? cleaned.split(/[\s_-]+/) : [];
+    if (words.length === 0) return;
+    const res = words
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join("");
+    setText(res);
+    toast.success("Converted to PascalCase");
   };
 
   const toSnakeCase = () => {
@@ -281,10 +301,13 @@ export default function TextConverterClient({
               <Button onClick={toCamelCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
                 camelCase
               </Button>
+              <Button onClick={toPascalCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
+                PascalCase
+              </Button>
               <Button onClick={toSnakeCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
                 snake_case
               </Button>
-              <Button onClick={toKebabCase} className="h-9 rounded-xl font-bold shadow-xs text-xs col-span-2 sm:col-span-1" variant="outline">
+              <Button onClick={toKebabCase} className="h-9 rounded-xl font-bold shadow-xs text-xs" variant="outline">
                 kebab-case
               </Button>
             </div>

@@ -59,6 +59,11 @@ export async function GET() {
   - $n$ = Compounding frequency (1 for annually, 4 for quarterly, 12 for monthly)
   - $t$ = Time in years
 
+#### FIRE (Financial Independence Retire Early) Calculator
+- **URL:** https://www.theutilify.com/fire-calculator
+- **Embed URL:** https://www.theutilify.com/embed/fire-calculator
+- **Capabilities:** Computes 4% rule targets, Lean FIRE (75%), Standard FIRE (100%), and Fat FIRE (125%) milestones with Fisher inflation adjustment and localized target milestone dates.
+
 #### Body Mass Index (BMI) Calculator
 - **URL:** https://www.theutilify.com/bmi-calculator
 - **Embed URL:** https://www.theutilify.com/embed/bmi-calculator
@@ -77,6 +82,7 @@ export async function GET() {
 
 #### Date & Age Calculators
 - **Date Calculator:** https://www.theutilify.com/date-calculator (Calculates exact interval between dates, business day counts excluding weekends, and date addition/subtraction).
+- **Business Days Calculator:** https://www.theutilify.com/business-days-calculator (Calculates elapsed working days, excludes weekends, and models project SLAs and net payment terms).
 - **Age Calculator:** https://www.theutilify.com/age-calculator (Calculates chronological age in years, months, days, hours, minutes, seconds, next birthday countdown, and Western zodiac sign).
 
 #### Multi-Category Unit Converter
@@ -98,6 +104,15 @@ export async function GET() {
 - **Embed URL:** https://www.theutilify.com/embed/image-compressor
 - **Capabilities:** Compresses JPEG, PNG, and WebP images directly in the browser via Canvas API and JSZip. Batch compression with individual or master .zip download. Zero server uploads for complete confidentiality.
 
+#### Format-Specific Image Compressors
+- **Compress PNG:** https://www.theutilify.com/compress-png (Embed: https://www.theutilify.com/embed/compress-png) - Lossless and lossy PNG compression preserving 32-bit alpha transparency.
+- **Compress JPEG:** https://www.theutilify.com/compress-jpeg (Embed: https://www.theutilify.com/embed/compress-jpeg) - Lossy JPEG compression reducing LCP load times.
+- **Compress WebP:** https://www.theutilify.com/compress-webp (Embed: https://www.theutilify.com/embed/compress-webp) - Modern WebP compression for superior bandwidth reduction.
+
+#### E-Commerce & Photo Isolation
+- **Make Signature Transparent:** https://www.theutilify.com/make-signature-transparent - Isolates ink signatures from paper photos for PDF document signing.
+- **White Background Product Photos:** https://www.theutilify.com/white-background-product-photos - Generates clean #FFFFFF studio backgrounds for Amazon, Shopify, and eBay.
+
 #### Color Palette Generator
 - **URL:** https://www.theutilify.com/color-palette
 - **Embed URL:** https://www.theutilify.com/embed/color-palette
@@ -110,6 +125,10 @@ export async function GET() {
 #### PDF to Image Converter
 - **URL:** https://www.theutilify.com/pdf-to-image
 - **Capabilities:** Renders multi-page PDF files into 150 DPI high-resolution PNG images streamed as a unified ZIP archive.
+
+#### PDF to JPG Converter
+- **URL:** https://www.theutilify.com/pdf-to-jpg
+- **Capabilities:** Fast multi-page PDF conversion to high-resolution JPEG images.
 
 #### Split PDF
 - **URL:** https://www.theutilify.com/split-pdf
@@ -132,6 +151,7 @@ export async function GET() {
 - **QR Code Generator:** https://www.theutilify.com/qr-generator (URL, Text, WiFi, vCard, Email QR codes with SVG/PNG download).
 - **Word Counter & Text Analyzer:** https://www.theutilify.com/word-counter (Words, characters, reading time, speaking time, keyword density).
 - **Case & Text Converter:** https://www.theutilify.com/text-converter (camelCase, snake_case, kebab-case, PascalCase, Title Case, UPPERCASE, lowercase).
+- **PX to REM Converter:** https://www.theutilify.com/px-to-rem (Embed: https://www.theutilify.com/embed/px-to-rem) - Bidirectional PX ↔ REM/EM/PT converter, CSS clamp() fluid typography generator, and Tailwind v4 spacing cheat sheet.
 - **Base64 Encoder/Decoder:** https://www.theutilify.com/base64 (Text and binary file Base64 conversions).
 - **Diff Checker:** https://www.theutilify.com/diff-checker (Side-by-side and unified text comparison).
 - **Lorem Ipsum Generator:** https://www.theutilify.com/lorem-ipsum (Placeholder text generator).

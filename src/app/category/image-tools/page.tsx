@@ -130,16 +130,16 @@ const imageFaqs: CategoryFaqItem[] = [
 export default function ImageToolsCategoryPage() {
   return (
     <CategoryHubLayout
-      categoryName="Image &amp; Media Tools"
+      categoryName="Image & Media Tools"
       categorySlug="image-tools"
-      headline="Free Online Image Tools &amp; Optimization Suite"
+      headline="Free Online Image Tools & Optimization Suite"
       subheadline="Studio-grade AI background removal, client-side WebP/PNG compression, and accessible color generation."
       description="Professional online image suite. Remove backgrounds with AI, compress images client-side, and generate accessible color palettes for free."
       tools={imageTools}
       faqs={imageFaqs}
       detailedContent={
         <div>
-          <h2>Optimize Visual Content for E-Commerce, Web &amp; Design</h2>
+          <h2>Optimize Visual Content for E-Commerce, Web & Design</h2>
           <p>
             High-fidelity visual assets are crucial for modern e-commerce stores, portfolio websites, and digital marketing campaigns. However, heavy photographic assets often slow down mobile web performance and penalize SEO rankings.
           </p>

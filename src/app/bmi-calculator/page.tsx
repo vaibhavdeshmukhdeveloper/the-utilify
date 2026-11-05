@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Calculate your exact Body Mass Index (BMI), ideal weight range, and WHO health category instantly with Metric and Imperial units.",
   alternates: {
     canonical: "/bmi-calculator",
+    languages: {
+      en: "https://www.theutilify.com/bmi-calculator",
+      es: "https://www.theutilify.com/es/bmi-calculator",
+      pt: "https://www.theutilify.com/pt/bmi-calculator",
+      "x-default": "https://www.theutilify.com/bmi-calculator",
+    },
   },
   openGraph: {
     title: "BMI Calculator - Free Body Mass Index Calculator | Utilify",

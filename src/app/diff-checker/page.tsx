@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Compare two pieces of text, code, or JSON side-by-side. Highlight added, removed, and modified characters and lines instantly with zero server storage.",
   alternates: {
     canonical: "/diff-checker",
+    languages: {
+      en: "https://www.theutilify.com/diff-checker",
+      es: "https://www.theutilify.com/es/diff-checker",
+      pt: "https://www.theutilify.com/pt/diff-checker",
+      "x-default": "https://www.theutilify.com/diff-checker",
+    },
   },
   openGraph: {
     title: "Diff Checker - Free Side-by-Side Text Comparison | Utilify",

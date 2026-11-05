@@ -353,7 +353,7 @@ export default function DiffCheckerClient() {
                       >
                         <span className="w-7 select-none opacity-40 font-bold text-right shrink-0">{line.num || ""}</span>
                         <span className="w-3.5 select-none opacity-45 shrink-0">{line.type === "removed" ? "-" : ""}</span>
-                        <span className="whitespace-pre truncate">{line.text}</span>
+                        <span className="whitespace-pre">{line.text}</span>
                       </div>
                     ))}
                   </div>
@@ -376,7 +376,7 @@ export default function DiffCheckerClient() {
                       >
                         <span className="w-7 select-none opacity-40 font-bold text-right shrink-0">{line.num || ""}</span>
                         <span className="w-3.5 select-none opacity-45 shrink-0">{line.type === "added" ? "+" : ""}</span>
-                        <span className="whitespace-pre truncate">{line.text}</span>
+                        <span className="whitespace-pre">{line.text}</span>
                       </div>
                     ))}
                   </div>

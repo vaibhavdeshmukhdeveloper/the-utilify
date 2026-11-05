@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Convert PDF pages into high-resolution PNG or JPG graphics. Fast, secure in-memory conversion with zero permanent file storage.",
   alternates: {
     canonical: "/pdf-to-image",
+    languages: {
+      en: "https://www.theutilify.com/pdf-to-image",
+      es: "https://www.theutilify.com/es/pdf-to-image",
+      pt: "https://www.theutilify.com/pt/pdf-to-image",
+      "x-default": "https://www.theutilify.com/pdf-to-image",
+    },
   },
   openGraph: {
     title: "PDF to Image Converter - Free Online PDF to PNG/JPG | Utilify",

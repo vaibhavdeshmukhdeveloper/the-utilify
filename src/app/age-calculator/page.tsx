@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Calculate your precise chronological age in years, months, days, hours, and minutes, plus an accurate live countdown to your next birthday.",
   alternates: {
     canonical: "/age-calculator",
+    languages: {
+      en: "https://www.theutilify.com/age-calculator",
+      es: "https://www.theutilify.com/es/age-calculator",
+      pt: "https://www.theutilify.com/pt/age-calculator",
+      "x-default": "https://www.theutilify.com/age-calculator",
+    },
   },
   openGraph: {
     title: "Age Calculator - Exact Age & Birthday Countdown | Utilify",

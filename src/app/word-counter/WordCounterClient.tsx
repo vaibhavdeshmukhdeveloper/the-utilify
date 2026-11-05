@@ -86,10 +86,10 @@ export default function WordCounterClient({
   // Calculations
   const charCount = text.length;
   const charNoSpaces = text.replace(/\s/g, "").length;
-  const rawWords = text.trim() === "" ? [] : text.trim().split(/\s+/);
+  const rawWords = text.trim() === "" ? [] : text.trim().split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w));
   const wordCount = rawWords.length;
   const lineCount = text === "" ? 0 : text.split("\n").length;
-  const sentenceCount = text.split(/[.!?]+/).filter((s) => s.trim().length > 0).length;
+  const sentenceCount = text.replace(/\b\d+\.\d+\b/g, "").split(/[.!?]+/).filter((s) => s.trim().length > 0).length;
   const paragraphCount = text.split(/\n\s*\n/).filter((p) => p.trim().length > 0).length;
 
   // Time & Length estimates
@@ -155,9 +155,11 @@ export default function WordCounterClient({
   const toTitleCase = () => {
     const smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|of|on|or|the|to|vs|via)$/i;
     const words = text.toLowerCase().split(/(\s+)/);
-    const capWords = words.map((word, index) => {
+    let isFirstWord = true;
+    const capWords = words.map((word) => {
       if (word.trim().length === 0) return word;
-      if (index > 0 && word.match(smallWords)) return word;
+      if (!isFirstWord && word.match(smallWords)) return word;
+      isFirstWord = false;
       return word.charAt(0).toUpperCase() + word.slice(1);
     });
     setText(capWords.join(""));

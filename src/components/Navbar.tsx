@@ -32,6 +32,12 @@ export function Navbar() {
     setIsMac(isMacPlatform);
   }, []);
 
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = currentLang;
+    }
+  }, [currentLang]);
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,7 +108,7 @@ export function Navbar() {
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
               className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-              aria-label="Search"
+              aria-label={t.nav.searchPlaceholder}
             >
               <Search className="h-5 w-5" />
             </button>
@@ -110,7 +116,7 @@ export function Navbar() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent focus:outline-none transition-all"
-              aria-label="Toggle Menu"
+              aria-label={currentLang === "es" ? "Alternar menú" : currentLang === "pt" ? "Alternar menu" : "Toggle Menu"}
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>

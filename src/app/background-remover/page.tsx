@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Remove background from images instantly using deep learning AI. Download crystal-clear transparent PNGs with zero watermarks and zero file storage.",
   alternates: {
     canonical: "/background-remover",
+    languages: {
+      en: "https://www.theutilify.com/background-remover",
+      es: "https://www.theutilify.com/es/background-remover",
+      pt: "https://www.theutilify.com/pt/background-remover",
+      "x-default": "https://www.theutilify.com/background-remover",
+    },
   },
   openGraph: {
     title: "AI Background Remover - Free Transparent PNG (No Sign-Up) | Utilify",

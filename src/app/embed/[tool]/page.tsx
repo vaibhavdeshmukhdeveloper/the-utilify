@@ -17,16 +17,21 @@ const ColorPaletteClient = dynamic(() => import("@/app/color-palette/ColorPalett
 const LoremIpsumClient = dynamic(() => import("@/app/lorem-ipsum/LoremIpsumClient"));
 const DateCalculatorClient = dynamic(() => import("@/app/date-calculator/DateCalculatorClient"));
 const AgeCalculatorClient = dynamic(() => import("@/app/age-calculator/AgeCalculatorClient"));
+const FireCalculatorClient = dynamic(() => import("@/app/fire-calculator/FireCalculatorClient"));
+const PxToRemClient = dynamic(() => import("@/app/px-to-rem/PxToRemClient"));
+const ImageCompressorClient = dynamic(() => import("@/app/image-compressor/ImageCompressorClient"));
 
 const EMBEDDABLE_TOOLS: Record<string, { title: string; component: React.ComponentType<any> }> = {
   "sip-calculator": { title: "SIP Calculator", component: SipCalculatorClient },
   "investment-calculator": { title: "Investment Calculator", component: InvestmentCalculatorClient },
+  "fire-calculator": { title: "FIRE Calculator", component: FireCalculatorClient },
   "bmi-calculator": { title: "BMI Calculator", component: BmiCalculatorClient },
   "password-generator": { title: "Password Generator", component: PasswordGeneratorClient },
   "qr-generator": { title: "QR Code Generator", component: QrGeneratorClient },
   "word-counter": { title: "Word Counter", component: WordCounterClient },
   "json-formatter": { title: "JSON Formatter", component: JsonFormatterClient },
   "unit-converter": { title: "Unit Converter", component: UnitConverterClient },
+  "px-to-rem": { title: "PX to REM Converter", component: PxToRemClient },
   "diff-checker": { title: "Diff Checker", component: DiffCheckerClient },
   "base64": { title: "Base64 Encoder/Decoder", component: Base64Client },
   "text-converter": { title: "Text Case Converter", component: TextConverterClient },
@@ -34,6 +39,10 @@ const EMBEDDABLE_TOOLS: Record<string, { title: string; component: React.Compone
   "lorem-ipsum": { title: "Lorem Ipsum Generator", component: LoremIpsumClient },
   "date-calculator": { title: "Date Calculator", component: DateCalculatorClient },
   "age-calculator": { title: "Age Calculator", component: AgeCalculatorClient },
+  "image-compressor": { title: "Image Compressor", component: ImageCompressorClient },
+  "compress-png": { title: "Compress PNG", component: ImageCompressorClient },
+  "compress-jpeg": { title: "Compress JPEG", component: ImageCompressorClient },
+  "compress-webp": { title: "Compress WebP", component: ImageCompressorClient },
 };
 
 export function generateStaticParams() {

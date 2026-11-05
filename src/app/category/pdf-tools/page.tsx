@@ -97,7 +97,7 @@ const pdfFaqs: CategoryFaqItem[] = [
 export default function PdfToolsCategoryPage() {
   return (
     <CategoryHubLayout
-      categoryName="PDF &amp; Document Tools"
+      categoryName="PDF & Document Tools"
       categorySlug="pdf-tools"
       headline="Free Online PDF Tools Suite"
       subheadline="Split, merge, convert, and compile PDF documents instantly with zero file retention and no software installs."

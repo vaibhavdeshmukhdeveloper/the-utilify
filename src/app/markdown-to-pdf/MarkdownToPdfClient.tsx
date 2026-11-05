@@ -127,8 +127,12 @@ export default function MarkdownToPdfClient() {
     setIsLoading(true);
     setResult(null);
     try {
+      const file = files[0];
+      const text = await file.text();
+      setMarkdown(text);
+
       const formData = new FormData();
-      formData.append("file", files[0]);
+      formData.append("file", file);
       formData.append("theme", activeTheme);
 
       const response = await fetch("/api/markdown-to-pdf", {
@@ -140,7 +144,8 @@ export default function MarkdownToPdfClient() {
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      setResult({ url, filename: `${files[0].name.split(".")[0] || "document"}.pdf` });
+      const baseName = file.name.replace(/\.[^/.]+$/, "") || "document";
+      setResult({ url, filename: `${baseName}.pdf` });
       toast.success("Markdown converted to PDF successfully!");
     } catch (error: any) {
       toast.error(error.message || "Failed to convert Markdown file");

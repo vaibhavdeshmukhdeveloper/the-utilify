@@ -63,29 +63,71 @@ export default function PasswordGeneratorClient({
   }, []);
 
   const generatePassword = useCallback(() => {
-    let charset = "";
-    if (includeLower) charset += "abcdefghijklmnopqrstuvwxyz";
-    if (includeUpper) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if (includeNumbers) charset += "0123456789";
-    if (includeSymbols) charset += "!@#$%^&*()_+-=[]{}|;':\",./<>?";
-
-    if (excludeSimilar) {
-      // Exclude i, l, 1, I, o, 0, O, o, etc.
-      charset = charset.replace(/[il1I|o0O]/g, "");
+    const sets: string[] = [];
+    if (includeLower) {
+      const s = excludeSimilar ? "abcdefghjkmnpqrstuvwxyz" : "abcdefghijklmnopqrstuvwxyz";
+      if (s) sets.push(s);
+    }
+    if (includeUpper) {
+      const s = excludeSimilar ? "ABCDEFGHJKLMNPQRSTUVWXYZ" : "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      if (s) sets.push(s);
+    }
+    if (includeNumbers) {
+      const s = excludeSimilar ? "23456789" : "0123456789";
+      if (s) sets.push(s);
+    }
+    if (includeSymbols) {
+      const s = excludeSimilar ? "!@#$%^&*()_+-=[]{}:,.<>?" : "!@#$%^&*()_+-=[]{}|;':\",./<>?";
+      if (s) sets.push(s);
     }
 
-    if (!charset) {
+    const charset = sets.join("");
+    if (!charset || sets.length === 0) {
       toast.error("Please select at least one character set");
       return;
     }
 
-    let generated = "";
-    const array = new Uint32Array(length);
-    window.crypto.getRandomValues(array);
-    for (let i = 0; i < length; i++) {
-      generated += charset[array[i] % charset.length];
+    // Cryptographically unbiased character picker with rejection sampling
+    const getSecureRandomChar = (chars: string): string => {
+      const len = chars.length;
+      const max = Math.floor(0x100000000 / len) * len;
+      const buf = new Uint32Array(1);
+      while (true) {
+        window.crypto.getRandomValues(buf);
+        if (buf[0] < max) {
+          return chars[buf[0] % len];
+        }
+      }
+    };
+
+    // Guarantee at least 1 character from each chosen character set
+    const chars: string[] = [];
+    for (const set of sets) {
+      if (chars.length < length) {
+        chars.push(getSecureRandomChar(set));
+      }
     }
 
+    // Fill the remainder from the combined charset
+    while (chars.length < length) {
+      chars.push(getSecureRandomChar(charset));
+    }
+
+    // Unbiased Fisher-Yates shuffle
+    const buf = new Uint32Array(1);
+    for (let i = chars.length - 1; i > 0; i--) {
+      const max = Math.floor(0x100000000 / (i + 1)) * (i + 1);
+      while (true) {
+        window.crypto.getRandomValues(buf);
+        if (buf[0] < max) {
+          const j = buf[0] % (i + 1);
+          [chars[i], chars[j]] = [chars[j], chars[i]];
+          break;
+        }
+      }
+    }
+
+    const generated = chars.join("");
     setPassword(generated);
 
     // Save to history (keep last 5)

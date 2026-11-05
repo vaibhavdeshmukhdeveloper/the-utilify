@@ -135,12 +135,23 @@ export default function Base64Client({
 
   const handleDecode = (b64: string) => {
     setBase64Input(b64);
-    if (!b64.trim()) {
+    let clean = b64.trim();
+    if (!clean) {
       setPlainOutput("");
       return;
     }
+    // Strip Data URI prefix if present (e.g. data:text/plain;base64,...)
+    if (clean.includes(";base64,")) {
+      clean = clean.split(";base64,")[1];
+    }
+    // Replace URL-safe base64 characters and whitespace
+    clean = clean.replace(/-/g, "+").replace(/_/g, "/").replace(/\s/g, "");
+    // Pad with '=' if needed
+    while (clean.length % 4 !== 0) {
+      clean += "=";
+    }
     try {
-      const binary = window.atob(b64.trim());
+      const binary = window.atob(clean);
       const bytes = new Uint8Array(binary.length);
       for (let i = 0; i < binary.length; i++) {
         bytes[i] = binary.charCodeAt(i);

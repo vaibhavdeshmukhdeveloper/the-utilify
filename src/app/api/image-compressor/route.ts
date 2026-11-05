@@ -11,19 +11,21 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const quality = parseInt(formData.get("quality") as string) || 80;
+    const rawQuality = parseInt(formData.get("quality") as string, 10);
+    const quality = Math.min(100, Math.max(1, isNaN(rawQuality) ? 80 : rawQuality));
+    const requestedFormat = ((formData.get("format") as string) || "").toLowerCase();
 
     let compressedBuffer: Buffer;
     const extension = file.name.split('.').pop()?.toLowerCase();
     const contentType = file.type || "";
     let outputType = contentType;
 
-    if (extension === 'png' || contentType === 'image/png') {
+    if (requestedFormat === "png" || (!requestedFormat && (extension === 'png' || contentType === 'image/png'))) {
       compressedBuffer = await sharp(buffer)
-        .png({ quality, compressionLevel: 9 })
+        .png({ quality, compressionLevel: 9, palette: quality < 100 })
         .toBuffer();
       outputType = "image/png";
-    } else if (extension === 'webp' || contentType === 'image/webp') {
+    } else if (requestedFormat === "webp" || (!requestedFormat && (extension === 'webp' || contentType === 'image/webp'))) {
       compressedBuffer = await sharp(buffer)
         .webp({ quality })
         .toBuffer();
@@ -31,15 +33,21 @@ export async function POST(req: NextRequest) {
     } else {
       // Default to jpeg/jpg/etc.
       compressedBuffer = await sharp(buffer)
+        .flatten({ background: "#ffffff" })
         .jpeg({ quality })
         .toBuffer();
       outputType = "image/jpeg";
     }
 
+    const cleanName = (file.name || "image").replace(/[\r\n\t]/g, "");
+    const fullFilename = `compressed_${cleanName}`;
+    const asciiFilename = fullFilename.replace(/[^\x20-\x7E]/g, "_").replace(/"/g, "") || "compressed_image";
+    const encodedFilename = encodeURIComponent(fullFilename);
+
     return new NextResponse(compressedBuffer as any, {
       headers: {
         "Content-Type": outputType,
-        "Content-Disposition": `attachment; filename="compressed_${file.name}"`,
+        "Content-Disposition": `attachment; filename="${asciiFilename}"; filename*=UTF-8''${encodedFilename}`,
       },
     });
   } catch (error: any) {

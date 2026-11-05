@@ -25,6 +25,7 @@ export function Footer() {
   // Additional localized names for programmatic and long-tail tools not having a separate route
   const localizedFallbackNames: Record<string, Record<string, string>> = {
     es: {
+      "pdf-to-jpg": "PDF a JPG",
       "compress-png": "Comprimir PNG",
       "compress-jpeg": "Comprimir JPEG",
       "compress-webp": "Comprimir WebP",
@@ -37,6 +38,7 @@ export function Footer() {
       "business-days-calculator": "Calculadora de Días Laborables",
     },
     pt: {
+      "pdf-to-jpg": "PDF para JPG",
       "compress-png": "Comprimir PNG",
       "compress-jpeg": "Comprimir JPEG",
       "compress-webp": "Comprimir WebP",
@@ -319,7 +321,7 @@ export function Footer() {
         {/* Bottom Area */}
         <div className="mt-8 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground text-center sm:text-left">
-            &copy; {currentYear} Utilify. {t.footer.allRightsReserved} Made with <Heart className="inline-block h-3.5 w-3.5 text-red-500 fill-red-500" /> {t.footer.madeWithLove}
+            &copy; {currentYear} Utilify. {t.footer.allRightsReserved} {currentLang === "es" ? "Hecho con" : currentLang === "pt" ? "Feito com" : "Made with"} <Heart className="inline-block h-3.5 w-3.5 text-red-500 fill-red-500" /> {t.footer.madeWithLove}
           </p>
           <div className="flex items-center gap-6 text-xs text-muted-foreground">
             <Link href="/privacy" className="hover:text-primary transition-colors">

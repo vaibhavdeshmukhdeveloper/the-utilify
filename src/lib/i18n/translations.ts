@@ -39,7 +39,7 @@ export const hubTranslations: Record<Language, HubTranslation> = {
     langName: "Español",
     heroBadge: "100% Gratis • Sin Registro • Privacidad Total",
     heroTitle: "Herramientas en Línea Gratuitas y Privadas",
-    heroSubtitle: "La suite definitiva de utilidades para PDF, edición de imágenes, calculadoras financieras y herramientas para desarrolladores. Ejecución directa en tu navegador.",
+    heroSubtitle: "La suite definitiva de utilidades para PDF, edición de imágenes, calculadoras financieras y herramientas para desarrolladores. Procesamiento instantáneo y seguro.",
     searchPlaceholder: "Buscar herramientas (ej. unir pdf, comprimir, quitar fondo)...",
     allCategories: "Todas las Herramientas",
     categories: {
@@ -57,7 +57,7 @@ export const hubTranslations: Record<Language, HubTranslation> = {
     langName: "Português",
     heroBadge: "100% Grátis • Sem Cadastro • Privacidade Total",
     heroTitle: "Ferramentas Online Gratuitas e Privadas",
-    heroSubtitle: "A suite definitiva de utilitários para PDF, processamento de imagens, calculadoras financeiras e ferramentas para desenvolvedores. Execução direta no seu navegador.",
+    heroSubtitle: "A suite definitiva de utilitários para PDF, processamento de imagens, calculadoras financeiras e ferramentas para desenvolvedores. Processamento instantâneo e seguro.",
     searchPlaceholder: "Pesquisar ferramentas (ex. juntar pdf, comprimir, remover fundo)...",
     allCategories: "Todas as Ferramentas",
     categories: {
@@ -79,6 +79,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Unir PDF",
       title: "Unir PDF Gratis Online - Combinar Archivos PDF en Segundos | Utilify",
       description: "Une múltiples documentos PDF en un solo archivo organizado de forma rápida, gratuita y segura. Sin límites de archivos y con total privacidad.",
+      summaryDefinition: "Unir PDF es una herramienta en línea gratuita y privada que permite combinar múltiples archivos PDF en un único documento ordenado al instante, con procesamiento en memoria RAM y cero retención de datos.",
       category: "PDF",
       features: ["Combinar ilimitados archivos PDF", "Reordenar páginas fácilmente", "Procesamiento en memoria seguro", "Sin marcas de agua"],
       howToUse: [
@@ -96,6 +97,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Dividir PDF",
       title: "Dividir PDF Gratis Online - Extraer Páginas de Archivos PDF | Utilify",
       description: "Extrae páginas individuales o rangos específicos de tus archivos PDF gratis en línea. Ideal para contratos y extractos bancarios.",
+      summaryDefinition: "Dividir PDF es una utilidad gratuita en línea que extrae páginas específicas, rangos personalizados o separa todas las páginas de un documento PDF en archivos individuales sin almacenar datos en servidores.",
       category: "PDF",
       features: ["Extraer rangos personalizados (ej. 1-3, 5)", "Separar páginas individuales", "Cero almacenamiento en disco", "Descarga instantánea"],
       howToUse: [
@@ -113,6 +115,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Quitar Fondo con IA",
       title: "Quitar Fondo de Imágenes Gratis con IA - Fondo Transparente | Utilify",
       description: "Elimina el fondo de fotos, personas y productos automáticamente con inteligencia artificial de alta precisión. Descarga en PNG transparente en alta resolución.",
+      summaryDefinition: "Quitar Fondo con IA es una herramienta gratuita que elimina automáticamente el fondo de retratos, productos y firmas mediante redes neuronales profundas, entregando imágenes PNG transparentes en alta resolución.",
       category: "Imágenes",
       features: ["Segmentación neuronal con IA", "Exportación en PNG transparente en alta resolución", "Pincel interactivo para retoques", "Sin créditos ni suscripciones"],
       howToUse: [
@@ -129,16 +132,17 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       slug: "image-compressor",
       name: "Comprimir Imágenes",
       title: "Comprimir Imágenes Gratis Online - Reducir Tamaño JPG, PNG y WebP | Utilify",
-      description: "Reduce el tamaño de tus fotos e imágenes hasta un 80% sin perder calidad visual. Compresión 100% local en tu navegador con descarga en ZIP.",
+      description: "Reduce el tamaño de tus fotos e imágenes hasta un 80% sin perder calidad visual. Compresión rápida y privada con descarga en lote ZIP.",
+      summaryDefinition: "Comprimir Imágenes es un optimizador gratuito que reduce el peso de archivos JPEG, PNG y WebP hasta en un 80% manteniendo la nitidez visual y la transparencia, con exportación individual o en archivo ZIP.",
       category: "Imágenes",
-      features: ["Compresión en tu navegador", "Soporta JPG, PNG y WebP", "Descarga individual o en lote ZIP", "Contador de ahorro en tiempo real"],
+      features: ["Compresión rápida y privada", "Soporta JPG, PNG y WebP", "Descarga individual o en lote ZIP", "Contador de ahorro en tiempo real"],
       howToUse: [
         { step: "Subir imágenes", description: "Selecciona una o varias imágenes de tu dispositivo." },
         { step: "Ajustar calidad", description: "Elige el nivel de compresión deseado con el control deslizante." },
         { step: "Descargar optimizadas", description: "Descarga tus imágenes individuales o en un archivo ZIP." },
       ],
       faqs: [
-        { question: "¿Mis fotos se suben a un servidor?", answer: "No. Toda la compresión se realiza en el navegador de tu computadora o teléfono." },
+        { question: "¿Mis fotos se almacenan en algún servidor?", answer: "No. Tus imágenes nunca se guardan ni retienen; todo el proceso es privado y seguro." },
         { question: "¿Conserva la transparencia PNG?", answer: "Sí, la transparencia del canal alfa se mantiene intacta." },
       ],
     },
@@ -146,17 +150,18 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       slug: "sip-calculator",
       name: "Calculadora SIP",
       title: "Calculadora SIP Online - Interés Compuesto y Crecimiento de Inversiones | Utilify",
-      description: "Calcula el rendimiento futuro de tus inversiones periódicas (SIP) y fondos indexados con fórmulas de interés compuesto y Step-Up.",
+      description: "Calcula el rendimiento futuro de tus inversiones periódicas (SIP) y fondos indexados con fórmulas de interés compuesto mensual y anual.",
+      summaryDefinition: "La Calculadora SIP es un simulador financiero gratuito que proyecta el crecimiento compuesto de planes de inversión sistemática mensual, mostrando capital invertido, intereses ganados y desglose año por año.",
       category: "Calculadoras",
-      features: ["Proyección de interés compuesto", "Simulación Step-Up anual", "Gráficos interactivos", "Fórmulas matemáticas detalladas"],
+      features: ["Proyección de interés compuesto", "Capitalización mensual o anual", "Gráficos interactivos", "Fórmulas matemáticas detalladas"],
       howToUse: [
         { step: "Ingresar monto mensual", description: "Indica la cantidad que planeas invertir cada mes." },
         { step: "Tasa y plazo", description: "Establece el retorno anual esperado y los años de inversión." },
         { step: "Ver proyección", description: "Examina el capital acumulado y las ganancias compuestas." },
       ],
       faqs: [
-        { question: "¿Qué es una inversión SIP?", answer: "Es un plan de inversión sistemática donde inviertes una suma fija periódicamente para promediar costos." },
-        { question: "¿Cómo influye el Step-Up?", answer: "Incrementar tu aporte un 10% cada año acelera exponencialmente tu fondo final." },
+        { question: "¿Qué es una inversión SIP?", answer: "Es un plan de inversión sistemática donde inviertes una suma fija periódicamente para promediar costos y aprovechar el interés compuesto." },
+        { question: "¿Qué diferencia hay entre aportar al inicio o al final del mes?", answer: "Aportar al inicio de cada período (anualidad anticipada) genera un mes adicional de interés compuesto sobre cada depósito." },
       ],
     },
     "bmi-calculator": {
@@ -164,6 +169,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora de IMC",
       title: "Calculadora de IMC Gratis - Índice de Masa Corporal y Peso Saludable | Utilify",
       description: "Calcula tu Índice de Masa Corporal (IMC) al instante con el sistema métrico o imperial y descubre tu rango de peso saludable según la OMS.",
+      summaryDefinition: "La Calculadora de IMC evalúa al instante tu Índice de Masa Corporal en unidades métricas o imperiales y determina tu rango de peso saludable según los estándares oficiales de la Organización Mundial de la Salud (OMS).",
       category: "Calculadoras",
       features: ["Sistema métrico e imperial", "Clasificación oficial de la OMS", "Cálculo de peso saludable", "100% privado y confidencial"],
       howToUse: [
@@ -179,18 +185,19 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
     "qr-generator": {
       slug: "qr-generator",
       name: "Generador de Código QR",
-      title: "Generador de Código QR Gratis - Crear QR para Wi-Fi, URL y Contactos | Utilify",
-      description: "Crea códigos QR personalizados en alta resolución para páginas web, redes Wi-Fi, tarjetas vCard y correos. Descarga en PNG o vector SVG.",
+      title: "Generador de Código QR Gratis - Crear QR para Wi-Fi, URL, Correo y SMS | Utilify",
+      description: "Crea códigos QR personalizados en alta resolución para páginas web, redes Wi-Fi, correos electrónicos y SMS. Descarga en PNG o vector SVG.",
+      summaryDefinition: "El Generador de Código QR crea códigos QR estáticos y personalizables para enlaces URL, redes Wi-Fi, correos electrónicos, SMS y texto directamente en tu navegador, con descarga gratuita en PNG y SVG.",
       category: "Desarrollo",
-      features: ["Códigos QR para Wi-Fi, URLs y vCard", "Niveles de corrección de error L/M/Q/H", "Colores personalizables", "Descargas en PNG y SVG"],
+      features: ["Códigos QR para Wi-Fi, URLs, Email y SMS", "Niveles de corrección de error L/M/Q/H", "Colores personalizables", "Descargas en PNG y SVG"],
       howToUse: [
-        { step: "Seleccionar tipo", description: "Elige si deseas compartir un enlace, red Wi-Fi o tarjeta de contacto." },
+        { step: "Seleccionar tipo", description: "Elige si deseas compartir un enlace, red Wi-Fi, correo o SMS." },
         { step: "Personalizar", description: "Ingresa los datos y ajusta los colores y nivel de corrección." },
         { step: "Descargar", description: "Obtén tu código QR en formato PNG o SVG para impresión." },
       ],
       faqs: [
         { question: "¿Los códigos QR expiran?", answer: "No. Son códigos QR estáticos que funcionan permanentemente sin límite de escaneos." },
-        { question: "¿Qué resolución tienen?", answer: "Se descargan en alta definición y en SVG vectorial para imprimir en cualquier tamaño." },
+        { question: "¿Qué resolución tienen?", answer: "Se descargan en alta definición PNG y en SVG vectorial para imprimir en cualquier tamaño." },
       ],
     },
     "password-generator": {
@@ -198,8 +205,9 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Generador de Contraseñas",
       title: "Generador de Contraseñas Seguras Online - Entropía Criptográfica | Utilify",
       description: "Genera contraseñas robustas e invulnerables con la API criptográfica nativa del navegador. Personaliza longitud, símbolos y números.",
+      summaryDefinition: "El Generador de Contraseñas utiliza el generador criptográfico nativo del navegador (crypto.getRandomValues) para crear claves aleatorias de alta entropía 100% en tu dispositivo sin enviar datos por internet.",
       category: "Desarrollo",
-      features: ["Criptografía local con crypto.getRandomValues", "Medidor de entropía en bits", "Generación de frases de paso", "Cero almacenamiento"],
+      features: ["Criptografía local con crypto.getRandomValues", "Medidor de fortaleza y seguridad", "Exclusión de caracteres similares", "Cero almacenamiento en red"],
       howToUse: [
         { step: "Elegir longitud", description: "Selecciona la cantidad de caracteres deseada (recomendado 16+)." },
         { step: "Opciones de caracteres", description: "Activa mayúsculas, minúsculas, números y símbolos." },
@@ -207,7 +215,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       ],
       faqs: [
         { question: "¿Dónde se generan las contraseñas?", answer: "100% en tu dispositivo mediante algoritmos criptográficos del navegador." },
-        { question: "¿Cuántos bits de entropía son recomendables?", answer: "128 bits o más garantiza protección total contra ataques de fuerza bruta." },
+        { question: "¿Cuántos caracteres son recomendables?", answer: "16 caracteres o más combinando mayúsculas, minúsculas, números y símbolos garantiza máxima protección." },
       ],
     },
     "json-formatter": {
@@ -215,6 +223,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Formateador de JSON",
       title: "Formateador y Validador de JSON Online - Pretty Print y Minify | Utilify",
       description: "Valida, formatea, embellece y minimiza datos JSON en tiempo real con detección de errores de sintaxis, ordenamiento de claves y números de línea.",
+      summaryDefinition: "El Formateador y Validador de JSON analiza, embellece, minimiza e inspecciona estructuras JSON en vista de árbol interactiva directamente en tu navegador, detectando errores de sintaxis con línea y columna exactas.",
       category: "Desarrollo",
       features: ["Validación sintáctica en tiempo real", "Indentación personalizable (2/4 espacios o tabs)", "Minificación para optimizar APIs", "Copia con un clic"],
       howToUse: [
@@ -231,9 +240,10 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       slug: "date-calculator",
       name: "Calculadora de Fechas",
       title: "Calculadora de Fechas y Días Hábiles Online | Utilify",
-      description: "Calcula la diferencia exacta entre dos fechas o suma y resta días, semanas y meses para planificar proyectos y plazos de entrega.",
+      description: "Calcula la diferencia exacta entre dos fechas o suma y resta días naturales y hábiles, semanas y meses para planificar proyectos.",
+      summaryDefinition: "La Calculadora de Fechas determina con exactitud el intervalo en años, meses, semanas, días calendario y días hábiles entre dos fechas, o proyecta fechas futuras sumando y restando tiempo.",
       category: "Calculadoras",
-      features: ["Diferencia en días, semanas y meses", "Suma y resta de días", "Enlaces compartibles", "100% precisa"],
+      features: ["Diferencia en días, semanas y meses", "Cálculo de días hábiles (lunes a viernes)", "Suma y resta de días y meses", "100% precisa en años bisiestos"],
       howToUse: [
         { step: "Seleccionar fechas", description: "Elige la fecha inicial y la fecha final." },
         { step: "Calcular", description: "Obtén la duración total y desglose de tiempo." },
@@ -241,7 +251,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       ],
       faqs: [
         { question: "¿Toma en cuenta años bisiestos?", answer: "Sí, todos los cálculos astronómicos y bisiestos se procesan con exactitud." },
-        { question: "¿Puedo sumar días a una fecha?", answer: "Sí, usa la pestaña de sumar/restar para proyectar fechas de entrega." },
+        { question: "¿Puedo sumar días hábiles a una fecha?", answer: "Sí, usa la pestaña de sumar/restar para proyectar fechas de entrega en días calendario o hábiles." },
       ],
     },
     "word-counter": {
@@ -249,6 +259,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Contador de Palabras",
       title: "Contador de Palabras y Caracteres Online - Tiempo de Lectura | Utilify",
       description: "Cuenta palabras, caracteres, oraciones y párrafos en tiempo real. Analiza el tiempo estimado de lectura y límites para redes sociales.",
+      summaryDefinition: "El Contador de Palabras analiza textos en tiempo real para calcular palabras, caracteres con y sin espacios, oraciones, párrafos, tiempo de lectura y oratoria, densidad de palabras clave y límites de redes sociales.",
       category: "Desarrollo",
       features: ["Conteo en vivo de palabras y caracteres", "Tiempo de lectura y oratoria", "Límites para redes sociales", "Análisis de palabras clave"],
       howToUse: [
@@ -257,7 +268,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
         { step: "Ajustar longitud", description: "Monitorea barras de progreso para Twitter, LinkedIn e Instagram." },
       ],
       faqs: [
-        { question: "¿Cómo calcula el tiempo de lectura?", answer: "Se basa en el promedio estándar de 200 a 250 palabras por minuto." },
+        { question: "¿Cómo calcula el tiempo de lectura?", answer: "Se basa en el promedio estándar de 200 palabras por minuto para lectura y 130 palabras por minuto para oratoria." },
         { question: "¿Es privado el texto que analizo?", answer: "Completamente. Tu texto nunca sale de tu navegador." },
       ],
     },
@@ -266,12 +277,13 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Generador de Paleta de Colores",
       title: "Generador de Paletas de Colores Online - Armonías y Contraste WCAG | Utilify",
       description: "Genera paletas de colores armónicas o extráelas desde tus imágenes. Verifica el contraste accesible según las normas WCAG.",
+      summaryDefinition: "El Generador de Paleta de Colores crea esquemas cromáticos armónicos, extrae colores dominantes desde imágenes subidas, verifica relaciones de contraste WCAG AA/AAA y exporta tokens a CSS, JSON, Tailwind y PNG.",
       category: "Imágenes",
-      features: ["Extracción desde imágenes", "Esquemas complementarios y análogos", "Verificación de contraste WCAG", "Exportación a CSS y Tailwind"],
+      features: ["Extracción desde imágenes", "Esquemas complementarios y análogos", "Verificación de contraste WCAG", "Exportación a CSS, Tailwind y PNG"],
       howToUse: [
-        { step: "Generar o subir", description: "Presiona la barra espaciadora para generar o sube tu logo." },
+        { step: "Generar o subir", description: "Presiona la barra espaciadora para generar o extrae colores desde una imagen." },
         { step: "Revisar contraste", description: "Comprueba las etiquetas de accesibilidad AA y AAA." },
-        { step: "Copiar códigos", description: "Exporta en valores HEX, RGB o variables CSS." },
+        { step: "Copiar códigos", description: "Exporta en valores HEX, RGB, variables CSS o imagen PNG." },
       ],
       faqs: [
         { question: "¿Qué son los contrastes WCAG?", answer: "Son pautas internacionales que garantizan que el texto sea legible para todas las personas." },
@@ -281,17 +293,18 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
     "pdf-to-image": {
       slug: "pdf-to-image",
       name: "PDF a Imágenes",
-      title: "Convertir PDF a Imágenes PNG Gratis Online | Utilify",
-      description: "Convierte páginas de documentos PDF en imágenes PNG de alta resolución (150 DPI) gratis en tu navegador. Descarga en un archivo ZIP sin registros.",
+      title: "Convertir PDF a Imágenes PNG o JPG Gratis Online | Utilify",
+      description: "Convierte páginas de documentos PDF en imágenes PNG o JPG de alta resolución (150 DPI) gratis en línea. Descarga en un archivo ZIP sin registros.",
+      summaryDefinition: "PDF a Imágenes convierte cada página de tus documentos PDF en imágenes PNG o JPG nítidas a 150 DPI empaquetadas en un archivo ZIP, con procesamiento en memoria RAM y cero almacenamiento en disco.",
       category: "PDF",
-      features: ["Conversión a 150 DPI de alta nitidez", "Descarga de páginas en archivo ZIP", "Cero almacenamiento en servidor", "100% gratuito"],
+      features: ["Conversión a PNG o JPG a 150 DPI", "Descarga de páginas en archivo ZIP", "Cero almacenamiento en servidor", "100% gratuito"],
       howToUse: [
-        { step: "Subir PDF", description: "Selecciona el documento PDF que deseas convertir." },
-        { step: "Procesar páginas", description: "El sistema convierte cada página en una imagen PNG en alta definición." },
+        { step: "Subir PDF", description: "Selecciona el documento PDF que deseas convertir y elige formato PNG o JPG." },
+        { step: "Procesar páginas", description: "El sistema convierte cada página en una imagen en alta definición." },
         { step: "Descargar ZIP", description: "Descarga todas las imágenes empaquetadas en un archivo ZIP." },
       ],
       faqs: [
-        { question: "¿Qué resolución tienen las imágenes exportadas?", answer: "Se exportan a 150 DPI con texto e ilustraciones completamente nítidos." },
+        { question: "¿Qué resolución tienen las imágenes exportadas?", answer: "Se exportan a 150 DPI en formato PNG o JPG con texto e ilustraciones completamente nítidos." },
         { question: "¿Mis archivos se guardan en la nube?", answer: "No. El procesamiento es transitorio en la memoria y se elimina al instante." },
       ],
     },
@@ -300,6 +313,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora de Inversiones",
       title: "Calculadora de Inversiones Multi-Objetivo e Interés Compuesto | Utilify",
       description: "Calculadora de inversiones multi-objetivo: calcula monto final, aportes periódicos necesarios, capital inicial, tasa de rendimiento o plazo en años con interés compuesto.",
+      summaryDefinition: "La Calculadora de Inversiones es una herramienta financiera multi-objetivo que resuelve monto final, aporte periódico, capital inicial, tasa de retorno o plazo con 5 frecuencias de capitalización y soporte multimoneda.",
       category: "Calculadoras",
       features: ["5 modos de cálculo: Monto Final, Aporte, Capital Inicial, Tasa y Plazo", "Frecuencias diaria, mensual, trimestral, semestral y anual", "Aportes al inicio o final del mes o año", "Desglose año por año en tabla y CSV"],
       howToUse: [
@@ -308,7 +322,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
         { step: "Ver proyección", description: "Analiza el capital acumulado, los intereses ganados y exporta a CSV." },
       ],
       faqs: [
-        { question: "¿Cuál es la diferencia con la Calculadora SIP?", answer: "La calculadora de inversiones modela un capital inicial fuerte combinado con depósitos mensuales y múltiples frecuencias de capitalización." },
+        { question: "¿Cuál es la diferencia con la Calculadora SIP?", answer: "La calculadora de inversiones modela un capital inicial fuerte combinado con depósitos mensuales, retiros y 5 objetivos de cálculo." },
         { question: "¿Cómo influye la frecuencia de capitalización?", answer: "A mayor frecuencia de reinversión (por ejemplo diaria o mensual vs anual), mayor es el rendimiento compuesto final." },
       ],
     },
@@ -317,6 +331,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora FIRE",
       title: "Calculadora FIRE - Libertad Financiera y Retiro Anticipado | Utilify",
       description: "Calcula tu número FIRE para alcanzar la independencia financiera y el retiro anticipado con la regla del 4% y retorno real ajustado por inflación.",
+      summaryDefinition: "La Calculadora FIRE estima el patrimonio necesario para alcanzar la independencia financiera y jubilación anticipada mediante la regla de retiro seguro (SWR) y la ecuación de Fisher ajustada por inflación.",
       category: "Calculadoras",
       features: ["Cálculo del número FIRE con regla del 4%", "Tiers Lean FIRE (75%) y Fat FIRE (125%)", "Ajuste por inflación según ecuación de Fisher", "Tiempo estimado para jubilarse"],
       howToUse: [
@@ -334,6 +349,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora de Edad",
       title: "Calculadora de Edad Exacta Online - Años, Meses, Días y Minutos | Utilify",
       description: "Calcula tu edad cronológica exacta en años, meses, días, horas y segundos. Descubre la cuenta regresiva para tu próximo cumpleaños y estadísticas de vida.",
+      summaryDefinition: "La Calculadora de Edad determina tu edad cronológica exacta en años, meses, semanas, días, horas, minutos y segundos desde tu fecha de nacimiento, incluyendo cuenta regresiva para tu próximo cumpleaños.",
       category: "Calculadoras",
       features: ["Edad cronológica exacta en tiempo real", "Cuenta regresiva para el próximo cumpleaños", "Desglose en semanas, días, horas y minutos", "Precisión con años bisiestos"],
       howToUse: [
@@ -351,6 +367,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Conversor de Unidades",
       title: "Conversor de Unidades Online - Longitud, Peso, Temperatura y Volumen | Utilify",
       description: "Convierte entre unidades de medida métricas e imperiales al instante: metros, pies, kilogramos, libras, grados Celsius, Fahrenheit, litros y galones.",
+      summaryDefinition: "El Conversor de Unidades transforma con precisión científica valores entre unidades métricas e imperiales en cinco categorías: longitud, peso, temperatura, área y volumen.",
       category: "Desarrollo",
       features: ["Conversión métrica e imperial", "Longitud, peso, temperatura, área y volumen", "Tabla comparativa de todas las unidades", "Alta precisión matemática"],
       howToUse: [
@@ -368,6 +385,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Conversor PX a REM",
       title: "Conversor PX a REM Online - Tipografía Fluida CSS clamp() y Tailwind | Utilify",
       description: "Convierte píxeles (px) a unidades relativas REM, EM y PT al instante. Genera código CSS clamp() para tipografía fluida y consulta tokens de Tailwind.",
+      summaryDefinition: "El Conversor PX a REM realiza conversiones bidireccionales entre píxeles y unidades REM, genera funciones CSS clamp() para tipografía fluida responsive y ofrece una tabla de referencia para Tailwind CSS.",
       category: "Desarrollo",
       features: ["Conversión bidireccional PX ↔ REM", "Generador de tipografía fluida CSS clamp()", "Tabla de tokens de Tailwind CSS v4", "Accesibilidad web WCAG"],
       howToUse: [
@@ -385,6 +403,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Codificador Base64",
       title: "Codificador y Decodificador Base64 Gratis Online | Utilify",
       description: "Codifica y decodifica texto y archivos binarios a formato Base64 con soporte completo para caracteres UTF-8. 100% privado en tu navegador.",
+      summaryDefinition: "El Codificador y Decodificador Base64 convierte texto con soporte UTF-8 completo y archivos en cadenas Base64 y Data URIs directamente en el navegador, sin transmitir información a ningún servidor.",
       category: "Desarrollo",
       features: ["Codificación y decodificación instantánea", "Soporte completo de caracteres UTF-8", "Arrastrar y soltar archivos", "Sin enviar datos a servidores"],
       howToUse: [
@@ -404,6 +423,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Juntar PDF",
       title: "Juntar PDF Grátis Online - Combinar Arquivos PDF em Segundos | Utilify",
       description: "Combine múltiplos documentos PDF em um único arquivo organizado de forma rápida, gratuita e segura. Sem limites de arquivos e com total privacidade.",
+      summaryDefinition: "Juntar PDF é uma ferramenta online gratuita e privada que combina vários arquivos PDF em um único documento na ordem desejada instantaneamente, com processamento em memória RAM e zero retenção de arquivos.",
       category: "PDF",
       features: ["Combinar arquivos PDF ilimitados", "Reordenar páginas facilmente", "Processamento em memória seguro", "Sem marcas d'água"],
       howToUse: [
@@ -421,6 +441,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Dividir PDF",
       title: "Dividir PDF Grátis Online - Separar e Extrair Páginas de PDF | Utilify",
       description: "Extraia páginas específicas ou intervalos de páginas dos seus arquivos PDF gratuitamente online. Perfeito para contratos e extratos.",
+      summaryDefinition: "Dividir PDF é um utilitário online gratuito que extrai páginas selecionadas, intervalos personalizados ou separa todas as páginas de um PDF em arquivos individuais com zero armazenamento em disco.",
       category: "PDF",
       features: ["Extrair intervalos personalizados (ex. 1-3, 5)", "Separar páginas individuais", "Zero armazenamento em disco", "Download instantâneo"],
       howToUse: [
@@ -438,6 +459,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Remover Fundo com IA",
       title: "Remover Fundo de Imagem Grátis com IA - Fundo Transparente | Utilify",
       description: "Remova o fundo de fotos, pessoas e produtos automaticamente com inteligência artificial de alta precisão. Baixe em PNG transparente em alta resolução.",
+      summaryDefinition: "Remover Fundo com IA é uma ferramenta gratuita que isola automaticamente pessoas, produtos e assinaturas usando redes neurais profundas, gerando arquivos PNG com fundo transparente em alta resolução.",
       category: "Imagens",
       features: ["Segmentação neural com IA", "Exportação em PNG transparente em alta definição", "Pincel interativo para retoques", "Sem créditos ou assinaturas"],
       howToUse: [
@@ -454,16 +476,17 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       slug: "image-compressor",
       name: "Comprimir Imagens",
       title: "Comprimir Imagens Grátis Online - Reduzir Tamanho JPG, PNG e WebP | Utilify",
-      description: "Reduza o tamanho das suas imagens em até 80% sem perda visível de qualidade. Compressão 100% no seu navegador com download em lote ZIP.",
+      description: "Reduza o tamanho das suas imagens em até 80% sem perda visível de qualidade. Compressão rápida e privada com download em lote ZIP.",
+      summaryDefinition: "Comprimir Imagens é um otimizador online gratuito que reduz o tamanho de arquivos JPG, PNG e WebP em até 80% preservando a qualidade visual e a transparência, com download individual ou em lote ZIP.",
       category: "Imagens",
-      features: ["Compressão no seu navegador", "Suporta JPG, PNG e WebP", "Download individual ou em pacote ZIP", "Contador de economia em tempo real"],
+      features: ["Compressão rápida e privada", "Suporta JPG, PNG e WebP", "Download individual ou em pacote ZIP", "Contador de economia em tempo real"],
       howToUse: [
         { step: "Enviar imagens", description: "Selecione uma ou mais imagens do seu celular ou computador." },
         { step: "Ajustar qualidade", description: "Escolha o nível de compressão desejado usando a barra deslizante." },
         { step: "Baixar otimizadas", description: "Baixe as imagens comprimidas uma a uma ou tudo em um único ZIP." },
       ],
       faqs: [
-        { question: "Minhas fotos vão para um servidor?", answer: "Não. A compressão roda 100% no seu próprio navegador via Canvas." },
+        { question: "Minhas fotos ficam salvas em algum servidor?", answer: "Não. Suas imagens nunca são armazenadas; todo o processamento é 100% privado e seguro." },
         { question: "Mantém o fundo transparente em PNG?", answer: "Sim, a transparência de 32 bits é totalmente preservada." },
       ],
     },
@@ -471,17 +494,18 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       slug: "sip-calculator",
       name: "Calculadora SIP",
       title: "Calculadora SIP Online - Juros Compostos e Crescimento de Investimentos | Utilify",
-      description: "Calcule o retorno de investimentos mensais recorrentes (SIP) e fundos indexados com fórmulas de juros compostos e Step-Up.",
+      description: "Calcule o retorno de investimentos mensais recorrentes (SIP) e fundos indexados com fórmulas de juros compostos mensais e anuais.",
+      summaryDefinition: "A Calculadora SIP é um simulador financeiro gratuito que projeta o crescimento de aportes mensais recorrentes com juros compostos, exibindo total investido, rendimentos acumulados e evolução anual.",
       category: "Calculadoras",
-      features: ["Projeção de juros compostos", "Simulação Step-Up anual", "Gráficos visuais interativos", "Fórmulas matemáticas explicadas"],
+      features: ["Projeção de juros compostos", "Capitalização mensal ou anual", "Gráficos visuais interativos", "Fórmulas matemáticas explicadas"],
       howToUse: [
         { step: "Valor mensal", description: "Digite quanto pretende investir todo mês." },
         { step: "Taxa e prazo", description: "Informe a rentabilidade anual estimada e o prazo em anos." },
         { step: "Ver projeção", description: "Analise o montante final acumulado e o total de juros gerados." },
       ],
       faqs: [
-        { question: "O que é investimento SIP?", answer: "É um aporte mensal sistemático para aproveitar o efeito dos juros compostos ao longo do tempo." },
-        { question: "Qual a vantagem do Step-Up?", answer: "Aumentar seu aporte em 10% a cada ano eleva drasticamente o seu patrimônio final." },
+        { question: "O que é investimento SIP?", answer: "É um plano de investimento sistemático onde você investe um valor fixo mensalmente para potencializar os juros compostos." },
+        { question: "Qual a diferença entre aportar no início ou no fim do mês?", answer: "Investir no início de cada período gera um mês extra de rendimento composto sobre cada aporte realizado." },
       ],
     },
     "bmi-calculator": {
@@ -489,6 +513,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora de IMC",
       title: "Calculadora de IMC Grátis - Índice de Massa Corporal e Peso Ideal | Utilify",
       description: "Calcule seu Índice de Massa Corporal (IMC) na hora no sistema métrico ou imperial e veja sua faixa de peso ideal segundo a OMS.",
+      summaryDefinition: "A Calculadora de IMC calcula instantaneamente o seu Índice de Massa Corporal em unidades métricas ou imperiais e apresenta a faixa de peso saudável recomendada pela Organização Mundial da Saúde (OMS).",
       category: "Calculadoras",
       features: ["Sistema métrico e imperial", "Tabela oficial da OMS", "Cálculo de peso saudável", "100% confidencial"],
       howToUse: [
@@ -504,12 +529,13 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
     "qr-generator": {
       slug: "qr-generator",
       name: "Gerador de Código QR",
-      title: "Gerador de Código QR Grátis - Criar QR Code para Wi-Fi, Link e Contatos | Utilify",
-      description: "Crie códigos QR em alta resolução para sites, redes Wi-Fi, cartões vCard e emails. Baixe em PNG ou vetor SVG.",
+      title: "Gerador de Código QR Grátis - Criar QR Code para Wi-Fi, Link, Email e SMS | Utilify",
+      description: "Crie códigos QR em alta resolução para sites, redes Wi-Fi, e-mails e SMS. Baixe gratuitamente em PNG ou vetor SVG.",
+      summaryDefinition: "O Gerador de Código QR cria QR Codes estáticos e personalizáveis para URLs, redes Wi-Fi, e-mails, SMS e textos diretamente no seu navegador, com exportação gratuita em PNG de alta resolução e SVG vetorial.",
       category: "Desenvolvimento",
-      features: ["QR Codes para Wi-Fi, links e vCard", "Níveis de correção de erro L/M/Q/H", "Cores personalizadas", "Exportação em PNG e SVG"],
+      features: ["QR Codes para Wi-Fi, links, e-mail e SMS", "Níveis de correção de erro L/M/Q/H", "Cores personalizadas", "Exportação em PNG e SVG"],
       howToUse: [
-        { step: "Tipo de dado", description: "Escolha se quer compartilhar um link, Wi-Fi ou contato." },
+        { step: "Tipo de dado", description: "Escolha se quer compartilhar um link, Wi-Fi, e-mail ou SMS." },
         { step: "Personalizar", description: "Digite os dados e defina cores e nível de correção." },
         { step: "Baixar", description: "Baixe seu QR Code em PNG ou SVG para impressão." },
       ],
@@ -523,8 +549,9 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Gerador de Senhas",
       title: "Gerador de Senhas Seguras Online - Entropia Criptográfica | Utilify",
       description: "Gere senhas fortes e aleatórias com a API criptográfica nativa do navegador. Escolha comprimento, símbolos e números.",
+      summaryDefinition: "O Gerador de Senhas utiliza a API criptográfica nativa do navegador (crypto.getRandomValues) para criar senhas aleatórias ultra-seguras 100% no seu dispositivo sem transmitir dados pela rede.",
       category: "Desenvolvimento",
-      features: ["Criptografia local com crypto.getRandomValues", "Medidor de entropia em bits", "Geração de frases seguras", "Zero armazenamento"],
+      features: ["Criptografia local com crypto.getRandomValues", "Indicador de força da senha", "Exclusão de caracteres ambíguos", "Zero armazenamento"],
       howToUse: [
         { step: "Tamanho da senha", description: "Defina a quantidade de caracteres (recomendado 16+)." },
         { step: "Tipos de caracteres", description: "Marque maiúsculas, minúsculas, dígitos e símbolos." },
@@ -532,7 +559,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       ],
       faqs: [
         { question: "Onde as senhas são criadas?", answer: "100% no seu navegador usando funções criptográficas do dispositivo." },
-        { question: "Quantos bits de entropia são ideais?", answer: "Pelo menos 128 bits garantem imunidade contra ataques de força bruta." },
+        { question: "Qual o tamanho ideal de senha?", answer: "Pelo menos 16 caracteres combinando letras, números e símbolos garante proteção máxima contra ataques de força bruta." },
       ],
     },
     "json-formatter": {
@@ -540,6 +567,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Formatador de JSON",
       title: "Formatador e Validador de JSON Online - Pretty Print e Minify | Utilify",
       description: "Valide, formate e reduza dados JSON em tempo real com identificação de erros de sintaxe, ordenação de chaves e números de linha.",
+      summaryDefinition: "O Formatador e Validador de JSON analisa, embeleza, minifica e inspeciona dados JSON em visualização de árvore interativa diretamente no navegador, apontando erros de sintaxe com linha e coluna exatas.",
       category: "Desenvolvimento",
       features: ["Validação sintática em tempo real", "Indentação ajustável (2/4 espaços ou tabs)", "Minificação de payloads para APIs", "Cópia rápida"],
       howToUse: [
@@ -556,9 +584,10 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       slug: "date-calculator",
       name: "Calculadora de Datas",
       title: "Calculadora de Datas e Dias Úteis Online | Utilify",
-      description: "Calcule a diferença exata entre duas datas ou some e subtraia dias, semanas e meses para prazos de projetos.",
+      description: "Calcule a diferença exata entre duas datas ou some e subtraia dias corridos e úteis, semanas e meses para prazos de projetos.",
+      summaryDefinition: "A Calculadora de Datas mede com precisão o intervalo em anos, meses, semanas, dias corridos e dias úteis entre duas datas, além de projetar datas futuras somando ou subtraindo períodos.",
       category: "Calculadoras",
-      features: ["Diferença em dias, semanas e meses", "Soma e subtração de dias", "Links compartilháveis", "Cálculos precisos"],
+      features: ["Diferença em dias, semanas e meses", "Contagem de dias úteis (segunda a sexta)", "Soma e subtração de dias e meses", "Cálculos precisos com anos bissextos"],
       howToUse: [
         { step: "Escolher datas", description: "Selecione a data de início e a data de término." },
         { step: "Calcular", description: "Veja a duração total e o detalhamento temporal." },
@@ -566,7 +595,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       ],
       faqs: [
         { question: "Considera anos bissextos?", answer: "Sim, todos os dias extras de anos bissextos são calculados corretamente." },
-        { question: "Posso somar dias para saber uma data futura?", answer: "Sim, basta usar a aba de somar/subtrair para projetar prazos de entrega." },
+        { question: "Posso somar dias úteis para saber uma data futura?", answer: "Sim, basta usar a aba de somar/subtrair para projetar prazos em dias corridos ou dias úteis." },
       ],
     },
     "word-counter": {
@@ -574,6 +603,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Contador de Palavras",
       title: "Contador de Palavras e Caracteres Online - Tempo de Leitura | Utilify",
       description: "Conte palavras, caracteres, frases e parágrafos em tempo real. Veja estimativas de tempo de leitura e limites para redes sociais.",
+      summaryDefinition: "O Contador de Palavras analisa textos em tempo real contabilizando palavras, caracteres com e sem espaços, frases, parágrafos, tempo de leitura e fala, densidade de palavras-chave e limites de redes sociais.",
       category: "Desenvolvimento",
       features: ["Contagem instantânea", "Tempo de leitura e fala", "Limites para redes sociais", "Análise de frequência de termos"],
       howToUse: [
@@ -582,7 +612,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
         { step: "Ajustar tamanho", description: "Acompanhe os limites de caracteres para Twitter, LinkedIn e Instagram." },
       ],
       faqs: [
-        { question: "Como é calculado o tempo de leitura?", answer: "Usa como base a velocidade média de 200 a 250 palavras por minuto." },
+        { question: "Como é calculado o tempo de leitura?", answer: "Usa como base a velocidade média de 200 palavras por minuto para leitura e 130 palavras por minuto para fala." },
         { question: "O texto enviado é mantido em segredo?", answer: "Sim. Nada é enviado para a nuvem; tudo fica no seu dispositivo." },
       ],
     },
@@ -591,12 +621,13 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Gerador de Paleta de Cores",
       title: "Gerador de Paletas de Cores Online - Harmonias e Contraste WCAG | Utilify",
       description: "Gere paletas de cores harmônicas ou extraia cores de fotos. Teste o contraste de acessibilidade de acordo com as normas WCAG.",
+      summaryDefinition: "O Gerador de Paleta de Cores cria esquemas harmônicos, extrai paletas de imagens enviadas, valida taxas de contraste de acessibilidade WCAG AA/AAA e exporta códigos para CSS, JSON, Tailwind e PNG.",
       category: "Imagens",
-      features: ["Extração de fotos", "Esquemas complementares e análogos", "Verificação de contraste WCAG", "Exportação para CSS e Tailwind"],
+      features: ["Extração de fotos", "Esquemas complementares e análogos", "Verificação de contraste WCAG", "Exportação para CSS, Tailwind e PNG"],
       howToUse: [
-        { step: "Gerar ou enviar", description: "Pressione espaço para gerar ou envie uma foto ou logo." },
+        { step: "Gerar ou enviar", description: "Pressione espaço para gerar ou envie uma foto para extrair as cores." },
         { step: "Verificar contraste", description: "Confira as notas de acessibilidade AA e AAA." },
-        { step: "Copiar códigos", description: "Exporte em valores HEX, RGB ou classes CSS." },
+        { step: "Copiar códigos", description: "Exporte em valores HEX, RGB, classes CSS ou imagem PNG." },
       ],
       faqs: [
         { question: "O que é contraste WCAG?", answer: "São diretrizes que garantem que textos fiquem legíveis para pessoas com baixa visão." },
@@ -606,17 +637,18 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
     "pdf-to-image": {
       slug: "pdf-to-image",
       name: "PDF para Imagens",
-      title: "Converter PDF para Imagens PNG Grátis Online | Utilify",
-      description: "Converta páginas de documentos PDF em imagens PNG de alta resolução (150 DPI) gratuitamente. Baixe em arquivo ZIP sem cadastro.",
+      title: "Converter PDF para Imagens PNG ou JPG Grátis Online | Utilify",
+      description: "Converta páginas de documentos PDF em imagens PNG ou JPG de alta resolução (150 DPI) gratuitamente. Baixe em arquivo ZIP sem cadastro.",
+      summaryDefinition: "PDF para Imagens converte todas as páginas de um arquivo PDF em imagens PNG ou JPG de alta nitidez (150 DPI) compactadas em um pacote ZIP, com processamento em memória RAM e zero retenção de dados.",
       category: "PDF",
-      features: ["Conversão a 150 DPI de alta nitidez", "Download de páginas em pacote ZIP", "Zero armazenamento em disco", "100% gratuito"],
+      features: ["Conversão para PNG ou JPG a 150 DPI", "Download de páginas em pacote ZIP", "Zero armazenamento em disco", "100% gratuito"],
       howToUse: [
-        { step: "Enviar PDF", description: "Selecione o documento PDF que deseja converter." },
-        { step: "Processar páginas", description: "A ferramenta extrai cada página em imagem PNG de alta qualidade." },
+        { step: "Enviar PDF", description: "Selecione o documento PDF que deseja converter e escolha o formato PNG ou JPG." },
+        { step: "Processar páginas", description: "A ferramenta extrai cada página em imagem de alta qualidade." },
         { step: "Baixar ZIP", description: "Baixe todas as imagens reunidas em um único arquivo ZIP." },
       ],
       faqs: [
-        { question: "Qual a resolução das imagens geradas?", answer: "São geradas a 150 DPI com texto e gráficos em perfeita nitidez." },
+        { question: "Qual a resolução das imagens geradas?", answer: "São geradas a 150 DPI em PNG ou JPG com texto e gráficos em perfeita nitidez." },
         { question: "Meus arquivos são salvos?", answer: "Não. Os documentos são processados apenas na memória e descartados em seguida." },
       ],
     },
@@ -625,6 +657,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora de Investimentos",
       title: "Calculadora de Investimentos Multi-Objetivo e Juros Compostos | Utilify",
       description: "Calculadora de investimentos multi-objetivo: calcule o montante final, aportes periódicos necessários, capital inicial, taxa de retorno ou prazo com juros compostos.",
+      summaryDefinition: "A Calculadora de Investimentos é uma ferramenta financeira multi-objetivo que calcula montante final, aporte periódico, capital inicial, taxa de retorno ou prazo em 5 frequências de capitalização e múltiplas moedas.",
       category: "Calculadoras",
       features: ["5 modos de cálculo: Montante Final, Aporte, Capital Inicial, Taxa e Prazo", "Capitalização diária, mensal, trimestral, semestral e anual", "Aportes no início ou fim do mês ou ano", "Detalhamento ano a ano e exportação para CSV"],
       howToUse: [
@@ -633,7 +666,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
         { step: "Ver projeção", description: "Confira o saldo total acumulado, os juros recebidos e baixe a planilha CSV." },
       ],
       faqs: [
-        { question: "Qual a diferença para a Calculadora SIP?", answer: "A calculadora de investimentos permite simular um grande aporte inicial associado a depósitos mensais e intervalos de capitalização variados." },
+        { question: "Qual a diferença para a Calculadora SIP?", answer: "A calculadora de investimentos permite simular um grande aporte inicial associado a depósitos mensais, resgates e 5 modos de cálculo." },
         { question: "Qual o impacto da frequência dos juros?", answer: "Quanto mais frequente a capitalização (como diária ou mensal), maior será o rendimento final acumulado." },
       ],
     },
@@ -642,6 +675,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora FIRE",
       title: "Calculadora FIRE - Independência Financeira e Aposentadoria Antecipada | Utilify",
       description: "Calcule seu número FIRE para conquistar a independência financeira e se aposentar mais cedo pela regra dos 4% com correção de inflação.",
+      summaryDefinition: "A Calculadora FIRE projeta o patrimônio necessário para alcançar a independência financeira e aposentadoria antecipada utilizando a taxa segura de retirada (SWR) e a equação de Fisher descontada pela inflação.",
       category: "Calculadoras",
       features: ["Cálculo do número FIRE pela regra dos 4%", "Faixas Lean FIRE (75%) e Fat FIRE (125%)", "Retorno real descontando inflação (Fisher)", "Projeção de anos até a independência"],
       howToUse: [
@@ -659,6 +693,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Calculadora de Idade",
       title: "Calculadora de Idade Exata Online - Anos, Meses, Dias e Minutos | Utilify",
       description: "Descubra sua idade cronológica exata em anos, meses, dias, horas e segundos. Veja a contagem regressiva para seu próximo aniversário e tempo vivido.",
+      summaryDefinition: "A Calculadora de Idade determina sua idade cronológica exata em anos, meses, semanas, dias, horas, minutos e segundos a partir da data de nascimento, incluindo contagem regressiva para o próximo aniversário.",
       category: "Calculadoras",
       features: ["Idade cronológica exata ao vivo", "Contagem regressiva para o próximo aniversário", "Detalhamento em semanas, dias, horas e minutos", "Cálculo preciso com anos bissextos"],
       howToUse: [
@@ -676,6 +711,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Conversor de Unidades",
       title: "Conversor de Unidades Online - Comprimento, Peso, Temperatura e Volume | Utilify",
       description: "Converta unidades métricas e imperiais em tempo real: metros, pés, polegadas, quilos, libras, Celsius, Fahrenheit, litros e galões.",
+      summaryDefinition: "O Conversor de Unidades realiza conversões de alta precisão científica entre medidas métricas e imperiais em cinco grandezas: comprimento, peso, temperatura, área e volume.",
       category: "Desenvolvimento",
       features: ["Conversão métrica e imperial", "Comprimento, peso, temperatura, área e volume", "Quadro com todas as conversões simultâneas", "Precisão matemática rigorosa"],
       howToUse: [
@@ -693,6 +729,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Conversor PX para REM",
       title: "Conversor PX para REM Online - Tipografia Fluida CSS clamp() e Tailwind | Utilify",
       description: "Converta pixels (px) em unidades relativas REM, EM e PT na hora. Crie código CSS clamp() para tipografia responsiva e veja a tabela do Tailwind.",
+      summaryDefinition: "O Conversor PX para REM converte valores bidirecionalmente entre pixels e unidades REM, gera expressões CSS clamp() para tipografia fluida responsiva e apresenta uma tabela de referência do Tailwind CSS.",
       category: "Desenvolvimento",
       features: ["Conversão bidirecional PX ↔ REM", "Gerador de CSS clamp() para design fluido", "Tabela de tokens do Tailwind CSS v4", "Acessibilidade WCAG"],
       howToUse: [
@@ -710,6 +747,7 @@ export const toolTranslations: Record<Language, Record<string, ToolTranslation>>
       name: "Codificador Base64",
       title: "Codificador e Decodificador Base64 Grátis Online | Utilify",
       description: "Codifique e decodifique textos e arquivos em Base64 com suporte total a caracteres UTF-8. 100% privado e executado no seu navegador.",
+      summaryDefinition: "O Codificador e Decodificador Base64 converte textos com suporte integral a UTF-8 e arquivos binários em strings Base64 e Data URIs diretamente no navegador, sem envio de dados para servidores.",
       category: "Desenvolvimento",
       features: ["Codificação e decodificação instantânea", "Suporte integral a caracteres UTF-8", "Arrastar e soltar arquivos", "Sem envio de dados para a nuvem"],
       howToUse: [

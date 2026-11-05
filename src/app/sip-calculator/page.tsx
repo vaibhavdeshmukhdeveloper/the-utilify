@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Calculate your future mutual fund returns and compounding growth with our free SIP calculator. Visualize monthly contributions, total investment, and expected wealth maturity.",
   alternates: {
     canonical: "/sip-calculator",
+    languages: {
+      en: "https://www.theutilify.com/sip-calculator",
+      es: "https://www.theutilify.com/es/sip-calculator",
+      pt: "https://www.theutilify.com/pt/sip-calculator",
+      "x-default": "https://www.theutilify.com/sip-calculator",
+    },
   },
   openGraph: {
     title: "SIP Calculator - Mutual Fund Compound Return Calculator | Utilify",
@@ -37,8 +43,9 @@ export default function Page() {
       "priceCurrency": "USD"
     },
     "featureList": [
-      "Dynamic monthly contribution and duration sliders",
-      "Interactive compounding growth visualization chart",
+      "Customizable monthly investment amount, duration, and return rate",
+      "Monthly and annual compounding with beginning or end of period timing",
+      "Interactive compounding growth and asset breakdown charts",
       "Calculates invested amount, estimated returns, and total maturity wealth",
       "100% client-side privacy - financial data never leaves your device"
     ]

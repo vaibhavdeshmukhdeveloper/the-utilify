@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Count words, characters, sentences, paragraphs, and estimated reading time live. Track social media limits for X, LinkedIn, Instagram, and SEO meta tags for free.",
   alternates: {
     canonical: "/word-counter",
+    languages: {
+      en: "https://www.theutilify.com/word-counter",
+      es: "https://www.theutilify.com/es/word-counter",
+      pt: "https://www.theutilify.com/pt/word-counter",
+      "x-default": "https://www.theutilify.com/word-counter",
+    },
   },
   openGraph: {
     title: "Free Online Word & Character Counter | Utilify",

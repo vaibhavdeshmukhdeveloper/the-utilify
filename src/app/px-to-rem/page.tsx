@@ -7,6 +7,12 @@ export const metadata: Metadata = {
   description: "Convert pixel (px) values to relative root em (rem) units instantly for accessible responsive web design, Figma design tokens, CSS clamp(), and Tailwind CSS.",
   alternates: {
     canonical: "/px-to-rem",
+    languages: {
+      en: "https://www.theutilify.com/px-to-rem",
+      es: "https://www.theutilify.com/es/px-to-rem",
+      pt: "https://www.theutilify.com/pt/px-to-rem",
+      "x-default": "https://www.theutilify.com/px-to-rem",
+    },
   },
   openGraph: {
     title: "PX to REM Converter - Free CSS Typography Tool | Utilify",

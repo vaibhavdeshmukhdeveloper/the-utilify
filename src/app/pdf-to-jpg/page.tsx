@@ -57,7 +57,7 @@ export default function PdfToJpgPage() {
     },
     {
       question: "What is the resolution of the converted JPG images?",
-      answer: "PDF pages are rendered at high resolution (300 DPI equivalent) to ensure that fine text lines, financial figures, signatures, and detailed charts remain crisp and readable."
+      answer: "PDF pages are rendered at high resolution (150 DPI) to ensure that fine text lines, financial figures, signatures, and detailed charts remain crisp and readable."
     },
     {
       question: "Are my uploaded PDF documents stored on your servers?",
@@ -73,6 +73,7 @@ export default function PdfToJpgPage() {
     <>
       <JsonLd data={schema} />
       <PdfToImageClient
+        defaultFormat="jpg"
         customTitle="PDF to JPG Converter"
         customDescription="Convert every page of your PDF into high-quality JPG images instantly. Fast, free, and completely private."
         customHowToUse={customHowToUse}
