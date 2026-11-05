@@ -144,17 +144,17 @@ Explicitly welcomes modern AI indexers alongside standard search bots while disa
 
 ### Dynamic OpenGraph & Meta Engine (`src/app/api/og/route.tsx` & File-Based OG)
 - **API Route:** Edge runtime dynamic 1200x630 OG image generator (`/api/og`) accepting `title`, `description`, `category`, and `badge`. Auto-linked across tool pages, category hubs, and root layout.
-- **File-Based Blog OG:** Dedicated Next.js Edge metadata generator `src/app/blog/[slug]/opengraph-image.tsx` rendering customized, branded cards for each of the 129 articles.
+- **File-Based Blog OG:** Dedicated Next.js Edge metadata generator `src/app/blog/[slug]/opengraph-image.tsx` rendering customized, branded cards for each of the 135 articles.
 
 ### Dynamic RSS 2.0 Feed (`src/app/feed.xml/route.ts`)
-- Automated XML feed generated from 129 in-depth articles in `src/lib/blog-data.ts`.
+- Automated XML feed generated from 135 in-depth articles in `src/lib/blog-data.ts`.
 
 ### Structured Data (Schema.org JSON-LD) & Article Headings
 - **Tool Pages:** `src/lib/seo-helpers.ts` provides `getSoftwareAppSchema()` with `SoftwareApplication`, `AggregateRating`, and `offers: { price: "0.00" }`.
 - **Tool Layout:** `src/components/ToolLayout.tsx` automatically injects `FAQPage`, `HowTo`, and `BreadcrumbList` JSON-LD schemas.
 - **Blog Pages:** `src/app/blog/[slug]/page.tsx` injects `Article` and `BreadcrumbList` JSON-LD. In addition, the custom `marked` heading renderer automatically extracts kebab-case anchor IDs for `h2` and `h3` headings (`scroll-mt-24`), driving both the interactive `<TableOfContents />` and search sitelinks.
 - **Comparison Pages:** `src/components/ComparisonLayout.tsx` injects `FAQPage` and `BreadcrumbList` JSON-LD.
-- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all 51 static base routes, 38 localized routes, and 129 blog posts (218 indexed URLs total). Embedded widgets (`/embed/[tool]`) specify `robots: { index: false, follow: true }` and are excluded from sitemaps by design.
+- **Sitemap & Robots:** `src/app/sitemap.ts` and `src/app/robots.ts` index all 51 static base routes, 38 localized routes, and 135 blog posts (224 indexed URLs total). Embedded widgets (`/embed/[tool]`) specify `robots: { index: false, follow: true }` and are excluded from sitemaps by design.
 
 ---
 
