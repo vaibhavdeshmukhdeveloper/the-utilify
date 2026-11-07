@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
-import { blogPosts } from "@/lib/blog-data";
+import { blogMetadata } from "@/lib/blog-meta";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const size = {
   width: 1200,
@@ -16,7 +16,7 @@ interface Props {
 
 export default async function Image({ params }: Props) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug) || {
+  const post = blogMetadata.find((p) => p.slug === slug) || {
     title: "The Utilify Editorial Guides & Productivity Tutorials",
     category: "Guides",
     readTime: "8 min read",
